@@ -1,0 +1,9 @@
+Changes in version 2.1.7-1 (2011-04-14)
+
+This version contains files modified by Andrey Kholmanskih:
+PdfPTable.java 
+2010-11-27
+* fixed a NullPointerException, arising in function getRowHeight when spaned a cells
+2011-04-14
+* function rowSpanAbove is changed
+

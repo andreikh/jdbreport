@@ -1,0 +1,7 @@
+Manifest-Version: 1.0
+Main-Class: jdbreport.design.view.TemplateEditor
+
+Name: JDBReport
+Implementation-Title: JDBReport
+Specification-Version: 2.2
+Implementation-Version: 2.2.20130413

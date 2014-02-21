@@ -1,0 +1,7 @@
+Manifest-Version: 1.0
+Main-Class: jdbreport.view.ReportEditor
+
+Name: JDBReport
+Implementation-Title: JDBReport
+Specification-Version: 2.2
+Implementation-Version: 2.2.20130413
