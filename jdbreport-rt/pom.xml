@@ -16,13 +16,13 @@
 		<dependency> 
   			<groupId>org.slf4j</groupId>
   			<artifactId>jul-to-slf4j</artifactId>
-  			<version>1.6.4</version>
+  			<version>1.7.6</version>
 		</dependency>
 
 		<dependency>
-			<groupId>de.odysseus.juel</groupId>
-			<artifactId>juel-impl</artifactId>
-			<version>2.2.3</version> 
+			<groupId>org.glassfish</groupId>
+			<artifactId>javax.el</artifactId>
+			<version>3.0.0</version>
 		</dependency>
 
 		<dependency> 
@@ -53,7 +53,7 @@
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
-			<version>4.8.1</version>
+			<version>4.11</version>
 			<scope>test</scope>
 		</dependency>
 
@@ -136,8 +136,8 @@
 			<plugin>
 				<artifactId>maven-compiler-plugin</artifactId>
 				<configuration>
-					<source>1.6</source>
-					<target>1.6</target>
+					<source>1.8</source>
+					<target>1.8</target>
 					<encoding>${project.build.sourceEncoding}</encoding>
 				</configuration>
 			</plugin>
