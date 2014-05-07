@@ -199,7 +199,7 @@ public class TemplateReportCell extends ReportCell implements CellObject {
 			return new String[] { getFieldName() };
 		}
 		if (type == CellObject.TYPE_NONE && expressions != null) {
-			List<String> list = new ArrayList<String>();
+			List<String> list = new ArrayList<>();
 			for (Expression expr : expressions) {
 				if (dsId.equals(expr.getBaseName())) {
 					list.add(expr.getProperty());

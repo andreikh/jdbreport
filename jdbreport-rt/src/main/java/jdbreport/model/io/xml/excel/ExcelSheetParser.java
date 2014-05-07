@@ -38,7 +38,7 @@ import javax.swing.text.JTextComponent;
 import jdbreport.grid.JReportGrid.HTMLReportRenderer;
 import jdbreport.model.Cell;
 import jdbreport.model.CellValue;
-import jdbreport.model.JReportModel;
+import jdbreport.view.model.JReportModel;
 import jdbreport.model.ReportBook;
 import jdbreport.model.ReportColumn;
 import jdbreport.model.Units;

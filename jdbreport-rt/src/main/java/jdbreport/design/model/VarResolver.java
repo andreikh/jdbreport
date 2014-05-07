@@ -42,7 +42,7 @@ import javax.el.PropertyNotFoundException;
  */
 public class VarResolver extends ELResolver{
 
-	private final Map<Object, Object> map = Collections.synchronizedMap(new HashMap<Object, Object>());
+	private final Map<Object, Object> map = Collections.synchronizedMap(new HashMap<>());
 
 	public VarResolver() {
 		
@@ -70,7 +70,7 @@ public class VarResolver extends ELResolver{
 			if (!map.containsKey(property)) {
 				throw new PropertyNotFoundException("Cannot find property " + property);
 			}
-			return getProperty((String) property);
+			return getProperty(property);
 		}
 		return null;
 	}

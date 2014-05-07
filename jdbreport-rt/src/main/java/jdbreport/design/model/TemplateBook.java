@@ -1,7 +1,7 @@
 /*
  * JDBReport Generator
  * 
- * Copyright (C) 2006-2012 Andrey Kholmanskih. All rights reserved.
+ * Copyright (C) 2006-2014 Andrey Kholmanskih. All rights reserved.
  * 
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -25,29 +25,22 @@
  */
 package jdbreport.design.model;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Properties;
-import java.util.TreeMap;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import java.util.regex.Matcher;
-
-import javax.el.ELContext;
-import javax.el.ExpressionFactory;
-import javax.el.ValueExpression;
-
 import jdbreport.model.*;
 import jdbreport.model.print.ReportPage;
 import jdbreport.source.*;
 import jdbreport.util.Utils;
+import jdbreport.view.model.JReportModel;
+
+import javax.el.ELContext;
+import javax.el.ExpressionFactory;
+import javax.el.ValueExpression;
+import java.util.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import java.util.regex.Matcher;
 
 /**
- * @version 2.0 12.05.2012
+ * @version 3.0 22.02.2014
  * @author Andrey Kholmanskih
  * 
  */
@@ -57,9 +50,9 @@ public class TemplateBook extends ReportBook {
 
 	public static final String REPORT_CAPTION = "reportCaption"; //$NON-NLS-1$
 
-	private static TreeMap<Object, String> WRITERS_MAP = new TreeMap<Object, String>();
+	private static TreeMap<Object, String> WRITERS_MAP = new TreeMap<>();
 
-	private static TreeMap<Object, String> READERS_MAP = new TreeMap<Object, String>();
+	private static TreeMap<Object, String> READERS_MAP = new TreeMap<>();
 
 	private static final Logger logger = Logger.getLogger(TemplateBook.class
 			.getName());
@@ -160,10 +153,6 @@ public class TemplateBook extends ReportBook {
 		return model;
 	}
 
-	public ReportBook createReportBook() {
-		return createReportBook(null);
-	}
-
 	public ReportBook createReportBook(HeighCalculator hCalc) {
 
 		ReportBook book = new ReportBook();
@@ -191,11 +180,6 @@ public class TemplateBook extends ReportBook {
 						book.add();
 					try {
 						generateReportModel(book.getReportModel(i), i, hCalc);
-					} catch (OutOfMemoryError e) {
-						newModel = null;
-						book = null;
-						System.gc();
-						Utils.showError(e);
 					} catch (Exception e) {
 						Utils.showError(e);
 					}
@@ -250,7 +234,7 @@ public class TemplateBook extends ReportBook {
 
 			prepareCells(templModel);
 
-			templModel.setTotalList(new HashMap<CellObject, TotalInfo>());
+			templModel.setTotalList(new HashMap<>());
 
 			for (DetailGroup detailGroup : rootGroup.getDetailGroups()) {
 				detailGroup.updateDataSet(getDataSetList());
@@ -259,7 +243,7 @@ public class TemplateBook extends ReportBook {
 
 			fillTotalInfo(rootGroup.getFooterGroup());
 
-			dsList = new TreeMap<String, BufferedDataSet>();
+			dsList = new TreeMap<>();
 			try {
 				for (int i = 0; i < rootGroup.getChildCount() - 1; i++) {
 					Group group = rootGroup.getChild(i);
@@ -292,7 +276,7 @@ public class TemplateBook extends ReportBook {
 	}
 
 	private void prepareCells(TemplateModel templModel) throws ReportException {
-		List<Expression> tokens = new ArrayList<Expression>();
+		List<Expression> tokens = new ArrayList<>();
 		for (TableRow row : templModel.getRowModel()) {
 			for (Cell cell : row) {
 				if (!cell.isNull() && !cell.isChild()) {
@@ -359,7 +343,7 @@ public class TemplateBook extends ReportBook {
 	}
 
 	protected Expression createExpression(String s) {
-		String t = null;
+		String t;
 		int i = s.indexOf('.');
 		if (i > 0) {
 			t = s.substring(0, i);
@@ -443,14 +427,15 @@ public class TemplateBook extends ReportBook {
 	}
 
 	private void closeSources() {
-		for (int i = 0; i < getSourcesList().size(); i++) {
-			JdbcReportSource source = (JdbcReportSource) getSourcesList()
-					.get(i);
-			for (Iterator<JdbcDataSet> it = source.iterator(); it.hasNext();) {
-				it.next().close();
-			}
-		}
-	}
+        int i = 0;
+        while (i < getSourcesList().size()) {
+            JdbcReportSource source =  getSourcesList().get(i);
+            for (JdbcDataSet aSource : source) {
+                aSource.close();
+            }
+            i++;
+        }
+    }
 
 	private void openMasterDs(BufferedDataSet ds) throws ReportException {
 		if (ds.getMasterId() != null) {
@@ -480,7 +465,7 @@ public class TemplateBook extends ReportBook {
 		RowsGroup footerGroup = group.getFooterGroup();
 		DetailGroup parentGroup = (DetailGroup) ((group.getParent() instanceof DetailGroup) ? group
 				.getParent() : null);
-		boolean changeParentGroupKey = false;
+		boolean changeParentGroupKey;
 		boolean eof;
 		while ((!(eof = group.isEof()) || group.minRowLimit())
 				&& !group.maxRowLimit()) {
@@ -638,7 +623,7 @@ public class TemplateBook extends ReportBook {
 					ti.incValue(value);
 				}
 
-			} catch (NumberFormatException e) {
+			} catch (NumberFormatException ignored) {
 			} catch (Exception e) {
 				logger.log(Level.WARNING, e.getMessage());
 			}
@@ -852,13 +837,13 @@ public class TemplateBook extends ReportBook {
 
 	/**
 	 * 
-	 * @param regexp
-	 * @param replacement
+	 * @param regexp old value
+	 * @param replacement new value
 	 * @since 2.0
 	 */
 	public void addReplacePattern(String regexp, String replacement) {
 		if (patternList == null) {
-			patternList = new ArrayList<ReplaceItem>();
+			patternList = new ArrayList<>();
 		}
 		patternList.add(new ReplaceItem(regexp, replacement));
 	}
@@ -879,13 +864,13 @@ public class TemplateBook extends ReportBook {
 			throws ReportException {
 		if (expressions.length > 1) {
 			String value = ""; //$NON-NLS-1$
-			for (int i = 0; i < expressions.length; i++) {
-				try {
-					value += expressions[i].getFormatValue();
-				} catch (Exception e) {
-					logger.log(Level.WARNING, e.getMessage());
-				}
-			}
+            for (Expression expression : expressions) {
+                try {
+                    value += expression.getFormatValue();
+                } catch (Exception e) {
+                    logger.log(Level.WARNING, e.getMessage());
+                }
+            }
 			return value;
 		} else {
 			try {
@@ -901,16 +886,16 @@ public class TemplateBook extends ReportBook {
 			throws ReportException {
 		if (expressions.length > 1) {
 			String value = ""; //$NON-NLS-1$
-			for (int i = 0; i < expressions.length; i++) {
-				try {
-					String v = getExprDsValue(expressions[i]);
-					if (v != null) {
-						value += v;
-					}
-				} catch (Exception e) {
-					logger.log(Level.WARNING, e.getMessage());
-				}
-			}
+            for (Expression expression : expressions) {
+                try {
+                    String v = getExprDsValue(expression);
+                    if (v != null) {
+                        value += v;
+                    }
+                } catch (Exception e) {
+                    logger.log(Level.WARNING, e.getMessage());
+                }
+            }
 			return value;
 		} else {
 			try {
@@ -1107,14 +1092,14 @@ public class TemplateBook extends ReportBook {
 	/**
 	 * Sets variable
 	 * 
-	 * @param name
-	 * @param value
+	 * @param name variable name
+	 * @param value variable value
 	 */
 	public void setVarValue(Object name, Object value) {
-		for (int i = 0; i < systemVars.length; i++) {
-			if (systemVars[i].toUpperCase().equals(name))
-				return;
-		}
+        for (String systemVar : systemVars) {
+            if (systemVar.toUpperCase().equals(name))
+                return;
+        }
 		getVars().put(name, value);
 
 		if (elContext != null) {
@@ -1124,16 +1109,16 @@ public class TemplateBook extends ReportBook {
 	}
 
 	public boolean findVar(String name) {
-		for (int i = 0; i < systemVars.length; i++) {
-			if (systemVars[i].equals(name))
-				return true;
-		}
+        for (String systemVar : systemVars) {
+            if (systemVar.equals(name))
+                return true;
+        }
 		return getVars().containsKey(name);
 	}
 
 	public Map<Object, Object> getVars() {
 		if (vars == null) {
-			vars = new HashMap<Object, Object>();
+			vars = new HashMap<>();
 		}
 		return vars;
 	}
@@ -1164,8 +1149,8 @@ public class TemplateBook extends ReportBook {
 
 	/**
 	 * 
-	 * @param id
-	 * @param ds
+	 * @param id dataset id
+	 * @param ds dataset
 	 * @since 2.0
 	 */
 	public void addReportDataSet(String id, Map<String, Object> ds) {
@@ -1174,7 +1159,7 @@ public class TemplateBook extends ReportBook {
 
 	private Map<String, ReportDataSet> getReportDataSetList() {
 		if (reportDSList == null) {
-			reportDSList = new HashMap<String, ReportDataSet>();
+			reportDSList = new HashMap<>();
 		}
 		return reportDSList;
 	}
@@ -1186,14 +1171,13 @@ public class TemplateBook extends ReportBook {
 	 */
 	protected Map<String, BufferedDataSet> getDataSetList() {
 		if (dataSetList == null) {
-			dataSetList = new HashMap<String, BufferedDataSet>();
+			dataSetList = new HashMap<>();
 		}
 		return dataSetList;
 	}
 
 	public ReportDataSet getDataSet(Object key) {
-		ReportDataSet ds = getDataSetList().get(key);
-		return ds;
+        return getDataSetList().get(key);
 	}
 
 	void setDataSet(ReportDataSet ds) {
@@ -1242,12 +1226,12 @@ public class TemplateBook extends ReportBook {
 		if (getSourcesList().size() == 0) {
 			getSourcesList().add(new JdbcReportSource());
 		}
-		return (JdbcReportSource) getSourcesList().get(0);
+		return  getSourcesList().get(0);
 	}
 
 	public List<JdbcReportSource> getSourcesList() {
 		if (sourcesList == null) {
-			sourcesList = new ArrayList<JdbcReportSource>();
+			sourcesList = new ArrayList<>();
 		}
 		return sourcesList;
 	}
@@ -1258,7 +1242,7 @@ public class TemplateBook extends ReportBook {
 
 	public Map<String, CellFunctionObject> getFunctionsList() {
 		if (functionsList == null) {
-			functionsList = new TreeMap<String, CellFunctionObject>();
+			functionsList = new TreeMap<>();
 		}
 		return functionsList;
 	}
@@ -1303,14 +1287,14 @@ public class TemplateBook extends ReportBook {
 								groupKey.getDatasetID());
 						if (ds != null && !ds.isEof()) {
 							if (ds.isDsEof())
-								return false;// TODO Change 22.05.2009
+								return false;
 							newValue = ds.getNextValue(groupKey.getName());
 						}
 					}
 					if (newValue == null) {
 						if (groupKey.getValue() == null)
 							return true;
-						groupKey.setValue(newValue);
+						groupKey.setValue(null);
 						return false;
 					}
 					if (!newValue.equals(groupKey.getValue())) {

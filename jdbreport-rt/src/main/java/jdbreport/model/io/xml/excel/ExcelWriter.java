@@ -40,7 +40,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import jdbreport.model.CellStyle;
-import jdbreport.model.JReportModel;
+import jdbreport.view.model.JReportModel;
 import jdbreport.model.ReportBook;
 import jdbreport.model.io.ReportWriter;
 import jdbreport.model.io.SaveReportException;

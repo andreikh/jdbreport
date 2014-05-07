@@ -1,7 +1,7 @@
 /*
  * JDBReport Generator
  * 
- * Copyright (C) 2006-2010 Andrey Kholmanskih. All rights reserved.
+ * Copyright (C) 2006-2014 Andrey Kholmanskih. All rights reserved.
  * 
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -45,7 +45,7 @@ import jdbreport.model.Cell;
 import jdbreport.model.CellCoord;
 import jdbreport.model.CellStyle;
 import jdbreport.model.GridRect;
-import jdbreport.model.JReportModel;
+import jdbreport.view.model.JReportModel;
 import jdbreport.model.Picture;
 import jdbreport.model.PictureFactory;
 import jdbreport.model.ReportException;
@@ -57,7 +57,7 @@ import jdbreport.source.ObjectDataSet;
 import jdbreport.source.ReportDataSet;
 
 /**
- * @version 2.0 28.05.2010
+ * @version 3.0 22.02.2014
  * @author Andrey Kholmanskih
  * 
  */
@@ -356,7 +356,7 @@ public abstract class AbstractCellFunction implements CellFunction {
 			return def;
 		if (value instanceof Boolean)
 			return (Boolean) value;
-		return new Boolean(value.toString());
+		return Boolean.valueOf(value.toString());
 	}
 
 	public void runFunction(String functionName) throws ReportException {
@@ -468,14 +468,11 @@ public abstract class AbstractCellFunction implements CellFunction {
 							new InputStreamReader((InputStream) value, "UTF-8"));
 					getCell().setValue(m);
 				} else if (value instanceof File) {
-					FileReader reader = new FileReader((File) value);
-					try {
-						jdbreport.model.math.MathML m = new jdbreport.model.math.MathML(
-								reader);
-						getCell().setValue(m);
-					} finally {
-						reader.close();
-					}
+                    try (FileReader reader = new FileReader((File) value)) {
+                        jdbreport.model.math.MathML m = new jdbreport.model.math.MathML(
+                                reader);
+                        getCell().setValue(m);
+                    }
 				}
 			} catch (Throwable e) {
 				e.printStackTrace();

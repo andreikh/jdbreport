@@ -3,7 +3,7 @@
  *
  * JDBReport Generator
  * 
- * Copyright (C) 2009-2010 Andrey Kholmanskih. All rights reserved.
+ * Copyright (C) 2009-2014 Andrey Kholmanskih. All rights reserved.
  * 
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -42,7 +42,7 @@ import javax.imageio.ImageIO;
 import org.w3c.dom.Document;
 
 /**
- * @version 1.0 28.02.2010
+ * @version 3.0 22.02.2014
  * @author Andrey Kholmanskih
  * 
  */
@@ -145,25 +145,30 @@ public class SVGImage {
 				iconHeight = height;
 
 				org.apache.batik.transcoder.image.ImageTranscoder t;
-				if ("jpg".equals(imageFormat) || "jpeg".equals(imageFormat)) {
-					t = new org.apache.batik.transcoder.image.JPEGTranscoder();
-				} else if ("tiff".equals(imageFormat)) {
-					t = new org.apache.batik.transcoder.image.TIFFTranscoder();
-				} else {
-					t = new org.apache.batik.transcoder.image.PNGTranscoder();
-				}
+                switch (imageFormat) {
+                    case "jpg":
+                    case "jpeg":
+                        t = new org.apache.batik.transcoder.image.JPEGTranscoder();
+                        break;
+                    case "tiff":
+                        t = new org.apache.batik.transcoder.image.TIFFTranscoder();
+                        break;
+                    default:
+                        t = new org.apache.batik.transcoder.image.PNGTranscoder();
+                        break;
+                }
 
 				if (width > 0) {
 					t
 							.addTranscodingHint(
 									org.apache.batik.transcoder.SVGAbstractTranscoder.KEY_WIDTH,
-									new Float(width));
+                                    (float) width);
 				}
 				if (height > 0) {
 					t
 							.addTranscodingHint(
 									org.apache.batik.transcoder.SVGAbstractTranscoder.KEY_HEIGHT,
-									new Float(height));
+                                    (float) height);
 				}
 
 				org.apache.batik.transcoder.TranscoderInput input = new org.apache.batik.transcoder.TranscoderInput(

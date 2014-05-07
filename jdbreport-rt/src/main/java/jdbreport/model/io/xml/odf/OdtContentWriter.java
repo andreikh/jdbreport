@@ -3,7 +3,7 @@
  *
  * JDBReport Generator
  * 
- * Copyright (C) 2007-2011 Andrey Kholmanskih. All rights reserved.
+ * Copyright (C) 2007-2014 Andrey Kholmanskih. All rights reserved.
  * 
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -50,7 +50,7 @@ import jdbreport.model.io.SaveReportException;
 import jdbreport.util.Utils;
 
 /**
- * @version 2.0 28.06.2011
+ * @version 3.0 22.02.2014
  * @author Andrey Kholmanskih
  * 
  */
@@ -66,7 +66,7 @@ class OdtContentWriter extends OdsContentWriter {
 		int n = 1;
 		for (ReportModel model : reportBook) {
 			int topRow = 0;
-			int r = 0;
+			int r;
 			do {
 				int leftCol = 0;
 				do {
@@ -183,7 +183,7 @@ class OdtContentWriter extends OdsContentWriter {
 				}
 				fw.println("/>");
 			} else {
-				StringBuffer buf = new StringBuffer("<table:table-cell ");
+				StringBuilder buf = new StringBuilder("<table:table-cell ");
 				buf.append("table:style-name=\"");
 				buf.append("Sheet");
 				buf.append(".");
@@ -202,12 +202,12 @@ class OdtContentWriter extends OdsContentWriter {
 				}
 				if (cell.getColSpan() > 0) {
 					buf.append("table:number-columns-spanned=\"");
-					buf.append("" + (cell.getColSpan() + 1));
+					buf.append("").append(cell.getColSpan() + 1);
 					buf.append("\" ");
 				}
 				if (cell.getRowSpan() > 0) {
 					buf.append("table:number-rows-spanned=\"");
-					buf.append("" + (cell.getRowSpan() + 1));
+					buf.append("").append(cell.getRowSpan() + 1);
 					buf.append("\" ");
 				}
 				buf.append('>');
@@ -243,7 +243,7 @@ class OdtContentWriter extends OdsContentWriter {
 					fw.println("</text:p>");
 
 					if (image != null) {
-						Dimension r = null;
+						Dimension r;
 						if (cell.isScaleIcon()) {
 							r = model.getCellSize(cell, row, c, false);
 						} else {
@@ -257,7 +257,7 @@ class OdtContentWriter extends OdsContentWriter {
 				}
 				
 				if (cell.getPicture() != null) {
-					Dimension r = null;
+					Dimension r;
 					RenderedImage image = Utils.getRenderedImage(cell.getPicture().getIcon());
 					if (cell.isScaleIcon()) {
 						r = model.getCellSize(cell, row, c, false);

@@ -126,7 +126,7 @@ public class RptWriter implements ReportWriter  {
 
 	public String write(String fileName, Object resource) {
 		if (resMap == null) {
-			resMap = new HashMap<String, Object>();
+			resMap = new HashMap<>();
 		}
 		resMap.put(fileName, resource);
 		return fileName;

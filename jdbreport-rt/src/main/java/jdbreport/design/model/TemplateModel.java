@@ -36,7 +36,7 @@ import jdbreport.model.CellStyle;
 import jdbreport.model.GridRect;
 import jdbreport.model.Group;
 import jdbreport.model.HeighCalculator;
-import jdbreport.model.JReportModel;
+import jdbreport.view.model.JReportModel;
 import jdbreport.model.TableRowModel;
 import jdbreport.source.JdbcReportSource;
 
@@ -62,7 +62,7 @@ public class TemplateModel extends JReportModel {
 	}
 
 	protected TableRowModel createRowModel() {
-		return new TemplateRowModel(this);
+		return new TemplateRowModel();
 	}
 
 	/**

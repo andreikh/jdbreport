@@ -154,7 +154,7 @@ public class DataSetResolver extends ELResolver {
 		}
 	}
 	
-	private final boolean isResolvable(Object base) {
+	private boolean isResolvable(Object base) {
 		return base instanceof ReportDataSet;
 	}
 

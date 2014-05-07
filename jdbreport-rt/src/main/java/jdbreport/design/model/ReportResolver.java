@@ -91,6 +91,6 @@ public class ReportResolver  extends ELResolver {
 		@Override
 		public Object invoke(ELContext context, Object base, Object method, Class<?>[] paramTypes, Object[] params) {
 			return delegate.invoke(context, base, method, paramTypes, params);
-		};
+		}
 	
 }

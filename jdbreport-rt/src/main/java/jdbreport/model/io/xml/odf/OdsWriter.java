@@ -192,7 +192,7 @@ public class OdsWriter implements ReportWriter, ImageWriter {
 
 	public void writeIcon(String fileName, RenderedImage image) {
 		if (images == null) {
-			images = new HashMap<String, RenderedImage>();
+			images = new HashMap<>();
 		}
 		images.put(fileName, image);
 	}

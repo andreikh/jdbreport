@@ -3,7 +3,7 @@
  *
  * JDBReport Generator
  * 
- * Copyright (C) 2006-2008 Andrey Kholmanskih. All rights reserved.
+ * Copyright (C) 2006-2014 Andrey Kholmanskih. All rights reserved.
  * 
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -52,7 +52,7 @@ import jdbreport.model.io.ReportReader;
 import org.xml.sax.SAXException;
 
 /**
- * @version 1.1 03/09/08
+ * @version 3.0 22.02.2014
  * @author Andrey Kholmanskih
  * 
  */
@@ -65,7 +65,7 @@ public class OdsReader implements ReportReader {
 
 	public void load(InputStream in, ReportBook reportBook)
 			throws LoadReportException {
-		ZipInputStream zipStream = null;
+		ZipInputStream zipStream;
 		if (in instanceof ZipInputStream)
 			zipStream = (ZipInputStream) in;
 		else
@@ -84,10 +84,10 @@ public class OdsReader implements ReportReader {
 		File path = new File(tmpPath);
 		if (!path.mkdir())
 			throw new LoadReportException(Messages.getString("OdsReader.4")); //$NON-NLS-1$
-		ArrayList<File> files = new ArrayList<File>();
+		ArrayList<File> files = new ArrayList<>();
 		try {
 			try {
-				ZipEntry entry = (ZipEntry) zipStream.getNextEntry();
+				ZipEntry entry =  zipStream.getNextEntry();
 				if (entry == null)
 					throw new LoadReportException(Messages
 							.getString("OdsReader.5")); //$NON-NLS-1$
@@ -101,71 +101,68 @@ public class OdsReader implements ReportReader {
 						} catch (IOException e) {
 							file.getParentFile().mkdirs();
 						}
-						OutputStream stream = new FileOutputStream(file);
-						try {
-							int l = 65536;
-							byte[] buf = new byte[l];
-							do {
-								l = zipStream.read(buf);
-								if (l > 0)
-									stream.write(buf, 0, l);
-							} while (l > 0);
-						} finally {
-							stream.close();
-						}
+                        try (OutputStream stream = new FileOutputStream(file)) {
+                            int l = 65536;
+                            byte[] buf = new byte[l];
+                            do {
+                                l = zipStream.read(buf);
+                                if (l > 0)
+                                    stream.write(buf, 0, l);
+                            } while (l > 0);
+                        }
 					} else
 						file.mkdirs();
-					entry = (ZipEntry) zipStream.getNextEntry();
+					entry = zipStream.getNextEntry();
 				}
 				zipStream.close();
 				OdsContentHandler handler = new OdsContentHandler(reportBook,
 						path.getPath());
 				reportBook.clear();
 				String mime = null;
-				for (int n = 0; n < files.size(); n++) {
-					if ("mimetype".equals(files.get(n).getName())) { //$NON-NLS-1$
-						FileReader reader = new FileReader(files.get(n));
-						char[] text = new char[1024];
-						int l = reader.read(text);
-						mime = new String(text, 0, l);
-						if (!"application/vnd.oasis.opendocument.spreadsheet" //$NON-NLS-1$
-						.equals(mime)) {
-							throw new LoadReportException(Messages
-									.getString("OdsReader.unknow") //$NON-NLS-1$
-									+ mime);
-						}
-						break;
-					}
-				}
+                for (File file1 : files) {
+                    if ("mimetype".equals(file1.getName())) { //$NON-NLS-1$
+                        FileReader reader = new FileReader(file1);
+                        char[] text = new char[1024];
+                        int l = reader.read(text);
+                        mime = new String(text, 0, l);
+                        if (!"application/vnd.oasis.opendocument.spreadsheet" //$NON-NLS-1$
+                                .equals(mime)) {
+                            throw new LoadReportException(Messages
+                                    .getString("OdsReader.unknow") //$NON-NLS-1$
+                                    + mime);
+                        }
+                        break;
+                    }
+                }
 				if (mime == null)
 					throw new LoadReportException(Messages
 							.getString("OdsReader.unknow2")); //$NON-NLS-1$
 
-				for (int n = 0; n < files.size(); n++) {
-					if ("meta.xml".equals(files.get(n).getName())) { //$NON-NLS-1$
-						parseFile(files.get(n), handler);
-						break;
-					}
-				}
-				for (int n = 0; n < files.size(); n++) {
-					if ("styles.xml".equals(files.get(n).getName())) { //$NON-NLS-1$
-						parseFile(files.get(n), handler);
-						break;
-					}
-				}
-				for (int n = 0; n < files.size(); n++) {
-					if ("content.xml".equals(files.get(n).getName())) { //$NON-NLS-1$
-						parseFile(files.get(n), handler);
-						removeDoubleBorders(reportBook);
-						break;
-					}
-				}
-				for (int n = 0; n < files.size(); n++) {
-					if ("settings.xml".equals(files.get(n).getName())) { //$NON-NLS-1$
-						parseFile(files.get(n), handler);
-						break;
-					}
-				}
+                for (File file : files) {
+                    if ("meta.xml".equals(file.getName())) { //$NON-NLS-1$
+                        parseFile(file, handler);
+                        break;
+                    }
+                }
+                for (File file : files) {
+                    if ("styles.xml".equals(file.getName())) { //$NON-NLS-1$
+                        parseFile(file, handler);
+                        break;
+                    }
+                }
+                for (File file : files) {
+                    if ("content.xml".equals(file.getName())) { //$NON-NLS-1$
+                        parseFile(file, handler);
+                        removeDoubleBorders(reportBook);
+                        break;
+                    }
+                }
+                for (File file : files) {
+                    if ("settings.xml".equals(file.getName())) { //$NON-NLS-1$
+                        parseFile(file, handler);
+                        break;
+                    }
+                }
 
 			} catch (IOException e) {
 				throw new LoadReportException(e);
@@ -190,24 +187,21 @@ public class OdsReader implements ReportReader {
 			handler.setReader(saxParser.getXMLReader());
 			FileInputStream stream = new FileInputStream(file);
 			saxParser.parse(stream, handler);
-		} catch (ParserConfigurationException e) {
-			throw new LoadReportException(e);
-		} catch (SAXException e) {
-			throw new LoadReportException(e);
-		} catch (IOException e) {
+		} catch (ParserConfigurationException | IOException | SAXException e) {
 			throw new LoadReportException(e);
 		}
-	}
+    }
 
 	void deletePath(File path) {
 		if (path.isDirectory()) {
 			File[] list = path.listFiles();
-			for (int i = 0; i < list.length; i++) {
-				if (list[i].isDirectory()) {
-					deletePath(list[i]);
-				}
-				list[i].delete();
-			}
+            if (list != null)
+            for (File aList : list) {
+                if (aList.isDirectory()) {
+                    deletePath(aList);
+                }
+                aList.delete();
+            }
 		}
 		path.delete();
 	}

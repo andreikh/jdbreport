@@ -34,7 +34,7 @@ import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.io.Writer;
 
-import jdbreport.model.JReportModel;
+import jdbreport.view.model.JReportModel;
 import jdbreport.model.ReportModel;
 import jdbreport.model.io.ResourceWriter;
 import jdbreport.model.io.SaveReportException;

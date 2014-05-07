@@ -40,7 +40,7 @@ import java.util.Map;
 import jdbreport.ReportService;
 import jdbreport.design.model.TemplateBook;
 import jdbreport.grid.JReportGrid;
-import jdbreport.model.JReportModel;
+import jdbreport.view.model.JReportModel;
 import jdbreport.model.ReportBook;
 import jdbreport.model.io.FileType;
 import jdbreport.model.io.LoadReportException;

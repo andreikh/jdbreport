@@ -108,8 +108,8 @@ public interface CellFunction {
 	/**
 	 * Returns the Cell by row and column
 	 * 
-	 * @param row
-	 * @param column
+	 * @param row the row's number
+	 * @param column the column's number
 	 * @return the cell's object
 	 */
 	public Cell getCell(int row, int column);

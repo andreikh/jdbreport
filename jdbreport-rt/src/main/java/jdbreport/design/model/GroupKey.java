@@ -44,7 +44,7 @@ public class GroupKey implements Cloneable {
 
 	/**
 	 * 
-	 * @param name
+	 * @param name key name
 	 */
 	public GroupKey(String name) {
 		super();
@@ -116,7 +116,7 @@ public class GroupKey implements Cloneable {
 
 	/**
 	 * Sets value of the key.
-	 * @param value
+	 * @param value key value
 	 */
 	public void setValue(Object value) {
 		this.value = value;

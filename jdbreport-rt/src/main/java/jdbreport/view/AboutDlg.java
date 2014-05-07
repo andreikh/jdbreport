@@ -47,7 +47,7 @@ import javax.swing.WindowConstants;
 import javax.swing.JLabel;
 
 import jdbreport.grid.ReportResources;
-import jdbreport.model.JReportModel;
+import jdbreport.view.model.JReportModel;
 import jdbreport.util.Utils;
 
 /**

@@ -3,7 +3,7 @@
  *
  * JDBReport Generator
  * 
- * Copyright (C) 2005-2011 Andrey Kholmanskih. All rights reserved.
+ * Copyright (C) 2005-2014 Andrey Kholmanskih. All rights reserved.
  * 
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -52,9 +52,10 @@ import jdbreport.model.io.ReportReader;
 import jdbreport.model.io.ReportWriter;
 import jdbreport.model.math.MathValue;
 import jdbreport.model.svg.SVGImage;
+import jdbreport.view.model.JReportModel;
 
 /**
- * @version 2.0 18.05.2011
+ * @version 3.0 22.02.2014
  * @author Andrey Kholmanskih
  * 
  */
@@ -64,7 +65,6 @@ public class ReportBook implements Iterable<ReportModel>, TableRowModelListener 
 	public static final String HTML_BODY = "html_body"; //$NON-NLS-1$
 	public static final String ODS = "ods"; //$NON-NLS-1$
 	public static final String ODT = "odt"; //$NON-NLS-1$
-	public static final String RPT = "rpt"; //$NON-NLS-1$
 	public static final String JRPT = "jrpt"; //$NON-NLS-1$
 	public static final String EXCEL = "excel_xml"; //$NON-NLS-1$
 	public static final String XML = "xml"; //$NON-NLS-1$
@@ -76,9 +76,9 @@ public class ReportBook implements Iterable<ReportModel>, TableRowModelListener 
 
 	protected static DateFormat dateFormatter = DateFormat.getDateInstance();
 
-	protected static TreeMap<Object, String> WRITERS_MAP = new TreeMap<Object, String>();
+	protected static TreeMap<Object, String> WRITERS_MAP = new TreeMap<>();
 
-	protected static TreeMap<Object, String> READERS_MAP = new TreeMap<Object, String>();
+	protected static TreeMap<Object, String> READERS_MAP = new TreeMap<>();
 
 	public static final String CURRENT_VERSION = "8"; //$NON-NLS-1$
 
@@ -97,29 +97,27 @@ public class ReportBook implements Iterable<ReportModel>, TableRowModelListener 
 		WRITERS_MAP.put(ODT, "jdbreport.model.io.xml.odf.OdtFileType"); //$NON-NLS-1$
 		try {
 			if (Class.forName("org.apache.poi.hssf.usermodel.HSSFWorkbook") != null) {
-				WRITERS_MAP.put(XLS, "jdbreport.model.io.poi.xls.XlsFileType"); //$NON-NLS-1$
+				WRITERS_MAP.put(XLS, "jdbreport.model.io.xls.poi.XlsFileType"); //$NON-NLS-1$
 				logger.info("Support MS Excel 2003 with POI is added");
 				if (Class.forName("org.apache.poi.xssf.usermodel.XSSFWorkbook") != null) {
 					WRITERS_MAP.put(XLSX,
-							"jdbreport.model.io.poi.xls.XlsxFileType"); //$NON-NLS-1$
+							"jdbreport.model.io.xls.poi.XlsxFileType"); //$NON-NLS-1$
 					logger.info("Support MS Excel 2007 with POI is added");
 				}
 			}
-		} catch (NoClassDefFoundError e) {
-			// e.printStackTrace();
-		} catch (ClassNotFoundException e) {
+		} catch (NoClassDefFoundError | ClassNotFoundException e) {
 		}
-		try {
+        try {
 			Class.forName("com.lowagie.text.Document");
-			WRITERS_MAP.put(PDF, "jdbreport.model.io.itext2.pdf.PdfFileType"); //$NON-NLS-1$
+			WRITERS_MAP.put(PDF, "jdbreport.model.io.pdf.itext2.PdfFileType"); //$NON-NLS-1$
 			logger.info("Support PDF with iText 2.1.7 is added");
 		} catch (ClassNotFoundException e) {
 			try {
 				Class.forName("com.itextpdf.text.Document");
 				WRITERS_MAP.put(PDF,
-						"jdbreport.model.io.itext5.pdf.PdfFileType"); //$NON-NLS-1$
+						"jdbreport.model.io.pdf.itext5.PdfFileType"); //$NON-NLS-1$
 				logger.info("Support PDF with iText 5.x is added");
-			} catch (ClassNotFoundException ex) {
+			} catch (ClassNotFoundException ignored) {
 			}
 		}
 
@@ -148,7 +146,7 @@ public class ReportBook implements Iterable<ReportModel>, TableRowModelListener 
 		return dateFormatter;
 	}
 
-	private List<ReportModel> list = new ArrayList<ReportModel>();
+	private List<ReportModel> list = new ArrayList<>();
 
 	private Map<Object, CellStyle> styleList;
 
@@ -173,7 +171,7 @@ public class ReportBook implements Iterable<ReportModel>, TableRowModelListener 
 	private boolean printThroughPdf = false;
 
 	public ReportBook() {
-		styleList = new HashMap<Object, CellStyle>();
+		styleList = new HashMap<>();
 		add();
 	}
 
@@ -187,7 +185,7 @@ public class ReportBook implements Iterable<ReportModel>, TableRowModelListener 
 
 	/**
 	 * 
-	 * @param key
+	 * @param key file type
 	 * @return true if exists FileType by key
 	 * @since 1.3
 	 */
@@ -197,7 +195,7 @@ public class ReportBook implements Iterable<ReportModel>, TableRowModelListener 
 
 	/**
 	 * 
-	 * @param key
+	 * @param key file type
 	 * @return FileType by key
 	 * @since 1.3
 	 */
@@ -205,17 +203,10 @@ public class ReportBook implements Iterable<ReportModel>, TableRowModelListener 
 		try {
 			String className = WRITERS_MAP.get(key);
 			if (className != null) {
-				FileType fileType = (FileType) Class.forName(className)
-						.newInstance();
-				return fileType;
+                return (FileType) Class.forName(className)
+                        .newInstance();
 			}
-		} catch (NullPointerException e) {
-			logger.log(Level.SEVERE, e.getMessage(), e);
-		} catch (InstantiationException e) {
-			logger.log(Level.SEVERE, e.getMessage(), e);
-		} catch (IllegalAccessException e) {
-			logger.log(Level.SEVERE, e.getMessage(), e);
-		} catch (ClassNotFoundException e) {
+		} catch (Exception e) {
 			logger.log(Level.SEVERE, e.getMessage(), e);
 		}
 		return null;
@@ -357,7 +348,7 @@ public class ReportBook implements Iterable<ReportModel>, TableRowModelListener 
 	protected void lockUpdate() {
 		lockUpdate++;
 		for (ReportModel model : list) {
-			((JReportModel) model).startUpdate();
+			model.startUpdate();
 		}
 	}
 
@@ -365,7 +356,7 @@ public class ReportBook implements Iterable<ReportModel>, TableRowModelListener 
 		if (lockUpdate > 0)
 			lockUpdate--;
 		for (ReportModel model : list) {
-			((JReportModel) model).endUpdate();
+			model.endUpdate();
 		}
 	}
 
@@ -420,7 +411,7 @@ public class ReportBook implements Iterable<ReportModel>, TableRowModelListener 
 	/**
 	 * Appends the other reportbook
 	 * 
-	 * @param book
+	 * @param book ReportBook
 	 * @since 2.0
 	 */
 	public void add(ReportBook book) {
@@ -430,8 +421,8 @@ public class ReportBook implements Iterable<ReportModel>, TableRowModelListener 
 	/**
 	 * Appends the other reportbook
 	 * 
-	 * @param book
-	 * @param index
+	 * @param book ReportBook
+	 * @param index insert index
 	 * @since 2.0
 	 */
 	public void add(ReportBook book, int index) {
@@ -494,13 +485,13 @@ public class ReportBook implements Iterable<ReportModel>, TableRowModelListener 
 	 */
 	protected void revalidatePageNumbers() {
 		int firstPage = 1;
-		for (int i = 0; i < list.size(); i++) {
-			TableRowModel rowModel = list.get(i).getRowModel();
-			rowModel.setFirstPageNumber(firstPage);
-			if (isGlobalPageNumber()) {
-				firstPage += rowModel.getPageCount();
-			}
-		}
+        for (ReportModel aList : list) {
+            TableRowModel rowModel = aList.getRowModel();
+            rowModel.setFirstPageNumber(firstPage);
+            if (isGlobalPageNumber()) {
+                firstPage += rowModel.getPageCount();
+            }
+        }
 
 	}
 
@@ -519,7 +510,7 @@ public class ReportBook implements Iterable<ReportModel>, TableRowModelListener 
 	 * common indexing of pages in all report is set, differently in each sheet
 	 * numbering starts with 1
 	 * 
-	 * @param globalPageNumber
+	 * @param globalPageNumber  if true, then indexing of pages in all report
 	 * @since 1.4
 	 */
 	public void setGlobalPageNumber(boolean globalPageNumber) {
@@ -792,7 +783,6 @@ public class ReportBook implements Iterable<ReportModel>, TableRowModelListener 
 	 * @param reader
 	 *            the ReportReader that is used to read the report
 	 * @throws LoadReportException
-	 * @throws IOException 
 	 */
 	public void open(InputStream stream, ReportReader reader)
 			throws LoadReportException {
@@ -853,11 +843,6 @@ public class ReportBook implements Iterable<ReportModel>, TableRowModelListener 
 
 	public void removeReportListListener(ReportListListener x) {
 		listenerList.remove(ReportListListener.class, x);
-	}
-
-	public ReportListListener[] getReportListListeners() {
-		return (ReportListListener[]) listenerList
-				.getListeners(ReportListListener.class);
 	}
 
 	/**
@@ -979,14 +964,6 @@ public class ReportBook implements Iterable<ReportModel>, TableRowModelListener 
 		changeSupport.removePropertyChangeListener(listener);
 	}
 
-	public synchronized void removePropertyChangeListener(String propertyName,
-			PropertyChangeListener listener) {
-		if (listener == null || changeSupport == null) {
-			return;
-		}
-		changeSupport.removePropertyChangeListener(propertyName, listener);
-	}
-
 	/**
 	 * Returns the styles' count
 	 * 
@@ -1034,9 +1011,8 @@ public class ReportBook implements Iterable<ReportModel>, TableRowModelListener 
 		Object id = style.getId();
 		if (id == null || styleList.containsKey(id)) {
 			id = new Integer(styleList.size());
-			while (styleList.containsKey(id)) {
-				id = new Integer(((Integer) id).intValue() + 1);
-			}
+			while (styleList.containsKey(id))
+                id = ((Integer) id).intValue() + 1;
 		}
 		style.setId(id);
 		styleList.put(id, style);
@@ -1228,7 +1204,7 @@ public class ReportBook implements Iterable<ReportModel>, TableRowModelListener 
 
 	/**
 	 * Printing through conversion to PDF
-	 * @param printThroughPdf
+	 * @param printThroughPdf boolean
 	 * @since 2.0
 	 */
 	public void setPrintThroughPdf(boolean printThroughPdf) {

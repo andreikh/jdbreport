@@ -77,7 +77,6 @@ import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
-import javax.swing.JViewport;
 import javax.swing.SwingUtilities;
 import javax.swing.WindowConstants;
 import javax.swing.event.ChangeEvent;
@@ -106,7 +105,7 @@ import jdbreport.grid.undo.UndoItem;
 import jdbreport.grid.undo.UndoList;
 import jdbreport.model.Cell;
 import jdbreport.model.HeighCalculator;
-import jdbreport.model.JReportModel;
+import jdbreport.view.model.JReportModel;
 import jdbreport.model.ReportBook;
 import jdbreport.model.ReportModel;
 import jdbreport.model.StringMetrics;
@@ -253,7 +252,7 @@ public class ReportPane extends JPanel implements ReportListListener,
 	}
 
 	public int calcRowHeight(ReportModel model, Cell cell, int row, int column) {
-		TableCellRenderer renderer = (TableCellRenderer) getDefaultGrid()
+		TableCellRenderer renderer =  getDefaultGrid()
 				.getCellRenderer(cell);
 		if (renderer instanceof ReportCellRenderer) {
 			return ((ReportCellRenderer) renderer).getTextHeight(model, row,
@@ -353,7 +352,7 @@ public class ReportPane extends JPanel implements ReportListListener,
 	}
 
 	private JReportGrid getDefaultGrid() {
-		return (JReportGrid) reportGridList.get(0);
+		return reportGridList.get(0);
 	}
 
 	public JReportGrid getFocusedGrid() {
@@ -427,7 +426,7 @@ public class ReportPane extends JPanel implements ReportListListener,
 
 	public java.util.List<JReportGrid> getReportGridList() {
 		if (reportGridList == null) {
-			reportGridList = new ArrayList<JReportGrid>();
+			reportGridList = new ArrayList<>();
 			createNew();
 		}
 		return reportGridList;
@@ -450,10 +449,6 @@ public class ReportPane extends JPanel implements ReportListListener,
 
 	public boolean isDirty() {
 		return dirty;
-	}
-
-	protected void setDirty() {
-		setDirty(true);
 	}
 
 	private void setDirty(boolean dirty) {
@@ -546,7 +541,7 @@ public class ReportPane extends JPanel implements ReportListListener,
 	/**
 	 * Find ReportGrid in tabbedPane
 	 * 
-	 * @param index
+	 * @param index report index
 	 * @return JReportGrid
 	 */
 	protected JReportGrid findReportGrid(int index) {
@@ -653,11 +648,13 @@ public class ReportPane extends JPanel implements ReportListListener,
 		return print(component, grids, showPrintDialog, interactive, 0);
 	}
 
-	/**
+    final Object lock = new Object();
+
+    /**
 	 * Printing of all report
 	 * 
-	 * @param showPrintDialog
-	 * @param interactive
+	 * @param showPrintDialog if true then show dialog
+	 * @param interactive if true interactive
 	 * @param numPage
 	 *            default page
 	 * @return true if the print has been successful
@@ -705,25 +702,21 @@ public class ReportPane extends JPanel implements ReportListListener,
 
 		printError = null;
 
-		final Object lock = new Object();
 
 		final sun.swing.PrintingStatus printingStatus = interactive ? sun.swing.PrintingStatus
 				.createPrintingStatus(component, job) : null;
 
-		Runnable runnable = new Runnable() {
-			public void run() {
-				try {
-					PrintRequestAttributeSet copyAttr = attr;
-					job.print(copyAttr);
-				} catch (Throwable t) {
-					synchronized (lock) {
-						printError = t;
-					}
-				} finally {
-					printingStatus.dispose();
-				}
-			}
-		};
+		Runnable runnable = () -> {
+            try {
+                job.print(attr);
+            } catch (Throwable t) {
+                synchronized (lock) {
+                    printError = t;
+                }
+            } finally {
+                printingStatus.dispose();
+            }
+        };
 
 		Thread th = new Thread(runnable);
 		th.start();
@@ -768,7 +761,7 @@ public class ReportPane extends JPanel implements ReportListListener,
 			return;
 		}
 		try {
-			ArrayList<JReportGrid> grids = new ArrayList<JReportGrid>();
+			ArrayList<JReportGrid> grids = new ArrayList<>();
 
 			for (int i = 0; i < getReportGridList().size(); i++) {
 				JReportGrid grid = getReportGrid(i);
@@ -808,7 +801,7 @@ public class ReportPane extends JPanel implements ReportListListener,
 
 		final PrinterJob job1 = PrinterJob.getPrinterJob();
 
-		if (!((PrinterJob) job1).printDialog(attr)) {
+		if (!job1.printDialog(attr)) {
 			return;
 		}
 		setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
@@ -838,7 +831,7 @@ public class ReportPane extends JPanel implements ReportListListener,
 
 				try {
 					job.print(myDoc, attr);
-				} catch (PrintException pe) {
+				} catch (PrintException ignored) {
 				}
 			} finally {
 				file.delete();
@@ -885,8 +878,7 @@ public class ReportPane extends JPanel implements ReportListListener,
 			int index = indexOfTabbed(grid);
 			if (index >= 0)
 				tabbedPane.setTitleAt(index, evt.getNewValue().toString());
-			return;
-		} else if (evt.getPropertyName().equals(VISIBLE_PROPERTY)) {
+        } else if (evt.getPropertyName().equals(VISIBLE_PROPERTY)) {
 			setGridVisible((JReportGrid) evt.getSource(),
 					(Boolean) evt.getNewValue());
 		} else if (evt.getPropertyName().equals(SHOW_GRID_PROPERTY)) {
@@ -901,7 +893,7 @@ public class ReportPane extends JPanel implements ReportListListener,
 				setTitle(s);
 		} else if (evt.getPropertyName().equals("rowSize")) {
 			JReportGrid grid = (JReportGrid) evt.getSource();
-			((JViewport) grid.getParent()).revalidate();
+			grid.getParent().revalidate();
 		}
 	}
 
@@ -1174,7 +1166,7 @@ public class ReportPane extends JPanel implements ReportListListener,
 	/**
 	 * Returns default filter
 	 * 
-	 * @param fileChooser
+	 * @param fileChooser JFileChooser
 	 * @return default FileFilter
 	 * @since 1.3
 	 */
@@ -1200,7 +1192,7 @@ public class ReportPane extends JPanel implements ReportListListener,
 		fileChooser.setDialogType(JFileChooser.SAVE_DIALOG);
 		fileChooser.removeChoosableFileFilter(fileChooser
 				.getAcceptAllFileFilter());
-		List<FileType> sortedList = new ArrayList<FileType>();
+		List<FileType> sortedList = new ArrayList<>();
 		for (String className : getReportBook().getWriterNames()) {
 			sortedList.add(getFileTypeClass(className));
 		}
@@ -1237,14 +1229,10 @@ public class ReportPane extends JPanel implements ReportListListener,
 		try {
 			if (className != null)
 				return (FileType) Class.forName(className).newInstance();
-		} catch (InstantiationException e) {
-			e.printStackTrace();
-		} catch (IllegalAccessException e) {
-			e.printStackTrace();
-		} catch (ClassNotFoundException e) {
+		} catch (InstantiationException | IllegalAccessException | ClassNotFoundException e) {
 			e.printStackTrace();
 		}
-		return null;
+        return null;
 	}
 
 	protected JFileChooser createFileChooser() {
@@ -1254,9 +1242,6 @@ public class ReportPane extends JPanel implements ReportListListener,
 			FileType reader = getFileTypeClass(className);
 			ReportFileFilter filter = new ReportFileFilter(reader);
 			fileChooser.addChoosableFileFilter(filter);
-			// if (filter.getDescription().equals(ReportPane.CURRENT_FILTER)) {
-			// currentFilter = filter;
-			// }
 		}
 		FileFilter currentFilter = getDefaultFilter(fileChooser);
 		if (currentFilter != null)
@@ -1446,10 +1431,8 @@ public class ReportPane extends JPanel implements ReportListListener,
 
 	public boolean incrementalFind(FindParams findParams) {
 		Finder finder = getFocusedGrid();
-		if (finder != null)
-			return getFocusedGrid().incrementalFind(findParams);
-		return false;
-	}
+        return finder != null ? getFocusedGrid().incrementalFind(findParams) : false;
+    }
 
 	protected LinkedList<UndoItem> getUndoStack() {
 		if (undoStack == null) {
@@ -1658,18 +1641,15 @@ public class ReportPane extends JPanel implements ReportListListener,
 		public int print(final Graphics graphics, final PageFormat pageFormat,
 				final int pageIndex) throws PrinterException {
 
-			Runnable runnable = new Runnable() {
-
-				public synchronized void run() {
-					try {
-						printPage(graphics, pageFormat, pageIndex);
-					} catch (Throwable throwable) {
-						retThrowable = throwable;
-					} finally {
-						notifyAll();
-					}
-				}
-			};
+			Runnable runnable = () -> {
+                try {
+                    printPage(graphics, pageFormat, pageIndex);
+                } catch (Throwable throwable) {
+                    retThrowable = throwable;
+                } finally {
+                    notifyAll();
+                }
+            };
 
 			synchronized (runnable) {
 				retVal = -1;
@@ -1680,7 +1660,7 @@ public class ReportPane extends JPanel implements ReportListListener,
 				while (retVal == -1 && retThrowable == null) {
 					try {
 						runnable.wait();
-					} catch (InterruptedException ie) {
+					} catch (InterruptedException ignored) {
 
 					}
 				}

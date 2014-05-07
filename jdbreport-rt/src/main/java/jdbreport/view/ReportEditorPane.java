@@ -98,7 +98,7 @@ import jdbreport.model.ReportBook;
 import jdbreport.model.ReportColumn;
 import jdbreport.model.ReportModel;
 import jdbreport.model.event.CellSelectListener;
-import jdbreport.model.io.itext.pdf.PdfFileType;
+import jdbreport.model.io.pdf.PdfFileType;
 import jdbreport.model.svg.SVGValue;
 import jdbreport.util.HelpWindow;
 

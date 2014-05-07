@@ -3,7 +3,7 @@
  *
  * JDBReport Generator
  * 
- * Copyright (C) 2006-2009 Andrey Kholmanskih. All rights reserved.
+ * Copyright (C) 2006-2014 Andrey Kholmanskih. All rights reserved.
  * 
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -33,7 +33,7 @@ import jdbreport.model.io.xml.RptWriter;
 
 
 /**
- * @version 2.0 20.12.2009
+ * @version 3.0 22.12.2014
  * @author Andrey Kholmanskih
  * 
  */
@@ -41,7 +41,7 @@ public class DbrWriter extends RptWriter {
 
 	
 	protected ReportWriter createReportWriter() {
-		return TemplateBookParser.createReportWriter(this);
+		return TemplateBookParser.createTemplateReportWriter(this);
 	}
 	
 

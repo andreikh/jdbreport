@@ -49,8 +49,8 @@ import jdbreport.design.grid.undo.TemplateGridHandler;
 import jdbreport.design.grid.undo.TemplateGridParser;
 import jdbreport.design.model.CellObject;
 import jdbreport.design.model.TemplateModel;
-import jdbreport.design.model.clipboard.TemplateClipboardParser;
-import jdbreport.design.model.clipboard.TemplateFragmentHandler;
+import jdbreport.design.view.clipboard.TemplateClipboardParser;
+import jdbreport.design.view.clipboard.TemplateFragmentHandler;
 import jdbreport.grid.CellPropertiesDlg;
 import jdbreport.grid.JReportGrid;
 import jdbreport.grid.ReportCellRenderer;
@@ -62,7 +62,7 @@ import jdbreport.grid.undo.UndoItem;
 import jdbreport.model.Cell;
 import jdbreport.model.GridRect;
 import jdbreport.model.TableRow;
-import jdbreport.model.clipboard.ClipboardParser;
+import jdbreport.view.clipboard.ClipboardParser;
 import jdbreport.util.Utils;
 
 /**

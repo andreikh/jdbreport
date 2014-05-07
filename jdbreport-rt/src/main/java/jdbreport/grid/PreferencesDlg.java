@@ -52,7 +52,7 @@ import jdbreport.grid.undo.PreferencesUndo;
 import jdbreport.grid.undo.UndoItem;
 import jdbreport.model.ReportBook;
 import jdbreport.model.ReportModel;
-import jdbreport.model.io.itext.pdf.PdfFileType;
+import jdbreport.model.io.pdf.PdfFileType;
 import jdbreport.util.Utils;
 import jdbreport.view.ReportEditorPane;
 

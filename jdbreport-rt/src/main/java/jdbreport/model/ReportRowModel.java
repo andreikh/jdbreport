@@ -3,7 +3,7 @@
  *
  * JDBReport Generator
  * 
- * Copyright (C) 2004-2011 Andrey Kholmanskih. All rights reserved.
+ * Copyright (C) 2004-2014 Andrey Kholmanskih. All rights reserved.
  * 
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -27,19 +27,23 @@
  */
 package jdbreport.model;
 
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
-import java.io.Serializable;
-import java.util.*;
-
-import javax.swing.event.*;
-
 import jdbreport.model.event.TableRowModelEvent;
 import jdbreport.model.event.TableRowModelListener;
 import jdbreport.util.GraphicUtil;
 
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.EventListenerList;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+
 /**
- * @version 2.0 12.05.2011
+ * @version 3.0 22.02.2014
  * 
  * @author Andrey Kholmanskih
  * 
@@ -87,7 +91,7 @@ public class ReportRowModel implements TableRowModel, PropertyChangeListener,
 	 */
 	private int firstPageNumber = 1;
 
-	private List<PageNumber> pageNumberList = new ArrayList<PageNumber>();
+	private List<PageNumber> pageNumberList = new ArrayList<>();
 
 	private List<Integer> pageColumnList;
 
@@ -97,8 +101,8 @@ public class ReportRowModel implements TableRowModel, PropertyChangeListener,
 
 	private boolean printLeftToRight;
 
-	public ReportRowModel(JReportModel reportModel) {
-		rowList = new ArrayList<TableRow>();
+	public ReportRowModel() {
+		rowList = new ArrayList<>();
 		rootGroup = createRootGroup();
 	}
 
@@ -127,17 +131,16 @@ public class ReportRowModel implements TableRowModel, PropertyChangeListener,
 	public void addColumn(int column) {
 		disableSpan();
 		try {
-			Iterator<TableRow> it = getRootGroup().iterator();
-			while (it.hasNext()) {
-				it.next().addColumn(column);
-			}
+            for (TableRow cells : getRootGroup()) {
+                cells.addColumn(column);
+            }
 		} finally {
 			enableSpan();
 		}
 	}
 
 	public void removeColumn(int column) {
-		List<Cell> list = new ArrayList<Cell>();
+		List<Cell> list = new ArrayList<>();
 		for (Iterator<TableRow> it = getRootGroup().iterator(); it.hasNext();) {
 			TableRow tableRow = it.next();
 			Cell cell = tableRow.getCellItem(column);
@@ -153,10 +156,9 @@ public class ReportRowModel implements TableRowModel, PropertyChangeListener,
 		}
 		disableSpan();
 		try {
-			for (Iterator<TableRow> it = getRootGroup().iterator(); it
-					.hasNext();) {
-				it.next().removeColumn(column);
-			}
+            for (TableRow cells : getRootGroup()) {
+                cells.removeColumn(column);
+            }
 			colcount--;
 		} finally {
 			enableSpan();
@@ -278,7 +280,7 @@ public class ReportRowModel implements TableRowModel, PropertyChangeListener,
 	}
 
 	/**
-	 * @param group
+	 * @param group Group
 	 */
 	protected void removeGroup(Group group) {
 		group.getParent().remove(group);
@@ -307,7 +309,7 @@ public class ReportRowModel implements TableRowModel, PropertyChangeListener,
 	private TableRow removeRow(int row) {
 		TableRow tableRow = rowList.remove(row);
 
-		List<Cell> list = new ArrayList<Cell>();
+		List<Cell> list = new ArrayList<>();
 		for (Cell cell : tableRow) {
 			if (cell.isChild()) {
 				if (list.indexOf(cell.getOwner()) < 0) {
@@ -462,12 +464,10 @@ public class ReportRowModel implements TableRowModel, PropertyChangeListener,
 		Cell oldCell;
 		disableSpan();
 		try {
-			Iterator<TableRow> it = getRootGroup().iterator();
-			while (it.hasNext()) {
-				TableRow reportRow = it.next();
-				oldCell = reportRow.removeColumn(columnIndex);
-				reportRow.addColumn(newIndex, oldCell);
-			}
+            for (TableRow reportRow : getRootGroup()) {
+                oldCell = reportRow.removeColumn(columnIndex);
+                reportRow.addColumn(newIndex, oldCell);
+            }
 		} finally {
 			enableSpan();
 		}
@@ -940,7 +940,7 @@ public class ReportRowModel implements TableRowModel, PropertyChangeListener,
 			restoreSpanCells();
 			RowsGroup pageHeaderGroup = rootGroup.getPageHeaderGroup();
 			RowsGroup pageFooterGroup = rootGroup.getPageFooterGroup();
-			PageNumber pageNumber = null;
+			PageNumber pageNumber;
 			getPageNumberList().clear();
 			if (pageColumnList != null) {
 				pageColumnList.clear();
@@ -1132,7 +1132,7 @@ public class ReportRowModel implements TableRowModel, PropertyChangeListener,
 				g = g.getParent();
 			}
 			if (g != null) {
-				RowsGroup header = (RowsGroup) ((DetailGroup) g)
+				RowsGroup header =  ((DetailGroup) g)
 						.getHeaderGroup();
 				if (header != null && header.getChildCount() > 0) {
 
@@ -1149,8 +1149,7 @@ public class ReportRowModel implements TableRowModel, PropertyChangeListener,
 				g = g.getParent();
 			}
 		}
-		int[] result = { h, count };
-		return result;
+        return new int[]{ h, count };
 	}
 
 	private PageNumber addPageNumber(PageNumber pageNumber, int index) {
@@ -1221,7 +1220,7 @@ public class ReportRowModel implements TableRowModel, PropertyChangeListener,
 
 	private List<SplitData> createSplitCells() {
 		if (splitCells == null) {
-			splitCells = new ArrayList<SplitData>();
+			splitCells = new ArrayList<>();
 		}
 		return splitCells;
 	}
@@ -1296,9 +1295,9 @@ public class ReportRowModel implements TableRowModel, PropertyChangeListener,
 		return pageNumberList;
 	}
 
-	void addPageColumn(int column) {
+	public void addPageColumn(int column) {
 		if (pageColumnList == null) {
-			pageColumnList = new ArrayList<Integer>();
+			pageColumnList = new ArrayList<>();
 		}
 		pageColumnList.add(column);
 	}

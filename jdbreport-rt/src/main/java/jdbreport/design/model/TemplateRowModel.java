@@ -3,7 +3,7 @@
  *
  * JDBReport Generator
  * 
- * Copyright (C) 2005-2011 Andrey Kholmanskih. All rights reserved.
+ * Copyright (C) 2005-2014 Andrey Kholmanskih. All rights reserved.
  * 
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -34,7 +34,6 @@ import jdbreport.model.BaseRowGroup;
 import jdbreport.model.DetailGroup;
 import jdbreport.model.Group;
 import jdbreport.model.GroupsGroup;
-import jdbreport.model.JReportModel;
 import jdbreport.model.ReportRowModel;
 import jdbreport.model.RootGroup;
 import jdbreport.model.RowsGroup;
@@ -43,7 +42,7 @@ import jdbreport.model.TreeRowGroup;
 import jdbreport.model.event.TableRowModelEvent;
 
 /**
- * @version 2.0 18.05.2011
+ * @version 3.0 22.02.2014
  * @author Andrey Kholmanskih
  * 
  */
@@ -53,8 +52,8 @@ public class TemplateRowModel extends ReportRowModel {
 
 	static private TemplateNullRow templateNullRow = new TemplateNullRow();
 
-	public TemplateRowModel(JReportModel reportModel) {
-		super(reportModel);
+	public TemplateRowModel() {
+		super();
 		setCanHideGroup(true);
 	}
 

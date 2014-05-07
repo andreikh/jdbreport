@@ -1,7 +1,7 @@
 /*
  * JDBReport Generator
  * 
- * Copyright (C) 2006-2012 Andrey Kholmanskih. All rights reserved.
+ * Copyright (C) 2006-2014 Andrey Kholmanskih. All rights reserved.
  * 
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -27,7 +27,6 @@ package jdbreport.design.model.xml;
 
 import java.io.PrintWriter;
 import java.util.Enumeration;
-import java.util.Iterator;
 import java.util.Properties;
 
 import jdbreport.design.model.CellFunctionObject;
@@ -55,7 +54,7 @@ import and.util.xml.XMLCoder;
 import and.util.xml.XMLParser;
 
 /**
- * @version 2.0 15.02.2012
+ * @version 3.0 22.02.2014
  * @author Andrey Kholmanskih
  * 
  */
@@ -87,15 +86,12 @@ public class TemplateBookParser extends ReportBookParser {
 		super(reportHandler, rr);
 	}
 
-	public static ReportWriter createReportWriter(ResourceWriter rw) {
+	public static ReportWriter createTemplateReportWriter(ResourceWriter rw) {
 		return new TemplateBookParser(rw);
 	}
 
 	protected XMLParser createSheetHandler() {
-		if (getHandler().getVersion().compareTo("7") < 0)
-			return new TemplateReportParser6(getDefaultReportHandler());
-		else
-			return new TemplateReportParser(getDefaultReportHandler(), resourceReader);
+    	return new TemplateReportParser(getDefaultReportHandler(), resourceReader);
 	}
 
 	private TemplateBook getTemplateReportBook() {
@@ -166,8 +162,7 @@ public class TemplateBookParser extends ReportBookParser {
 		}
 		if (inReplacements && name.equals("replacements")) {
 			inReplacements = false;
-			return;
-		}
+        }
 	}
 
 	public boolean startElement(String name, Attributes attributes) {
@@ -295,19 +290,18 @@ public class TemplateBookParser extends ReportBookParser {
 	private void writeVars(TemplateBook book, PrintWriter fw) {
 		if (book.getVars().size() > 0) {
 			fw.println("<vars>");
-			Iterator<Object> it = book.getVars().keySet().iterator();
-			while (it.hasNext()) {
-				String key = (String) it.next();
-				Object value = book.getVars().get(key);
-				if (value != null && value.toString().length() > 0)
-					fw.println("<var name=\"" + XMLCoder.replaceSpecChar(key)
-							+ "\" value=\""
-							+ XMLCoder.replaceSpecChar(value.toString())
-							+ "\" />");
-				else
-					fw.println("<var name=\"" + XMLCoder.replaceSpecChar(key)
-							+ "\"/>");
-			}
+            for (Object o : book.getVars().keySet()) {
+                String key = (String) o;
+                Object value = book.getVars().get(key);
+                if (value != null && value.toString().length() > 0)
+                    fw.println("<var name=\"" + XMLCoder.replaceSpecChar(key)
+                            + "\" value=\""
+                            + XMLCoder.replaceSpecChar(value.toString())
+                            + "\" />");
+                else
+                    fw.println("<var name=\"" + XMLCoder.replaceSpecChar(key)
+                            + "\"/>");
+            }
 			fw.println("</vars>");
 		}
 
@@ -315,32 +309,22 @@ public class TemplateBookParser extends ReportBookParser {
 
 	protected void writeDataSources(TemplateBook book, PrintWriter writer) {
 		for (int i = 0; i < book.getSourcesList().size(); i++) {
-			JdbcReportSource source = (JdbcReportSource) book.getSourcesList()
+			JdbcReportSource source = book.getSourcesList()
 					.get(i);
-			StringBuffer params = new StringBuffer("alias=\""
+			StringBuilder params = new StringBuilder("alias=\""
 					+ XMLCoder.replaceSpecChar(source.getAlias()) + "\"");
 			if (source.getJndiName() != null)
-				params
-						.append(" jndiName=\""
-								+ XMLCoder
-										.replaceSpecChar(source.getJndiName())
-								+ "\"");
+				params.append(" jndiName=\"").append(XMLCoder
+                        .replaceSpecChar(source.getJndiName())).append("\"");
 			if (source.getDriverName() != null)
-				params.append(" driver=\""
-						+ XMLCoder.replaceSpecChar(source.getDriverName())
-						+ "\"");
+				params.append(" driver=\"").append(XMLCoder.replaceSpecChar(source.getDriverName())).append("\"");
 			if (source.getUrl() != null)
-				params.append(" url=\""
-						+ XMLCoder.replaceSpecChar(source.getUrl()) + "\"");
+				params.append(" url=\"").append(XMLCoder.replaceSpecChar(source.getUrl())).append("\"");
 			if (source.getUser() != null)
-				params.append(" user=\""
-						+ XMLCoder.replaceSpecChar(source.getUser()) + "\"");
+				params.append(" user=\"").append(XMLCoder.replaceSpecChar(source.getUser())).append("\"");
 			if (source.getPassword() != null)
-				params
-						.append(" pass=\""
-								+ XMLCoder
-										.replaceSpecChar(source.getPassword())
-								+ "\"");
+				params.append(" pass=\"").append(XMLCoder
+                        .replaceSpecChar(source.getPassword())).append("\"");
 			writer.println("<DataSetList " + params + ">");
 			if (source.getProperties().size() > 0) {
 				StringBuffer properties = new StringBuffer("<Properties ");
@@ -379,27 +363,24 @@ public class TemplateBookParser extends ReportBookParser {
 		if (book.getFunctionsList().isEmpty())
 			return;
 		writer.println("<cell-functions>");
-		Iterator<CellFunctionObject> it = book.getFunctionsList().values()
-				.iterator();
-		while (it.hasNext()) {
-			CellFunctionObject cellObject = it.next();
-			if (cellObject.getFunctionName() == null)
-				continue;
+        for (CellFunctionObject cellObject : book.getFunctionsList().values()) {
+            if (cellObject.getFunctionName() == null)
+                continue;
 
-			writer.println("<class name=\"" + cellObject.getFunctionName()
-					+ "\">");
-			if (cellObject.getFunctionBody() != null) {
-				writer.print("<function-text><![CDATA[");
-				writer.print(cellObject.getFunctionBody());
-				writer.println("]]></function-text>");
-			}
-			if (cellObject.getCompiledClass() != null) {
-				writer.println("<function-code>"
-						+ new String(XMLCoder.base64Encode(cellObject
-								.getCompiledClass())) + "</function-code>");
-			}
-			writer.println("</class>");
-		}
+            writer.println("<class name=\"" + cellObject.getFunctionName()
+                    + "\">");
+            if (cellObject.getFunctionBody() != null) {
+                writer.print("<function-text><![CDATA[");
+                writer.print(cellObject.getFunctionBody());
+                writer.println("]]></function-text>");
+            }
+            if (cellObject.getCompiledClass() != null) {
+                writer.println("<function-code>"
+                        + new String(XMLCoder.base64Encode(cellObject
+                        .getCompiledClass())) + "</function-code>");
+            }
+            writer.println("</class>");
+        }
 		writer.println("</cell-functions>");
 
 	}
@@ -413,7 +394,7 @@ public class TemplateBookParser extends ReportBookParser {
 			for (int i = 0; i < dGroup.getKeyCount(); i++) {
 				GroupKey key = dGroup.getKey(i);
 				if (key.getName() != null) {
-					String dsId = null;
+					String dsId;
 					if (key.getDatasetID() != null)
 						dsId = " dataset=\"" + key.getDatasetID() + "\"";
 					else

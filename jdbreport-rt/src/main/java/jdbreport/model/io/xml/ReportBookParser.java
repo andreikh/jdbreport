@@ -1,7 +1,7 @@
 /*
  * JDBReport Generator
  * 
- * Copyright (C) 2006-2010 Andrey Kholmanskih. All rights reserved.
+ * Copyright (C) 2006-2014 Andrey Kholmanskih. All rights reserved.
  * 
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -34,7 +34,6 @@ import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.io.Writer;
 import java.text.MessageFormat;
-import java.util.Iterator;
 
 import jdbreport.model.ReportBook;
 import jdbreport.model.io.ReportWriter;
@@ -48,7 +47,7 @@ import and.util.xml.XMLCoder;
 import and.util.xml.XMLParser;
 
 /**
- * @version 2.0 20.04.2010
+ * @version 3.0 22.02.2014
  * @author Andrey Kholmanskih
  * 
  */
@@ -102,10 +101,7 @@ public class ReportBookParser extends ReportBookWriterParser implements
 	 * @return handler for the parsing sheets
 	 */
 	protected XMLParser createSheetHandler() {
-		if (getHandler().getVersion().compareTo("7") < 0)
-			return new DBReportParser6(getDefaultReportHandler());
-		else
-			return new DBReportParser(getDefaultReportHandler(), resourceReader);
+		return new DBReportParser(getDefaultReportHandler(), resourceReader);
 	}
 
 
@@ -167,10 +163,9 @@ public class ReportBookParser extends ReportBookWriterParser implements
 
 	protected void writeStyles(ReportBook reportBook, PrintWriter fw) {
 		fw.println("<Styles>");
-		Iterator<Object> it = reportBook.getStyleList().keySet().iterator();
-		while (it.hasNext()) {
-			StyleReportParser.save(fw, reportBook.getStyles(it.next()));
-		}
+        for (Object o : reportBook.getStyleList().keySet()) {
+            StyleReportParser.save(fw, reportBook.getStyles(o));
+        }
 		fw.println("</Styles>");
 	}
 
@@ -183,12 +178,9 @@ public class ReportBookParser extends ReportBookWriterParser implements
 			throws SaveReportException {
 		try {
 			file.createNewFile();
-			FileOutputStream out = new FileOutputStream(file);
-			try {
-				save(out, reportBook);
-			} finally {
-				out.close();
-			}
+            try (FileOutputStream out = new FileOutputStream(file)) {
+                save(out, reportBook);
+            }
 		} catch (IOException e) {
 			throw new SaveReportException(e);
 		}

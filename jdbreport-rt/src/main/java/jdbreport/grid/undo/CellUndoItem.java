@@ -31,7 +31,7 @@ import java.util.ArrayList;
 import jdbreport.grid.JReportGrid;
 import jdbreport.model.Cell;
 import jdbreport.model.CellWrap;
-import jdbreport.model.JReportModel;
+import jdbreport.view.model.JReportModel;
 import jdbreport.model.ReportModel;
 
 /**
