@@ -2,7 +2,7 @@
  *
  * JDBReport Generator
  * 
- * Copyright (C) 2004-2012 Andrey Kholmanskih. All rights reserved.
+ * Copyright (C) 2004-2014 Andrey Kholmanskih. All rights reserved.
  * 
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -101,7 +101,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
- * @version 2.1 16.05.2012
+ * @version 3.0 16.05.2014
  * 
  * @author Andrey Kholmanskih
  * 
@@ -347,11 +347,13 @@ public class JReportGrid extends JTable implements TableRowModelListener,
 		super.updateUI();
 	}
 
+    @Override
 	public Rectangle getCellRect(int row, int column, boolean includeSpacing) {
 		return getReportModel().getCellRect(row, column, includeSpacing,
 				getComponentOrientation().isLeftToRight());
 	}
 
+    @Override
 	public void tableChanged(TableModelEvent e) {
 		if (e == null || e.getFirstRow() == TableModelEvent.HEADER_ROW
 				|| e.getType() == TableModelEvent.INSERT
@@ -1419,7 +1421,7 @@ public class JReportGrid extends JTable implements TableRowModelListener,
 	}
 
 	public String copyText(GridRect selectionRect) throws SaveReportException {
-		StringBuffer result = new StringBuffer();
+		StringBuilder result = new StringBuilder();
 		for (int row = selectionRect.getTopRow(); row <= selectionRect
 				.getBottomRow(); row++) {
 			String text = getRendererText(row, selectionRect.getLeftCol());
@@ -1479,12 +1481,10 @@ public class JReportGrid extends JTable implements TableRowModelListener,
 			reportTransferable.addCopyData(copyData, ReportTransferable.TypeFlavor.xml);
 			reportTransferable.addCopyData(copyData.getBytes("UTF-8"),	ReportTransferable.TypeFlavor.xml);
 			clip.setContents(reportTransferable, reportTransferable);
-		} catch (SaveReportException e) {
-			Utils.showError(e);
-		} catch (UnsupportedEncodingException e) {
+		} catch (SaveReportException | UnsupportedEncodingException e) {
 			Utils.showError(e);
 		}
-	}
+    }
 
 	public String copy(GridRect selectionRect) throws SaveReportException {
 		ClipboardParser writer = createClipboardWriter();
@@ -1564,9 +1564,9 @@ public class JReportGrid extends JTable implements TableRowModelListener,
 	}
 
 	/**
-	 * @param reader
-	 * @param selectRow
-	 * @param selectCol
+	 * @param reader Reader
+	 * @param selectRow selected row
+	 * @param selectCol selected column
 	 * @throws ParserConfigurationException
 	 * @throws SAXException
 	 * @throws IOException
@@ -1686,18 +1686,11 @@ public class JReportGrid extends JTable implements TableRowModelListener,
 					pasteText(data, getSelectedRow(), getSelectedColumn());
 					repaint();
 				}
-				return;
-			}
-		} catch (UnsupportedFlavorException e) {
-			Utils.showError(e);
-		} catch (IOException e) {
-			Utils.showError(e);
-		} catch (ParserConfigurationException e) {
-			Utils.showError(e);
-		} catch (SAXException e) {
+            }
+		} catch (UnsupportedFlavorException | ParserConfigurationException | SAXException | IOException e) {
 			Utils.showError(e);
 		}
-	}
+    }
 
 	public void insertIcon() {
 		JFileChooser fileChooser = new JFileChooser(ReportPane.CURRENT_IMAGE_PATH); //$NON-NLS-1$
@@ -1946,7 +1939,6 @@ public class JReportGrid extends JTable implements TableRowModelListener,
 	/**
 	 * Compares text's height and row's height.
 	 * 
-	 * @param model
 	 * @param row
 	 *            the row's number
 	 * @param column
@@ -2128,16 +2120,20 @@ public class JReportGrid extends JTable implements TableRowModelListener,
 
 		// Objects
 		setLazyRenderer(Object.class,
-				"jdbreport.grid.JReportGrid$TextReportRenderer"); //$NON-NLS-1$
+                TextReportRenderer.class.getName()); //$NON-NLS-1$
 
 		// PageNumber
 		setLazyRenderer(jdbreport.model.PageNumber.class,
-				"jdbreport.grid.JReportGrid$PageNumberRenderer"); //$NON-NLS-1$
+                PageNumberRenderer.class.getName()); //$NON-NLS-1$
+
+        // PageCount
+        setLazyRenderer(jdbreport.model.PageCount.class,
+                PageCountRenderer.class.getName()); //$NON-NLS-1$
 
 		// Booleans
 		setLazyRenderer(Boolean.class, "javax.swing.JTable$BooleanRenderer"); //$NON-NLS-1$
 
-		setLazyRenderer(Date.class, "jdbreport.grid.JReportGrid$DateRenderer"); //$NON-NLS-1$
+		setLazyRenderer(Date.class, DateRenderer.class.getName()); //$NON-NLS-1$
 
 		for (Class<?> c : ReportCell.defaultValuesByClass.keySet()) {
 			CellValueInfo vi = ReportCell.defaultValuesByClass.get(c);
@@ -2424,8 +2420,8 @@ public class JReportGrid extends JTable implements TableRowModelListener,
 					minx = (int) Math.min(minx, p.getX());
 					maxx = (int) Math.max(maxx, p.getX());
 				}
-				int x_ = 0;
-				int y_ = 0;
+				int x_;
+				int y_;
 
 				switch (verticalAlignment) {
 				case CellStyle.TOP:

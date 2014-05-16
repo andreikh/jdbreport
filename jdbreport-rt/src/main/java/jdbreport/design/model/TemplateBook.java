@@ -87,19 +87,6 @@ public class TemplateBook extends ReportBook {
 
 	private KeyComparator keyComparator;
 
-	private static final int VAR_PAGE = 0;
-
-	private static final int VAR_PAGE_RU = 2;
-
-	private static final int VAR_ROW = 1;
-
-	private static final int VAR_ROW_RU = 3;
-
-	private static final int VAR_PAGE_COUNT = 4;
-
-	private static final String[] systemVars = { "_PAGE", "_ROW", "_СТРАНИЦА", //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-			"_СТРОКА", "_PAGE_COUNT" }; //$NON-NLS-1$ //$NON-NLS-2$
-
 	private Map<String, BufferedDataSet> dsList;
 
 	private DetailGroup currentGroup;
@@ -212,11 +199,11 @@ public class TemplateBook extends ReportBook {
 					.setValue(elContext, getDataSetList().get(key));
 		}
 
-		for (int i = 0; i < systemVars.length; i++) {
+		for (String varName : SystemVar.getNames()) {
 			ValueExpression var = exprFactory.createValueExpression(elContext,
-					"${" + systemVars[i] + "}", Object.class);
-			var.setValue(elContext, getSystemVarValue(i));
-			elContext.getVariableMapper().setVariable(systemVars[i], var);
+					"${" + varName + "}", Object.class);
+			var.setValue(elContext, getSystemVarValue(varName));
+			elContext.getVariableMapper().setVariable(varName, var);
 		}
 	}
 
@@ -941,10 +928,9 @@ public class TemplateBook extends ReportBook {
 			RowsGroup group) {
 		int isNoRep = 1;
 
-		elContext.getVariableMapper().resolveVariable(systemVars[VAR_ROW])
-				.setValue(elContext, getCurrentRow());
-		elContext.getVariableMapper().resolveVariable(systemVars[VAR_ROW_RU])
-				.setValue(elContext, getCurrentRow());
+        for (String v : SystemVar._ROW.names())
+    		elContext.getVariableMapper().resolveVariable(v)
+	    			.setValue(elContext, getCurrentRow());
 
 		for (int column = 0; column < newRow.getColCount(); column++) {
 			CellObject cell = (CellObject) row.getCellItem(column);
@@ -1044,16 +1030,19 @@ public class TemplateBook extends ReportBook {
 		}
 
 	}
+    protected Object getSystemVarValue(String varName) {
+        SystemVar var = SystemVar.find(varName);
+        if (var == null) return null;
+        return getSystemVarValue(var);
+    }
 
-	protected Object getSystemVarValue(int index) {
-		switch (index) {
-		case VAR_PAGE:
-		case VAR_PAGE_RU:
+	protected Object getSystemVarValue(SystemVar var) {
+		switch (var) {
+		case _PAGE:
 			return getCurrentPage();
-		case VAR_ROW:
-		case VAR_ROW_RU:
+		case _ROW:
 			return getCurrentRow();
-		case VAR_PAGE_COUNT:
+		case _PAGE_COUNT:
 			return getPageCount();
 		}
 		return null;
@@ -1082,10 +1071,10 @@ public class TemplateBook extends ReportBook {
 	}
 
 	public Object getVarValue(Object name) {
-		for (int i = 0; i < systemVars.length; i++) {
-			if (systemVars[i].toUpperCase().equals(name))
-				return getSystemVarValue(i);
-		}
+        SystemVar var = SystemVar.find((String)name);
+        if (var != null) {
+            return  getSystemVarValue(var);
+        }
 		return getVars().get(name);
 	}
 
@@ -1096,9 +1085,9 @@ public class TemplateBook extends ReportBook {
 	 * @param value variable value
 	 */
 	public void setVarValue(Object name, Object value) {
-        for (String systemVar : systemVars) {
-            if (systemVar.toUpperCase().equals(name))
-                return;
+        SystemVar var = SystemVar.find(name.toString());
+        if (var != null) {
+            return;
         }
 		getVars().put(name, value);
 
@@ -1109,10 +1098,8 @@ public class TemplateBook extends ReportBook {
 	}
 
 	public boolean findVar(String name) {
-        for (String systemVar : systemVars) {
-            if (systemVar.equals(name))
-                return true;
-        }
+        SystemVar var = SystemVar.find(name);
+        if (var != null) return true;
 		return getVars().containsKey(name);
 	}
 

@@ -34,7 +34,6 @@ import javax.swing.JPanel;
 
 import java.awt.HeadlessException;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.Map;
 import javax.swing.JDialog;
 import javax.swing.JTable;
@@ -47,6 +46,7 @@ import javax.swing.text.JTextComponent;
 
 import jdbreport.design.grid.undo.VarUndo;
 import jdbreport.design.grid.undo.VarValueUndo;
+import jdbreport.design.model.SystemVar;
 import jdbreport.grid.ReportResources;
 import jdbreport.grid.UndoEvent;
 import jdbreport.grid.UndoListener;
@@ -76,6 +76,10 @@ public class VarList extends JDialog {
 			throws HeadlessException {
 		super(owner);
 		this.vars = vars;
+        for (String var : SystemVar.getNames()) {
+            if (!vars.containsKey(var))
+                vars.put(var, null);
+        }
 		initialize();
 	}
 
@@ -93,7 +97,6 @@ public class VarList extends JDialog {
 	/**
 	 * This method initializes this
 	 * 
-	 * @return void
 	 */
 	private void initialize() {
 		this.setSize(300, 260);
@@ -104,12 +107,6 @@ public class VarList extends JDialog {
 
 	public void addUndoListener(UndoListener l) {
 		undoListener = l;
-	}
-
-	public void removeUndoListener(UndoListener l) {
-		if (undoListener == l) {
-			undoListener = null;
-		}
 	}
 
 	protected void pushUndo(UndoItem undo) {
@@ -160,22 +157,20 @@ public class VarList extends JDialog {
 			addButton = new JButton();
 			addButton.setIcon(ReportResources.getInstance().getIcon("add.gif")); //$NON-NLS-1$
 			addButton.setToolTipText(Messages.getString("VarList.ad_tooltip")); //$NON-NLS-1$
-			addButton.addActionListener(new java.awt.event.ActionListener() {
-				public void actionPerformed(java.awt.event.ActionEvent e) {
-					String newvar = "new_var";
-					if (vars.containsKey(newvar)) {
-						int i = 1;
-						while (vars.containsKey(newvar + i)) {
-							i++;
-						}
-						newvar = newvar + i;
-					}
-					vars.put(newvar, null);
-					varsModel.updateVarList();
-					varsTable.revalidate();
-					pushUndo(new VarUndo(VarList.this, null, newvar));
-				}
-			});
+			addButton.addActionListener(e -> {
+                String newvar = "new_var";
+                if (vars.containsKey(newvar)) {
+                    int i = 1;
+                    while (vars.containsKey(newvar + i)) {
+                        i++;
+                    }
+                    newvar = newvar + i;
+                }
+                vars.put(newvar, null);
+                varsModel.updateVarList();
+                varsTable.revalidate();
+                pushUndo(new VarUndo(VarList.this, null, newvar));
+            });
 		}
 		return addButton;
 	}
@@ -191,19 +186,17 @@ public class VarList extends JDialog {
 			delButton.setIcon(ReportResources.getInstance().getIcon("del.gif")); //$NON-NLS-1$
 			delButton.setToolTipText(Messages
 					.getString("VarList.delete_tooltip")); //$NON-NLS-1$
-			delButton.addActionListener(new java.awt.event.ActionListener() {
-				public void actionPerformed(java.awt.event.ActionEvent e) {
-					int row = varsTable.getSelectedRow();
-					if (row >= 0) {
-						Object old = list.remove(row);
-						vars.remove(old);
-						varsModel.updateVarList();
-						varsTable.revalidate();
-						varsTable.repaint();
-						pushUndo(new VarUndo(VarList.this, old, null));
-					}
-				}
-			});
+			delButton.addActionListener(e -> {
+                int row = varsTable.getSelectedRow();
+                if (row >= 0) {
+                    Object old = list.remove(row);
+                    vars.remove(old);
+                    varsModel.updateVarList();
+                    varsTable.revalidate();
+                    varsTable.repaint();
+                    pushUndo(new VarUndo(VarList.this, old, null));
+                }
+            });
 		}
 		return delButton;
 	}
@@ -241,6 +234,10 @@ public class VarList extends JDialog {
 		varsTable.repaint();
 	}
 
+    private boolean isSystemVar(Object varName) {
+        return SystemVar.find(varName.toString()) != null;
+    }
+
 	private class VarsModel extends DefaultTableModel {
 
 		private static final long serialVersionUID = 1L;
@@ -250,11 +247,10 @@ public class VarList extends JDialog {
 		}
 
 		public void updateVarList() {
-			list = new ArrayList<Object>();
-			Iterator<Object> it = vars.keySet().iterator();
-			while (it.hasNext()) {
-				list.add(it.next());
-			}
+			list = new ArrayList<>();
+            for (Object o : vars.keySet()) {
+                list.add(o);
+            }
 		}
 
 		public int getRowCount() {
@@ -278,7 +274,7 @@ public class VarList extends JDialog {
 		}
 
 		public boolean isCellEditable(int rowIndex, int columnIndex) {
-			return true;
+            return !isSystemVar(list.get(rowIndex));
 		}
 
 		public Object getValueAt(int rowIndex, int columnIndex) {
