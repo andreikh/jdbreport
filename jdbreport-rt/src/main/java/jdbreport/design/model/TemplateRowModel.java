@@ -84,7 +84,7 @@ public class TemplateRowModel extends ReportRowModel {
 	}
 
 	@Override
-	protected void clearPageHeader(int startRow) {
+    public void clearPageHeader(int startRow) {
 	}
 
 	@Override
@@ -421,7 +421,7 @@ public class TemplateRowModel extends ReportRowModel {
 			disableSpan();
 			try {
 				removeGroup(group);
-				addGroup((TreeRowGroup) getRootGroup(), newRowIndex <= 0 ? 0
+				addGroup(getRootGroup(), newRowIndex <= 0 ? 0
 						: getRootGroup().getChildCount(), group);
 			} finally {
 				enableSpan();

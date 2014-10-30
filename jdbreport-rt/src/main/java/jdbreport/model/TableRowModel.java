@@ -323,6 +323,12 @@ public interface TableRowModel extends Iterable<TableRow> {
 	 */
 	public RowsGroup getGroup(TableRow tableRow);
 
+    /**
+     * append group
+     * @param group Group object
+     */
+    public void appendGroup(Group group);
+
 	/**
 	 * If parameter b is true, sets the group that is visible in report,
 	 * otherwise removes rows containing in the group from report

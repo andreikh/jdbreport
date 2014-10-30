@@ -59,6 +59,12 @@ public interface ReportModel extends TableModel {
 	 */
 	public int addRows(int count, int index);
 
+    /**
+     * Appends all rows from model
+     * @param model other model
+     */
+    void appendModel(ReportModel model);
+
 	/**
 	 * Removes rows' count begining with the index from the model.
 	 * 

@@ -759,7 +759,17 @@ public class ReportRowModel implements TableRowModel, PropertyChangeListener,
 		}
 	}
 
-	protected void showGroup(Group group) {
+    public void appendGroup(Group group) {
+        getRootGroup().addGroup(Integer.MAX_VALUE, group);
+        int row = getGroupRowIndex(group) - getRootGroup().getPageHeaderGroup().getRowCount()
+                - getRootGroup().getPageFooterGroup().getRowCount();
+        if (row > rowList.size()) row = rowList.size();
+        for (TableRow tableRow : group) {
+            rowList.add(row++, tableRow);
+        }
+    }
+
+    public void showGroup(Group group) {
 		if (group.getChildCount() == 0)
 			return;
 		int row = rowList.indexOf(group.getFirstGroupRow()) + 1;
@@ -774,7 +784,7 @@ public class ReportRowModel implements TableRowModel, PropertyChangeListener,
 			rowList.add(row++, it.next());
 	}
 
-	protected void hideGroup(Group group) {
+	public void hideGroup(Group group) {
 		if (group.getChildCount() == 0)
 			return;
 		Iterator<TableRow> it = group.iterator();
@@ -863,7 +873,7 @@ public class ReportRowModel implements TableRowModel, PropertyChangeListener,
 	 * removes all page headers and page footers from report
 	 * 
 	 */
-	protected void clearPageHeader(int startRow) {
+    public void clearPageHeader(int startRow) {
 		startRow = 0;
 		int i = startRow;
 		RowsGroup pageHeader = getRootGroup().getPageHeaderGroup();

@@ -115,6 +115,19 @@ public class JReportModel extends AbstractTableModel implements ReportModel {
 		return getRowModel().addRows(count, index);
 	}
 
+    public void appendModel(ReportModel model) {
+        Iterator<Group> it = model.getRowModel().getRootGroup().getGroupIterator();
+        ((ReportRowModel)getRowModel()).clearPageHeader(0);
+        while (it.hasNext()) {
+            Group group = it.next();
+            if (group.getType() != Group.ROW_PAGE_HEADER && group.getType() != Group.ROW_PAGE_FOOTER
+                    && group.getRowCount() > 0) {
+                getRowModel().appendGroup(group);
+            }
+        }
+        updatePages(0);
+    }
+
 	/*
 	 * (non-Javadoc)
 	 * 
