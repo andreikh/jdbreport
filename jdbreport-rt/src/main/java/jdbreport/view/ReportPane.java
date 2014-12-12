@@ -84,12 +84,6 @@ import javax.swing.event.ChangeListener;
 import javax.swing.filechooser.FileFilter;
 import javax.swing.table.TableCellRenderer;
 
-import and.finder.FindParams;
-import and.finder.Finder;
-import and.finder.views.FindPanel;
-import and.properties.XMLProperties;
-import and.util.Utilities;
-
 import jdbreport.grid.JReportGrid;
 import jdbreport.grid.ReportAction;
 import jdbreport.grid.ReportCellRenderer;
@@ -105,6 +99,10 @@ import jdbreport.grid.undo.UndoItem;
 import jdbreport.grid.undo.UndoList;
 import jdbreport.model.Cell;
 import jdbreport.model.HeighCalculator;
+import jdbreport.util.finder.FindParams;
+import jdbreport.util.finder.Finder;
+import jdbreport.util.xml.XMLProperties;
+import jdbreport.view.finder.FindPanel;
 import jdbreport.view.model.JReportModel;
 import jdbreport.model.ReportBook;
 import jdbreport.model.ReportModel;
@@ -119,7 +117,7 @@ import jdbreport.print.PrintPreview;
 import jdbreport.util.Utils;
 
 /**
- * @version 2.0 30.11.2011
+ * @version 3.0 12.12.2014
  * @author Andrey Kholmanskih
  * 
  */
@@ -1024,7 +1022,7 @@ public class ReportPane extends JPanel implements ReportListListener,
 		if (status == JFileChooser.APPROVE_OPTION) {
 			File selectedFile = fileChooser.getSelectedFile();
 			FileFilter filter = fileChooser.getFileFilter();
-			ReportPane.CURRENT_DIRECTORY_PATH = and.util.Utilities
+			ReportPane.CURRENT_DIRECTORY_PATH = Utils
 					.extractFilePath(fileChooser.getSelectedFile().getPath());
 			ReportPane.CURRENT_FILTER = filter.getDescription();
 			if (filter instanceof ReportFileFilter)
@@ -1092,7 +1090,7 @@ public class ReportPane extends JPanel implements ReportListListener,
 			int status = fileChooser.showSaveDialog(this);
 			if (status == JFileChooser.APPROVE_OPTION
 					&& fileChooser.getSelectedFile() != null) {
-				CURRENT_DIRECTORY_PATH = and.util.Utilities
+				CURRENT_DIRECTORY_PATH = Utils
 						.extractFilePath(fileChooser.getSelectedFile()
 								.getPath());
 				file = fileChooser.getSelectedFile();
@@ -1101,7 +1099,7 @@ public class ReportPane extends JPanel implements ReportListListener,
 				FileType fileType = selectedFilter.getFileType();
 				writer = fileType.getWriter();
 
-				String ext = Utilities.getFileExtension(file);
+				String ext = Utils.getFileExtension(file);
 				if (!checkExtensions(fileType, ext)) {
 					file = new File(file.getPath()
 							+ "." + fileType.getExtensions()[0]); //$NON-NLS-1$
@@ -1261,7 +1259,7 @@ public class ReportPane extends JPanel implements ReportListListener,
 			ReportPane.CURRENT_FILTER = selectedFilter.getDescription();
 			FileType fileType = selectedFilter.getFileType();
 			ReportWriter writer = fileType.getWriter();
-			if (Utilities.getFileExtension(file).length() == 0) {
+			if (Utils.getFileExtension(file).length() == 0) {
 				file = new File(file.getPath()
 						+ "." + fileType.getExtensions()[0]); //$NON-NLS-1$
 			}
@@ -1413,7 +1411,7 @@ public class ReportPane extends JPanel implements ReportListListener,
 
 	protected void showFindPanel() {
 		if (findPanel == null) {
-			findPanel = new and.finder.views.FindPanel(this);
+			findPanel = new FindPanel(this);
 			findPanel.setIncremental(true);
 			this.add(findPanel, BorderLayout.SOUTH);
 			this.revalidate();

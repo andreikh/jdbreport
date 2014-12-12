@@ -36,11 +36,11 @@ import java.io.PrintWriter;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import jdbreport.util.xml.XMLParser;
+import jdbreport.util.xml.XMLReaderHandler;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 
-import and.util.xml.XMLParser;
-import and.util.xml.XMLReaderHandler;
 import jdbreport.design.model.TemplateBook;
 import jdbreport.model.AbstractValue;
 import jdbreport.model.Cell;

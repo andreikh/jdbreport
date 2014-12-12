@@ -38,13 +38,12 @@ import java.util.Iterator;
 
 import javax.swing.Icon;
 
-import and.util.Utilities;
-
 import jdbreport.model.Border;
 import jdbreport.model.Cell;
 import jdbreport.model.CellCoord;
 import jdbreport.model.CellStyle;
 import jdbreport.model.GridRect;
+import jdbreport.util.Utils;
 import jdbreport.view.model.JReportModel;
 import jdbreport.model.Picture;
 import jdbreport.model.PictureFactory;
@@ -57,7 +56,7 @@ import jdbreport.source.ObjectDataSet;
 import jdbreport.source.ReportDataSet;
 
 /**
- * @version 3.0 22.02.2014
+ * @version 3.0 12.12.2014
  * @author Andrey Kholmanskih
  * 
  */
@@ -429,7 +428,7 @@ public abstract class AbstractCellFunction implements CellFunction {
 			} else if (value instanceof File) {
 				try {
 					if (format == null || format.length() == 0) {
-						format = Utilities.getFileExtension(((File) value));
+						format = Utils.getFileExtension(((File) value));
 					}
 					Picture picture = PictureFactory.createPicture(format);
 					picture.load((File) value);

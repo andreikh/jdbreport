@@ -35,9 +35,6 @@ import java.io.PrintWriter;
 
 import javax.swing.table.TableColumnModel;
 
-import and.util.Utilities;
-import and.util.xml.XMLCoder;
-
 import jdbreport.model.Cell;
 import jdbreport.model.CellStyle;
 import jdbreport.model.CellValue;
@@ -48,9 +45,10 @@ import jdbreport.model.Units;
 import jdbreport.model.Cell.Type;
 import jdbreport.model.io.SaveReportException;
 import jdbreport.util.Utils;
+import jdbreport.util.xml.XMLCoder;
 
 /**
- * @version 3.0 22.02.2014
+ * @version 3.0 12.12.2014
  * @author Andrey Kholmanskih
  * 
  */
@@ -143,7 +141,7 @@ class OdtContentWriter extends OdsContentWriter {
 				fw.print("<style:style style:name=\"Sheet" + "." + key
 						+ "\" style:family=\"table-cell\" ");
 				fw.println(">");
-				writeCellProperties(fw, style, CellStyle.getDefaultStyle());
+				writeCellProperties(fw, style);
 				fw.println("</style:style>");
 			}
 		}
@@ -214,8 +212,8 @@ class OdtContentWriter extends OdsContentWriter {
 				fw.println(buf.toString());
 				if (cell.getValue() != null) {
 					String headTag = "<text:p text:style-name=\"";
-					headTag += cell.getStyleId() == null ? "Default" : cell
-							.getStyleId();
+					headTag += cell.getStyleId() == null ? "Default" : String.valueOf(cell
+							.getStyleId());
 					headTag += "\">";
 					fw.print(headTag);
 					
@@ -280,10 +278,10 @@ class OdtContentWriter extends OdsContentWriter {
 		buff.append("<draw:frame ");
 		buff.append("svg:x=\"0pt\" svg:y=\"0pt\" ");
 		buff.append("svg:width=\"");
-		buff.append(Utilities.round(Units.PT.setXPixels(r.width), 2));
+		buff.append(Utils.round(Units.PT.setXPixels(r.width), 2));
 		buff.append("pt\" ");
 		buff.append("svg:height=\"");
-		buff.append(Utilities.round(Units.PT.setYPixels(r.height), 2));
+		buff.append(Utils.round(Units.PT.setYPixels(r.height), 2));
 		buff.append("pt\" ");
 		buff.append('>');
 		buff.append("<draw:image xlink:href=\"Pictures/");

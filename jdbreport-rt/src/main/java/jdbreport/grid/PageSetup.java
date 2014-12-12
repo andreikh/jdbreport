@@ -60,8 +60,6 @@ import jdbreport.model.print.ReportPage;
 import jdbreport.model.print.ReportPage.PaperSize;
 import jdbreport.util.Utils;
 
-import and.util.Utilities;
-
 /**
  * @version 2.0 13.03.2011
  * @author Andrey Kholmanskih
@@ -78,13 +76,9 @@ public class PageSetup extends JDialog implements ActionListener {
 	private JRadioButton portraitButton = null;
 	private JRadioButton landscapeButton = null;
 	private JPanel marginPanel = null;
-	private JLabel jLabel3 = null;
 	private JTextField leftField = null;
-	private JLabel jLabel4 = null;
 	private JTextField rightField = null;
-	private JLabel jLabel5 = null;
 	private JTextField topField = null;
-	private JLabel jLabel6 = null;
 	private JTextField bottomField = null;
 	private JCheckBox shrinkWidthBox = null;
 	private JPanel jPanel = null;
@@ -120,11 +114,6 @@ public class PageSetup extends JDialog implements ActionListener {
 		initialize();
 	}
 
-	/**
-	 * This method initializes this
-	 * 
-	 * @return void
-	 */
 	private void initialize() {
 		this.setSize(300, 360);
 		this.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
@@ -352,18 +341,18 @@ public class PageSetup extends JDialog implements ActionListener {
 	 */
 	private JPanel getMarginPanel() {
 		if (marginPanel == null) {
-			jLabel6 = new JLabel();
+			JLabel jLabel6 = new JLabel();
 			jLabel6.setText(Messages.getString("PageSetup.5")); //$NON-NLS-1$
-			jLabel5 = new JLabel();
+			JLabel jLabel5 = new JLabel();
 			jLabel5.setText(Messages.getString("PageSetup.6")); //$NON-NLS-1$
-			jLabel4 = new JLabel();
+			JLabel jLabel4 = new JLabel();
 			jLabel4.setText(Messages.getString("PageSetup.7")); //$NON-NLS-1$
 			GridLayout gridLayout = new GridLayout();
 			gridLayout.setRows(4);
 			gridLayout.setHgap(5);
 			gridLayout.setVgap(5);
 			gridLayout.setColumns(2);
-			jLabel3 = new JLabel();
+			JLabel jLabel3 = new JLabel();
 			jLabel3.setText(Messages.getString("PageSetup.8")); //$NON-NLS-1$
 			marginPanel = new JPanel();
 			marginPanel.setLayout(gridLayout);
@@ -387,7 +376,7 @@ public class PageSetup extends JDialog implements ActionListener {
 		if (widthField == null) {
 			widthField = new JTextField();
 			widthField.setInputVerifier(getNumericVerifier());
-			widthField.setText("" + Utilities.round(page.getWidth(unit), 1)); //$NON-NLS-1$
+			widthField.setText("" + Utils.round(page.getWidth(unit), 1)); //$NON-NLS-1$
 			widthField.setEditable(page.getPaperSize().equals(PaperSize.User));
 		}
 		return widthField;
@@ -397,7 +386,7 @@ public class PageSetup extends JDialog implements ActionListener {
 		if (heightField == null) {
 			heightField = new JTextField();
 			heightField.setInputVerifier(getNumericVerifier());
-			heightField.setText("" + Utilities.round(page.getHeight(unit), 1)); //$NON-NLS-1$
+			heightField.setText("" + Utils.round(page.getHeight(unit), 1)); //$NON-NLS-1$
 			heightField.setEditable(page.getPaperSize().equals(PaperSize.User));
 			
 		}
@@ -413,7 +402,7 @@ public class PageSetup extends JDialog implements ActionListener {
 		if (leftField == null) {
 			leftField = new JTextField();
 			leftField.setInputVerifier(getNumericVerifier());
-			leftField.setText("" + Utilities.round(page.getLeftMargin(unit), 1)); //$NON-NLS-1$
+			leftField.setText("" + Utils.round(page.getLeftMargin(unit), 1)); //$NON-NLS-1$
 		}
 		return leftField;
 	}
@@ -428,7 +417,7 @@ public class PageSetup extends JDialog implements ActionListener {
 			rightField = new JTextField();
 			rightField.setInputVerifier(getNumericVerifier());
 			rightField
-					.setText("" + Utilities.round(page.getRightMargin(unit), 1)); //$NON-NLS-1$
+					.setText("" + Utils.round(page.getRightMargin(unit), 1)); //$NON-NLS-1$
 		}
 		return rightField;
 	}
@@ -442,7 +431,7 @@ public class PageSetup extends JDialog implements ActionListener {
 		if (topField == null) {
 			topField = new JTextField();
 			topField.setInputVerifier(getNumericVerifier());
-			topField.setText("" + Utilities.round(page.getTopMargin(unit), 1)); //$NON-NLS-1$
+			topField.setText("" + Utils.round(page.getTopMargin(unit), 1)); //$NON-NLS-1$
 		}
 		return topField;
 	}
@@ -457,7 +446,7 @@ public class PageSetup extends JDialog implements ActionListener {
 			bottomField = new JTextField();
 			bottomField.setInputVerifier(getNumericVerifier());
 			bottomField
-					.setText("" + Utilities.round(page.getBottomMargin(unit), 1)); //$NON-NLS-1$
+					.setText("" + Utils.round(page.getBottomMargin(unit), 1)); //$NON-NLS-1$
 		}
 		return bottomField;
 	}
@@ -607,8 +596,8 @@ public class PageSetup extends JDialog implements ActionListener {
 			if (!ps.equals(currentPaperSize)) {
 				boolean editable = ps.equals(PaperSize.User);
 				if (!editable)  {
-					heightField.setText("" + Utilities.round(unit.getValue(ps.getHeight()), 1));  //$NON-NLS-1$
-					widthField.setText("" + Utilities.round(unit.getValue(ps.getWidth()), 1)); //$NON-NLS-1$
+					heightField.setText("" + Utils.round(unit.getValue(ps.getHeight()), 1));  //$NON-NLS-1$
+					widthField.setText("" + Utils.round(unit.getValue(ps.getWidth()), 1)); //$NON-NLS-1$
 				}
 				heightField.setEditable(editable);
 				widthField.setEditable(editable);

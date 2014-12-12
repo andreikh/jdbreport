@@ -41,14 +41,13 @@ import java.util.zip.ZipOutputStream;
 
 import javax.imageio.ImageIO;
 
-import and.util.Utilities;
-
 import jdbreport.model.ReportBook;
 import jdbreport.model.io.ReportWriter;
 import jdbreport.model.io.SaveReportException;
+import jdbreport.util.Utils;
 
 /**
- * @version 1.3 15.08.2009
+ * @version 3.0 12.12.2014
  * @author Andrey Kholmanskih
  * 
  */
@@ -87,7 +86,7 @@ public class OdsWriter implements ReportWriter, ImageWriter {
 						RenderedImage image = images.get(fileName);
 
 						ImageIO.write(image,
-								Utilities.getFileExtension(fileName), zipStream);
+								Utils.getFileExtension(fileName), zipStream);
 					}
 
 				entry = new ZipEntry("settings.xml"); //$NON-NLS-1$
@@ -158,7 +157,7 @@ public class OdsWriter implements ReportWriter, ImageWriter {
 		if (images != null)
 			for (String fileName : images.keySet()) {
 				fw.print("<manifest:file-entry manifest:media-type=\"image/"); //$NON-NLS-1$
-				fw.print(Utilities.getFileExtension(fileName));
+				fw.print(Utils.getFileExtension(fileName));
 				fw.print("\" manifest:full-path=\"Pictures/"); //$NON-NLS-1$
 				fw.print(fileName);
 				fw.println("\"/>"); //$NON-NLS-1$

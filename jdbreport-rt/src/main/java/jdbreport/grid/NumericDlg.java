@@ -43,10 +43,8 @@ import javax.swing.JComboBox;
 import jdbreport.model.Units;
 import jdbreport.util.Utils;
 
-import and.util.Utilities;
-
 /**
- * @version 2.0 13.03.2011
+ * @version 3.0 12.12.2014
  * @author Andrey Kholmanskih
  * 
  */
@@ -73,25 +71,13 @@ public class NumericDlg extends JDialog {
 	private JButton okButton = null;
 	private JButton cancelButton = null;
 	private JPanel centerPanel = null;
-	private JLabel jLabel = null;
 	private JTextField valueField = null;
-	private JLabel jLabel1 = null;
 	private JComboBox unitsBox = null;
 	private int result = CANCEL;
 	private int unitInd;
 	private double value;
 	private Orientation orientation;
 
-	/**
-	 * 
-	 * @param owner
-	 * @param title
-	 * @param value
-	 *            numeric value in pixels
-	 * @param unitInd
-	 * @param orientation
-	 * @throws HeadlessException
-	 */
 	public NumericDlg(Frame owner, String title, double value, int unitInd,
 			Orientation orientation) throws HeadlessException {
 		super(owner, title, true);
@@ -124,10 +110,6 @@ public class NumericDlg extends JDialog {
 		return unitInd;
 	}
 
-	/**
-	 * @param value
-	 * @param unitInd
-	 */
 	private void saveValue(double value, int unitInd) {
 		switch (unitInd) {
 		case PX:
@@ -154,11 +136,6 @@ public class NumericDlg extends JDialog {
 		Utils.screenCenter(this, owner);
 	}
 
-	/**
-	 * This method initializes this
-	 * 
-	 * @return void
-	 */
 	private void initialize() {
 		this.setSize(300, 100);
 		this.setContentPane(getJContentPane());
@@ -216,7 +193,7 @@ public class NumericDlg extends JDialog {
 	private JButton getOkButton() {
 		if (okButton == null) {
 			okButton = new JButton();
-			okButton.setText(Messages.getString("NumericDlg.1")); //$NON-NLS-1$
+			okButton.setText(Messages.getString("NumericDlg.1"));
 			okButton.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					String s = valueField.getText();
@@ -232,15 +209,10 @@ public class NumericDlg extends JDialog {
 		return okButton;
 	}
 
-	/**
-	 * This method initializes cancelButton
-	 * 
-	 * @return javax.swing.JButton
-	 */
 	private JButton getCancelButton() {
 		if (cancelButton == null) {
 			cancelButton = new JButton();
-			cancelButton.setText(Messages.getString("NumericDlg.2")); //$NON-NLS-1$
+			cancelButton.setText(Messages.getString("NumericDlg.2"));
 			cancelButton.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					setVisible(false);
@@ -258,10 +230,10 @@ public class NumericDlg extends JDialog {
 	 */
 	private JPanel getCenterPanel() {
 		if (centerPanel == null) {
-			jLabel1 = new JLabel();
-			jLabel1.setText(Messages.getString("NumericDlg.3")); //$NON-NLS-1$
-			jLabel = new JLabel();
-			jLabel.setText(Messages.getString("NumericDlg.4")); //$NON-NLS-1$
+			JLabel jLabel1 = new JLabel();
+			jLabel1.setText(Messages.getString("NumericDlg.3"));
+			JLabel jLabel = new JLabel();
+			jLabel.setText(Messages.getString("NumericDlg.4"));
 			centerPanel = new JPanel();
 			centerPanel.add(jLabel);
 			centerPanel.add(getValueField());
@@ -314,9 +286,9 @@ public class NumericDlg extends JDialog {
 	private JComboBox getUnitsBox() {
 		if (unitsBox == null) {
 			unitsBox = new JComboBox();
-			unitsBox.addItem(Messages.getString("NumericDlg.0")); //$NON-NLS-1$
-			unitsBox.addItem(Messages.getString("NumericDlg.7")); //$NON-NLS-1$
-			unitsBox.addItem(Messages.getString("NumericDlg.8")); //$NON-NLS-1$
+			unitsBox.addItem(Messages.getString("NumericDlg.0"));
+			unitsBox.addItem(Messages.getString("NumericDlg.7"));
+			unitsBox.addItem(Messages.getString("NumericDlg.8"));
 			if (unitInd < unitsBox.getItemCount())
 				unitsBox.setSelectedIndex(unitInd);
 			unitsBox.addActionListener(new java.awt.event.ActionListener() {
@@ -354,7 +326,7 @@ public class NumericDlg extends JDialog {
 			v = unit.getValue(value);
 			break;
 		}
-		valueField.setText("" + Utilities.round(v, DECIMAL)); //$NON-NLS-1$
+		valueField.setText("" + Utils.round(v, DECIMAL));
 	}
 
 	public int getResult() {

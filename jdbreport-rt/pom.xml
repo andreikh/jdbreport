@@ -65,12 +65,6 @@
 		</dependency>
 		
 		<dependency>
-			<groupId>andkh.utils</groupId>
-			<artifactId>andkh-utils</artifactId>
-			<version>1.7-SNAPSHOT</version>
-		</dependency>
-		
-		<dependency>
 			<groupId>org.apache.xmlgraphics</groupId>
 			<artifactId>batik-svg-dom</artifactId>
 			<version>${batik.version}</version>

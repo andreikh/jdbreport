@@ -43,11 +43,11 @@ import jdbreport.model.io.SaveReportException;
 
 import org.xml.sax.Attributes;
 
-import and.util.xml.XMLCoder;
-import and.util.xml.XMLParser;
+import jdbreport.util.xml.XMLCoder;
+import jdbreport.util.xml.XMLParser;
 
 /**
- * @version 3.0 22.02.2014
+ * @version 3.0 12.12.2014
  * @author Andrey Kholmanskih
  * 
  */

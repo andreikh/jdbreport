@@ -30,7 +30,6 @@ package jdbreport.design.grid.undo;
 
 import java.io.PrintWriter;
 
-import and.util.xml.XMLParser;
 import jdbreport.design.model.GroupKey;
 import jdbreport.design.model.xml.TemplCellHandler;
 import jdbreport.design.model.xml.TemplateReportParser;
@@ -39,12 +38,12 @@ import jdbreport.grid.undo.GridParser;
 import jdbreport.model.DetailGroup;
 import jdbreport.model.Group;
 import jdbreport.model.ReportModel;
-import jdbreport.model.io.ResourceWriter;
 import jdbreport.model.io.SaveReportException;
 import jdbreport.model.io.xml.CellParser;
+import jdbreport.util.xml.XMLParser;
 
 /**
- * @version 2.0 19.12.2009
+ * @version 3.0 12.12.2014
  * @author Andrey Kholmanskih
  *
  */
@@ -63,7 +62,7 @@ public class TemplateGridParser extends GridParser {
 	}
 
 	protected CellParser createCellHandler() {
-		return new TemplCellHandler(getDefaultReportHandler(), (ResourceWriter)null);
+		return new TemplCellHandler(getDefaultReportHandler(), null);
 	}
 
 	protected String getSheetName() {
@@ -79,7 +78,7 @@ public class TemplateGridParser extends GridParser {
 			for (int i = 0; i < dGroup.getKeyCount(); i++) {
 				GroupKey key = dGroup.getKey(i);
 				if (key.getName() != null) {
-					String dsId = null;
+					String dsId;
 					if (key.getDatasetID() != null)
 						dsId = " dataset=\"" + key.getDatasetID() + "\"";
 					else

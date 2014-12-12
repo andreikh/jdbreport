@@ -28,10 +28,9 @@ package jdbreport.source;
 import java.util.logging.Logger;
 
 import jdbreport.model.ReportException;
-import and.dbcomp.DataSetParams;
 
 /**
- * @version 1.1 03/09/08
+ * @version 3.0 12.12.2014
  * @author Andrey Kholmanskih
  * 
  */
@@ -69,7 +68,6 @@ public abstract class AbstractDataSet implements ReportDataSet {
 		try {
 			return super.clone();
 		} catch (CloneNotSupportedException e) {
-			e.printStackTrace();
 			return null;
 		}
 	}

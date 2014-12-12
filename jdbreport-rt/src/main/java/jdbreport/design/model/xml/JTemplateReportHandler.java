@@ -29,13 +29,11 @@ import jdbreport.model.ReportBook;
 import jdbreport.model.io.ResourceReader;
 import jdbreport.model.io.xml.JReportHandler;
 
+import jdbreport.util.xml.XMLParser;
 import org.xml.sax.XMLReader;
 
-import and.util.xml.XMLParser;
-
-
 /**
- * @version 2.0 20.12.2009
+ * @version 3.0 12.12.2014
  * @author Andrey Kholmanskih
  *
  */

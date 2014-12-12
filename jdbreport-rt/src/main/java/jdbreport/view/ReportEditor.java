@@ -42,11 +42,10 @@ import jdbreport.model.ReportModel;
 import jdbreport.model.StringMetrics;
 import jdbreport.model.io.LoadReportException;
 import jdbreport.util.Utils;
-
-import and.properties.XMLProperties;
+import jdbreport.util.xml.XMLProperties;
 
 /**
- * @version 1.4 17.02.2010
+ * @version 3.0 12.12.2014
  * @author Andrey Kholmanskih
  * 
  */
@@ -208,7 +207,7 @@ public class ReportEditor extends JFrame implements
 	}
 
 	public static void main(String[] args) {
-		Utils.errorHandler = and.swing.DefaultErrorHandler.getInstance();
+		Utils.errorHandler = DefaultErrorHandler.getInstance();
 		ReportEditor re = new ReportEditor();
 		re.getReportPane().changeLookAndFeel();
 

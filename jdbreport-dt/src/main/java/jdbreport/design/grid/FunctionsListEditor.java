@@ -25,10 +25,7 @@
  */
 package jdbreport.design.grid;
 
-import java.awt.BorderLayout;
-import java.awt.Dialog;
-import java.awt.Frame;
-import java.awt.HeadlessException;
+import java.awt.*;
 import java.util.Map;
 
 import javax.swing.JPanel;
@@ -39,9 +36,6 @@ import javax.swing.JList;
 import javax.swing.JButton;
 import javax.swing.ImageIcon;
 
-import and.properties.XMLProperties;
-
-
 import javax.swing.JTextField;
 
 import jdbreport.design.grid.undo.FunctionUndo;
@@ -51,9 +45,10 @@ import jdbreport.grid.UndoEvent;
 import jdbreport.grid.UndoListener;
 import jdbreport.grid.undo.UndoItem;
 import jdbreport.util.Utils;
+import jdbreport.util.xml.XMLProperties;
 
 /**
- * @version 2.0 13.03.2011
+ * @version 3.0 12.12.2014
  * @author Andrey Kholmanskih
  *
  */
@@ -98,20 +93,13 @@ public class FunctionsListEditor extends JDialog {
 	private int result;
 	private UndoListener undoListener;
 	
-	public FunctionsListEditor(Frame owner, Map<String, CellFunctionObject> functionList, XMLProperties properties) throws HeadlessException {
-		super(owner, true);
+	public FunctionsListEditor(Window owner, Map<String, CellFunctionObject> functionList, XMLProperties properties) throws HeadlessException {
+		super(owner, DEFAULT_MODALITY_TYPE);
 		this.functionList = functionList;
 		this.properties = properties;
 		initialize();
 	}
 
-	public FunctionsListEditor(Dialog owner, Map<String, CellFunctionObject> functionList, XMLProperties properties) throws HeadlessException {
-		super(owner, true);
-		this.functionList = functionList;
-		this.properties = properties;
-		initialize();
-	}
-	
 	private XMLProperties getProperties() {
 		return properties;
 	}

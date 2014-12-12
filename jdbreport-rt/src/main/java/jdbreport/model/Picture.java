@@ -45,12 +45,10 @@ import javax.swing.ImageIcon;
 
 import jdbreport.util.Utils;
 
-import and.util.Utilities;
-
 /**
  * @author Andrey Kholmanskih
  * 
- * @version 1.0 05.05.2011
+ * @version 3.0 12.12.2014
  */
 public class Picture {
 
@@ -83,7 +81,7 @@ public class Picture {
 	}
 
 	public Picture(ImageIcon value) {
-		this.icon = (ImageIcon) value;
+		this.icon =  value;
 		width = icon.getIconWidth();
 		height = icon.getIconHeight();
 		iconWidth = width;
@@ -184,7 +182,7 @@ public class Picture {
 	}
 
 	private RenderedImage getRenderedImage(ImageIcon icon) {
-		RenderedImage image = null;
+		RenderedImage image;
 		if (icon.getImage() instanceof RenderedImage) {
 			image = (RenderedImage) icon.getImage();
 		} else {
@@ -235,8 +233,8 @@ public class Picture {
 
 	protected boolean checkImageWriterFormat(String format) {
 		String[] formats = ImageIO.getWriterFormatNames();
-		for (int i = 0; i < formats.length; i++) {
-			if (format.equals(formats[i])) {
+		for (String format1 : formats) {
+			if (format.equals(format1)) {
 				return true;
 			}
 		}
@@ -258,7 +256,7 @@ public class Picture {
 			byte[] b = new byte[1024 * 1024];
 			byte[] image = new byte[0];
 			int i;
-			while ((i = Utilities.readBytes(is, b)) > 0) {
+			while ((i = Utils.readBytes(is, b)) > 0) {
 				byte[] image2 = image;
 				image = new byte[image2.length + i];
 				if (image2.length > 0) {
@@ -275,11 +273,8 @@ public class Picture {
 	}
 
 	public void load(File file) throws IOException {
-		InputStream is = new BufferedInputStream(new FileInputStream(file));
-		try {
+		try (InputStream is = new BufferedInputStream(new FileInputStream(file))) {
 			load(is);
-		} finally {
-			is.close();
 		}
 	}
 

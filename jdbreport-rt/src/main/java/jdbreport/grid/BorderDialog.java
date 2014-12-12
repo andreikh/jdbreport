@@ -49,12 +49,12 @@ import java.awt.HeadlessException;
 
 import javax.swing.JDialog;
 
+import jdbreport.actions.ToggleAction;
 import jdbreport.model.Border;
 import jdbreport.model.CellStyle;
-import javax.swing.JComboBox;
+import jdbreport.view.JColorBox;
 
-import and.actions.ToggleAction;
-import and.swing.JColorBox;
+import javax.swing.JComboBox;
 
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
@@ -95,11 +95,6 @@ public class BorderDialog extends JDialog {
 		initialize();
 	}
 	
-	/**
-	 * This method initializes this
-	 * 
-	 * @return void
-	 */
 	private void initialize() {
 		this.setTitle(Messages.getString("BorderDialog.0")); //$NON-NLS-1$
 		this.setResizable(false);
@@ -154,7 +149,7 @@ public class BorderDialog extends JDialog {
 
 	protected JToggleButton createActionComponent(Action a) {
 		Icon icon = a != null ? (Icon) a.getValue(Action.SMALL_ICON) : null;
-		boolean enabled = a != null ? a.isEnabled() : true;
+		boolean enabled = a == null || a.isEnabled();
 		String tooltip = a != null ? (String) a
 				.getValue(Action.SHORT_DESCRIPTION) : null;
 		JToggleButton b = new JToggleButton("", icon); //$NON-NLS-1$

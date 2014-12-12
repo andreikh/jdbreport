@@ -28,7 +28,6 @@ package jdbreport.source;
 import java.text.MessageFormat;
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
 
 import javax.swing.event.EventListenerList;
@@ -36,10 +35,8 @@ import javax.swing.event.EventListenerList;
 import jdbreport.model.ReportException;
 import jdbreport.util.Utils;
 
-import and.dbcomp.DataSetParams;
-
 /**
- * @version 2.0 21.01.2011
+ * @version 3.0 12.12.2014
  * @author Andrey Kholmanskih
  * 
  */
@@ -47,7 +44,7 @@ public class BufferedDataSet implements MasterDataSet, DataSetListener {
 
 	private ReportDataSet ds;
 
-	private Map<String, Object> values = new HashMap<String, Object>();
+	private Map<String, Object> values = new HashMap<>();
 
 	private boolean inCashe = false;
 
@@ -133,9 +130,7 @@ public class BufferedDataSet implements MasterDataSet, DataSetListener {
 		}
 		inCashe = true;
 		try {
-			Iterator<String> it = values.keySet().iterator();
-			while (it.hasNext()) {
-				String key = it.next();
+			for (String key : values.keySet()) {
 				values.put(key, ds.getValue(key));
 			}
 			currentObject = ds.getCurrentObject();
@@ -184,7 +179,7 @@ public class BufferedDataSet implements MasterDataSet, DataSetListener {
 		try {
 			BufferedDataSet newDataSet = (BufferedDataSet) super.clone();
 			newDataSet.ds = (ReportDataSet) this.ds.clone();
-			newDataSet.values = new HashMap<String, Object>();
+			newDataSet.values = new HashMap<>();
 			return newDataSet;
 		} catch (CloneNotSupportedException e) {
 			e.printStackTrace();
@@ -239,7 +234,7 @@ public class BufferedDataSet implements MasterDataSet, DataSetListener {
 			throws ReportException {
 		if (linkedParams != null)
 			return true;
-		linkedParams = new HashMap<String, Object>();
+		linkedParams = new HashMap<>();
 		Collection<String> masterFields = masterDS.getColumnNames();
 		for (int i = 0; i < getParams().size(); i++) {
 			if (masterFields.contains(getParams().getName(i))) {
@@ -259,15 +254,13 @@ public class BufferedDataSet implements MasterDataSet, DataSetListener {
 		try {
 			if (!validateParams(masterDS))
 				return false;
-			Iterator<String> it = linkedParams.keySet().iterator();
-			while (it.hasNext()) {
-				String name = it.next();
+			for (String name : linkedParams.keySet()) {
 				Object paramValue = linkedParams.get(name);
 				Object dsValue = masterDS.getValue(name);
 				if (paramValue == null && dsValue == null)
 					continue;
-				boolean change = paramValue == null ? !dsValue
-						.equals(paramValue) : !paramValue.equals(dsValue);
+				boolean change = (paramValue == null) ? !dsValue
+						.equals(null) : !paramValue.equals(dsValue);
 				if (change) {
 					result = true;
 					linkedParams.put(name, dsValue);

@@ -44,18 +44,15 @@ import jdbreport.model.CellValue;
 import jdbreport.model.ReportBook;
 import jdbreport.model.ReportColumn;
 import jdbreport.model.ReportModel;
-import jdbreport.model.ReportRow;
 import jdbreport.model.RowsGroup;
 import jdbreport.model.Units;
 import jdbreport.model.Cell.Type;
 import jdbreport.model.io.SaveReportException;
 import jdbreport.util.Utils;
-
-import and.util.Utilities;
-import and.util.xml.XMLCoder;
+import jdbreport.util.xml.XMLCoder;
 
 /**
- * @version 2.2 13.04.2013
+ * @version 3.0 12.12.2014
  * @author Andrey Kholmanskih
  * 
  */
@@ -128,7 +125,7 @@ class OdsContentWriter extends OdfBaseWriter {
 	protected void writeBody(PrintWriter fw, ReportBook reportBook) throws SaveReportException {
 		fw.println("<office:body>");
 		fw.println("<office:spreadsheet>");
-		Set<String> titles = new HashSet<String>();
+		Set<String> titles = new HashSet<>();
 		int n = 1;
 		for (ReportModel model : reportBook) {
 			String reportTitle = model.getReportTitle();
@@ -183,7 +180,7 @@ class OdsContentWriter extends OdfBaseWriter {
 						.println("<style:style style:name=\""
 								+ key
 								+ "\" style:family=\"table-cell\" style:parent-style-name=\"Default\" >");
-				writeCellProperties(fw, style, CellStyle.getDefaultStyle());
+				writeCellProperties(fw, style);
 				writeParagraphProperties(fw, style, CellStyle.getDefaultStyle());
 				writeTextProperties(fw, style, CellStyle.getDefaultStyle());
 				fw.println("</style:style>");
@@ -195,15 +192,15 @@ class OdsContentWriter extends OdfBaseWriter {
 
 	protected void writeRowStyles(PrintWriter fw, ReportBook reportBook) {
 		int n = 1;
-		List<RowStyle> rowStyles = new ArrayList<RowStyle>();
-		rowStylesMap = new HashMap<String, String>();
+		List<RowStyle> rowStyles = new ArrayList<>();
+		rowStylesMap = new HashMap<>();
 
 		for (ReportModel model : reportBook) {
 			for (int r = 1; r <= model.getRowCount(); r++) {
 				String styleName = "ro" + n + r;
 				RowStyle rowStyle = new RowStyle(styleName);
 				rowStyle.setBreakBefore(r > 1 && model.isLastRowInPage(r - 2));
-				rowStyle.setHeight(Utilities.round(((ReportRow) model
+				rowStyle.setHeight(Utils.round((model
 						.getRowModel().getRow(r - 1)).getNativeHeight(), 4));
 				int i = rowStyles.indexOf(rowStyle);
 				if (i >= 0) {
@@ -240,7 +237,7 @@ class OdsContentWriter extends OdfBaseWriter {
 				} else
 					fw.print("\"auto\" ");
 				fw.print("style:column-width=\""
-						+ Utilities.round(((ReportColumn) model
+						+ Utils.round(((ReportColumn) model
 								.getColumnModel().getColumn(c - 1))
 								.getNativeWidth(), 4) + "pt\"/>");
 				fw.println("</style:style>");
@@ -269,7 +266,7 @@ class OdsContentWriter extends OdfBaseWriter {
 				}
 				fw.println("/>");
 			} else {
-				StringBuffer buf = new StringBuffer("<table:table-cell ");
+				StringBuilder buf = new StringBuilder("<table:table-cell ");
 				buf.append("table:style-name=\"");
 				buf.append(cell.getStyleId() == null ? "Default" : cell
 						.getStyleId());
@@ -291,7 +288,7 @@ class OdsContentWriter extends OdfBaseWriter {
 				if (cell.getValue() != null && valueType == Type.FLOAT) {
 					double value;
 					try {
-						value = Utilities.parseDouble(cell.getValue()
+						value = Utils.parseDouble(cell.getValue()
 								.toString());
 					} catch (Exception e) {
 						value = 0;
@@ -304,7 +301,7 @@ class OdsContentWriter extends OdfBaseWriter {
 				
 				if (cell.getColSpan() > 0) {
 					buf.append("table:number-columns-spanned=\"");
-					buf.append("" + (cell.getColSpan() + 1));
+					buf.append("").append(cell.getColSpan() + 1);
 					buf.append("\" ");
 				}
 				if (cell.getRowSpan() > 0) {
@@ -320,7 +317,7 @@ class OdsContentWriter extends OdfBaseWriter {
 					}
 					if (r > 1) {
 						buf.append("table:number-rows-spanned=\"");
-						buf.append("" + r);
+						buf.append("").append(r);
 						buf.append("\" ");
 					}
 				}
@@ -351,7 +348,7 @@ class OdsContentWriter extends OdfBaseWriter {
 					fw.println("</text:p>");
 					
 					if (image != null) {
-						Dimension r = null;
+						Dimension r;
 						if (cell.isScaleIcon()) {
 							r = model.getCellSize(cell, row, c, false);
 						} else {
@@ -365,7 +362,7 @@ class OdsContentWriter extends OdfBaseWriter {
 				}
 				
 				if (cell.getPicture() != null) {
-					Dimension r = null;
+					Dimension r;
 					RenderedImage image = Utils.getRenderedImage(cell.getPicture().getIcon());
 					if (cell.isScaleIcon()) {
 						r = model.getCellSize(cell, row, c, false);
@@ -386,10 +383,10 @@ class OdsContentWriter extends OdfBaseWriter {
 		StringBuffer buff = new StringBuffer("<draw:frame ");
 		buff.append("svg:x=\"0pt\" svg:y=\"0pt\" ");
 		buff.append("svg:width=\"");
-		buff.append(Utilities.round(Units.PT.setXPixels(r.width), 2));
+		buff.append(Utils.round(Units.PT.setXPixels(r.width), 2));
 		buff.append("pt\" ");
 		buff.append("svg:height=\"");
-		buff.append(Utilities.round(Units.PT.setYPixels(r.height), 2));
+		buff.append(Utils.round(Units.PT.setYPixels(r.height), 2));
 		buff.append("pt\" ");
 		buff.append('>');
 		buff.append("<draw:image xlink:href=\"Pictures/");
@@ -463,10 +460,8 @@ class OdsContentWriter extends OdfBaseWriter {
 			RowStyle other = (RowStyle) obj;
 			if (breakBefore != other.breakBefore)
 				return false;
-			if (Float.floatToIntBits(height) != Float
-					.floatToIntBits(other.height))
-				return false;
-			return true;
+			return Float.floatToIntBits(height) == Float
+					.floatToIntBits(other.height);
 		}
 
 	}

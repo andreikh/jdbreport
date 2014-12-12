@@ -29,10 +29,8 @@ import java.util.Collection;
 
 import jdbreport.model.ReportException;
 
-import and.dbcomp.DataSetParams;
-
 /**
- * @version 1.4 15.03.2010
+ * @version 3.0 12.12.2014
  * @author Andrey Kholmanskih
  * 
  */

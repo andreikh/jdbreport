@@ -40,8 +40,6 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.EventListenerList;
 import javax.swing.event.ListSelectionEvent;
 
-import and.util.Utilities;
-
 import jdbreport.model.event.ReportListEvent;
 import jdbreport.model.event.ReportListListener;
 import jdbreport.model.event.TableRowModelEvent;
@@ -52,26 +50,27 @@ import jdbreport.model.io.ReportReader;
 import jdbreport.model.io.ReportWriter;
 import jdbreport.model.math.MathValue;
 import jdbreport.model.svg.SVGImage;
+import jdbreport.util.Utils;
 import jdbreport.view.model.JReportModel;
 
 /**
- * @version 3.0 22.02.2014
+ * @version 3.0 12.12.2014
  * @author Andrey Kholmanskih
  * 
  */
 public class ReportBook implements Iterable<ReportModel>, TableRowModelListener {
 
-	public static final String HTML = "html"; //$NON-NLS-1$
-	public static final String HTML_BODY = "html_body"; //$NON-NLS-1$
-	public static final String ODS = "ods"; //$NON-NLS-1$
-	public static final String ODT = "odt"; //$NON-NLS-1$
-	public static final String JRPT = "jrpt"; //$NON-NLS-1$
-	public static final String EXCEL = "excel_xml"; //$NON-NLS-1$
-	public static final String XML = "xml"; //$NON-NLS-1$
-	public static final String PDF = "pdf"; //$NON-NLS-1$
-	public static final String XLS = "xls"; //$NON-NLS-1$
-	public static final String XLSX = "xlsx"; //$NON-NLS-1$
-	public static final String DOCX = "docx"; //$NON-NLS-1$
+	public static final String HTML = "html";
+	public static final String HTML_BODY = "html_body";
+	public static final String ODS = "ods";
+	public static final String ODT = "odt";
+	public static final String JRPT = "jrpt";
+	public static final String EXCEL = "excel_xml";
+	public static final String XML = "xml";
+	public static final String PDF = "pdf";
+	public static final String XLS = "xls";
+	public static final String XLSX = "xlsx";
+	public static final String DOCX = "docx";
 	public static boolean enableSVG;
 
 	protected static DateFormat dateFormatter = DateFormat.getDateInstance();
@@ -80,7 +79,7 @@ public class ReportBook implements Iterable<ReportModel>, TableRowModelListener 
 
 	protected static TreeMap<Object, String> READERS_MAP = new TreeMap<>();
 
-	public static final String CURRENT_VERSION = "8"; //$NON-NLS-1$
+	public static final String CURRENT_VERSION = "8";
 
 	private static final Logger logger = Logger.getLogger(ReportBook.class
 			.getName());
@@ -92,42 +91,42 @@ public class ReportBook implements Iterable<ReportModel>, TableRowModelListener 
 			enableSVG = false;
 		}
 
-		WRITERS_MAP.put(JRPT, "jdbreport.model.io.xml.RptFileType"); //$NON-NLS-1$
-		WRITERS_MAP.put(ODS, "jdbreport.model.io.xml.odf.OdsFileType"); //$NON-NLS-1$
-		WRITERS_MAP.put(ODT, "jdbreport.model.io.xml.odf.OdtFileType"); //$NON-NLS-1$
+		WRITERS_MAP.put(JRPT, "jdbreport.model.io.xml.RptFileType");
+		WRITERS_MAP.put(ODS, "jdbreport.model.io.xml.odf.OdsFileType");
+		WRITERS_MAP.put(ODT, "jdbreport.model.io.xml.odf.OdtFileType");
 		try {
 			if (Class.forName("org.apache.poi.hssf.usermodel.HSSFWorkbook") != null) {
-				WRITERS_MAP.put(XLS, "jdbreport.model.io.xls.poi.XlsFileType"); //$NON-NLS-1$
+				WRITERS_MAP.put(XLS, "jdbreport.model.io.xls.poi.XlsFileType");
 				logger.info("Support MS Excel 2003 with POI is added");
 				if (Class.forName("org.apache.poi.xssf.usermodel.XSSFWorkbook") != null) {
 					WRITERS_MAP.put(XLSX,
-							"jdbreport.model.io.xls.poi.XlsxFileType"); //$NON-NLS-1$
+							"jdbreport.model.io.xls.poi.XlsxFileType");
 					logger.info("Support MS Excel 2007 with POI is added");
 				}
 			}
-		} catch (NoClassDefFoundError | ClassNotFoundException e) {
+		} catch (NoClassDefFoundError | ClassNotFoundException ignored) {
 		}
         try {
 			Class.forName("com.lowagie.text.Document");
-			WRITERS_MAP.put(PDF, "jdbreport.model.io.pdf.itext2.PdfFileType"); //$NON-NLS-1$
+			WRITERS_MAP.put(PDF, "jdbreport.model.io.pdf.itext2.PdfFileType");
 			logger.info("Support PDF with iText 2.1.7 is added");
 		} catch (ClassNotFoundException e) {
 			try {
 				Class.forName("com.itextpdf.text.Document");
 				WRITERS_MAP.put(PDF,
-						"jdbreport.model.io.pdf.itext5.PdfFileType"); //$NON-NLS-1$
+						"jdbreport.model.io.pdf.itext5.PdfFileType");
 				logger.info("Support PDF with iText 5.x is added");
 			} catch (ClassNotFoundException ignored) {
 			}
 		}
 
-		WRITERS_MAP.put(HTML, "jdbreport.model.io.html.HTMLFileType"); //$NON-NLS-1$
-		WRITERS_MAP.put(HTML_BODY, "jdbreport.model.io.html.HTMLBodyFileType"); //$NON-NLS-1$
-		WRITERS_MAP.put(EXCEL, "jdbreport.model.io.xml.excel.ExcelFileType"); //$NON-NLS-1$
+		WRITERS_MAP.put(HTML, "jdbreport.model.io.html.HTMLFileType");
+		WRITERS_MAP.put(HTML_BODY, "jdbreport.model.io.html.HTMLBodyFileType");
+		WRITERS_MAP.put(EXCEL, "jdbreport.model.io.xml.excel.ExcelFileType");
 
-		READERS_MAP.put(JRPT, "jdbreport.model.io.xml.RptFileType"); //$NON-NLS-1$
-		READERS_MAP.put(ODS, "jdbreport.model.io.xml.odf.OdsFileType"); //$NON-NLS-1$
-		READERS_MAP.put(XML, "jdbreport.model.io.xml.XMLFileType"); //$NON-NLS-1$ //$NON-NLS-2$
+		READERS_MAP.put(JRPT, "jdbreport.model.io.xml.RptFileType");
+		READERS_MAP.put(ODS, "jdbreport.model.io.xml.odf.OdsFileType");
+		READERS_MAP.put(XML, "jdbreport.model.io.xml.XMLFileType");
 
 		if (MathValue.isEnableMathMl()) {
 			logger.info("Support MathML with JEuclid");
@@ -229,9 +228,7 @@ public class ReportBook implements Iterable<ReportModel>, TableRowModelListener 
 						.newInstance();
 				return fileType.getReader();
 			}
-		} catch (InstantiationException e) {
-			logger.log(Level.SEVERE, e.getMessage(), e);
-		} catch (IllegalAccessException e) {
+		} catch (InstantiationException | IllegalAccessException e) {
 			logger.log(Level.SEVERE, e.getMessage(), e);
 		} catch (ClassNotFoundException e) {
 			logger.log(Level.SEVERE, e.getMessage(), e);
@@ -256,11 +253,7 @@ public class ReportBook implements Iterable<ReportModel>, TableRowModelListener 
 						.newInstance();
 				return fileType.getWriter();
 			}
-		} catch (InstantiationException e) {
-			logger.log(Level.SEVERE, e.getMessage(), e);
-		} catch (IllegalAccessException e) {
-			logger.log(Level.SEVERE, e.getMessage(), e);
-		} catch (ClassNotFoundException e) {
+		} catch (InstantiationException | IllegalAccessException | ClassNotFoundException e) {
 			logger.log(Level.SEVERE, e.getMessage(), e);
 		}
 		return null;
@@ -430,11 +423,9 @@ public class ReportBook implements Iterable<ReportModel>, TableRowModelListener 
 			CellStyle style = book.getStyleList().get(key);
 			if (getStyleList().containsKey(key)) {
 
-				Object newKey = new Integer(getStyleList().size());
+				Object newKey = getStyleList().size();
 				while (getStyleList().containsKey(newKey)
-						|| book.getStyleList().containsKey(newKey)) {
-					newKey = new Integer(((Integer) newKey).intValue() + 1);
-				}
+						|| book.getStyleList().containsKey(newKey)) newKey = ((Integer) newKey).intValue() + 1;
 				style.setId(newKey);
 				book.replaceStyles(key, newKey);
 				getStyleList().put(newKey, style);
@@ -455,7 +446,7 @@ public class ReportBook implements Iterable<ReportModel>, TableRowModelListener 
 	 * @return the removed ReportModel
 	 */
 	public ReportModel remove(int index) {
-		ReportModel model = (ReportModel) list.remove(index);
+		ReportModel model = list.remove(index);
 		revalidatePageNumbers();
 		model.getRowModel().removeRowModelListener(this);
 		fireReportRemoved(new ReportListEvent(this, index, 0));
@@ -616,7 +607,7 @@ public class ReportBook implements Iterable<ReportModel>, TableRowModelListener 
 	 * @return the ReportReader's or ReportWriter's key
 	 */
 	public String getKeyByFile(String filename) {
-		return Utilities.getFileExtension(filename).toLowerCase();
+		return Utils.getFileExtension(filename).toLowerCase();
 	}
 
 	/**
@@ -990,9 +981,9 @@ public class ReportBook implements Iterable<ReportModel>, TableRowModelListener 
 		Object id = style.getId();
 		int count = styleList.size();
 		if (id == null)
-			id = new Integer(count);
+			id = count;
 		while (styleList.containsKey(id)) {
-			id = new Integer(++count);
+			id = ++count;
 		}
 		style.setId(id);
 		styleList.put(id, style);
@@ -1010,7 +1001,7 @@ public class ReportBook implements Iterable<ReportModel>, TableRowModelListener 
 	public Object appendStyle(CellStyle style) {
 		Object id = style.getId();
 		if (id == null || styleList.containsKey(id)) {
-			id = new Integer(styleList.size());
+			id = styleList.size();
 			while (styleList.containsKey(id))
                 id = ((Integer) id).intValue() + 1;
 		}

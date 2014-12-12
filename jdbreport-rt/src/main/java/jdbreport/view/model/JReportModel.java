@@ -26,10 +26,10 @@
  */
 package jdbreport.view.model;
 
-import and.util.Utilities;
 import jdbreport.model.*;
 import jdbreport.model.print.ReportPage;
 import jdbreport.util.GraphicUtil;
+import jdbreport.util.Utils;
 
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.TableColumn;
@@ -43,7 +43,7 @@ import java.util.Map;
 import java.util.NoSuchElementException;
 
 /**
- * @version 3.0 22.02.2014
+ * @version 3.0 12.12.2014
  * @author Andrey Kholmanskih
  * 
  */
@@ -288,7 +288,7 @@ public class JReportModel extends AbstractTableModel implements ReportModel {
 				cell.setValue(aValue);
 		}
 		if (cell.getContentType().equals(Cell.TEXT_HTML)) {
-			cell.setValue(and.util.Utilities.html2Plain(cell.getText()));
+			cell.setValue(Utils.html2Plain(cell.getText()));
 		}
 	}
 
@@ -1361,7 +1361,7 @@ public class JReportModel extends AbstractTableModel implements ReportModel {
 			String str = cell.getText();
 			if (str != null && style.getDecimal() > 0) {
 				try {
-					str = Utilities.roundStr(new Double(str.replace(',', '.')),
+					str = Utils.roundStr(new Double(str.replace(',', '.')),
 							style.getDecimal());
 				} catch (Exception ignored) {
 				}

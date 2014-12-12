@@ -44,11 +44,10 @@ import jdbreport.model.ReportModel;
 import jdbreport.model.StringMetrics;
 import jdbreport.model.io.LoadReportException;
 import jdbreport.util.Utils;
-
-import and.properties.XMLProperties;
+import jdbreport.util.xml.XMLProperties;
 
 /**
- * @version 1.2 02/01/09
+ * @version 3.0 12.12.2014
  * @author Andrey Kholmanskih
  * 
  */
@@ -164,10 +163,6 @@ public class ReportDialog extends JDialog implements
 	protected void initMenu() {
 		setJMenuBar(getReportPane().createJMenuBar());
 	}
-
-	/**
-	 * @return
-	 */
 
 	private void exitForm(WindowEvent evt) {
 		if (!getReportPane().saveQuestion())

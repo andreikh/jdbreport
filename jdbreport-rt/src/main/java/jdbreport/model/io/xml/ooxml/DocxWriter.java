@@ -45,16 +45,15 @@ import java.util.zip.ZipOutputStream;
 
 import javax.imageio.ImageIO;
 
-import and.util.Utilities;
-
 import jdbreport.model.ReportBook;
 import jdbreport.model.io.ReportWriter;
 import jdbreport.model.io.SaveReportException;
+import jdbreport.util.Utils;
 
 /**
  * @author Andrey Kholmanskih
  * 
- * @version 1.0 02.06.2010
+ * @version 3.0 12.12.2014
  */
 public class DocxWriter implements ReportWriter {
 
@@ -91,7 +90,7 @@ public class DocxWriter implements ReportWriter {
 						zipStream.putNextEntry(entry);
 						RenderedImage image = images.get(fileName);
 
-						ImageIO.write(image, Utilities
+						ImageIO.write(image, Utils
 								.getFileExtension(fileName), zipStream);
 					}
 

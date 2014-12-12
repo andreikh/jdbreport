@@ -50,7 +50,7 @@ import org.apache.batik.transcoder.TranscoderException;
 import org.apache.batik.transcoder.print.PrintTranscoder;
 import org.w3c.dom.svg.SVGDocument;
 
-import and.util.Utilities;
+import jdbreport.util.Utils;
 
 import jdbreport.grid.JReportGrid;
 import jdbreport.grid.ReportCellRenderer;
@@ -183,11 +183,11 @@ public class SVGReportRenderer extends JComponent implements ReportCellRenderer 
 			int x = 0;
 			int y = 0;
 			Point2D[] points = new Point2D[3];
-			points[0] = Utilities.rotatePoint(x, y, x + getWidth(), y, Math
+			points[0] = Utils.rotatePoint(x, y, x + getWidth(), y, Math
 					.toRadians(a));
-			points[1] = Utilities.rotatePoint(x, y, x + getWidth(), y
+			points[1] = Utils.rotatePoint(x, y, x + getWidth(), y
 					+ getHeight(), Math.toRadians(a));
-			points[2] = Utilities.rotatePoint(x, y, x, y + getHeight(), Math
+			points[2] = Utils.rotatePoint(x, y, x, y + getHeight(), Math
 					.toRadians(a));
 			int miny = getHeight();
 			int maxy = -miny;

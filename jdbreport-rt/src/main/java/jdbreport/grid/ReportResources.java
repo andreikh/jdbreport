@@ -26,16 +26,17 @@
  */
 package jdbreport.grid;
 
+import jdbreport.util.Resources;
+
 import java.util.Locale;
 import java.util.ResourceBundle;
 
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 
-import and.properties.Resources;
 
 /**
- * @version 1.1 03/09/08
+ * @version 3.0 12.12.2014
  * @author Andrey Kholmanskih
  * 
  */

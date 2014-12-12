@@ -38,8 +38,6 @@ import java.net.URL;
 
 import javax.swing.JDialog;
 
-import and.properties.Properties;
-
 /**
  * @version 1.1 03/09/08
  * @author Andrey Kholmanskih

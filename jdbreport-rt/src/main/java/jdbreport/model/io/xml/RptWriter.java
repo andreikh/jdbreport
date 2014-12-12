@@ -38,15 +38,14 @@ import java.util.zip.ZipOutputStream;
 
 import javax.imageio.ImageIO;
 
-import and.util.Utilities;
-
 import jdbreport.model.ReportBook;
 import jdbreport.model.io.ReportWriter;
 import jdbreport.model.io.SaveReportException;
+import jdbreport.util.Utils;
 
 
 /**
- * @version 2.0 17.02.2010
+ * @version 3.0 12.12.2014
  * @author Andrey Kholmanskih
  *
  */
@@ -90,7 +89,7 @@ public class RptWriter implements ReportWriter  {
 						Object res = resMap.get(fileName);
 						if (res instanceof RenderedImage) {
 							ImageIO.write((RenderedImage)res,
-									Utilities.getFileExtension(fileName), zipStream);
+									Utils.getFileExtension(fileName), zipStream);
 						} else  if (res instanceof byte[]){
 							zipStream.write((byte[])res);
 						} else {

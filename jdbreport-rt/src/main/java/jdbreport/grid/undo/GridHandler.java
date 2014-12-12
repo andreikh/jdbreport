@@ -28,14 +28,13 @@ package jdbreport.grid.undo;
 import jdbreport.model.ReportModel;
 import jdbreport.model.io.xml.DefaultReaderHandler;
 
+import jdbreport.util.xml.XMLParser;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
 
-import and.util.xml.XMLParser;
-
 /**
- * @version 1.1 03/09/08
+ * @version 3.0 12.12.2014
  * @author Andrey Kholmanskih
  * 
  */
@@ -54,24 +53,24 @@ public class GridHandler extends DefaultReaderHandler {
 		super.startElement(uri, localName, qName, attributes);
 		if (rootName == null) {
 			rootName = qName;
-			if (rootName.equals("jdbreport")) { //$NON-NLS-1$
+			if (rootName.equals("jdbreport")) {
 				isDbreport = true;
 				return;
 			}
 			throw new SAXException(
-					Messages.getString("GridHandler.1") + rootName); //$NON-NLS-1$
+					Messages.getString("GridHandler.1") + rootName);
 		}
 		if (handler != null) {
 			isParse = handler.startElement(qName, attributes);
 			return;
 		}
 		if (isDbreport) {
-			if (qName.equals("reportgrid")) { //$NON-NLS-1$
+			if (qName.equals("reportgrid")) {
 				handler = getDefaultHandler();
 				return;
 			}
 		}
-		throw new SAXException(Messages.getString("GridHandler.3")); //$NON-NLS-1$
+		throw new SAXException(Messages.getString("GridHandler.3"));
 	}
 
 	protected XMLParser getDefaultHandler() {

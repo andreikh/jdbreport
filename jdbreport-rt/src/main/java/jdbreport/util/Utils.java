@@ -27,14 +27,14 @@
  */
 package jdbreport.util;
 
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.Graphics2D;
-import java.awt.Point;
-import java.awt.Toolkit;
-import java.awt.Window;
+import java.awt.*;
+import java.awt.geom.Point2D;
 import java.awt.image.BufferedImage;
 import java.awt.image.RenderedImage;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.text.DecimalFormat;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Level;
@@ -42,10 +42,8 @@ import java.util.logging.Logger;
 
 import javax.swing.ImageIcon;
 
-import and.util.ErrorHandler;
-
 /**
- * @version 2.0 20.01.2011
+ * @version 3.0 12.12.2014
  * @author Andrey Kholmanskih
  * 
  */
@@ -58,10 +56,12 @@ public class Utils {
 			"Horizontal", "Vertical", "FDiagonal", "BDiagonal", "Cross",
 			"DiagCross" };
 
+	private static char decimalSeparator = '\0';
+
 	private static Map<String, Color> colorMap;
 	
 	private static void initColorMap() {
-		colorMap = new HashMap<String, Color>();
+		colorMap = new HashMap<>();
 		colorMap.put("black", Color.black);
 		colorMap.put("silver", Color.lightGray);
 		colorMap.put("gray", Color.gray);
@@ -81,9 +81,7 @@ public class Utils {
 	}
 	
 	private static Map<String, Color> getColorMap() {
-		if (colorMap == null) {
-			initColorMap();
-		}
+		if (colorMap == null) initColorMap();
 		return colorMap;
 	}
 	
@@ -123,9 +121,9 @@ public class Utils {
 	public static Color stringToColor(String color) {
 		if (color == null)
 			return null;
-		int r = 0;
-		int g = 0;
-		int b = 0;
+		int r;
+		int g;
+		int b;
 		int ind1 = color.indexOf(',');
 		if (ind1 > 0) {
 			r = Integer.parseInt(color.substring(0, ind1 - 1));
@@ -136,7 +134,7 @@ public class Utils {
 			int c = Integer.decode(color);
 			r = (c >> 16) & 0xff;
 			g = (c >> 8) & 0xff;
-			b = (c >> 0) & 0xff;
+			b = (c) & 0xff;
 		} else {
 			int c = Integer.parseInt(color);
 			b = (c >> 16) & 0xff;
@@ -156,11 +154,11 @@ public class Utils {
 
 	/**
 	 * 
-	 * @param icon
+	 * @param icon ImageIcon
 	 * @return RendereImage
 	 */
 	public static RenderedImage getRenderedImage(ImageIcon icon) {
-		RenderedImage image = null;
+		RenderedImage image;
 		if (icon.getImage() instanceof RenderedImage) {
 			image = (RenderedImage) icon.getImage();
 		} else {
@@ -174,8 +172,6 @@ public class Utils {
 
 	/**
 	 * Center screen
-	 * 
-	 * @param window
 	 */
 	public static void screenCenter(Window window) {
 		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
@@ -217,6 +213,178 @@ public class Utils {
 		if (errorHandler != null) {
 			errorHandler.showError(message);
 		}
+	}
+
+	public static String getFileExtension(File f) {
+		if (f != null) {
+			return getFileExtension(f.getName());
+		}
+		return null;
+	}
+
+	public static String getFileExtension(String filename) {
+		int i = filename.lastIndexOf('.');
+		if (i > 0 && i < filename.length() - 1) {
+			return filename.substring(i + 1).toLowerCase();
+		}
+		return "";
+	}
+
+	public static String changeFileExtension(String fileName,
+											 String newExtension) {
+		int i = fileName.lastIndexOf('.');
+		if (i > 0 && i < fileName.length() - 1) {
+			return fileName.substring(0, i) + newExtension;
+		}
+		return fileName + "." + newExtension;
+	}
+
+	public static String extractFileName(String filePath) {
+		int i = filePath.lastIndexOf('/');
+		if (i < 0)
+			i = filePath.lastIndexOf('\\');
+		if (i < 0)
+			return filePath;
+		return filePath.substring(i + 1);
+	}
+
+	public static String extractFilePath(String filePath) {
+		int i = filePath.lastIndexOf('/');
+		if (i < 0)
+			i = filePath.lastIndexOf('\\');
+		if (i < 0)
+			return "";
+		return filePath.substring(0, i + 1);
+	}
+
+	/**
+	 * Turn of a point round other point counter-clockwise
+	 *
+	 * @param x0 coordinate x central point
+	 * @param y0 coordinate y central point
+	 * @param x coordinate x source point
+	 * @param y coordinate y source point
+	 * @param a angle of rotation in radians
+	 * @return result point
+	 */
+	public static Point2D.Double rotatePoint(double x0, double y0, double x,
+											 double y, double a) {
+		Point2D.Double p = new Point2D.Double();
+		double sina = Math.sin(a);
+		double cosa = Math.cos(a);
+
+		p.x = x0 + (x - x0) * cosa + (y0 - y) * sina;
+		p.y = y0 + (x - x0) * sina + (y - y0) * cosa;
+		return p;
+	}
+
+	public static String html2Plain(String text) {
+		StringBuffer result = new StringBuffer();
+		for (int i = 0; i < text.length(); i++) {
+			if (text.charAt(i) != '&' || i >= text.length() - 2) {
+				result.append(text.charAt(i));
+			} else {
+				i++;
+				if (text.charAt(i) != '#') {
+					result.append('&');
+					result.append(text.charAt(i));
+					continue;
+				}
+				int b = ++i;
+				while (text.charAt(i) != ';' && i < text.length()) {
+					i++;
+				}
+				if (text.charAt(i) == ';') {
+					try {
+						int ch = Integer.parseInt(text.substring(b, i));
+						result.append((char) ch);
+					} catch (Exception e) {
+						result.append(text.substring(b - 2, i));
+					}
+				} else {
+					result.append(text.substring(b - 2));
+				}
+
+			}
+		}
+		return result.toString();
+	}
+
+	public static char getDecimalSeparator() {
+		if (decimalSeparator == '\0') {
+			DecimalFormat df = new DecimalFormat();
+			decimalSeparator = df.getDecimalFormatSymbols()
+					.getDecimalSeparator();
+		}
+		return decimalSeparator;
+	}
+
+	public static double round(double value) {
+		return round(value, 0);
+	}
+
+	public static double round(double value, int decimal) {
+		long d = 1;
+		int c = decimal < 0 ? -decimal : decimal;
+		for (int i = 0; i < c; i++) {
+			d = d * 10;
+		}
+		if (decimal >= 0) {
+			return (double) Math.round(value * d) / d;
+		}
+		return Math.round(value / d) * d;
+	}
+
+	public static float round(float value, int decimal) {
+		int d = 1;
+		int c = decimal < 0 ? -decimal : decimal;
+		for (int i = 0; i < c; i++) {
+			d = d * 10;
+		}
+		if (decimal >= 0) {
+			int v = Math.round(value * d);
+			return 1.0f * v / d;
+		}
+		return Math.round(value / d) * d;
+	}
+
+	public static String roundStr(Double value, int decimal) {
+		return String.format("%1." + decimal + "f", value);
+	}
+
+	public static double parseDouble(String s) {
+		if (s == null)
+			return 0;
+		try {
+			return Double.parseDouble(s);
+		} catch (NumberFormatException e) {
+			char ds = s.indexOf(',') >= 0 ? '.' : ',';
+			char oldChar = ds == ',' ? '.' : ',';
+			s = s.replace(oldChar, ds);
+			return Double.parseDouble(s);
+		}
+	}
+
+	/**
+	 * Fill array from stream
+	 *
+	 * @param in input stream
+	 * @param b bytes
+	 * @return count bytes reads from stream
+	 * @throws java.io.IOException
+	 */
+	public static int readBytes(InputStream in, byte[] b) throws IOException {
+		int l = b.length;
+		int pos = 0;
+		int n;
+		do {
+			n = in.read(b, pos, l);
+			if (n > 0) {
+				pos += n;
+				l -= n;
+			}
+		} while (n > 0 && l > 0);
+		return pos;
 	}
 
 }

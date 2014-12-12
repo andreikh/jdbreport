@@ -55,11 +55,10 @@ import javax.swing.JTextField;
 import jdbreport.design.model.CellFunctionObject;
 import jdbreport.util.HelpDlg;
 import jdbreport.util.Utils;
-
-import and.properties.XMLProperties;
+import jdbreport.util.xml.XMLProperties;
 
 /**
- * @version 2.0 24.05.2011
+ * @version 3.0 12.12.2014
  * @author Andrey Kholmanskih
  * 
  */
@@ -115,11 +114,7 @@ public class CellFunctionEditor extends JDialog {
 
 	private JPanel namePanel = null;
 
-	private JLabel jLabel = null;
-
 	private JTextField nameField = null;
-
-	private JLabel jLabel1 = null;
 
 	private JButton helpButton;
 
@@ -160,11 +155,6 @@ public class CellFunctionEditor extends JDialog {
 		properties.put(DIVIDER_HEIGHT, getJSplitPane().getDividerLocation());
 	}
 
-	/**
-	 * This method initializes this
-	 * 
-	 * @return void
-	 */
 	private void initialize() {
 		this.setSize(500, 450);
 		this.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
@@ -534,11 +524,11 @@ public class CellFunctionEditor extends JDialog {
 	 */
 	private JPanel getNamePanel() {
 		if (namePanel == null) {
-			jLabel1 = new JLabel();
+			JLabel jLabel1 = new JLabel();
 			jLabel1.setText(" implements CellFunction {"); //$NON-NLS-1$
 			FlowLayout flowLayout = new FlowLayout();
 			flowLayout.setAlignment(java.awt.FlowLayout.LEFT);
-			jLabel = new JLabel();
+			JLabel jLabel = new JLabel();
 			jLabel.setText("class "); //$NON-NLS-1$
 			namePanel = new JPanel();
 			namePanel.setBackground(java.awt.SystemColor.controlHighlight);

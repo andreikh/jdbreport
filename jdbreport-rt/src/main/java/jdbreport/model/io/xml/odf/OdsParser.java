@@ -31,12 +31,11 @@ import jdbreport.model.ReportModel;
 import jdbreport.model.Units;
 import jdbreport.model.io.xml.DefaultReaderHandler;
 
+import jdbreport.util.xml.XMLParser;
 import org.xml.sax.Attributes;
 
-import and.util.xml.XMLParser;
-
 /**
- * @version 1.1 03/09/08
+ * @version 3.0 12.12.2014
  * @author Andrey Kholmanskih
  * 
  */
@@ -158,7 +157,6 @@ public class OdsParser extends OdsReportParser {
 			}
 			if (name.equals("office:body")) {
 				inBody = false;
-				return;
 			}
 		}
 	}

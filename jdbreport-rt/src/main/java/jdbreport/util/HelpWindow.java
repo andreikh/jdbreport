@@ -26,6 +26,8 @@
  */
 package jdbreport.util;
 
+import jdbreport.util.xml.XMLProperties;
+
 import java.awt.BorderLayout;
 import java.awt.Frame;
 import java.awt.Rectangle;
@@ -33,12 +35,10 @@ import java.awt.Rectangle;
 import javax.swing.JPanel;
 import javax.swing.JFrame;
 
-import and.properties.XMLProperties;
-
 import java.net.URL;
 
 /**
- * @version 2.0 31.05.2010
+ * @version 3.0 12.12.2014
  * @author Andrey Kholmanskih
  * 
  */

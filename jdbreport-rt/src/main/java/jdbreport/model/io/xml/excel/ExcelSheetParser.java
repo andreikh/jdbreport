@@ -38,9 +38,10 @@ import javax.swing.text.JTextComponent;
 import jdbreport.grid.JReportGrid.HTMLReportRenderer;
 import jdbreport.model.Cell;
 import jdbreport.model.CellValue;
+import jdbreport.util.Utils;
+import jdbreport.util.xml.XMLCoder;
 import jdbreport.view.model.JReportModel;
 import jdbreport.model.ReportBook;
-import jdbreport.model.ReportColumn;
 import jdbreport.model.Units;
 import jdbreport.model.io.SaveReportException;
 import jdbreport.model.io.xml.DefaultReaderHandler;
@@ -51,11 +52,8 @@ import jdbreport.util.GraphicUtil;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 
-import and.util.Utilities;
-import and.util.xml.XMLCoder;
-
 /**
- * @version 2.0 30.03.2012
+ * @version 3.0 12.12.2014
  * 
  * @author Andrey Kholmanskih
  * 
@@ -318,7 +316,6 @@ public class ExcelSheetParser extends DefaultReportParser {
 		if ("Worksheet".equals( name )) {
 			getReportModel().endUpdate();
 			getHandler().popHandler(name);
-			return;
 		}
 	}
 
@@ -354,9 +351,9 @@ public class ExcelSheetParser extends DefaultReportParser {
 				+ model.getRowCount() + "\">");
 		boolean isIndex = false;
 		for (int i = 0; i < model.getColumnCount(); i++) {
-			double w = ((ReportColumn)model.getColumnModel().getColumn(i)).getWidth();
+			double w = (model.getColumnModel().getColumn(i)).getWidth();
 			if (w != 64) {
-				double v = Utilities.round((double)w /  GraphicUtil.getScaleX(), 4);
+				double v = Utils.round( w / GraphicUtil.getScaleX(), 4);
 				String str = "ss:AutoFitWidth=\"0\" ss:Width=\"" + v + "\"";
 				if (isIndex)
 					str = "ss:Index=\"" + (i + 1) + "\" " + str;

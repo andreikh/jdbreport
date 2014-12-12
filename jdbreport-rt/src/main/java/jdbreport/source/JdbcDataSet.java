@@ -39,12 +39,8 @@ import java.util.Map;
 
 import jdbreport.model.ReportException;
 
-import and.dbcomp.DataSetParams;
-import and.dbcomp.DbSource;
-import and.dbcomp.Params;
-
 /**
- * @version 2.0 07.02.2011
+ * @version 3.0 12.12.2014
  * @author Andrey Kholmanskih
  * 
  */
@@ -261,7 +257,7 @@ public class JdbcDataSet extends  AbstractDataSet {
 
 	public Collection<String> getColumnNames() throws ReportException {
 		open();
-		Collection<String> result = new ArrayList<String>();
+		Collection<String> result = new ArrayList<>();
 		try {
 			for (int i = 0; i < rs.getMetaData().getColumnCount(); i++) {
 				result.add(rs.getMetaData().getColumnName(i + 1));

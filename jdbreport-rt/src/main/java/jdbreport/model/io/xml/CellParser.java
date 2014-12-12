@@ -46,13 +46,12 @@ import jdbreport.model.io.ResourceReader;
 import jdbreport.model.io.ResourceWriter;
 import jdbreport.model.io.SaveReportException;
 
+import jdbreport.util.xml.XMLCoder;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 
-import and.util.xml.XMLCoder;
-
 /**
- * @version 2.0 19.12.2009
+ * @version 3.0 12.12.2014
  * @author Andrey Kholmanskih
  * 
  */
@@ -68,9 +67,6 @@ public class CellParser extends DefaultReportParser {
 		this.resourceWriter = resIO;
 	}
 
-	/**
-	 * @param reportHandler
-	 */
 	public CellParser(DefaultReaderHandler reportHandler, Cell cell, ResourceReader resReader) {
 		super(reportHandler);
 		this.setCell(cell);
@@ -188,7 +184,6 @@ public class CellParser extends DefaultReportParser {
 			if (cell.getPicture().getBuf() == null) {
 				cell.setPicture(null);
 			}
-			return;
 		}
 
 	}
@@ -206,8 +201,8 @@ public class CellParser extends DefaultReportParser {
 
 	private boolean checkImageWriterFormat(String format) {
 		String[] formats = ImageIO.getWriterFormatNames();
-		for (int i = 0; i < formats.length; i++) {
-			if (format.equals(formats[i])) {
+		for (String format1 : formats) {
+			if (format.equals(format1)) {
 				return true;
 			}
 		}

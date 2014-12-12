@@ -33,10 +33,10 @@ import jdbreport.model.io.xml.excel.ExcelXPParser;
 
 import org.xml.sax.*;
 
-import and.util.xml.XMLParser;
+import jdbreport.util.xml.XMLParser;
 
 /**
- * @version 2.0 20.12.2009
+ * @version 3.0 12.12.2014
  * @author Andrey Kholmanskih
  * 
  */

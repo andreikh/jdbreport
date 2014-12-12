@@ -30,15 +30,14 @@ import java.awt.event.ActionEvent;
 import javax.swing.Action;
 import javax.swing.JOptionPane;
 
-import and.properties.Resources;
-
 import jdbreport.grid.ReportAction;
 import jdbreport.grid.TargetGrid;
 import jdbreport.model.Group;
+import jdbreport.util.Resources;
 
 
 /**
- * @version 2.0 09.08.2010
+ * @version 3.0 12.12.2014
  * @author Andrey Kholmanskih
  *
  */

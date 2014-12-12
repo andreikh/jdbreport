@@ -30,9 +30,6 @@
 
 package jdbreport.grid;
 
-import and.swing.JFontChooser;
-import and.swing.JRotateChooser;
-
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
@@ -62,9 +59,11 @@ import jdbreport.model.CellStyle;
 import jdbreport.model.GridRect;
 import jdbreport.model.ReportModel;
 import jdbreport.util.Utils;
+import jdbreport.view.JFontChooser;
+import jdbreport.view.JRotateChooser;
 
 /**
- * @version 2.0 15.02.2012
+ * @version 3.0 12.12.2014
  * @author Andrey Kholmanskih
  * 
  */
@@ -73,7 +72,7 @@ public class CellPropertiesDlg extends javax.swing.JDialog implements
 
 	private static final long serialVersionUID = 1L;
 	private static final String TITLE = Messages
-			.getString("CellPropertiesDlg.title"); //$NON-NLS-1$
+			.getString("CellPropertiesDlg.title");
 	private JRotateChooser rotateChooser;
 	private GridRect selectedRect;
 	private JReportGrid grid;
@@ -82,7 +81,6 @@ public class CellPropertiesDlg extends javax.swing.JDialog implements
 	private JCheckBox wrapLineBox;
 	private javax.swing.JCheckBox autoHeightBox;
 	private javax.swing.JComboBox hAlignBox;
-	private javax.swing.JPanel rotatePanel;
 	private javax.swing.JTabbedPane tabbedPane;
 	private javax.swing.JComboBox vAlignBox;
 
@@ -121,7 +119,7 @@ public class CellPropertiesDlg extends javax.swing.JDialog implements
 		initComponents();
 		this.grid = grid;
 		this.selectedRect = grid.getSelectionRect();
-		cells = new ArrayList<Cell>();
+		cells = new ArrayList<>();
 		addTabs();
 		setCell(selectedRect);
 		Utils.screenCenter(this, owner);
@@ -133,7 +131,7 @@ public class CellPropertiesDlg extends javax.swing.JDialog implements
 		initComponents();
 		this.grid = grid;
 		this.selectedRect = grid.getSelectionRect();
-		cells = new ArrayList<Cell>();
+		cells = new ArrayList<>();
 		addTabs();
 		setCell(selectedRect);
 		Utils.screenCenter(this, owner);
@@ -176,7 +174,7 @@ public class CellPropertiesDlg extends javax.swing.JDialog implements
 
 		 
 		tabbedPane.addTab(
-				Messages.getString("CellPropertiesDlg.align"), createAlignPanel()); //$NON-NLS-1$
+				Messages.getString("CellPropertiesDlg.align"), createAlignPanel());
 
 		getContentPane().add(tabbedPane, java.awt.BorderLayout.CENTER);
 
@@ -205,8 +203,7 @@ public class CellPropertiesDlg extends javax.swing.JDialog implements
 		autoHeightBox.addActionListener(this);
 
 		carryField = new JSpinner();
-		carryField.setModel(new SpinnerNumberModel(new Integer(0), new Integer(
-				0), null, new Integer(1)));
+		carryField.setModel(new SpinnerNumberModel(0, 0, null, 1));
 		carryField.setToolTipText(Messages
 				.getString("CellPropertiesDlg.rowscount")); //$NON-NLS-1$
 		carryField.addChangeListener(this);
@@ -223,14 +220,14 @@ public class CellPropertiesDlg extends javax.swing.JDialog implements
 		gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
 		gridBagConstraints.insets = new java.awt.Insets(12, 20, 4, 4);
 		gridBagConstraints.gridwidth = 2;
-		alignPanel.add(new JLabel(Messages.getString("CellPropertiesDlg.horz")), gridBagConstraints); //$NON-NLS-1$
+		alignPanel.add(new JLabel(Messages.getString("CellPropertiesDlg.horz")), gridBagConstraints);
 
 		hAlignBox
 				.setModel(new javax.swing.DefaultComboBoxModel(
 						new String[] {
 								Messages.getString("CellPropertiesDlg.left"), Messages.getString("CellPropertiesDlg.center"), Messages.getString("CellPropertiesDlg.right"), Messages.getString("CellPropertiesDlg.filled") })); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
 		hAlignBox.setToolTipText(Messages
-				.getString("CellPropertiesDlg.horz_align")); //$NON-NLS-1$
+				.getString("CellPropertiesDlg.horz_align"));
 		gridBagConstraints = new java.awt.GridBagConstraints();
 		gridBagConstraints.gridx = 0;
 		gridBagConstraints.gridy = 1;
@@ -243,7 +240,7 @@ public class CellPropertiesDlg extends javax.swing.JDialog implements
 		gridBagConstraints.gridx = 2;
 		gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
 		gridBagConstraints.insets = new java.awt.Insets(12, 6, 4, 4);
-		alignPanel.add(new JLabel(Messages.getString("CellPropertiesDlg.vert")), gridBagConstraints); //$NON-NLS-1$
+		alignPanel.add(new JLabel(Messages.getString("CellPropertiesDlg.vert")), gridBagConstraints);
 
 		vAlignBox
 				.setModel(new javax.swing.DefaultComboBoxModel(
@@ -259,7 +256,7 @@ public class CellPropertiesDlg extends javax.swing.JDialog implements
 		gridBagConstraints.insets = new java.awt.Insets(4, 6, 4, 20);
 		alignPanel.add(vAlignBox, gridBagConstraints);
 
-		rotatePanel = new javax.swing.JPanel(new java.awt.BorderLayout());
+		JPanel rotatePanel = new JPanel(new BorderLayout());
 		rotatePanel.setPreferredSize(new Dimension(120, 120));
 		
 		rotateChooser = new JRotateChooser();
@@ -563,7 +560,7 @@ public class CellPropertiesDlg extends javax.swing.JDialog implements
 					break;
 				}
 			}
-			fontPanel.setBold(equals ? style.isBold() : false);
+			fontPanel.setBold(equals && style.isBold());
 			fontPanel.setItalic(equals ? style.isItalic() : false);
 		} else {
 			Font font = new Font(fontFamily, style.getStyle(), style.getSize());
@@ -641,21 +638,21 @@ public class CellPropertiesDlg extends javax.swing.JDialog implements
 
 	public void propertyChange(PropertyChangeEvent evt) {
 		String pn = evt.getPropertyName();
-		if (pn.equals("family")) { //$NON-NLS-1$
+		if (pn.equals("family")) {
 			fontFamilyChange = true;
-		} else if (pn.equals("size")) { //$NON-NLS-1$
+		} else if (pn.equals("size")) {
 			fontSizeChange = true;
-		} else if (pn.equals("color")) { //$NON-NLS-1$
+		} else if (pn.equals("color")) {
 			fontColorChange = true;
-		} else if (pn.equals("bold")) { //$NON-NLS-1$
+		} else if (pn.equals("bold")) {
 			fontBoldChange = true;
-		} else if (pn.equals("italic")) { //$NON-NLS-1$
+		} else if (pn.equals("italic")) {
 			fontItalicChange = true;
-		} else if (pn.equals("underline")) { //$NON-NLS-1$
+		} else if (pn.equals("underline")) {
 			fontUnderlineChange = true;
-		} else if (pn.equals("strike")) { //$NON-NLS-1$
+		} else if (pn.equals("strike")) {
 			fontStrikeChange = true;
-		} else if (pn.equals("angle")) { //$NON-NLS-1$
+		} else if (pn.equals("angle")) {
 			rotateChange = true;
 		}
 	}

@@ -34,17 +34,16 @@ import java.io.PrintWriter;
 import jdbreport.model.io.ResourceReader;
 import jdbreport.model.io.ResourceWriter;
 
+import jdbreport.util.xml.XMLCoder;
+import jdbreport.util.xml.XMLParser;
+import jdbreport.util.xml.XMLReaderHandler;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
-
-import and.util.xml.XMLCoder;
-import and.util.xml.XMLParser;
-import and.util.xml.XMLReaderHandler;
 
 /**
  * The object that returns a number of the current page
  * 
- * @version 2.0 20.12.2009
+ * @version 3.0 12.12.2014
  * @author Andrey Kholmanskih
  * 
  */
@@ -157,10 +156,7 @@ public class PageNumber implements CellValue<Integer>, XMLParser {
 
 	public boolean startElement(String name, Attributes attributes)
 			throws SAXException {
-		if (name.equals("format")) {
-			return true;
-		}
-		return false;
+		return name.equals("format");
 	}
 
 	public Image getAsImage(ReportModel model, int row,

@@ -37,13 +37,13 @@ import jdbreport.model.io.ResourceWriter;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 
-import and.util.xml.XMLParser;
-import and.util.xml.XMLReaderHandler;
+import jdbreport.util.xml.XMLParser;
+import jdbreport.util.xml.XMLReaderHandler;
 
 /**
  * The object that returns page numbers
  * 
- * @version 2.0 11.08.2013
+ * @version 3.0 12.12.2014
  * @author Andrey Kholmanskih
  * 
  */

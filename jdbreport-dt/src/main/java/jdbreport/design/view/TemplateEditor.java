@@ -30,11 +30,12 @@ import javax.swing.WindowConstants;
 
 import jdbreport.design.model.TemplateBook;
 import jdbreport.util.Utils;
+import jdbreport.view.DefaultErrorHandler;
 import jdbreport.view.ReportEditor;
 import jdbreport.view.ReportEditorPane;
 
 /**
- * @version 1.4 17.02.2010
+ * @version 3.0 12.12.2014
  * @author Andrey Kholmanskih
  * 
  */
@@ -65,7 +66,7 @@ public class TemplateEditor extends ReportEditor {
 	}
 
 	public static void main(String[] args) {
-		Utils.errorHandler = and.swing.DefaultErrorHandler.getInstance();
+		Utils.errorHandler = DefaultErrorHandler.getInstance();
 		TemplateEditor re = new TemplateEditor();
 		re.getReportPane().changeLookAndFeel();
 		re.setCloseOperation(WindowConstants.EXIT_ON_CLOSE);

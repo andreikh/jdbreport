@@ -27,11 +27,6 @@
 
 package jdbreport.grid;
 
-import and.finder.FindParams;
-import and.finder.Finder;
-import and.swing.ExtensionFileFilter;
-import and.swing.ImagePreview;
-import and.util.Utilities;
 import jdbreport.grid.undo.*;
 import jdbreport.model.*;
 import jdbreport.model.event.CellSelectListener;
@@ -42,8 +37,13 @@ import jdbreport.model.io.SaveReportException;
 import jdbreport.model.print.ReportPage;
 import jdbreport.model.svg.SVGImage;
 import jdbreport.model.svg.SVGValue;
+import jdbreport.util.ExtensionFileFilter;
 import jdbreport.util.GraphicUtil;
 import jdbreport.util.Utils;
+import jdbreport.util.finder.FindParams;
+import jdbreport.util.finder.Finder;
+import jdbreport.util.finder.TableFinder;
+import jdbreport.view.ImagePreview;
 import jdbreport.view.ReportPane;
 import jdbreport.view.clipboard.ClipboardParser;
 import jdbreport.view.clipboard.FragmentHandler;
@@ -101,7 +101,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
- * @version 3.0 16.05.2014
+ * @version 3.0 12.12.2014
  * 
  * @author Andrey Kholmanskih
  * 
@@ -1715,7 +1715,7 @@ public class JReportGrid extends JTable implements TableRowModelListener,
 		if (status == JFileChooser.APPROVE_OPTION) {
 			File selectedFile = fileChooser.getSelectedFile();
 			
-			ReportPane.CURRENT_IMAGE_PATH = and.util.Utilities
+			ReportPane.CURRENT_IMAGE_PATH = Utils
 			.extractFilePath(selectedFile.getPath());
 			
 			Cell cell = getSelectedCell();
@@ -1724,7 +1724,7 @@ public class JReportGrid extends JTable implements TableRowModelListener,
 						getSelectedColumn());
 			}
 
-			String format = and.util.Utilities.getFileExtension(selectedFile);
+			String format = Utils.getFileExtension(selectedFile);
 			try {
 				Picture picture = PictureFactory.createPicture(format);
 				picture.load(selectedFile);
@@ -1784,7 +1784,7 @@ public class JReportGrid extends JTable implements TableRowModelListener,
 		if (status == JFileChooser.APPROVE_OPTION) {
 			File selectedFile = fileChooser.getSelectedFile();
 
-			String format = and.util.Utilities.getFileExtension(selectedFile);
+			String format = Utils.getFileExtension(selectedFile);
 			if (format.length() == 0) {
 				FileFilter filter = fileChooser.getFileFilter();
 				if (filter instanceof ExtensionFileFilter) {
@@ -2052,7 +2052,7 @@ public class JReportGrid extends JTable implements TableRowModelListener,
 
 	protected Finder getFinder() {
 		if (finder == null) {
-			finder = new and.swing.TableFinder(this);
+			finder = new TableFinder(this);
 		}
 		return finder;
 	}
@@ -2404,11 +2404,11 @@ public class JReportGrid extends JTable implements TableRowModelListener,
 				int x = 0;
 				int y = 0;
 				Point2D[] points = new Point2D[3];
-				points[0] = Utilities.rotatePoint(x, y, x + getWidth(), y,
+				points[0] = Utils.rotatePoint(x, y, x + getWidth(), y,
 						Math.toRadians(a));
-				points[1] = Utilities.rotatePoint(x, y, x + getWidth(), y
+				points[1] = Utils.rotatePoint(x, y, x + getWidth(), y
 						+ getHeight(), Math.toRadians(a));
-				points[2] = Utilities.rotatePoint(x, y, x, y + getHeight(),
+				points[2] = Utils.rotatePoint(x, y, x, y + getHeight(),
 						Math.toRadians(a));
 				int miny = getHeight();
 				int maxy = -miny;
@@ -2704,7 +2704,7 @@ public class JReportGrid extends JTable implements TableRowModelListener,
 
 		@Override
 		public Object getCellEditorValue() {
-			return and.util.Utilities.html2Plain((String) super
+			return Utils.html2Plain((String) super
 					.getCellEditorValue());
 		}
 
@@ -2754,8 +2754,8 @@ public class JReportGrid extends JTable implements TableRowModelListener,
 
 		public String formatFloating(Number value) {
 			String v = value.toString();
-			if (Utilities.getDecimalSeparator() != '.') {
-				return v.replace('.', Utilities.getDecimalSeparator());
+			if (Utils.getDecimalSeparator() != '.') {
+				return v.replace('.', Utils.getDecimalSeparator());
 			}
 			return v;
 		}

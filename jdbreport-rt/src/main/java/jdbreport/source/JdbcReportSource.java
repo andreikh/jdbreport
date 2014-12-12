@@ -30,10 +30,8 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import and.dbcomp.DbSource;
-
 /**
- * @version 2.1 20.06.2012
+ * @version 3.0 12.12.2014
  * @author Andrey Kholmanskih
  * 
  */
@@ -51,15 +49,16 @@ public class JdbcReportSource extends DbSource implements
 	public JdbcReportSource(String name) {
 		super();
 		setAlias(name);
-		dsList = new ArrayList<JdbcDataSet>();
+		dsList = new ArrayList<>();
 	}
 
+	@Override
 	public Object clone() {
 		JdbcReportSource source = null;
 		try {
 			source = (JdbcReportSource) super.clone();
 			source.setConnection(null);
-			source.dsList = new ArrayList<JdbcDataSet>();
+			source.dsList = new ArrayList<>();
 			for (JdbcDataSet ds : dsList) {
 				JdbcDataSet newDs = (JdbcDataSet) ds.clone();
 				newDs.setSource(source);
@@ -89,7 +88,7 @@ public class JdbcReportSource extends DbSource implements
 	}
 
 	public JdbcDataSet remove(int index) {
-		JdbcDataSet ds = (JdbcDataSet) dsList.remove(index);
+		JdbcDataSet ds = dsList.remove(index);
 		ds.setSource(null);
 		return ds;
 	}
@@ -100,7 +99,7 @@ public class JdbcReportSource extends DbSource implements
 	}
 
 	public JdbcDataSet getDataSet(int index) {
-		return (JdbcDataSet) dsList.get(index);
+		return dsList.get(index);
 	}
 
 	public Iterator<JdbcDataSet> iterator() {

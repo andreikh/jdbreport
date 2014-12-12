@@ -31,16 +31,15 @@ package jdbreport.design.model;
 import java.util.ArrayList;
 import java.util.List;
 
-import and.util.Utilities;
-
 import jdbreport.model.Cell;
 import jdbreport.model.Group;
 import jdbreport.model.RowsGroup;
+import jdbreport.util.Utils;
 
 /**
  * Object used for calculation of outcomes
  * 
- * @version 2.0 22.04.2011
+ * @version 3.0 12.12.2014
  * @author Andrey Kholmanskih
  * 
  */
@@ -51,7 +50,7 @@ class TotalInfo {
 	private int column;
 	private int count;
 	private RowsGroup group;
-	private List<Cell> targetCells = new ArrayList<Cell>();
+	private List<Cell> targetCells = new ArrayList<>();
 	private int decimal;
 
 	/**
@@ -60,8 +59,6 @@ class TotalInfo {
 	 *            kind of function
 	 * @param column
 	 *            the column which meanings are used to calculate
-     * @param row
-	 *            the row which meanings are used to calculate	             
 	 * @param group
 	 *            the group where the result is counted
 	 */
@@ -76,7 +73,7 @@ class TotalInfo {
 	/**
 	 * Adds a cell, where the result of calculation will be written
 	 * 
-	 * @param cell
+	 * @param cell Cell
 	 */
 	public void addTargetCell(Cell cell) {
 		if (targetCells.indexOf(cell) < 0) {
@@ -98,9 +95,9 @@ class TotalInfo {
 			if (decimal == 0) {
 				return Math.round(value);
 			}
-			return Utilities.round(value, decimal);
+			return Utils.round(value, decimal);
 		} else if (totalFunction == CellObject.AF_AVG) {
-			return count == 0 ? 0 : Utilities.round(value / count, decimal + 1);
+			return count == 0 ? 0 : Utils.round(value / count, decimal + 1);
 		}  
 		return value;
 	}
@@ -137,15 +134,15 @@ class TotalInfo {
 
 	/**
 	 * 
-	 * @param value
-	 * @return
+	 * @param value double value
+	 * @return decimal
 	 * @since 2.0
 	 */
 	private int getDecimal(double value) {
 		long v = (long)value;
 		if (value - v != 0.0) {
 			String s = String.format("%f", value);
-			int i = s.indexOf(Utilities.getDecimalSeparator());
+			int i = s.indexOf(Utils.getDecimalSeparator());
 			if (i >= 0) {
 				int l = s.length() - 1;
 				while (l > 0) {
@@ -170,7 +167,7 @@ class TotalInfo {
 	/**
 	 * Returns the column which meanings are used to calculate
 	 * 
-	 * @return
+	 * @return column
 	 */
 	public int getColumn() {
 		return column;
@@ -179,7 +176,7 @@ class TotalInfo {
 	/**
 	 * Returns the group where the result is counted
 	 * 
-	 * @return
+	 * @return group
 	 */
 	public RowsGroup getGroup() {
 		return group;
@@ -191,7 +188,6 @@ class TotalInfo {
 	 * 
 	 * @param targetGroup
 	 *            the group where the result is counted
-	 * @return             
 	 */
 	public boolean moveToTarget(Group targetGroup) {
 		if (targetGroup != null

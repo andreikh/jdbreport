@@ -25,6 +25,8 @@
  */
 package jdbreport.util;
 
+import java.awt.*;
+
 /**
  * @version 2.0 19.12.2009
  * @author Andrey Kholmanskih
@@ -93,5 +95,16 @@ public class GraphicUtil {
 	public static void setScreenScaleY(double scale) {
 		screenScale_y = scale;
 	}
+
+	public static void setChildFont(Container parent, Font font) {
+		for (int i = 0; i < parent.getComponentCount(); i++) {
+			Component c = parent.getComponent(i);
+			c.setFont(font);
+			if (c instanceof Container) {
+				setChildFont((Container) c, font);
+			}
+		}
+	}
+
 
 }

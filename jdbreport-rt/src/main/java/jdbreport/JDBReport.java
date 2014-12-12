@@ -34,18 +34,17 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Map;
 
-import and.swing.DefaultErrorHandler;
-
 import jdbreport.model.ReportBook;
 import jdbreport.model.io.LoadReportException;
 import jdbreport.service.JDBReportService;
 import jdbreport.util.Utils;
+import jdbreport.view.DefaultErrorHandler;
 import jdbreport.view.ReportDialog;
 import jdbreport.view.ReportEditor;
 
 
 /**
- * @version 2.0 04.03.2011
+ * @version 3.0 12.12.2014
  *  
  * @author Andrey Kholmanskih
  *

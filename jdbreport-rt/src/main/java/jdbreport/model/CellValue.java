@@ -36,11 +36,11 @@ import jdbreport.model.io.ResourceReader;
 import jdbreport.model.io.ResourceWriter;
 import jdbreport.model.io.SaveReportException;
 
-import and.util.xml.XMLParser;
-import and.util.xml.XMLReaderHandler;
+import jdbreport.util.xml.XMLParser;
+import jdbreport.util.xml.XMLReaderHandler;
 
 /**
- * @version 2.0 20.12.2009
+ * @version 3.0 12.12.2014
  * @author Andrey Kholmanskih
  * 
  */

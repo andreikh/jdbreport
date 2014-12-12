@@ -34,9 +34,9 @@ import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.io.Writer;
 
+import jdbreport.util.xml.XMLParser;
 import jdbreport.view.model.JReportModel;
 import jdbreport.model.ReportModel;
-import jdbreport.model.io.ResourceWriter;
 import jdbreport.model.io.SaveReportException;
 import jdbreport.model.io.xml.CellParser;
 import jdbreport.model.io.xml.DBReportParser;
@@ -44,10 +44,8 @@ import jdbreport.model.io.xml.ReportBookWriterParser;
 
 import org.xml.sax.Attributes;
 
-import and.util.xml.XMLParser;
-
 /**
- * @version 2.0 20.04.2010
+ * @version 3.0 12.12.2014
  * @author Andrey Kholmanskih
  * 
  */
@@ -77,13 +75,10 @@ public class GridParser extends ReportBookWriterParser {
 
 	public void save(OutputStream out, JReportModel model)
 			throws SaveReportException {
-		PrintWriter fw = new PrintWriter(new BufferedWriter(
+		try (PrintWriter fw = new PrintWriter(new BufferedWriter(
 				new OutputStreamWriter(out, java.nio.charset.Charset
-						.forName("UTF-8"))));
-		try {
+						.forName("UTF-8"))))) {
 			save(fw, model);
-		} finally {
-			fw.close();
 		}
 	}
 
@@ -112,17 +107,14 @@ public class GridParser extends ReportBookWriterParser {
 
 
 	protected CellParser createCellHandler() {
-		return new CellParser(getDefaultReportHandler(), (ResourceWriter)null);
+		return new CellParser(getDefaultReportHandler(), null);
 	}
 
 	public void save(File file, JReportModel model) throws SaveReportException {
 		try {
 			file.createNewFile();
-			FileOutputStream out = new FileOutputStream(file);
-			try {
+			try (FileOutputStream out = new FileOutputStream(file)) {
 				save(out, model);
-			} finally {
-				out.close();
 			}
 		} catch (IOException e) {
 			throw new SaveReportException(e);

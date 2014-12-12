@@ -42,9 +42,10 @@ import jdbreport.model.ReportBook;
 import jdbreport.model.io.LoadReportException;
 import jdbreport.model.io.ReportReader;
 import jdbreport.model.io.ResourceReader;
+import jdbreport.util.Utils;
 
 /**
- * @version 2.0 20.12.2009
+ * @version 3.0 12.12.2014
  * @author Andrey Kholmanskih
  * 
  */
@@ -54,15 +55,15 @@ public class RptReader implements ReportReader, ResourceReader {
 
 	public void load(InputStream in, ReportBook reportBook)
 			throws LoadReportException {
-		ZipInputStream zipStream = null;
+		ZipInputStream zipStream;
 		if (in instanceof ZipInputStream)
 			zipStream = (ZipInputStream) in;
 		else
 			zipStream = new ZipInputStream(in);
 
-		resMap = new HashMap<String, Object>();
+		resMap = new HashMap<>();
 		try {
-			ZipEntry entry = (ZipEntry) zipStream.getNextEntry();
+			ZipEntry entry = zipStream.getNextEntry();
 			if (entry == null)
 				throw new LoadReportException(Messages.getString("RptReader.0")); //$NON-NLS-1$
 			while (entry != null) {
@@ -75,9 +76,9 @@ public class RptReader implements ReportReader, ResourceReader {
 							if (l > 0)
 								stream.write(buf, 0, l);
 						} while (l > 0);
-					resMap.put(and.util.Utilities.extractFileName(entry.getName()), stream.toByteArray());
+					resMap.put(Utils.extractFileName(entry.getName()), stream.toByteArray());
 				}
-				entry = (ZipEntry) zipStream.getNextEntry();
+				entry =  zipStream.getNextEntry();
 			}
 			
 			ReportReader reader = createXMLReader();

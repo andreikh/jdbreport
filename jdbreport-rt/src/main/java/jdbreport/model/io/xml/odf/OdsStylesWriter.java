@@ -29,16 +29,15 @@ package jdbreport.model.io.xml.odf;
 import java.io.PrintWriter;
 import java.io.Writer;
 
-import and.util.Utilities;
-
 import jdbreport.model.CellStyle;
 import jdbreport.model.ReportBook;
 import jdbreport.model.Units;
 import jdbreport.model.io.SaveReportException;
 import jdbreport.model.print.ReportPage;
+import jdbreport.util.Utils;
 
 /**
- * @version 2.0 19.12.2009
+ * @version 3.0 12.12.2014
  * @author Andrey Kholmanskih
  * 
  */
@@ -91,7 +90,7 @@ class OdsStylesWriter extends OdfBaseWriter {
 
 		writeFontFaces(fw, reportBook);
 
-		writeDefaultStyles(fw, reportBook);
+		writeDefaultStyles(fw);
 
 		writeAutomaticStyles(fw, reportBook);
 
@@ -100,11 +99,11 @@ class OdsStylesWriter extends OdfBaseWriter {
 		fw.println("</office:document-styles>");
 	}
 
-	private void writeDefaultStyles(PrintWriter fw, ReportBook reportBook) {
+	private void writeDefaultStyles(PrintWriter fw) {
 		fw.println("<office:styles>");
 		fw.println("<style:default-style style:family=\"table-cell\"  >");
 		CellStyle style = CellStyle.getDefaultStyle().deriveWrapLine(false);
-		writeCellProperties(fw, style, null);
+		writeCellProperties(fw, style);
 		writeParagraphProperties(fw, style, null);
 		writeTextProperties(fw, style, null);
 		fw.println("</style:default-style>");
@@ -136,22 +135,22 @@ class OdsStylesWriter extends OdfBaseWriter {
 
 	private void writePageStyles(PrintWriter fw, ReportPage reportPage) {
 		fw.print("<style:page-layout-properties ");
-		fw.print("fo:page-width=\"" + Utilities.round(reportPage.getWidth(), 2)
+		fw.print("fo:page-width=\"" + Utils.round(reportPage.getWidth(), 2)
 				+ "pt\" ");
 		fw.print("fo:page-height=\""
-				+ Utilities.round(reportPage.getHeight(), 2) + "pt\" ");
+				+ Utils.round(reportPage.getHeight(), 2) + "pt\" ");
 
 		fw.print("fo:margin-left=\""
-				+ Utilities.round(reportPage.getLeftMargin(Units.PT), 2)
+				+ Utils.round(reportPage.getLeftMargin(Units.PT), 2)
 				+ "pt\" ");
 		fw.print("fo:margin-right=\""
-				+ Utilities.round(reportPage.getRightMargin(Units.PT), 2)
+				+ Utils.round(reportPage.getRightMargin(Units.PT), 2)
 				+ "pt\" ");
 		fw.print("fo:margin-top=\""
-				+ Utilities.round(reportPage.getTopMargin(Units.PT), 2)
+				+ Utils.round(reportPage.getTopMargin(Units.PT), 2)
 				+ "pt\" ");
 		fw.print("fo:margin-bottom=\""
-				+ Utilities.round(reportPage.getBottomMargin(Units.PT), 2)
+				+ Utils.round(reportPage.getBottomMargin(Units.PT), 2)
 				+ "pt\" ");
 		if (reportPage.getOrientation() == ReportPage.LANDSCAPE)
 			fw.print("style:print-orientation=\"landscape\" ");

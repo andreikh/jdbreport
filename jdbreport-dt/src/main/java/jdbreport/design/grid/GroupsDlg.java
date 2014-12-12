@@ -61,10 +61,8 @@ import jdbreport.grid.undo.UndoItem;
 import jdbreport.model.DetailGroup;
 import jdbreport.util.Utils;
 
-import and.swing.NumericFieldListener;
-
 /**
- * @version 2.0 13.03.2011
+ * @version 3.0 12.12.2014
  * @author Andrey Kholmanskih
  * 
  */
@@ -129,7 +127,7 @@ public class GroupsDlg extends JDialog implements ActionListener {
 		Utils.screenCenter(this);
 		this
 				.setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE); // Generated
-		this.setTitle(Messages.getString("GroupsDlg.title")); //$NON-NLS-1$
+		this.setTitle(Messages.getString("GroupsDlg.title"));
 		this.setContentPane(getJContentPane());
 	}
 
@@ -485,7 +483,7 @@ public class GroupsDlg extends JDialog implements ActionListener {
 
 		private List<GroupKey> getList() {
 			if (list == null) {
-				list = new ArrayList<GroupKey>();
+				list = new ArrayList<>();
 			}
 			return list;
 		}
@@ -537,10 +535,10 @@ public class GroupsDlg extends JDialog implements ActionListener {
 		}
 
 		private void fillData(DetailGroup group) {
-			list = new ArrayList<GroupKey>();
+			list = new ArrayList<>();
 			path = group.getIndexPath();
 			for (int i = 0; i < group.getKeyCount(); i++) {
-				list.add((GroupKey) group.getKey(i));
+				list.add(group.getKey(i));
 			}
 		}
 

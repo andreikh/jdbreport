@@ -33,10 +33,10 @@ import jdbreport.model.ReportModel;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 
-import and.util.xml.AbstractXMLParser;
+import jdbreport.util.xml.AbstractXMLParser;
 
 /**
- * @version 1.1 03/09/08
+ * @version 3.0 12.12.2014
  * @author Andrey Kholmanskih
  * 
  */

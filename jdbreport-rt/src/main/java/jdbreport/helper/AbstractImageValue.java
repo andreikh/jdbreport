@@ -49,17 +49,16 @@ import jdbreport.model.io.ResourceReader;
 import jdbreport.model.io.ResourceWriter;
 import jdbreport.model.io.SaveReportException;
 
+import jdbreport.util.xml.XMLCoder;
+import jdbreport.util.xml.XMLParser;
+import jdbreport.util.xml.XMLReaderHandler;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
-
-import and.util.xml.XMLCoder;
-import and.util.xml.XMLParser;
-import and.util.xml.XMLReaderHandler;
 
 /**
  * @author Andrey Kholmanskih
  * 
- * @version 2.0 12.12.2009
+ * @version 3.0 12.12.2014
  */
 public abstract class AbstractImageValue<E> extends AbstractValue<E> {
 

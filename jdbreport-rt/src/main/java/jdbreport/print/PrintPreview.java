@@ -64,15 +64,14 @@ import jdbreport.grid.JReportGrid;
 import jdbreport.grid.ReportAction;
 import jdbreport.grid.ReportPrintable;
 import jdbreport.util.Utils;
+import jdbreport.util.xml.XMLProperties;
 import jdbreport.view.ReportPane;
 
 import javax.swing.BorderFactory;
 import javax.swing.border.BevelBorder;
 
-import and.properties.XMLProperties;
-
 /**
- * @version 2.0 22.04.2011
+ * @version 3.0 12.12.2014
  * @author Andrey Kholmanskih
  * 
  */
@@ -212,9 +211,6 @@ public class PrintPreview extends JDialog implements ActionListener {
 		}
 	}
 
-	/**
-	 * @param printable
-	 */
 	private void initialize() {
 		getContentPane().add(getToolBar(), BorderLayout.NORTH);
 		JScrollPane scrollPane = new JScrollPane(getPreviewPanel());
@@ -370,7 +366,7 @@ public class PrintPreview extends JDialog implements ActionListener {
 		if (countPageBox == null) {
 			String[] count = {"1", "2", "4", "6", "8"};
 			countPageBox = new JComboBox(count);
-			countPageBox.setToolTipText(Messages.getString("PrintPreview.11")); //$NON-NLS-1$
+			countPageBox.setToolTipText(Messages.getString("PrintPreview.11"));
 			countPageBox.setEditable(false);
 			countPageBox.setSelectedItem("" + countInPanel);
 			countPageBox.setMaximumSize(countPageBox.getPreferredSize());

@@ -49,6 +49,7 @@ import javax.swing.event.ListSelectionListener;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.JLabel;
 
+import jdbreport.design.grid.dialogs.DBSourceDialog;
 import jdbreport.design.model.TemplateBook;
 import jdbreport.grid.ReportResources;
 import jdbreport.grid.UndoEvent;
@@ -56,12 +57,10 @@ import jdbreport.grid.UndoListener;
 import jdbreport.grid.undo.UndoItem;
 import jdbreport.source.JdbcDataSet;
 import jdbreport.source.JdbcReportSource;
-
-import and.dbcomp.JdbcSource;
-import and.dialogs.DBSourceDialog;
+import jdbreport.source.JdbcSource;
 
 /**
- * @version 1.4 12.04.2010
+ * @version 3.0 12.12.2014
  * @author Andrey Kholmanskih
  * 
  */
@@ -100,8 +99,6 @@ public class JdbcSourceEditor extends JDialog {
 	private Vector<JdbcReportSource> sourceList;
 
 	private QueryModel queryModel;
-
-	private JLabel jLabel = null;
 
 	private JToolBar toolPanel = null;
 
@@ -300,7 +297,7 @@ public class JdbcSourceEditor extends JDialog {
 	 */
 	private JPanel getLeftPanel() {
 		if (leftPanel == null) {
-			jLabel = new JLabel();
+			JLabel jLabel = new JLabel();
 			jLabel
 					.setText(Messages
 							.getString("JdbcSourceEditor.label_dataset")); //$NON-NLS-1$
@@ -557,18 +554,18 @@ public class JdbcSourceEditor extends JDialog {
 		}
 
 		public JdbcDataSet getDataSet(int rowIndex) {
-			return getQueryList() != null ? (JdbcDataSet) getQueryList().get(
+			return getQueryList() != null ? getQueryList().get(
 					rowIndex) : null;
 		}
 
 		public String getColumnName(int column) {
 			switch (column) {
 			case COLUMN_QUERY_ALIAS:
-				return Messages.getString("JdbcSourceEditor.column_id"); //$NON-NLS-1$
+				return Messages.getString("JdbcSourceEditor.column_id");
 			case COLUMN_MASTER_ALIAS:
-				return Messages.getString("JdbcSourceEditor.column_master"); //$NON-NLS-1$
+				return Messages.getString("JdbcSourceEditor.column_master");
 			}
-			return ""; //$NON-NLS-1$
+			return "";
 		}
 
 		public boolean isCellEditable(int rowIndex, int columnIndex) {
@@ -708,9 +705,9 @@ public class JdbcSourceEditor extends JDialog {
 		if (addSourceButton == null) {
 			addSourceButton = new JButton();
 			addSourceButton.setIcon(ReportResources.getInstance().getIcon(
-					"add.gif")); //$NON-NLS-1$
+					"add.gif"));
 			addSourceButton.setToolTipText(Messages
-					.getString("JdbcSourceEditor.addsource_tooltip")); //$NON-NLS-1$
+					.getString("JdbcSourceEditor.addsource_tooltip"));
 			addSourceButton
 					.addActionListener(new java.awt.event.ActionListener() {
 						public void actionPerformed(java.awt.event.ActionEvent e) {
@@ -724,8 +721,8 @@ public class JdbcSourceEditor extends JDialog {
 	protected void addNewSource() {
 		JdbcReportSource src = new JdbcReportSource();
 		try {
-			src.setAlias(Messages.getString("JdbcSourceEditor.new_source")); //$NON-NLS-1$
-			DBSourceDialog dlg = new DBSourceDialog((Frame) this.getOwner(),
+			src.setAlias(Messages.getString("JdbcSourceEditor.new_source"));
+			DBSourceDialog dlg = new DBSourceDialog(this.getOwner(),
 					src);
 			dlg.setVisible(true);
 			if (dlg.getExitCode() == DBSourceDialog.OK) {
@@ -857,7 +854,7 @@ public class JdbcSourceEditor extends JDialog {
 	private static class JdbcSourceUndo implements UndoItem {
 
 		private TemplateBook reportBook;
-		List<JdbcReportSource> list = new ArrayList<JdbcReportSource>();
+		List<JdbcReportSource> list = new ArrayList<>();
 
 		public JdbcSourceUndo(TemplateBook reportBook) {
 			this.reportBook = reportBook;
@@ -875,7 +872,7 @@ public class JdbcSourceEditor extends JDialog {
 
 		public UndoItem undo() {
 			List<JdbcReportSource> tmpList = list;
-			list = new ArrayList<JdbcReportSource>();
+			list = new ArrayList<>();
 			list.addAll(reportBook.getSourcesList());
 
 			reportBook.getSourcesList().clear();

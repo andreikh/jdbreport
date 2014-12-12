@@ -57,8 +57,6 @@ import org.apache.poi.hssf.util.HSSFColor;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.ss.util.CellRangeAddress;
 
-import and.util.Utilities;
-
 import jdbreport.grid.JReportGrid.HTMLReportRenderer;
 import jdbreport.model.Border;
 import jdbreport.model.CellValue;
@@ -76,18 +74,14 @@ import jdbreport.model.print.ReportPage.PaperSize;
 import jdbreport.util.Utils;
 
 /**
- * @version 2.0 30.03.2012
+ * @version 3.0 12.12.2014
  * @author Andrey Kholmanskih
  * 
  */
 public class Excel2003Writer implements ReportWriter {
 
-	private Map<Object, CellStyle> styleMap = new HashMap<Object, CellStyle>();
+	private Map<Object, CellStyle> styleMap = new HashMap<>();
 	private JTextComponent htmlReportRenderer;
-	/**
-	 * char width in points
-	 */
-	private static float char_width = 5.5f;
 	private Drawing drawing;
 
 	public void save(Writer writer, ReportBook reportBook)
@@ -99,11 +93,8 @@ public class Excel2003Writer implements ReportWriter {
 			throws SaveReportException {
 		try {
 			file.createNewFile();
-			FileOutputStream out = new FileOutputStream(file);
-			try {
+			try (FileOutputStream out = new FileOutputStream(file)) {
 				save(out, reportBook);
-			} finally {
-				out.close();
 			}
 		} catch (IOException e) {
 			throw new SaveReportException(e);
@@ -114,7 +105,7 @@ public class Excel2003Writer implements ReportWriter {
 			throws SaveReportException {
 		Workbook wb = createWorkbook();
 
-		Set<String> titles = new HashSet<String>();
+		Set<String> titles = new HashSet<>();
 		for (ReportModel model : reportBook) {
 			String reportTitle = model.getReportTitle();
 			if (reportTitle.length() > 26)
@@ -170,6 +161,10 @@ public class Excel2003Writer implements ReportWriter {
 			if (model.isColumnBreak(c)) {
 				sheet.setColumnBreak(c);
 			}
+			/*
+	  char width in points
+	 */
+			float char_width = 5.5f;
 			sheet.setColumnWidth(
 					c,
 					(int) ((((ReportColumn) cm.getColumn(c)).getNativeWidth() - 2)
@@ -190,7 +185,7 @@ public class Excel2003Writer implements ReportWriter {
 			if (sheetRow == null) {
 				sheetRow = sheet.createRow(row);
 			}
-			sheetRow.setHeightInPoints((float) (tableRow).getNativeHeight());
+			sheetRow.setHeightInPoints((tableRow).getNativeHeight());
 			if (model.isLastRowInPage(row)) {
 				sheet.setRowBreak(row);
 			}
@@ -270,7 +265,7 @@ public class Excel2003Writer implements ReportWriter {
 							.getDecimal() != -1) {
 						newCell.setCellType(Cell.CELL_TYPE_NUMERIC);
 						try {
-							newCell.setCellValue(Utilities.parseDouble(value
+							newCell.setCellValue(Utils.parseDouble(value
 									.toString()));
 						} catch (Exception e) {
 							newCell.setCellValue(0);
@@ -378,7 +373,7 @@ public class Excel2003Writer implements ReportWriter {
 
 	private RichTextString createRichTextFromContent(List<Content> contentList,
 			CreationHelper createHelper, Workbook wb, short fontIndex) {
-		StringBuffer text = new StringBuffer();
+		StringBuilder text = new StringBuilder();
 		int[] idx = new int[contentList.size()];
 		int i = 0;
 		for (Content content : contentList) {
@@ -436,7 +431,7 @@ public class Excel2003Writer implements ReportWriter {
 				if (fontColor == null) {
 					try {
 						fontColor = Utils.stringToColor(attribute);
-					} catch (Exception e) {
+					} catch (Exception ignored) {
 
 					}
 				}
@@ -462,7 +457,7 @@ public class Excel2003Writer implements ReportWriter {
 					font.setColor(parentFont.getColor());
 					try {
 						font.setCharSet(parentFont.getCharSet());
-					} catch (Throwable e) {
+					} catch (Throwable ignored) {
 					}
 					font.setFontHeight(parentFont.getFontHeight());
 					font.setFontName(parentFont.getFontName());
@@ -533,10 +528,9 @@ public class Excel2003Writer implements ReportWriter {
 			e.printStackTrace();
 		}
 		byte[] bytes = stream.toByteArray();
-		int pictureIdx = wb.addPicture(bytes,
+		return wb.addPicture(bytes,
 				"jpg".equals(format) ? Workbook.PICTURE_TYPE_JPEG
 						: Workbook.PICTURE_TYPE_PNG);
-		return pictureIdx;
 	}
 
 	protected CellStyle createStyle(jdbreport.model.CellStyle style, Workbook wb) {

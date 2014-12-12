@@ -28,7 +28,7 @@ package jdbreport.model.io.xml;
 import java.io.PrintWriter;
 import java.util.Iterator;
 
-import and.util.xml.XMLCoder;
+import jdbreport.util.xml.XMLCoder;
 
 import jdbreport.model.Cell;
 import jdbreport.model.DetailGroup;
@@ -44,7 +44,7 @@ import jdbreport.model.io.SaveReportException;
 /**
  * @author Andrey Kholmanskih
  *
- * @version	2.0 15.11.2010
+ * @version	3.0 12.12.2014
  */
 public abstract class ReportBookWriterParser extends DefaultReportParser {
 

@@ -42,8 +42,6 @@ import java.util.TreeMap;
 import javax.swing.text.JTextComponent;
 import javax.swing.text.html.HTMLDocument;
 
-import and.util.xml.XMLCoder;
-
 import jdbreport.grid.JReportGrid.HTMLReportRenderer;
 import jdbreport.model.Border;
 import jdbreport.model.Cell;
@@ -54,9 +52,10 @@ import jdbreport.model.TableRow;
 import jdbreport.model.io.Content;
 import jdbreport.model.io.ReportWriter;
 import jdbreport.model.io.SaveReportException;
+import jdbreport.util.xml.XMLCoder;
 
 /**
- * @version 1.3 15.08.2009
+ * @version 3.0 12.12.2014
  * @author Andrey Kholmanskih
  * 
  */
@@ -78,11 +77,8 @@ abstract class OdfBaseWriter implements ReportWriter {
 			throws SaveReportException {
 		try {
 			file.createNewFile();
-			FileOutputStream out = new FileOutputStream(file);
-			try {
+			try (FileOutputStream out = new FileOutputStream(file)) {
 				save(out, reportBook);
-			} finally {
-				out.close();
 			}
 		} catch (IOException e) {
 			throw new SaveReportException(e);
@@ -107,16 +103,16 @@ abstract class OdfBaseWriter implements ReportWriter {
 		fw.println("<office:font-face-decls>");
 		for (FontStyle style : fontMap.values()) {
 			fw.println("<style:font-face style:name=\""
-					+ and.util.xml.XMLCoder.replaceSpecChar(style.getName())
+					+ XMLCoder.replaceSpecChar(style.getName())
 					+ "\" svg:font-family=\""
-					+ and.util.xml.XMLCoder.replaceSpecChar(style.getFamily())
+					+ XMLCoder.replaceSpecChar(style.getFamily())
 					+ "\" />");
 		}
 		fw.println("</office:font-face-decls>");
 	}
 
 	private void findFontStyles(Collection<CellStyle> styles) {
-		fontMap = new TreeMap<String, FontStyle>();
+		fontMap = new TreeMap<>();
 		for (CellStyle style : styles) {
 			if (!fontMap.containsKey(style.getFamily())) {
 				fontMap.put(style.getFamily(), new FontStyle(style.getFamily(),
@@ -139,7 +135,7 @@ abstract class OdfBaseWriter implements ReportWriter {
 
 	protected void writeParagraphProperties(PrintWriter fw, CellStyle style,
 			CellStyle defaultStyle) {
-		StringBuffer buf = new StringBuffer();
+		StringBuilder buf = new StringBuilder();
 		if (defaultStyle == null
 				|| style.getHorizontalAlignment() != defaultStyle
 						.getHorizontalAlignment()) {
@@ -155,7 +151,7 @@ abstract class OdfBaseWriter implements ReportWriter {
 				s = "justify";
 				break;
 			}
-			buf.append("fo:text-align=\"" + s + "\" ");
+			buf.append("fo:text-align=\"").append(s).append("\" ");
 		}
 		if (buf.length() > 0) {
 			fw.println("<style:paragraph-properties " + buf.toString() + "/>");
@@ -164,7 +160,7 @@ abstract class OdfBaseWriter implements ReportWriter {
 
 	protected void writeTextProperties(PrintWriter fw, CellStyle style,
 			CellStyle defaultStyle) {
-		StringBuffer buf = new StringBuffer();
+		StringBuilder buf = new StringBuilder();
 		if (style.getTypeOffset() == CellStyle.SS_SUB) {
 			buf.append(" style:text-position=\"-33% 58%\" ");
 		} else if (style.getTypeOffset() == CellStyle.SS_SUPER) {
@@ -172,8 +168,8 @@ abstract class OdfBaseWriter implements ReportWriter {
 		}
 		if (defaultStyle == null
 				|| !style.getFamily().equals(defaultStyle.getFamily()))
-			buf.append("style:font-name=\"" + style.getFamily() + "\" ");
-		buf.append("fo:font-size=\"" + style.getSize() + "pt\" ");
+			buf.append("style:font-name=\"").append(style.getFamily()).append("\" ");
+		buf.append("fo:font-size=\"").append(style.getSize()).append("pt\" ");
 
 		if (style.getStyle() != CellStyle.getDefaultStyle().getStyle()) {
 			if (style.isBold())
@@ -190,17 +186,15 @@ abstract class OdfBaseWriter implements ReportWriter {
 				&& style.getForegroundColor() != null
 				&& !style.getForegroundColor().equals(
 						defaultStyle.getForegroundColor())) {
-			buf.append("fo:color=\"" + colorToStr(style.getForegroundColor())
-					+ "\" ");
+			buf.append("fo:color=\"").append(colorToStr(style.getForegroundColor())).append("\" ");
 		}
 		if (buf.length() > 0) {
 			fw.println("<style:text-properties " + buf.toString() + "/>");
 		}
 	}
 
-	protected void writeCellProperties(PrintWriter fw, CellStyle style,
-			CellStyle defaultStyle) {
-		StringBuffer buf = new StringBuffer();
+	protected void writeCellProperties(PrintWriter fw, CellStyle style) {
+		StringBuilder buf = new StringBuilder();
 		if (style.getVerticalAlignment() == CellStyle.TOP)
 			buf.append("style:vertical-align =\"top\" ");
 		else if (style.getVerticalAlignment() == CellStyle.CENTER)
@@ -217,12 +211,11 @@ abstract class OdfBaseWriter implements ReportWriter {
 			buf.append("fo:wrap-option=\"wrap\" ");
 		}
 		if (style.getAngle() != 0) {
-			buf.append("style:rotation-angle=\"" + style.getAngle() + "\" ");
+			buf.append("style:rotation-angle=\"").append(style.getAngle()).append("\" ");
 		}
 
 		if (style.getBackground() != Color.white) {
-			buf.append("fo:background-color=\""
-					+ colorToStr(style.getBackground()) + "\" ");
+			buf.append("fo:background-color=\"").append(colorToStr(style.getBackground())).append("\" ");
 		}
 		for (byte i = Border.LINE_LEFT; i <= Border.LINE_BOTTOM; i++) {
 			if (style.getBorders(i) != null) {
@@ -235,7 +228,7 @@ abstract class OdfBaseWriter implements ReportWriter {
 	}
 
 	protected void writeTextStyles(PrintWriter fw, ReportBook reportBook) {
-		textStyles = new ArrayList<CellStyle>();
+		textStyles = new ArrayList<>();
 		for (ReportModel model : reportBook) {
 			for (TableRow tableRow : model.getRowModel()) {
 				for (Cell cell : tableRow) {
@@ -281,13 +274,13 @@ abstract class OdfBaseWriter implements ReportWriter {
 
 	protected String getHTMLRenderedText(CellStyle parentStyle, Cell cell) {
 		if (cell.isNull() || cell.isChild())
-			return ""; //$NON-NLS-1$
+			return "";
 		JTextComponent tc = getHTMLReportRenderer();
 		tc.setText(cell.getText());
 		List<Content> contentList = Content
 				.getHTMLContentList((HTMLDocument) tc.getDocument());
 		if (contentList != null) {
-			StringBuffer result = new StringBuffer();
+			StringBuilder result = new StringBuilder();
 			for (Content content : contentList) {
 				if ("\n".equals(content.getText())) {
 					result.append("</text:p><text:p>");
@@ -297,8 +290,7 @@ abstract class OdfBaseWriter implements ReportWriter {
 					if (newStyle != null) {
 						int i = textStyles.indexOf(newStyle);
 						if (i >= 0) {
-							result.append(" text:style-name=\"T" + (i + 1)
-									+ "\"");
+							result.append(" text:style-name=\"T").append(i + 1).append("\"");
 						}
 					}
 					result.append(">");

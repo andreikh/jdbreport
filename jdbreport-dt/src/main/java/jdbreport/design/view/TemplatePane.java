@@ -63,16 +63,7 @@ import javax.swing.JToolBar;
 import javax.swing.SwingUtilities;
 import javax.swing.filechooser.FileFilter;
 
-import and.properties.XMLProperties;
-import and.swing.JMenuButton;
-import jdbreport.design.grid.DesignAction;
-import jdbreport.design.grid.FunctionsListEditor;
-import jdbreport.design.grid.GroupsDlg;
-import jdbreport.design.grid.JdbcSourceEditor;
-import jdbreport.design.grid.TemplPrefDlg;
-import jdbreport.design.grid.TemplateGrid;
-import jdbreport.design.grid.TemplateReportResources;
-import jdbreport.design.grid.VarList;
+import jdbreport.design.grid.*;
 import jdbreport.design.grid.DesignAction.InsertTypedRowAction;
 import jdbreport.design.model.CellObject;
 import jdbreport.design.model.TemplateBook;
@@ -91,12 +82,13 @@ import jdbreport.model.ReportBook;
 import jdbreport.model.ReportModel;
 import jdbreport.model.event.CellValueChangeListener;
 import jdbreport.source.JdbcReportSource;
+import jdbreport.util.xml.XMLProperties;
 import jdbreport.view.ReportEditor;
 import jdbreport.view.ReportEditorPane;
 import jdbreport.view.ReportFileFilter;
 
 /**
- * @version 2.0 18.04.2012
+ * @version 3.0 12.12.2014
  * @author Andrey Kholmanskih
  * 
  */
@@ -262,7 +254,7 @@ public class TemplatePane extends ReportEditorPane implements
 			dsAliasBox = new JComboBox();
 			dsAliasBox.setEditable(true);
 			dsAliasBox.setToolTipText(TemplateReportResources.getInstance()
-					.getString("dataset_alias_box.tooltip")); //$NON-NLS-1$
+					.getString("dataset_alias_box.tooltip"));
 			dsAliasBox.setMaximumSize(new Dimension(100, 22));
 			dsAliasBox.setPreferredSize(new java.awt.Dimension(100, 22));
 			dsAliasBox.setActionCommand(DATASET_CHANGE_COMMAND);
@@ -315,7 +307,7 @@ public class TemplatePane extends ReportEditorPane implements
 				selectionRect);
 		while (it.hasNext()) {
 			CellObject c = (CellObject) it.next();
-			((CellObject) c).setReplacement(!replace);
+			 c.setReplacement(!replace);
 		}
 
 	}
@@ -603,7 +595,7 @@ public class TemplatePane extends ReportEditorPane implements
 	protected void updateDsAliasBox() {
 		dsAliasBox.removeAllItems();
 		for (int i = 0; i < getTemplateBook().getSourcesList().size(); i++) {
-			JdbcReportSource source = (JdbcReportSource) getTemplateBook()
+			JdbcReportSource source = getTemplateBook()
 					.getSourcesList().get(i);
 			for (int n = 0; n < source.getDataSetCount(); n++) {
 				dsAliasBox.addItem(source.getDataSet(n).getId());
@@ -639,13 +631,8 @@ public class TemplatePane extends ReportEditorPane implements
 	protected FunctionsListEditor getFunctionsListEditor() {
 		if (functionEditor == null) {
 			Window w = SwingUtilities.getWindowAncestor(this);
-			if (w instanceof Frame) {
-				functionEditor = new FunctionsListEditor((Frame) w,
+			functionEditor = new FunctionsListEditor(w,
 						getTemplateBook().getFunctionsList(), properties);
-			} else {
-				functionEditor = new FunctionsListEditor((Dialog) w,
-						getTemplateBook().getFunctionsList(), properties);
-			}
 			functionEditor.addUndoListener(this);
 		}
 		return functionEditor;
@@ -956,12 +943,12 @@ public class TemplatePane extends ReportEditorPane implements
 	}
 
 	public String getCaption() {
-		return TemplateReportResources.getInstance().getString("caption"); //$NON-NLS-1$
+		return TemplateReportResources.getInstance().getString("caption");
 	}
 
 	protected LinkedList<String> getRecentFiles() {
 		if (recentFiles == null) {
-			recentFiles = new LinkedList<String>();
+			recentFiles = new LinkedList<>();
 		}
 		return recentFiles;
 	}
@@ -1002,10 +989,6 @@ public class TemplatePane extends ReportEditorPane implements
 
 	}
 
-	/**
-	 * @param fileMenu
-	 * @param i
-	 */
 	private void addRecentItem(JMenu fileMenu, String fileName) {
 		JMenuItem menuItem = new JMenuItem();
 		menuItem.setText(fileName);
@@ -1046,8 +1029,8 @@ public class TemplatePane extends ReportEditorPane implements
 		Object o = properties.get(RECENT);
 		if (o != null && o instanceof String[]) {
 			String[] files = (String[]) o;
-			for (int i = 0; i < files.length; i++) {
-				getRecentFiles().addLast(files[i]);
+			for (String file : files) {
+				getRecentFiles().addLast(file);
 			}
 			addRecentItems(getFileMenu());
 		}

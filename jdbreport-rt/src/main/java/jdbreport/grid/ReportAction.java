@@ -36,16 +36,16 @@ import javax.swing.Action;
 import javax.swing.JColorChooser;
 import javax.swing.JOptionPane;
 
-import and.actions.BaseAction;
-import and.properties.Resources;
-
+import jdbreport.actions.BaseAction;
+import jdbreport.actions.ToggleAction;
 import jdbreport.grid.undo.UndoItem;
 import jdbreport.model.Cell;
 import jdbreport.model.CellStyle;
 import jdbreport.model.GridRect;
+import jdbreport.util.Resources;
 
 /**
- * @version 2.0 18.04.2012
+ * @version 3.0 12.12.2014
  * @author Andrey Kholmanskih
  * 
  */
@@ -102,7 +102,7 @@ public class ReportAction {
 		return new GridActionImpl(name, targetGrid);
 	}
 	
-	public static and.actions.ToggleAction createGridToggleAction(String name, TargetGrid targetGrid) {
+	public static ToggleAction createGridToggleAction(String name, TargetGrid targetGrid) {
 		return new GridToggleActionImpl(name, targetGrid);
 	}
 
@@ -122,7 +122,7 @@ public class ReportAction {
 
 	}
 
-	public static class GridToggleActionImpl extends and.actions.ToggleAction {
+	public static class GridToggleActionImpl extends ToggleAction {
 
 		private static final long serialVersionUID = 1L;
 		
@@ -179,7 +179,7 @@ public class ReportAction {
 	}
 
 	public abstract static class GridToggleAction extends
-			and.actions.ToggleAction {
+			ToggleAction {
 
 		private static final long serialVersionUID = 1L;
 

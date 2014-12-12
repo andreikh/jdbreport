@@ -77,6 +77,7 @@ import javax.swing.event.MenuListener;
 import javax.swing.event.PopupMenuEvent;
 import javax.swing.event.PopupMenuListener;
 
+import jdbreport.actions.ToggleAction;
 import jdbreport.grid.BorderDialog;
 import jdbreport.grid.CellSelectChangedEvent;
 import jdbreport.grid.Consts;
@@ -101,14 +102,13 @@ import jdbreport.model.event.CellSelectListener;
 import jdbreport.model.io.pdf.PdfFileType;
 import jdbreport.model.svg.SVGValue;
 import jdbreport.util.HelpWindow;
-
-import and.actions.ToggleAction;
-import and.properties.XMLProperties;
+import jdbreport.util.Utils;
+import jdbreport.util.xml.XMLProperties;
 
 /**
  * @author Andrey Kholmanskih
  * 
- * @version 2.0 18.04.2012
+ * @version 3.0 12.12.2014
  * 
  */
 public class ReportEditorPane extends ReportPane implements CellSelectListener,
@@ -636,18 +636,14 @@ public class ReportEditorPane extends ReportPane implements CellSelectListener,
 				String ext = ".ods"; //$NON-NLS-1$
 				tmpFile = File.createTempFile("~rpt", null); //$NON-NLS-1$
 				tmpFile.delete();
-				tmpFile = new File(and.util.Utilities.changeFileExtension(
+				tmpFile = new File(Utils.changeFileExtension(
 						tmpFile.getPath(), ext));
 				saveAs(tmpFile, null);
 				ProcessBuilder pb = createProcess(getODSCommand(),
 						tmpFile.getPath());
 				try {
-					Process p = pb.start();
-					if (p == null) {
-						ods_exists = false;
-						odsCommand = null;
-					} else
-						return;
+					pb.start();
+					return;
 				} catch (IOException e) {
 					ods_exists = false;
 					odsCommand = null;
@@ -663,7 +659,7 @@ public class ReportEditorPane extends ReportPane implements CellSelectListener,
 						: ".xml"; //$NON-NLS-1$
 				tmpFile = File.createTempFile("~rpt", null); //$NON-NLS-1$
 				tmpFile.delete();
-				tmpFile = new File(and.util.Utilities.changeFileExtension(
+				tmpFile = new File(Utils.changeFileExtension(
 						tmpFile.getPath(), ext));
 				saveAs(tmpFile, null);
 				ProcessBuilder pb = createProcess(getExcelCommand(),
@@ -954,7 +950,7 @@ public class ReportEditorPane extends ReportPane implements CellSelectListener,
 		return button;
 	}
 
-	private and.actions.ToggleAction getBoldAction() {
+	private ToggleAction getBoldAction() {
 		if (boldAction == null)
 			boldAction = ReportAction.createGridToggleAction(
 					ReportAction.FONT_BOLD_ACTION, this);

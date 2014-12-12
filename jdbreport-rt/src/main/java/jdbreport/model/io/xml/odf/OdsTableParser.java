@@ -44,21 +44,20 @@ import jdbreport.model.TableRowModel;
 import jdbreport.model.io.xml.DefaultReaderHandler;
 import jdbreport.model.io.xml.odf.CommonStyle.Break;
 
+import jdbreport.util.Utils;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 
-import and.util.Utilities;
-
 /**
- * @version 1.1 03/09/08
+ * @version 3.0 12.12.2014
  * @author Andrey Kholmanskih
  * 
  */
 class OdsTableParser extends OdsReportParser {
 
-	private ArrayList<String> columnCellStyles = new ArrayList<String>();
+	private ArrayList<String> columnCellStyles = new ArrayList<>();
 
-	private ArrayList<String> rowCellStyles = new ArrayList<String>();
+	private ArrayList<String> rowCellStyles = new ArrayList<>();
 
 	private boolean inRow;
 
@@ -84,7 +83,7 @@ class OdsTableParser extends OdsReportParser {
 
 	private int countRepeatColumn;
 
-	private List<Cell> currentCells = new ArrayList<Cell>();
+	private List<Cell> currentCells = new ArrayList<>();
 
 	private RowStyle currentRowStyle;
 
@@ -221,7 +220,6 @@ class OdsTableParser extends OdsReportParser {
 		if (name.equals("table:table")) {
 			currentGroup = null;
 			getHandler().popHandler(name);
-			return;
 		}
 	}
 
@@ -323,7 +321,7 @@ class OdsTableParser extends OdsReportParser {
 			try {
 				BufferedImage image = ImageIO.read(file);
 				currentCell.setIcon(new ImageIcon(image));
-				currentCell.setImageFormat(Utilities.getFileExtension(s));
+				currentCell.setImageFormat(Utils.getFileExtension(s));
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
@@ -385,7 +383,7 @@ class OdsTableParser extends OdsReportParser {
 		if (currentRowStyle.getBreak() == Break.page) {
 			int r = currentRowStyle.isAfter() ? currentRow : currentRow - 1;
 			if (r > 0) {
-				((TableRow) getReportModel().getRowModel().getRow(r))
+				(getReportModel().getRowModel().getRow(r))
 						.setPageBreak(true);
 			}
 		}

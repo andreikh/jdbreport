@@ -58,7 +58,7 @@ import jdbreport.model.math.MathValue;
 import jdbreport.util.Utils;
 
 /**
- * @version 2.1 21.05.2012
+ * @version 3.0 12.12.2014
  * @author Andrey Kholmanskih
  * 
  */
@@ -293,9 +293,6 @@ public class CellEditorPanel extends JPanel {
 	private boolean findTag(String tag) {
 		String btag = "<" + tag + ">";
 		String etag = "</" + tag + ">";
-		String t = textPane.getSelectedText();
-		if (t == null)
-			t = EMPTY_STRING;
 		int b = textPane.getSelectionStart();
 		int e = textPane.getSelectionEnd();
 		String text = textPane.getText();
@@ -333,11 +330,6 @@ public class CellEditorPanel extends JPanel {
 		}
 	}
 
-	/**
-	 * This method initializes this
-	 * 
-	 * @return void
-	 */
 	private void initialize() {
 		this.setLayout(new BorderLayout());
 		this.setSize(340, 260);
@@ -412,7 +404,7 @@ public class CellEditorPanel extends JPanel {
 					String content = textPane.getContentType();
 					text = textPane.getText();
 					if (content.equals(Cell.TEXT_HTML)) {
-						text = and.util.Utilities.html2Plain(text);
+						text = Utils.html2Plain(text);
 						contentButton.setText(Messages
 								.getString("CellEditorPanel.Plain")); //$NON-NLS-1$
 						textPane.setContentType(Cell.TEXT_PLAIN);
@@ -474,8 +466,7 @@ public class CellEditorPanel extends JPanel {
 		if (MathValue.isEnableMathMl()) { 
 			String s = textPane.getText().trim().toLowerCase();
 			if (s.endsWith("</math>") && s.contains("<math")) {
-				MathML m = new MathML(s);
-				return m;
+				return new MathML(s);
 			}
 		}
 		return textPane.getText();

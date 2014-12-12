@@ -37,11 +37,7 @@ import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.io.Writer;
-import java.util.Iterator;
-
 import javax.imageio.ImageIO;
-
-import and.util.Utilities;
 
 import jdbreport.model.Border;
 import jdbreport.model.Cell;
@@ -54,7 +50,7 @@ import jdbreport.model.io.SaveReportException;
 import jdbreport.util.Utils;
 
 /**
- * @version 2.0 24.06.2011
+ * @version 3.0 12.12.2014
  * @author Andrey Kholmanskih
  * 
  */
@@ -69,13 +65,10 @@ public class HTMLWriter implements ReportWriter {
 
 	public void save(OutputStream out, ReportBook reportBook)
 			throws SaveReportException {
-		PrintWriter fw = new PrintWriter(new BufferedWriter(
+		try (PrintWriter fw = new PrintWriter(new BufferedWriter(
 				new OutputStreamWriter(out, java.nio.charset.Charset
-						.forName("UTF-8"))));
-		try {
+						.forName("UTF-8"))))) {
 			save(fw, reportBook);
-		} finally {
-			fw.close();
 		}
 
 	}
@@ -85,11 +78,8 @@ public class HTMLWriter implements ReportWriter {
 		try {
 			setFileName(file.getPath());
 			file.createNewFile();
-			FileOutputStream out = new FileOutputStream(file);
-			try {
+			try (FileOutputStream out = new FileOutputStream(file)) {
 				save(out, reportBook);
-			} finally {
-				out.close();
 			}
 		} catch (IOException e) {
 			throw new SaveReportException(e);
@@ -116,9 +106,8 @@ public class HTMLWriter implements ReportWriter {
 		fw.println("<style type=\"text/css\">");
 		fw.println("<!--");
 		fw.println(getCss(CellStyle.getDefaultStyle()));
-		for (Iterator<Object> it = reportBook.getStyleList().keySet()
-				.iterator(); it.hasNext();) {
-			fw.println(getCss(reportBook.getStyles(it.next())));
+		for (Object o : reportBook.getStyleList().keySet()) {
+			fw.println(getCss(reportBook.getStyles(o)));
 		}
 		fw.println("-->");
 		fw.println("</style>");
@@ -151,7 +140,7 @@ public class HTMLWriter implements ReportWriter {
 	}
 
 	private String getCss(CellStyle style) {
-		StringBuffer s = new StringBuffer();
+		StringBuilder s = new StringBuilder();
 		s.append(".s");
 		if (style.getId() == null || style.getId().equals(-1))
 			s.append("Default");
@@ -248,7 +237,7 @@ public class HTMLWriter implements ReportWriter {
 	private void saveToHTML(PrintWriter fw, ReportModel model, boolean saveStyle) throws SaveReportException {
 		int colCount = model.getColumnCount();
 		int[] colWidths = new int[colCount];
-		int leftCol = -1;
+		int leftCol;
 		int rightCol = -1;
 		do {
 			rightCol++;
@@ -410,7 +399,7 @@ public class HTMLWriter implements ReportWriter {
 
 	private String formatText(String text) {
 		boolean isPrevSpace = true;
-		StringBuffer result = new StringBuffer();
+		StringBuilder result = new StringBuilder();
 		int n = 0;
 		while (n < text.length()) {
 			if (text.charAt(n) == ' ') {
@@ -444,8 +433,8 @@ public class HTMLWriter implements ReportWriter {
 	private String getImg(ReportModel model, final int col, final int row, Cell cell, RenderedImage image) {
 		if (fileName == null)
 			return "";
-		StringBuffer imgTag = new StringBuffer(Utilities.changeFileExtension(
-				Utilities.extractFileName(fileName), ""));
+		StringBuilder imgTag = new StringBuilder(Utils.changeFileExtension(
+				Utils.extractFileName(fileName), ""));
 		String ext = cell.getImageFormat();
 		if (ext != null) {
 			if (ext.equalsIgnoreCase("gif") || ext.equalsIgnoreCase("wmf"))
@@ -453,11 +442,11 @@ public class HTMLWriter implements ReportWriter {
 		} else {
 			ext = "png";
 		}
-		imgTag.append("_" + row);
-		imgTag.append("_" + col);
+		imgTag.append("_").append(row);
+		imgTag.append("_").append(col);
 		imgTag.append('.');
 		imgTag.append(ext);
-		String ImgFile = Utilities.extractFilePath(fileName) + imgTag;
+		String ImgFile = Utils.extractFilePath(fileName) + imgTag;
 		try {
 			ImageIO.write(image, ext, new File(ImgFile));
 		} catch (IOException e) {
@@ -494,7 +483,6 @@ public class HTMLWriter implements ReportWriter {
 
 	public String write(String fileName, Object resource)
 			throws SaveReportException {
-		// TODO Auto-generated method stub
-		return fileName; 
+		return fileName;
 	}
 }
