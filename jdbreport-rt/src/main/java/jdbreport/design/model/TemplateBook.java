@@ -1,27 +1,20 @@
 /*
  * JDBReport Generator
  * 
- * Copyright (C) 2006-2014 Andrey Kholmanskih. All rights reserved.
+ * Copyright (C) 2006-2014 Andrey Kholmanskih
  * 
- * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
- * License as published by the Free Software Foundation; either
- * version 2.1 of the License, or (at your option) any later version.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
  *
- * This library is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Lesser General Public License for more details.
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
- * You should have received a copy of the GNU Lesser General Public
- * License along with this library.  If not, write to the 
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  *
- * Free Software Foundation, Inc.,
- * 59 Temple Place - Suite 330,
- * Boston, MA  USA  02111-1307
- * 
- * Andrey Kholmanskih
- * support@jdbreport.com
  */
 package jdbreport.design.model;
 
@@ -46,9 +39,9 @@ import java.util.regex.Matcher;
  */
 public class TemplateBook extends ReportBook {
 
-	public static final String JDBR = "jdbr"; //$NON-NLS-1$
+	public static final String JDBR = "jdbr";
 
-	public static final String REPORT_CAPTION = "reportCaption"; //$NON-NLS-1$
+	public static final String REPORT_CAPTION = "reportCaption";
 
 	private static TreeMap<Object, String> WRITERS_MAP = new TreeMap<>();
 
@@ -60,11 +53,11 @@ public class TemplateBook extends ReportBook {
 	static {
 		WRITERS_MAP.putAll(ReportBook.WRITERS_MAP);
 		WRITERS_MAP.put(TemplateBook.JDBR,
-				"jdbreport.design.model.xml.DbrFileType"); //$NON-NLS-1$
+				"jdbreport.design.model.xml.DbrFileType");
 
 		READERS_MAP.putAll(ReportBook.READERS_MAP);
 		READERS_MAP.put(TemplateBook.JDBR,
-				"jdbreport.design.model.xml.DbrFileType"); //$NON-NLS-1$
+				"jdbreport.design.model.xml.DbrFileType");
 	}
 
 	private List<JdbcReportSource> sourcesList;

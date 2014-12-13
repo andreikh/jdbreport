@@ -1,26 +1,17 @@
 /*
- * Copyright (C) 2007 Andrey Kholmanskih. All rights reserved.
+ * Copyright (C) 2007-2014 Andrey Kholmanskih
  * 
- * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
- * License as published by the Free Software Foundation; either
- * version 2.1 of the License, or (at your option) any later version.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
  *
- * This library is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Lesser General Public License for more details.
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
- * You should have received a copy of the GNU Lesser General Public
- * License along with this library.  If not, write to the 
- *
- * Free Software Foundation, Inc.,
- * 59 Temple Place - Suite 330,
- * Boston, MA  USA  02111-1307
- * 
- * 
- * Andrey Kholmanskih
- * support@jdbreport.com
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  * 
  */
 package jdbreport.design.grid.dialogs;
@@ -29,11 +20,11 @@ import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 
 /**
-* @Version 1.0 06/16/07
+* @version 3.0 12.12.2014
 * @author Andrey Kholmanskih
 */
 public class Messages {
-	private static final String BUNDLE_NAME = "jdbreport.design.grid.dialogs.messages"; //$NON-NLS-1$
+	private static final String BUNDLE_NAME = "jdbreport.design.grid.dialogs.messages";
 
 	private static final ResourceBundle RESOURCE_BUNDLE = ResourceBundle
 			.getBundle(BUNDLE_NAME);

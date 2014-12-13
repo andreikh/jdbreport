@@ -1,3 +1,20 @@
+/*
+ * Copyright (C) 2009-2014 Andrey Kholmanskih
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
+ */
+
 package jdbreport.view;
 
 import javax.swing.*;
@@ -6,9 +23,16 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.File;
 
+/**
+ * @version 1.0 08.09.2009
+ * @author Andrey Kholmanskih
+ *
+ */
 public class ImagePreview extends JComponent implements PropertyChangeListener {
+
 	private static final long serialVersionUID = 1L;
-	ImageIcon thumbnail = null;
+
+	ImageIcon icon = null;
 	File file = null;
 
 	public ImagePreview(JFileChooser fc) {
@@ -18,41 +42,35 @@ public class ImagePreview extends JComponent implements PropertyChangeListener {
 
 	public void loadImage() {
 		if (file == null) {
-			thumbnail = null;
+			icon = null;
 			return;
 		}
 
-		// Don't use createImageIcon (which is a wrapper for getResource)
-		// because the image we're trying to load is probably not one
-		// of this program's own resources.
 		ImageIcon tmpIcon = new ImageIcon(file.getPath());
 		int w = getPreferredSize().width - 10 ;
 		if (tmpIcon.getIconWidth() > w) {
-			thumbnail = new ImageIcon(tmpIcon.getImage().getScaledInstance(
+			icon = new ImageIcon(tmpIcon.getImage().getScaledInstance(
 					 w, -1, Image.SCALE_DEFAULT));
-		} else { // no need to miniaturize
-			thumbnail = tmpIcon;
+		} else {
+			icon = tmpIcon;
 		}
 	}
 
 	public void propertyChange(PropertyChangeEvent e) {
-		boolean update = false;
-		String prop = e.getPropertyName();
+		boolean change = false;
+		String propertyName = e.getPropertyName();
 
-		// If the directory changed, don't show an image.
-		if (JFileChooser.DIRECTORY_CHANGED_PROPERTY.equals(prop)) {
+		if (JFileChooser.DIRECTORY_CHANGED_PROPERTY.equals(propertyName)) {
 			file = null;
-			update = true;
+			change = true;
 
-			// If a file became selected, find out which one.
-		} else if (JFileChooser.SELECTED_FILE_CHANGED_PROPERTY.equals(prop)) {
+		} else if (JFileChooser.SELECTED_FILE_CHANGED_PROPERTY.equals(propertyName)) {
 			file = (File) e.getNewValue();
-			update = true;
+			change = true;
 		}
 
-		// Update the preview accordingly.
-		if (update) {
-			thumbnail = null;
+		if (change) {
+			icon = null;
 			if (isShowing()) {
 				loadImage();
 				repaint();
@@ -61,21 +79,20 @@ public class ImagePreview extends JComponent implements PropertyChangeListener {
 	}
 
 	protected void paintComponent(Graphics g) {
-		if (thumbnail == null) {
+		if (icon == null)
 			loadImage();
-		}
-		if (thumbnail != null) {
-			int x = getWidth() / 2 - thumbnail.getIconWidth() / 2;
-			int y = getHeight() / 2 - thumbnail.getIconHeight() / 2;
 
-			if (y < 0) {
+		if (icon != null) {
+			int x = getWidth() / 2 - icon.getIconWidth() / 2;
+			int y = getHeight() / 2 - icon.getIconHeight() / 2;
+
+			if (y < 0)
 				y = 0;
-			}
 
-			if (x < 5) {
+			if (x < 5)
 				x = 5;
-			}
-			thumbnail.paintIcon(this, g, x, y);
+
+			icon.paintIcon(this, g, x, y);
 		}
 	}
 }

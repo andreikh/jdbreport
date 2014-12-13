@@ -1,29 +1,22 @@
 /*
  * ToggleAction.java
  *
- * Copyright (C) 2007-2010 Andrey Kholmanskih. All rights reserved.
+ * Copyright (C) 2007-2014 Andrey Kholmanskih
  * 
- * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
- * License as published by the Free Software Foundation; either
- * version 2.1 of the License, or (at your option) any later version.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
  *
- * This library is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Lesser General Public License for more details.
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
- * You should have received a copy of the GNU Lesser General Public
- * License along with this library.  If not, write to the 
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  *
- * Free Software Foundation, Inc.,
- * 59 Temple Place - Suite 330,
- * Boston, MA  USA  02111-1307
- * 
- * 
- * Andrey Kholmanskih
- * support@jdbreport.com
  */
+
 package jdbreport.actions;
 
 import javax.swing.*;
@@ -33,92 +26,90 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * @version 3.0 12.12.2014
  * @author Andrey Kholmanskih
- * 
+ * @version 3.0 12.12.2014
  */
 public abstract class ToggleAction extends BaseAction {
 
-	private static final long serialVersionUID = 1L;
-	
-	private boolean selected;
-	private List<ButtonModel> buttonModels = new ArrayList<ButtonModel>();
+    private static final long serialVersionUID = 1L;
 
-	public ToggleAction(String name, ActionListener l) {
-		super(name, l);
-	}
+    private boolean selected;
+    private List<ButtonModel> buttonModels = new ArrayList<ButtonModel>();
 
-	public ToggleAction(String name, String delimiter, ActionListener l) {
-		super(name, delimiter, l);
-	}
+    public ToggleAction(String name, ActionListener l) {
+        super(name, l);
+    }
 
-	public ToggleAction(String name) {
-		super(name);
-	}
+    public ToggleAction(String name, String delimiter, ActionListener l) {
+        super(name, delimiter, l);
+    }
 
-	public ToggleAction(String name, String delimiter) {
-		super(name, delimiter);
-	}
+    public ToggleAction(String name) {
+        super(name);
+    }
 
-	public AbstractButton addButton(AbstractButton button) {
-		button.setAction(this);
-		addButtonModel(button.getModel());
-		return button;
-	}
+    public ToggleAction(String name, String delimiter) {
+        super(name, delimiter);
+    }
 
-	public void addButtonModel(ButtonModel model) {
-		if (buttonModels.indexOf(model) < 0)
-			buttonModels.add(model);
-	}
+    public AbstractButton addButton(AbstractButton button) {
+        button.setAction(this);
+        addButtonModel(button.getModel());
+        return button;
+    }
 
-	public void removeButtonModel(ButtonModel model) {
-		buttonModels.remove(model);
-	}
+    public void addButtonModel(ButtonModel model) {
+        if (buttonModels.indexOf(model) < 0)
+            buttonModels.add(model);
+    }
 
-	/**
-	 * @return the selected
-	 */
-	public boolean isSelected() {
-		return selected;
-	}
+    public void removeButtonModel(ButtonModel model) {
+        buttonModels.remove(model);
+    }
 
-	/**
-	 * @param selected
-	 *            the selected to set
-	 */
-	public void setSelected(boolean selected) {
-		boolean oldValue = this.selected;
+    /**
+     * @return the selected
+     */
+    public boolean isSelected() {
+        return selected;
+    }
 
-		if (oldValue != selected) {
-			this.selected = selected;
-			for (int i = 0; i < buttonModels.size(); i++) {
-				ButtonModel buttonModel = buttonModels.get(i);
-				buttonModel.setSelected(selected);
-			}
-			firePropertyChange("selected", Boolean.valueOf(oldValue), Boolean
-					.valueOf(selected));
-		}
-	}
+    /**
+     * @param selected the selected to set
+     */
+    public void setSelected(boolean selected) {
+        boolean oldValue = this.selected;
 
-	public void setEnabled(boolean newValue) {
-		boolean oldValue = this.enabled;
+        if (oldValue != selected) {
+            this.selected = selected;
+            for (int i = 0; i < buttonModels.size(); i++) {
+                ButtonModel buttonModel = buttonModels.get(i);
+                buttonModel.setSelected(selected);
+            }
+            firePropertyChange("selected", Boolean.valueOf(oldValue), Boolean
+                    .valueOf(selected));
+        }
+    }
 
-		if (oldValue != newValue) {
-			super.setEnabled(newValue);
-			for (int i = 0; i < buttonModels.size(); i++) {
-				ButtonModel buttonModel = buttonModels.get(i);
-				buttonModel.setEnabled(newValue);
-			}
-		}
-	}
+    public void setEnabled(boolean newValue) {
+        boolean oldValue = this.enabled;
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
-	 */
-	public void actionPerformed(ActionEvent e) {
-		setSelected(!selected);
-	}
+        if (oldValue != newValue) {
+            super.setEnabled(newValue);
+            for (int i = 0; i < buttonModels.size(); i++) {
+                ButtonModel buttonModel = buttonModels.get(i);
+                buttonModel.setEnabled(newValue);
+            }
+        }
+    }
+
+    /*
+     * (non-Javadoc)
+     *
+     * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
+     */
+    public void actionPerformed(ActionEvent e) {
+        setSelected(!selected);
+    }
 
 }
