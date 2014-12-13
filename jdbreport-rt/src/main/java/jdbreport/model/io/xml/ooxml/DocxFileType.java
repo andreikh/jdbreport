@@ -32,7 +32,7 @@ import jdbreport.model.io.ReportWriter;
  */
 public class DocxFileType implements FileType {
 
-	private final static String[] fileExtensions = { "docx" }; //$NON-NLS-1$
+	private final static String[] fileExtensions = { "docx" };
 	private ReportWriter writer;
 
 	public String[] getExtensions() {
@@ -40,7 +40,7 @@ public class DocxFileType implements FileType {
 	}
 
 	public String getDescription() {
-		return "Microsoft Word 2007"; //$NON-NLS-1$
+		return "Microsoft Word 2007";
 	}
 
 	public ReportReader getReader() {
@@ -55,7 +55,7 @@ public class DocxFileType implements FileType {
 	}
 
 	public String getContentType() {
-		return "application/vnd.openxmlformats-officedocument.wordprocessingml.document"; //$NON-NLS-1$
+		return "application/vnd.openxmlformats-officedocument.wordprocessingml.document";
 	}
 
 	public int getOrder() {

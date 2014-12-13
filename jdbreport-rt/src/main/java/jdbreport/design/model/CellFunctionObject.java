@@ -94,7 +94,7 @@ public class CellFunctionObject implements Cloneable {
 	}
 
 	public String getClassText() {
-		StringBuffer text = new StringBuffer();
+		StringBuilder text = new StringBuilder();
 		text.append("import jdbreport.model.*;");
 		text.append("import jdbreport.design.model.CellFunction;");
 		text.append("import jdbreport.design.model.AbstractCellFunction;");
@@ -119,11 +119,8 @@ public class CellFunctionObject implements Cloneable {
 		String sourceFile = getFunctionName() + ".java";
 		File file = new File(sourceFile);
 		file.createNewFile();
-		FileOutputStream fw = new FileOutputStream(file);
-		try {
+		try (FileOutputStream fw = new FileOutputStream(file)) {
 			fw.write(getClassText().getBytes("UTF-8"));
-		} finally {
-			fw.close();
 		}
 		File classFile = new File(getFunctionName() + ".class");
 		try {
@@ -132,18 +129,14 @@ public class CellFunctionObject implements Cloneable {
 				logger.severe("Compiler not found");
 				return;
 			}
-			int compileReturnCode = javac.run(null, null, null, new String[] {
-					"-source", "5", "-target", "5", "-encoding", "UTF-8", sourceFile });
+			int compileReturnCode = javac.run(null, null, null, "-source", "5", "-target", "5", "-encoding", "UTF-8", sourceFile);
 			if (compileReturnCode != 0) {
 				throw new Exception("Compilation error");
 			}
 			if (classFile.exists()) {
-				FileInputStream fr = new FileInputStream(classFile);
-				try {
+				try (FileInputStream fr = new FileInputStream(classFile)) {
 					compiledClass = new byte[(int) classFile.length()];
 					fr.read(compiledClass);
-				} finally {
-					fr.close();
 				}
 			}
 		} finally {
@@ -160,18 +153,12 @@ public class CellFunctionObject implements Cloneable {
 	}
 
 	private void loadFunction() {
-		if (compiledClass != null) {
-			try {
-				ClassLoader loader = new FunctionClassLoader(this);
-				Object func = loader.loadClass(getFunctionName()).newInstance();
-				cellFunction = (CellFunction) func;
-			} catch (ClassNotFoundException e) {
-				logger.log(Level.SEVERE, e.getMessage(), e);
-			} catch (InstantiationException e) {
-				logger.log(Level.SEVERE, e.getMessage(), e);
-			} catch (IllegalAccessException e) {
-				logger.log(Level.SEVERE, e.getMessage(), e);
-			}
+		if (compiledClass != null) try {
+			ClassLoader loader = new FunctionClassLoader(this);
+			Object func = loader.loadClass(getFunctionName()).newInstance();
+			cellFunction = (CellFunction) func;
+		} catch (ClassNotFoundException | InstantiationException | IllegalAccessException e) {
+			logger.log(Level.SEVERE, e.getMessage(), e);
 		}
 	}
 

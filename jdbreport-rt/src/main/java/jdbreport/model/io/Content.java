@@ -36,7 +36,7 @@ import jdbreport.util.Utils;
 
 /**
  * @author  Andrey Kholmanskih
- * @version 1.0 10.08.2009
+ * @version 3.0 13.12.2014
  */
 public class Content {
 	
@@ -58,7 +58,7 @@ public class Content {
 	}
 
 	public static List<Content> getHTMLContentList(HTMLDocument doc) {
-		List<Content> contentList = new ArrayList<Content>();
+		List<Content> contentList = new ArrayList<>();
 		Element rootElement = doc.getDefaultRootElement();
 		for (int i = 0; i < rootElement.getElementCount(); i++) {
 			Element el = rootElement.getElement(i);
@@ -116,36 +116,44 @@ public class Content {
 			String name = key.toString();
 			String attribute = attributeSet.getAttribute(key).toString();
 
-			if (name.equals("font-weight")) {
-				bold = attribute.equals("bold");
-			} else if (name.equals("font-style")) {
-				italic = attribute.equals("italic");
-			} else if (name.equals("text-decoration")) {
-				if (attribute.equals("underline")) {
-					underline = true;
-				} else if (attribute.equals("line-through")) {
-					line_through = true;
-				}
-			} else if (name.equals("font-family")) {
-				family = attribute;
-			} else if (name.equals("font-size")) {
-				sizeStr = attribute;
-
-			} else if (name.equals("color")) {
-				fontColor = Utils.colorByName(attribute);
-				if (fontColor == null) {
-					try {
-						fontColor = Utils.stringToColor(attribute);
-					} catch (Exception e) {
-
+			switch (name) {
+				case "font-weight":
+					bold = attribute.equals("bold");
+					break;
+				case "font-style":
+					italic = attribute.equals("italic");
+					break;
+				case "text-decoration":
+					if (attribute.equals("underline")) {
+						underline = true;
+					} else if (attribute.equals("line-through")) {
+						line_through = true;
 					}
-				}
-			} else if (name.equals("vertical-align")) {
-				if (attribute.equals("sub")) {
-					sub = true;
-				} else if (attribute.equals("sup")) {
-					sup = true;
-				}
+					break;
+				case "font-family":
+					family = attribute;
+					break;
+				case "font-size":
+					sizeStr = attribute;
+
+					break;
+				case "color":
+					fontColor = Utils.colorByName(attribute);
+					if (fontColor == null) {
+						try {
+							fontColor = Utils.stringToColor(attribute);
+						} catch (Exception ignored) {
+
+						}
+					}
+					break;
+				case "vertical-align":
+					if (attribute.equals("sub")) {
+						sub = true;
+					} else if (attribute.equals("sup")) {
+						sup = true;
+					}
+					break;
 			}
 		}
 		if (family != null || bold || italic || underline || line_through

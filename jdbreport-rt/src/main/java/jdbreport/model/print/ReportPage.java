@@ -121,8 +121,8 @@ public class ReportPage extends PageFormat {
 	/**
 	 * Sets size in 1/72 inch
 	 * 
-	 * @param width
-	 * @param height
+	 * @param width width page
+	 * @param height height page
 	 */
 	private void setSize(double width, double height) {
 		Paper paper = getPaper();

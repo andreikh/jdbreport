@@ -43,7 +43,7 @@ import jdbreport.model.event.TableRowModelEvent;
 import jdbreport.model.event.TableRowModelListener;
 
 /**
- * @version 1.1 03/09/08
+ * @version 3.0 13.12.2014
  * @author Andrey Kholmanskih
  * 
  */
@@ -276,7 +276,7 @@ public class RowHeader extends JComponent implements TableRowModelListener,
 		if (!invalidWidth) {
 			return super.getWidth();
 		}
-		Object s = ""; //$NON-NLS-1$
+		Object s;
 		int result = super.getWidth();
 		int oldWidth = result;
 		FontRenderContext frc = ((Graphics2D) getGraphics())
@@ -448,7 +448,6 @@ public class RowHeader extends JComponent implements TableRowModelListener,
 	 * 
 	 * @return the string "TableRowHeaderUI"
 	 * 
-	 * @return "TableRowHeaderUI"
 	 */
 	public String getUIClassID() {
 		return uiClassID;
@@ -687,12 +686,12 @@ public class RowHeader extends JComponent implements TableRowModelListener,
 		if (aRow != null && resizingRow == null) {
 			int[] rows = { getRowModel().getRowIndex(aRow) };
 			int[] heights = { aRow.getHeight() };
-			undoItem = new ResizingRowUndoItem((JReportGrid) table, rows,
+			undoItem = new ResizingRowUndoItem(table, rows,
 					heights);
 		} else {
 			if (aRow == null && resizingRow != null && undoItem != null) {
 				if (undoItem.getHeights()[0] != resizingRow.getHeight()) {
-					((JReportGrid) table).pushUndo(undoItem);
+					table.pushUndo(undoItem);
 				}
 				undoItem = null;
 			}
@@ -803,12 +802,8 @@ public class RowHeader extends JComponent implements TableRowModelListener,
 			if ((row = RowHeader.this.rowAtPoint(p)) != -1) {
 				TableRow aRow = RowHeader.this.rowModel.getRow(row);
 				TableCellRenderer renderer = aRow.getHeaderRenderer();
-				if (renderer == null) {
-					if (defaultRenderer != null) {
-						renderer = defaultRenderer;
-					} else {
-						return null;
-					}
+				if (renderer == null && defaultRenderer == null) {
+					return null;
 				}
 				return new AccessibleRowHeaderEntry(row, RowHeader.this,
 						RowHeader.this.table);
@@ -841,12 +836,8 @@ public class RowHeader extends JComponent implements TableRowModelListener,
 			} else {
 				TableRow aRow = RowHeader.this.rowModel.getRow(i);
 				TableCellRenderer renderer = aRow.getHeaderRenderer();
-				if (renderer == null) {
-					if (defaultRenderer != null) {
-						renderer = defaultRenderer;
-					} else {
-						return null;
-					}
+				if (renderer == null && defaultRenderer == null) {
+					return null;
 				}
 				return new AccessibleRowHeaderEntry(i, RowHeader.this,
 						RowHeader.this.table);
@@ -911,7 +902,7 @@ public class RowHeader extends JComponent implements TableRowModelListener,
 							RowHeader.this.getTable(), headerValue, false,
 							false, -1, row);
 					if (c instanceof Accessible) {
-						return ((Accessible) c).getAccessibleContext();
+						return c.getAccessibleContext();
 					}
 				}
 				return null;
@@ -951,11 +942,11 @@ public class RowHeader extends JComponent implements TableRowModelListener,
 				AccessibleContext ac = getCurrentAccessibleContext();
 				if (ac != null) {
 					String name = ac.getAccessibleName();
-					if ((name != null) && (name != "")) { //$NON-NLS-1$
+					if (name != null && !name.isEmpty()) {
 						return ac.getAccessibleName();
 					}
 				}
-				if ((accessibleName != null) && (accessibleName != "")) { //$NON-NLS-1$
+				if (accessibleName != null && !accessibleName.isEmpty()) {
 					return accessibleName;
 				} else {
 					return table.getRowName(row);
@@ -1224,11 +1215,7 @@ public class RowHeader extends JComponent implements TableRowModelListener,
 					return ((AccessibleComponent) ac).isEnabled();
 				} else {
 					Component c = getCurrentComponent();
-					if (c != null) {
-						return c.isEnabled();
-					} else {
-						return false;
-					}
+					return c != null && c.isEnabled();
 				}
 			}
 
@@ -1250,11 +1237,7 @@ public class RowHeader extends JComponent implements TableRowModelListener,
 					return ((AccessibleComponent) ac).isVisible();
 				} else {
 					Component c = getCurrentComponent();
-					if (c != null) {
-						return c.isVisible();
-					} else {
-						return false;
-					}
+					return c != null && c.isVisible();
 				}
 			}
 
@@ -1271,11 +1254,7 @@ public class RowHeader extends JComponent implements TableRowModelListener,
 			}
 
 			public boolean isShowing() {
-				if (isVisible() && RowHeader.this.isShowing()) {
-					return true;
-				} else {
-					return false;
-				}
+				return isVisible() && RowHeader.this.isShowing();
 			}
 
 			public boolean contains(Point p) {
@@ -1374,11 +1353,7 @@ public class RowHeader extends JComponent implements TableRowModelListener,
 					return ((AccessibleComponent) ac).isFocusTraversable();
 				} else {
 					Component c = getCurrentComponent();
-					if (c != null) {
-						return c.isFocusable();
-					} else {
-						return false;
-					}
+					return c != null && c.isFocusable();
 				}
 			}
 

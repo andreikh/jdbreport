@@ -24,10 +24,8 @@ import java.awt.Image;
 
 import javax.swing.Icon;
 
-import jdbreport.design.model.CellObject;
-
 /**
- * @version 2.2 13.04.2013
+ * @version 3.0 13.12.2014
  * 
  * @author Andrey Kholmanskih
  * 
@@ -170,6 +168,7 @@ public class NullCell implements Cell {
 
 	}
 
+	@Override
 	public Object clone() {
 		return this;
 	}
@@ -206,25 +205,11 @@ public class NullCell implements Cell {
 	public void clear() {
 	}
 
-	public int getTotalFunction() {
-		return CellObject.AF_NONE;
-	}
-
-	public void setTotalFunction(int func) {
-	}
-
 	public Type getValueType() {
 		return Type.STRING;
 	}
 
 	public void setValueType(Type valueType) {
-	}
-
-	public int getDecimals() {
-		return 0;
-	}
-
-	public void setDecimals(int p) {
 	}
 
 	public boolean isEditable() {

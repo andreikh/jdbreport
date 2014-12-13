@@ -107,7 +107,7 @@ public class TemplateModel extends JReportModel {
 		CellObject cell = (CellObject) getOwnerReportCell(row, column);
 		if (cell.isNull())
 			return null;
-		StringBuffer result = new StringBuffer();
+		StringBuilder result = new StringBuilder();
 		if (cell.getFunctionName() != null) {
 			result.append(Messages.getString("TemplateModel.0")); //$NON-NLS-1$
 			result.append(" <b>"); //$NON-NLS-1$

@@ -35,7 +35,7 @@ import jdbreport.model.TreeRowGroup;
 import jdbreport.model.event.TableRowModelEvent;
 
 /**
- * @version 3.0 22.02.2014
+ * @version 3.0 13.12.2014
  * @author Andrey Kholmanskih
  * 
  */
@@ -105,11 +105,10 @@ public class TemplateRowModel extends ReportRowModel {
 	public void setRowType(int[] selectedRows, int type) {
 		if (selectedRows.length == 0)
 			return;
-		ArrayList<TypeTableRow> list = new ArrayList<TypeTableRow>();
+		ArrayList<TypeTableRow> list = new ArrayList<>();
 		TableRow row;
-		int n = 0;
-		BaseRowGroup destGroup = null;
-		int first = 0;
+		BaseRowGroup destGroup;
+		int first;
 
 		if (findLikeGroup(selectedRows, type))
 			return;
@@ -126,15 +125,15 @@ public class TemplateRowModel extends ReportRowModel {
 			return;
 		case Group.ROW_NONE:
 		default:
-			// TODO make
 			destGroup = (BaseRowGroup) getRootGroup().getGroup(type);
 			if (destGroup == null)
 				destGroup = (BaseRowGroup) getRootGroup().addGroup(type);
 			first = getGroupRowIndex(destGroup);
 		}
 		disableSpan();
-		try {
-			for (int i = 0; i < selectedRows.length; i++) {
+		try {//todo
+			int n = 0;
+			for (int selectedRow : selectedRows) {
 				row = getRow(selectedRows[n]);
 				BaseRowGroup srcGroup = (BaseRowGroup) getRootGroup().getGroup(
 						row);
@@ -161,8 +160,8 @@ public class TemplateRowModel extends ReportRowModel {
 	}
 
 	/**
-	 * @param selectedRows
-	 * @param type
+	 * @param selectedRows rows number array
+	 * @param type group type
 	 */
 	private boolean findLikeGroup(int[] selectedRows, int type) {
 		BaseRowGroup destGroup = null;
@@ -220,8 +219,8 @@ public class TemplateRowModel extends ReportRowModel {
 	private boolean findDetailRowGroup(int[] selectedRows, int type) {
 		int findType = Group.ROW_DETAIL;
 		DetailGroup destGroup = null;
-		for (int i = 0; i < selectedRows.length; i++) {
-			Group group = getGroup(selectedRows[i]);
+		for (int selectedRow : selectedRows) {
+			Group group = getGroup(selectedRow);
 			if (group.getType() == findType) {
 				destGroup = (DetailGroup) group.getParent();
 				break;
@@ -250,8 +249,8 @@ public class TemplateRowModel extends ReportRowModel {
 			int type) {
 		BaseRowGroup newGroup = (BaseRowGroup) destGroup.addGroup(type);
 		if (type == Group.ROW_GROUP_HEADER || type == Group.ROW_DETAIL)
-			for (int i = 0; i < rows.length; i++) {
-				TableRow tableRow = rowList.get(rows[i]);
+			for (int row : rows) {
+				TableRow tableRow = rowList.get(row);
 				Group group = getGroup(tableRow);
 				group.remove(tableRow);
 				newGroup.addRow(tableRow);
@@ -271,8 +270,8 @@ public class TemplateRowModel extends ReportRowModel {
 	private boolean findDetailGroup(int[] selectedRows, int type) {
 		DetailGroup destGroup = null;
 		int findType = Group.GROUP_DETAIL;
-		for (int i = 0; i < selectedRows.length; i++) {
-			Group group = getGroup(selectedRows[i]).getParent();
+		for (int selectedRow : selectedRows) {
+			Group group = getGroup(selectedRow).getParent();
 			if (group.getType() == findType) {
 				destGroup = (DetailGroup) group;
 				break;
@@ -293,7 +292,7 @@ public class TemplateRowModel extends ReportRowModel {
 			}
 		}
 		if (destGroup == null) {
-			destGroup = (DetailGroup) ((TemplateRootGroup) getRootGroup()).addGroup(Group.GROUP_DETAIL);
+			destGroup = (DetailGroup) getRootGroup().addGroup(Group.GROUP_DETAIL);
 		}
 		if (destGroup != null) {
 			moveRowsToDetailGroup(destGroup, selectedRows, type);
@@ -427,20 +426,20 @@ public class TemplateRowModel extends ReportRowModel {
 		if (targetGroup != null) {
 			disableSpan();
 			try {
-				int newGroupIndex = 0;
+				int newGroupIndex;
 				switch (targetGroup.getType()) {
 				case Group.ROW_TITLE:
 				case Group.ROW_PAGE_HEADER:
 					removeGroup(group);
 					newGroupIndex = getRootGroup().getChildIndex(
 							getRootGroup().getGroup(Group.ROW_PAGE_HEADER)) + 1;
-					addGroup((TreeRowGroup) getRootGroup(), newGroupIndex,
+					addGroup(getRootGroup(), newGroupIndex,
 							group);
 					break;
 				case Group.GROUP_DETAIL:
 					removeGroup(group);
 					newGroupIndex = getRootGroup().getChildIndex(targetGroup) + 1;
-					addGroup((TreeRowGroup) getRootGroup(), newGroupIndex,
+					addGroup(getRootGroup(), newGroupIndex,
 							group);
 					break;
 				case Group.ROW_FOOTER:
@@ -448,7 +447,7 @@ public class TemplateRowModel extends ReportRowModel {
 					removeGroup(group);
 					newGroupIndex = getRootGroup().getChildIndex(
 							getRootGroup().getGroup(targetGroup.getType()));
-					addGroup((TreeRowGroup) getRootGroup(), newGroupIndex,
+					addGroup(getRootGroup(), newGroupIndex,
 							group);
 					break;
 				case Group.ROW_DETAIL:
@@ -520,16 +519,16 @@ public class TemplateRowModel extends ReportRowModel {
 				case Group.ROW_NONE:
 					splitGroup((RowsGroup) group, tableRow);
 					int groupIndex = group.getParent().getChildIndex(group) + 1;
-					detailGroup = ((RootGroup) getRootGroup())
+					detailGroup = getRootGroup()
 							.createDetailGroup();
-					((TreeRowGroup) getRootGroup()).addGroup(groupIndex,
+					getRootGroup().addGroup(groupIndex,
 							detailGroup);
 					break;
 				case Group.ROW_TITLE:
 				case Group.ROW_PAGE_HEADER:
-					detailGroup = ((RootGroup) getRootGroup())
+					detailGroup = getRootGroup()
 							.createDetailGroup();
-					((TreeRowGroup) getRootGroup()).addGroup(2, detailGroup);
+					getRootGroup().addGroup(2, detailGroup);
 					break;
 				default:
 					detailGroup = (GroupsGroup) getRootGroup().addGroup(
@@ -589,13 +588,13 @@ public class TemplateRowModel extends ReportRowModel {
 						group = (RowsGroup) group.getParent().addGroup(type);
 					} else {
 						if (group != null && group.getType() == Group.ROW_NONE) {
-							splitGroup((RowsGroup) group, tableRow);
+							splitGroup(group, tableRow);
 							int groupIndex = group.getParent().getChildIndex(
 									group) + 1;
-							DetailGroup detailGroup = ((RootGroup) getRootGroup())
+							DetailGroup detailGroup = getRootGroup()
 									.createDetailGroup();
-							((TreeRowGroup) getRootGroup()).addGroup(
-									groupIndex, detailGroup);
+							 getRootGroup().addGroup(
+									 groupIndex, detailGroup);
 							group = (RowsGroup) detailGroup.addGroup(type);
 						} else {
 							group = (RowsGroup) getRootGroup().addGroup(type);

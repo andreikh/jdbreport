@@ -25,46 +25,45 @@ import java.io.PrintWriter;
 import jdbreport.model.io.ReportWriter;
 
 /**
- * @version 1.3 10.05.2009
  * @author Andrey Kholmanskih
- * 
+ * @version 1.3 10.05.2009
  */
 public class OdtWriter extends OdsWriter {
 
-	public OdtWriter() {
-		super();
-	}
+    public OdtWriter() {
+        super();
+    }
 
-	protected ReportWriter getStylesWriter() {
-		return new OdtStylesWriter();
-	}
+    protected ReportWriter getStylesWriter() {
+        return new OdtStylesWriter();
+    }
 
-	protected void writeManifest(OutputStream stream) {
-		PrintWriter fw = new PrintWriter(new OutputStreamWriter(stream,
-				java.nio.charset.Charset.forName("UTF-8"))); //$NON-NLS-1$
-		try {
-			fw.println("<?xml version=\"1.0\" encoding=\"UTF-8\"?>"); //$NON-NLS-1$
-			fw
-					.println("<manifest:manifest xmlns:manifest=\"urn:oasis:names:tc:opendocument:xmlns:manifest:1.0\">"); //$NON-NLS-1$
-			fw
-					.println("<manifest:file-entry manifest:media-type=\"application/vnd.oasis.opendocument.text\" manifest:full-path=\"/\"/>"); //$NON-NLS-1$
-			writeIconsManifest(fw);
-			writeManifestFiles(fw);
-			fw.println("</manifest:manifest>"); //$NON-NLS-1$
-		} finally {
-			fw.flush();
-		}
-	}
+    protected void writeManifest(OutputStream stream) {
+        PrintWriter fw = new PrintWriter(new OutputStreamWriter(stream,
+                java.nio.charset.Charset.forName("UTF-8")));
+        try {
+            fw.println("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
+            fw
+                    .println("<manifest:manifest xmlns:manifest=\"urn:oasis:names:tc:opendocument:xmlns:manifest:1.0\">");
+            fw
+                    .println("<manifest:file-entry manifest:media-type=\"application/vnd.oasis.opendocument.text\" manifest:full-path=\"/\"/>");
+            writeIconsManifest(fw);
+            writeManifestFiles(fw);
+            fw.println("</manifest:manifest>");
+        } finally {
+            fw.flush();
+        }
+    }
 
-	protected void mimeWrite(OutputStream stream) {
-		PrintWriter fw = new PrintWriter(new OutputStreamWriter(stream,
-				java.nio.charset.Charset.forName("UTF-8"))); //$NON-NLS-1$
-		fw.print("application/vnd.oasis.opendocument.text"); //$NON-NLS-1$
-		fw.flush();
-	}
+    protected void mimeWrite(OutputStream stream) {
+        PrintWriter fw = new PrintWriter(new OutputStreamWriter(stream,
+                java.nio.charset.Charset.forName("UTF-8")));
+        fw.print("application/vnd.oasis.opendocument.text");
+        fw.flush();
+    }
 
-	protected ReportWriter getContentWriter() {
-		return new OdtContentWriter(this);
-	}
+    protected ReportWriter getContentWriter() {
+        return new OdtContentWriter(this);
+    }
 
 }

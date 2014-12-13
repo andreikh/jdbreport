@@ -491,7 +491,7 @@ public interface ReportModel extends TableModel {
 	 *            if false, return the true cell bounds - computed by
 	 *            subtracting the intercell spacing from the height and widths
 	 *            of the column and row models
-	 * @param isLeftToRight
+	 * @param isLeftToRight leftToRight flag
 	 * @return the rectangle containing the cell at location row,column
 	 */
 	public Rectangle getCellRect(int row, int column, boolean includeSpacing,
@@ -508,7 +508,7 @@ public interface ReportModel extends TableModel {
 	 *            the row's number
 	 * @param column
 	 *            the column's number
-	 * @param includeSpacing
+	 * @param includeSpacing include spacing flag
 	 * @return the cell's size
 	 */
 	public Dimension getCellSize(Cell cell, int row, int column,
@@ -763,7 +763,7 @@ public interface ReportModel extends TableModel {
 	
 	/**
 	 * 
-	 * @param map
+	 * @param map styles
 	 * @since 2.0
 	 */
 	public void setStyleList(Map<Object, CellStyle> map);
@@ -783,7 +783,7 @@ public interface ReportModel extends TableModel {
 	 * If true that pages are printed from left to right, from top to down, 
 	 * differently pages are printed from top to down, from left to right.
 	 * 
-	 * @param value
+	 * @param value print left to right flag
 	 * @since 2.0
 	 */
 	public void setPrintLeftToRight(boolean value);

@@ -31,7 +31,7 @@ import jdbreport.design.model.TemplateReportCell;
 import jdbreport.source.BufferedDataSet;
 
 /**
- * @version 2.0 11.05.2011
+ * @version 3.0 13.12.2014
  * 
  * @author Andrey Kholmanskih
  * 
@@ -159,7 +159,7 @@ public class DetailGroup extends TreeRowGroup {
 
 	public boolean addKey(GroupKey groupKey) {
 		if (keyList == null) {
-			keyList = new ArrayList<GroupKey>();
+			keyList = new ArrayList<>();
 		}
 		return keyList.add(groupKey);
 	}
@@ -195,7 +195,7 @@ public class DetailGroup extends TreeRowGroup {
 		firstDetailGroup = 0;
 		lastDetailGroup = getChildCount() - 1;
 		for (int i = 0; i < getChildCount(); i++) {
-			int t = ((Group) getChild(i)).getType();
+			int t = getChild(i).getType();
 			if (t == Group.ROW_GROUP_HEADER) {
 				firstDetailGroup = i + 1;
 			} else {
@@ -240,10 +240,7 @@ public class DetailGroup extends TreeRowGroup {
 			}
 		}
 		DetailGroup childGroup = (DetailGroup) findGroup(Group.GROUP_DETAIL);
-		if (childGroup != null) {
-			return childGroup.isEof();
-		}
-		return true;
+		return childGroup == null || childGroup.isEof();
 	}
 
 	private void resetOldCellValue() {
@@ -259,10 +256,10 @@ public class DetailGroup extends TreeRowGroup {
 
 	public void replaceDataSet(BufferedDataSet ds) throws ReportException {
 		if (dsList == null) {
-			dsList = new HashMap<String, BufferedDataSet>();
+			dsList = new HashMap<>();
 		}
 		dsList.remove(ds.getId());
-		Map<String, BufferedDataSet> map = new HashMap<String, BufferedDataSet>();
+		Map<String, BufferedDataSet> map = new HashMap<>();
 		map.put(ds.getId(), ds);
 		for (int i = 0; i < getChildCount(); i++) {
 			if (getChild(i).getType() == ROW_DETAIL) {
@@ -280,7 +277,7 @@ public class DetailGroup extends TreeRowGroup {
 		if (map == null)
 			return;
 		if (dsList == null) {
-			dsList = new HashMap<String, BufferedDataSet>();
+			dsList = new HashMap<>();
 		}
 		dsList.clear();
 		for (int i = 0; i < getChildCount(); i++) {
@@ -295,9 +292,7 @@ public class DetailGroup extends TreeRowGroup {
 
 	private void updateDS(RowsGroup group, Map<String, BufferedDataSet> map)
 			throws ReportException {
-		Iterator<TableRow> it = group.iterator();
-		while (it.hasNext()) {
-			TableRow row = it.next();
+		for (TableRow row : group) {
 			for (int c = 0; c < row.getColCount(); c++) {
 				CellObject cell = (CellObject) row.getCellItem(c);
 				try {
@@ -423,7 +418,7 @@ public class DetailGroup extends TreeRowGroup {
 	/**
 	 * Sets the minimum number of rows in the group
 	 * 
-	 * @param count
+	 * @param count min row count
 	 * @since 1.3
 	 */
 	public void setMinRowCount(int count) {

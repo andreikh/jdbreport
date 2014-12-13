@@ -58,7 +58,7 @@ public class RptReader implements ReportReader, ResourceReader {
 		try {
 			ZipEntry entry = zipStream.getNextEntry();
 			if (entry == null)
-				throw new LoadReportException(Messages.getString("RptReader.0")); //$NON-NLS-1$
+				throw new LoadReportException(Messages.getString("RptReader.0"));
 			while (entry != null) {
 				if (!entry.isDirectory()) {
 					ByteArrayOutputStream stream = new ByteArrayOutputStream();
@@ -91,7 +91,7 @@ public class RptReader implements ReportReader, ResourceReader {
 
 	public void load(Reader reader, ReportBook reportBook)
 			throws LoadReportException {
-		throw new LoadReportException(Messages.getString("RptReader.1")); //$NON-NLS-1$
+		throw new LoadReportException(Messages.getString("RptReader.1"));
 	}
 
 	public InputStream getResource(String id) {

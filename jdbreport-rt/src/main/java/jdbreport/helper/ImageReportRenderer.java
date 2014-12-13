@@ -37,7 +37,7 @@ import jdbreport.model.CellStyle;
 import jdbreport.model.ReportModel;
 
 /**
- * @version 1.2 02/13/09
+ * @version 3.0.13.12.2014
  * @author Andrey Kholmanskih
  * 
  */
@@ -72,25 +72,24 @@ public class ImageReportRenderer extends TextReportRenderer {
 		if (hasFocus) {
 			if (!isSelected && table.isCellEditable(row, column)) {
 				Color color;
-				color = UIManager.getColor("Table.focusCellForeground"); //$NON-NLS-1$
+				color = UIManager.getColor("Table.focusCellForeground");
 				if (color != null) {
 					super.setForeground(color);
 				}
-				color = UIManager.getColor("Table.focusCellBackground"); //$NON-NLS-1$
+				color = UIManager.getColor("Table.focusCellBackground");
 				if (color != null) {
 					super.setBackground(color);
 				}
 			}
 		}
 
-		setText(""); //$NON-NLS-1$
+		setText("");
 		StyledDocument doc = getStyledDocument();
 
 		if (value != null) {
 			doc.setParagraphAttributes(0, 0, style.getAttributeSet(), true);
 
-			prepareIcon(((JReportGrid) table).getReportModel(), row, column,
-					doc);
+			prepareIcon(((JReportGrid) table).getReportModel(), row, column);
 		}
 		return this;
 	}
@@ -105,8 +104,8 @@ public class ImageReportRenderer extends TextReportRenderer {
 		return 0;
 	}
 
-	protected void prepareIcon(ReportModel model, int row, int column,
-			StyledDocument doc) {
+	protected void prepareIcon(ReportModel model, int row, int column
+			) {
 		Icon icon = ((AbstractImageValue<?>) cell.getValue()).getIcon();
 		if (icon != null) {
 			if (cell.isScaleIcon() && icon instanceof ImageIcon) {

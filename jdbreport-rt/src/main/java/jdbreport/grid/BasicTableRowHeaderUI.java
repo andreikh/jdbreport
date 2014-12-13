@@ -43,7 +43,7 @@ import jdbreport.model.TableRow;
 import jdbreport.model.TableRowModel;
 
 /**
- * @version 1.2 02/08/09
+ * @version 3.0 13.12.2014
  * @author Andrey Kholmanskih
  * 
  */
@@ -382,7 +382,7 @@ public class BasicTableRowHeaderUI extends TableRowHeaderUI {
 		TableRow aRow;
 		Group group;
 		Group oldGroup = null;
-		int levelX = 0;
+		int levelX;
 		for (int row = rMin; row <= rMax; row++) {
 			aRow = rowModel.getRow(row);
 			group = rowModel.getGroup(row);
@@ -428,7 +428,6 @@ public class BasicTableRowHeaderUI extends TableRowHeaderUI {
 			group = rowModel.getGroup(draggedRowIndex);
 			if (group != null && group != oldGroup) {
 				levelX = group.getLevel() * RowHeader.LEVEL_WIDTH;
-				oldGroup = group;
 				draggedCellRect.x = x0 + levelX;
 				draggedCellRect.width = width0 - levelX;
 			}

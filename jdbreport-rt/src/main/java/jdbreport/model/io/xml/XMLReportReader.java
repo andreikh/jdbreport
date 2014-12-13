@@ -36,7 +36,7 @@ import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
 
 /**
- * @version 2.0 20.12.2009
+ * @version 3.0 13.12.2014
  * @author Andrey Kholmanskih
  * 
  */
@@ -68,11 +68,7 @@ public class XMLReportReader implements ReportReader {
 					reportBook, saxParser.getXMLReader());
 			reportBook.clear();
 			saxParser.parse(in, handler);
-		} catch (ParserConfigurationException e) {
-			throw new LoadReportException(e);
-		} catch (SAXException e) {
-			throw new LoadReportException(e);
-		} catch (IOException e) {
+		} catch (ParserConfigurationException | SAXException | IOException e) {
 			throw new LoadReportException(e);
 		}
 	}
@@ -87,11 +83,7 @@ public class XMLReportReader implements ReportReader {
 					reportBook, saxParser.getXMLReader());
 			reportBook.clear();
 			saxParser.parse(new InputSource(reader), handler);
-		} catch (ParserConfigurationException e) {
-			throw new LoadReportException(e);
-		} catch (SAXException e) {
-			throw new LoadReportException(e);
-		} catch (IOException e) {
+		} catch (ParserConfigurationException | SAXException | IOException e) {
 			throw new LoadReportException(e);
 		}
 	}

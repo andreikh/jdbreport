@@ -25,7 +25,7 @@ import java.awt.Font;
 
 
 /**
- * @version 1.2 02/08/09
+ * @version 3.0 13.12.2014
  * @author Andrey Kholmanskih
  *
  */
@@ -33,18 +33,6 @@ public interface Consts {
 	
 	public static Font defaultFont = new Font("Tahoma", Font.PLAIN, 12);
 	
-	public static Font headerFont = defaultFont;
-
-	public static Font labelFont = defaultFont;
-	
-	public static Font textFont = defaultFont;
-
 	public static Font statusFont = new Font("Tahoma", Font.PLAIN, 11);
 
-	public static Font buttonFont = defaultFont;
-	
-	public static Font menuFont = defaultFont;
-	
-	public static Font listFont = defaultFont;
-	
 }

@@ -50,12 +50,10 @@ import javax.swing.JComboBox;
 
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.geom.Line2D;
 
 /**
- * @version 2.0 03.05.2011
+ * @version 3.0 13.12.2014
  * @author Andrey Kholmanskih
  * 
  */
@@ -73,7 +71,7 @@ public class BorderDialog extends JDialog {
 
 	private JPanel bottomPanel;
 
-	private JComboBox widthBox = null;
+	private JComboBox<Border> widthBox = null;
 
 	private JColorBox colorBox = null;
 
@@ -144,8 +142,8 @@ public class BorderDialog extends JDialog {
 		boolean enabled = a == null || a.isEnabled();
 		String tooltip = a != null ? (String) a
 				.getValue(Action.SHORT_DESCRIPTION) : null;
-		JToggleButton b = new JToggleButton("", icon); //$NON-NLS-1$
-		b.putClientProperty("hideActionText", Boolean.TRUE); //$NON-NLS-1$
+		JToggleButton b = new JToggleButton("", icon);
+		b.putClientProperty("hideActionText", Boolean.TRUE);
 		b.setEnabled(enabled);
 		b.setToolTipText(tooltip);
 		b.setAction(a);
@@ -183,7 +181,7 @@ public class BorderDialog extends JDialog {
 	 */
 	private JComboBox getWidthBox() {
 		if (widthBox == null) {
-			widthBox = new JComboBox();
+			widthBox = new JComboBox<>();
 			widthBox.setToolTipText(Messages.getString("BorderDialog.3")); //$NON-NLS-1$
 			widthBox.addItem(new Border(Color.black, 0.5f));
 			widthBox.addItem(new Border(Color.black, 1.0f));
@@ -198,14 +196,8 @@ public class BorderDialog extends JDialog {
 			widthBox.setPreferredSize(boxSize);
 			widthBox.setSelectedIndex(0);
 			widthBox.setFont(getFont().deriveFont(Font.PLAIN, 11f));
-			widthBox.addActionListener(new ActionListener() {
-
-				public void actionPerformed(ActionEvent e) {
-					Border.defaultBorder = new Border(colorBox.getColor(),
-							getBorderWidth(),  getBorderStyle());
-				}
-
-			});
+			widthBox.addActionListener(e -> Border.defaultBorder = new Border(colorBox.getColor(),
+                    getBorderWidth(),  getBorderStyle()));
 
 			widthBox.setRenderer(new LineCellRenderer());
 
@@ -229,18 +221,12 @@ public class BorderDialog extends JDialog {
 		if (colorBox == null) {
 			colorBox = new JColorBox(false);
 			colorBox.setColor(Color.BLACK);
-			colorBox.setToolTipText(Messages.getString("BorderDialog.4")); //$NON-NLS-1$
-			colorBox.setFont(new Font("Dialog", Font.PLAIN, 8)); //$NON-NLS-1$
+			colorBox.setToolTipText(Messages.getString("BorderDialog.4"));
+			colorBox.setFont(new Font("Dialog", Font.PLAIN, 8));
 			colorBox.setMaximumSize(boxSize);
 			colorBox.setPreferredSize(boxSize);
-			colorBox.addActionListener(new ActionListener() {
-
-				public void actionPerformed(ActionEvent e) {
-					Border.defaultBorder = new Border(colorBox.getColor(),
-							getBorderWidth(), getBorderStyle());
-				}
-
-			});
+			colorBox.addActionListener(e -> Border.defaultBorder = new Border(colorBox.getColor(),
+                    getBorderWidth(), getBorderStyle()));
 		}
 		return colorBox;
 	}

@@ -27,8 +27,8 @@ public interface ResourceWriter {
 
 	/**
 	 * Write of resources
-	 * @param fileName
-	 * @param resource
+	 * @param fileName file name
+	 * @param resource resource object
 	 * @return the filename
 	 * @throws SaveReportException
 	 * @since 2.0

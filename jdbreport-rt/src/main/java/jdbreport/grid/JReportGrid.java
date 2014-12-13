@@ -94,7 +94,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
- * @version 3.0 12.12.2014
+ * @version 3.0 13.12.2014
  * 
  * @author Andrey Kholmanskih
  * 
@@ -105,7 +105,7 @@ public class JReportGrid extends JTable implements TableRowModelListener,
 
 	private static final long serialVersionUID = 1265975931384658496L;
 
-	private static final String uiClassID = "ReportUI"; //$NON-NLS-1$
+	private static final String uiClassID = "ReportUI";
 
 	static final int PAINT = 0;
 
@@ -114,7 +114,7 @@ public class JReportGrid extends JTable implements TableRowModelListener,
 	public static final int ROW_MARGIN = 2;
 
 	static {
-		UIManager.put(uiClassID, "jdbreport.grid.BasicReportUI"); //$NON-NLS-1$
+		UIManager.put(uiClassID, "jdbreport.grid.BasicReportUI");
 	}
 
 	private static final Logger logger = Logger.getLogger(JReportGrid.class
@@ -528,9 +528,7 @@ public class JReportGrid extends JTable implements TableRowModelListener,
 
 		if (getAutoscrolls()) {
 			Rectangle cellRect = getCellRect(rowIndex, columnIndex, false);
-			if (cellRect != null) {
-				scrollRectToVisible(cellRect);
-			}
+			scrollRectToVisible(cellRect);
 		}
 		fireCellSelectChanged(new CellSelectChangedEvent(this,
 				rsm.getMinSelectionIndex(), csm.getMinSelectionIndex()));
@@ -1659,10 +1657,8 @@ public class JReportGrid extends JTable implements TableRowModelListener,
 				String data = new String(
 						(byte[]) clip.getData(dataFlavors[reportFlavorIndex]),
 						"UTF-8");
-				if (data != null) {
 					paste(data, getSelectedRow(), getSelectedColumn());
 					repaint();
-				}
 				return;
 			}
 			if (xmlIndex >= 0) {
@@ -1796,11 +1792,8 @@ public class JReportGrid extends JTable implements TableRowModelListener,
 			try {
 				if (format.equals("svg") && enableSvg) {
 					SVGImage image = ((SVGValue) cell.getValue()).getValue();
-					PrintWriter pw = new PrintWriter(selectedFile);
-					try {
+					try (PrintWriter pw = new PrintWriter(selectedFile)) {
 						pw.write(image.getXML());
-					} finally {
-						pw.close();
 					}
 				} else {
 					RenderedImage image;
@@ -2217,7 +2210,7 @@ public class JReportGrid extends JTable implements TableRowModelListener,
 					.getStyleId());
 			setCellStyle(style);
 
-			rowMargin = ((JReportGrid) table).getRowMargin();
+			rowMargin = table.getRowMargin();
 
 			if (isSelected && !((JReportGrid) table).isPrintState()) {
 				String lf = UIManager.getLookAndFeel().getName();
@@ -2660,10 +2653,10 @@ public class JReportGrid extends JTable implements TableRowModelListener,
 	protected void createDefaultEditors() {
 		defaultEditorsByColumnClass = new UIDefaults();
 
-		setLazyEditor(Object.class, "jdbreport.grid.JReportGrid$StyledEditor"); //$NON-NLS-1$
+		setLazyEditor(Object.class, "jdbreport.grid.JReportGrid$StyledEditor");
 
 		// Booleans
-		setLazyEditor(Boolean.class, "javax.swing.JTable$BooleanEditor"); //$NON-NLS-1$
+		setLazyEditor(Boolean.class, "javax.swing.JTable$BooleanEditor");
 
 		for (Class<?> c : ReportCell.defaultValuesByClass.keySet()) {
 			CellValueInfo vi = ReportCell.defaultValuesByClass.get(c);

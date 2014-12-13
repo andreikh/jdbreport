@@ -31,7 +31,7 @@ import jdbreport.model.ReportModel;
 import org.xml.sax.Attributes;
 
 /**
- * @version 1.1 03/09/08
+ * @version 3.0 13.12.2014
  * @author Andrey Kholmanskih
  * 
  */
@@ -56,7 +56,7 @@ public class DataPacketParser extends DefaultReportParser {
 	public DataPacketParser(DefaultReaderHandler reportHandler) {
 		super(reportHandler);
 		this.reportModel = getReportModel();
-		fields = new ArrayList<Field>();
+		fields = new ArrayList<>();
 		createStyles();
 	}
 
@@ -151,12 +151,10 @@ public class DataPacketParser extends DefaultReportParser {
 					cell.setStyleId(headerStyle);
 				}
 				inMetadata = false;
-				return;
 			}
 		} else if (inRowdata) {
 			if (name.equals(DataPacketParser.ROWDATA)) {
 				inRowdata = false;
-				return;
 			}
 		}
 	}

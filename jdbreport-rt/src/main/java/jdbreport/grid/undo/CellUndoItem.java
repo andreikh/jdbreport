@@ -27,7 +27,7 @@ import jdbreport.view.model.JReportModel;
 import jdbreport.model.ReportModel;
 
 /**
- * @version 1.1 03/09/08
+ * @version 3.0 13.12.2014
  * @author Andrey Kholmanskih
  * 
  */
@@ -41,7 +41,7 @@ public class CellUndoItem extends AbstractGridUndo {
 	}
 
 	private void fillCellList(ReportModel model) {
-		list = new ArrayList<CellWrap>();
+		list = new ArrayList<>();
 		if (selectedRect != null)
 			for (int row = selectedRect.getTopRow(); row <= selectedRect
 					.getBottomRow(); row++) {

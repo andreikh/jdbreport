@@ -33,9 +33,11 @@ import java.io.*;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.Set;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
- * @version 1.0 06/24/06
+ * @version 3.0 13.1.2014
  * @author Andrey Kholmanskih
  * 
  */
@@ -43,8 +45,11 @@ public class XMLProperties implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
+	private static final Logger log = Logger.getLogger(XMLProperties.class
+			.getName());
+
 	public XMLProperties() {
-		fHashMap = new HashMap<String, Object>();
+		fHashMap = new HashMap<>();
 	}
 
 	public XMLProperties(String fileName) throws Exception {
@@ -90,9 +95,7 @@ public class XMLProperties implements Serializable {
 
 	public long getLong(String key, long deflt) {
 		Object obj = fHashMap.get(key);
-		if (obj == null) {
-			return deflt;
-		}
+		if (obj == null) return deflt;
 		if (obj instanceof Long)
 			return (Long) obj;
 		return Long.parseLong((String) obj);
@@ -117,7 +120,7 @@ public class XMLProperties implements Serializable {
 		Object obj = fHashMap.get(key);
 		if (obj != null) {
 			if (obj instanceof Character)
-				return ((Character) obj).charValue();
+				return (Character) obj;
 			else if (((String) obj).length() > 0)
 				return ((String) obj).charAt(0);
 		}
@@ -152,23 +155,23 @@ public class XMLProperties implements Serializable {
 	}
 
 	public void put(String key, long data) {
-		fHashMap.put(key, new Long(data));
+		fHashMap.put(key, data);
 	}
 
 	public void put(String key, double data) {
-		fHashMap.put(key, new Double(data));
+		fHashMap.put(key, data);
 	}
 
 	public void put(String key, int data) {
-		fHashMap.put(key, new Integer(data));
+		fHashMap.put(key, data);
 	}
 
 	public void put(String key, char data) {
-		fHashMap.put(key, new Character(data));
+		fHashMap.put(key, data);
 	}
 
 	public void put(String key, boolean data) {
-		fHashMap.put(key, new Boolean(data));
+		fHashMap.put(key, data);
 	}
 
 	public void save() {
@@ -176,18 +179,15 @@ public class XMLProperties implements Serializable {
 			Document doc = saveProperties();
 			DOMSource source = new DOMSource(doc);
 			File newXML = new File(fileName);
-			FileOutputStream os = new FileOutputStream(newXML);
-			try {
+			try (FileOutputStream os = new FileOutputStream(newXML)) {
 				StreamResult result = new StreamResult(os);
 				TransformerFactory transFactory = TransformerFactory
 						.newInstance();
 				Transformer transformer = transFactory.newTransformer();
 				transformer.transform(source, result);
-			} finally {
-				os.close();
 			}
 		} catch (Exception e) {
-			System.err.println(e.getMessage());
+			log.log(Level.SEVERE, e.getMessage());
 		}
 	}
 
@@ -208,7 +208,7 @@ public class XMLProperties implements Serializable {
 	}
 
 	/**
-	 * @return
+	 * @return Document
 	 * @throws javax.xml.parsers.ParserConfigurationException
 	 */
 	private Document saveProperties() throws ParserConfigurationException {
@@ -247,11 +247,8 @@ public class XMLProperties implements Serializable {
 			throws Exception {
 		fileName = filename;
 		boolean result;
-		FileInputStream in = new FileInputStream(new File(filename));
-		try {
+		try (FileInputStream in = new FileInputStream(new File(filename))) {
 			result = load(in, classFactory);
-		} finally {
-			in.close();
 		}
 		return result;
 	}
@@ -290,9 +287,7 @@ public class XMLProperties implements Serializable {
 		DocumentBuilder builder = DocumentBuilderFactory.newInstance()
 				.newDocumentBuilder();
 		Document doc = builder.parse(new InputSource(new StringReader(xml)));
-		if (doc == null)
-			return false;
-		return fillProperties(doc, classFactory);
+		return doc != null && fillProperties(doc, classFactory);
 	}
 
 	public boolean loadXML(InputStream stream) throws Exception {
@@ -305,9 +300,7 @@ public class XMLProperties implements Serializable {
 		DocumentBuilder builder = DocumentBuilderFactory.newInstance()
 				.newDocumentBuilder();
 		Document doc = builder.parse(new InputSource(stream));
-		if (doc == null)
-			return false;
-		return fillProperties(doc, classFactory);
+		return doc != null && fillProperties(doc, classFactory);
 	}
 
 	private boolean fillProperties(Document doc, ClassFactory factory) {
@@ -323,9 +316,9 @@ public class XMLProperties implements Serializable {
 						if (attributes != null) {
 							Node n = attributes.getNamedItem("key");
 							Node c = attributes.getNamedItem("class");
-							if (c != null && c.getNodeValue() != "") {
+							if (c != null &&  !"".equals(c.getNodeValue())) {
 								try {
-									Object o = null;
+									Object o;
 									if (factory == null)
 										o = Class.forName(c.getNodeValue())
 												.newInstance();
@@ -373,7 +366,7 @@ public class XMLProperties implements Serializable {
 	}
 
 	public void ShowError(Exception e) {
-		System.err.println(e);
+		log.log(Level.SEVERE, e.getMessage(), e);
 	}
 
 	private static class StoredStrings implements XMLStored {
@@ -394,12 +387,12 @@ public class XMLProperties implements Serializable {
 		public void store(Element parent) {
 			if (values == null)
 				return;
-			for (int i = 0; i < values.length; i++) {
-				if (values[i] != null) {
+			for (String value : values) {
+				if (value != null) {
 					Element child = parent.getOwnerDocument().createElement(
 							STRING);
 					child.appendChild(parent.getOwnerDocument().createTextNode(
-							values[i]));
+							value));
 					parent.appendChild(child);
 				}
 			}

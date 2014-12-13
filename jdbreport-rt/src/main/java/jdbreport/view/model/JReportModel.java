@@ -41,7 +41,7 @@ import java.util.NoSuchElementException;
  */
 public class JReportModel extends AbstractTableModel implements ReportModel {
 
-	public static final String VERSION = "3.0";
+	public static final String VERSION = "3.1";
 
 	private static final long serialVersionUID = -2926872019856806971L;
 

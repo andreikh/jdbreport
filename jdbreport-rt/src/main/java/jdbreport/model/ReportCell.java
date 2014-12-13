@@ -29,7 +29,7 @@ import javax.swing.Icon;
 import javax.swing.ImageIcon;
 
 /**
- * @version 2.2 13.04.2013
+ * @version 3.0 13.12.2014
  * 
  * @author Andrey Kholmanskih
  * 
@@ -38,7 +38,7 @@ public class ReportCell implements Cell {
 
 	private static final long serialVersionUID = -8821568917060765855L;
 
-	public static HashMap<Class<?>, CellValueInfo> defaultValuesByClass = new HashMap<Class<?>, CellValueInfo>();
+	public static HashMap<Class<?>, CellValueInfo> defaultValuesByClass = new HashMap<>();
 
 	private Object value;
 
@@ -68,19 +68,8 @@ public class ReportCell implements Cell {
 	public ReportCell() {
 	}
 
-	public ReportCell(Object value) {
-		this();
-		this.value = value;
-		styleIndex = null;
-	}
-
 	/**
 	 * Adds or removes default cell values
-	 * 
-	 * @param valueClass
-	 * @param cellValueClass
-	 * @param editorClass
-	 * @param rendererClass
 	 */
 	public static void setDefaultCellValueClass(Class<?> valueClass,
 			Class<?> cellValueClass, String rendererClass, String editorClass) {
@@ -118,9 +107,7 @@ public class ReportCell implements Cell {
 								.newInstance();
 						cellValue.setValue(value);
 						value = cellValue;
-					} catch (InstantiationException e) {
-						e.printStackTrace();
-					} catch (IllegalAccessException e) {
+					} catch (InstantiationException | IllegalAccessException e) {
 						e.printStackTrace();
 					}
 				} else {
@@ -303,7 +290,7 @@ public class ReportCell implements Cell {
 	 */
 	public Icon getIcon() {
 		if (owner != null) {
-			return owner.getIcon();
+			return owner.getPicture() != null ? owner.getPicture().getIcon() : null;
 		}
 		return picture != null ? picture.getIcon() : null;
 	}

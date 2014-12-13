@@ -44,7 +44,7 @@ import jdbreport.view.model.JReportModel;
 import jdbreport.util.Utils;
 
 /**
- * @version 3.0 12.12.2014
+ * @version 3.0 13.12.2014
  * @author Andrey Kholmanskih
  * 
  */
@@ -127,12 +127,8 @@ final class AboutDlg extends JDialog {
 	private JButton getJButton() {
 		if (jButton == null) {
 			jButton = new JButton();
-			jButton.setText("OK"); //$NON-NLS-1$
-			jButton.addActionListener(new java.awt.event.ActionListener() {
-				public void actionPerformed(java.awt.event.ActionEvent e) {
-					setVisible(false);
-				}
-			});
+			jButton.setText("OK");
+			jButton.addActionListener(e -> setVisible(false));
 		}
 		return jButton;
 	}

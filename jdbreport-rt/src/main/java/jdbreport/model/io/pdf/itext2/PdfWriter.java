@@ -60,7 +60,7 @@ import jdbreport.util.GraphicUtil;
 /**
  * @author Andrey Kholmanskih
  * 
- * @version 2.1 03.07.2012
+ * @version 3.0 13.12.2014
  * 
  */
 public class PdfWriter extends ITextWriter {
@@ -74,7 +74,7 @@ public class PdfWriter extends ITextWriter {
 			GraphicUtil.setScaleX(1);
 			GraphicUtil.setScaleY(1);
 
-			ReportPage pageFormat = null;
+			ReportPage pageFormat;
 			int i = 0;
 			while (i < reportBook.size() - 1 && !reportBook.getReportModel(i).isVisible()) {
 				i++;
@@ -121,7 +121,7 @@ public class PdfWriter extends ITextWriter {
 	}
 
 	private int saveSheet(Document document, int listCount, ReportModel model)
-			throws DocumentException, BadElementException, IOException,
+			throws DocumentException, IOException,
 			SaveReportException {
 
 		model.updatePages(0);
@@ -154,10 +154,10 @@ public class PdfWriter extends ITextWriter {
 		int pageCount = printable.calcCountPage(model.getReportPage());
 		Map<Integer, PageClip> clips = printable.getPageClips();
 		
-		int leftCol = 0;
-		int topRow = 0;
-		int rightCol = 0;
-		int bottomRow = 0;
+		int leftCol;
+		int topRow;
+		int rightCol;
+		int bottomRow;
 		
 		for (int pageIndex = 0; pageIndex < pageCount; pageIndex++) { 
 			PageClip pageClip = clips.get(pageIndex);
@@ -326,9 +326,7 @@ public class PdfWriter extends ITextWriter {
 				} else {
 					p = new Paragraph(text);
 				}
-				if (p != null) {
-					pdfCell.setPhrase(p);
-				}
+				pdfCell.setPhrase(p);
 				pdfCell.setPadding(1);
 				pdfCell.setLeading(0f, 1.1f);
 			} else {
@@ -413,7 +411,7 @@ public class PdfWriter extends ITextWriter {
 					if (newStyle.getTypeOffset() == CellStyle.SS_SUPER
 							|| newStyle.getTypeOffset() == CellStyle.SS_SUB) {
 						newStyle = newStyle
-								.deriveFont((float) ((float) newStyle.getSize() / 2));
+								.deriveFont((float) newStyle.getSize() / 2);
 					}
 					int i = textStyles.indexOf(newStyle);
 					if (i < 0) {

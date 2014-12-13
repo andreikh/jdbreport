@@ -72,7 +72,7 @@ public class TableRowModelEvent extends java.util.EventObject {
 	 *            an int specifying the first row in a range of affected rows
 	 * @param to
 	 *            an int specifying the last row in a range of affected rows
-	 * @param draging
+	 * @param draging draging flag
 	 * 
 	 */
 	public TableRowModelEvent(TableRowModel source, int from, int to,

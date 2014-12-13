@@ -32,9 +32,9 @@ class ColumnStyle extends CommonStyle {
 	 * 
 	 * @param width
 	 *            width of column in 1/72 of an inch
-	 * @param brk
-	 * @param after
-	 * @param optimalWidth
+	 * @param brk break type
+	 * @param after break_after
+	 * @param optimalWidth optimal width flag
 	 */
 	public ColumnStyle(double width, Break brk, boolean after,
 			boolean optimalWidth) {

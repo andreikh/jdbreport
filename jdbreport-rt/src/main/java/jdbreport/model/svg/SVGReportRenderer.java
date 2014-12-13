@@ -53,7 +53,7 @@ import jdbreport.model.ReportModel;
 import jdbreport.util.GraphicUtil;
 
 /**
- * @version 1.0 28.02.2010
+ * @version 3.0 13.12.2014
  * @author Andrey Kholmanskih
  * 
  */
@@ -171,56 +171,54 @@ public class SVGReportRenderer extends JComponent implements ReportCellRenderer 
 			setSize(getHeight(), getWidth());
 		}
 		Rectangle r = getTextRect();
-		if (r != null) {
-			setSize(r.width + r.x + rowMargin, r.height + r.y + rowMargin);
-			int x = 0;
-			int y = 0;
-			Point2D[] points = new Point2D[3];
-			points[0] = Utils.rotatePoint(x, y, x + getWidth(), y, Math
-					.toRadians(a));
-			points[1] = Utils.rotatePoint(x, y, x + getWidth(), y
-					+ getHeight(), Math.toRadians(a));
-			points[2] = Utils.rotatePoint(x, y, x, y + getHeight(), Math
-					.toRadians(a));
-			int miny = getHeight();
-			int maxy = -miny;
-			int minx = getWidth();
-			int maxx = -minx;
-			for (Point2D p : points) {
-				miny = (int) Math.min(miny, p.getY());
-				maxy = (int) Math.max(maxy, p.getY());
-				minx = (int) Math.min(minx, p.getX());
-				maxx = (int) Math.max(maxx, p.getX());
-			}
-			int x_ = 0;
-			int y_ = 0;
+		setSize(r.width + r.x + rowMargin, r.height + r.y + rowMargin);
+		int x = 0;
+		int y = 0;
+		Point2D[] points = new Point2D[3];
+		points[0] = Utils.rotatePoint(x, y, x + getWidth(), y, Math
+                .toRadians(a));
+		points[1] = Utils.rotatePoint(x, y, x + getWidth(), y
+                + getHeight(), Math.toRadians(a));
+		points[2] = Utils.rotatePoint(x, y, x, y + getHeight(), Math
+                .toRadians(a));
+		int miny = getHeight();
+		int maxy = -miny;
+		int minx = getWidth();
+		int maxx = -minx;
+		for (Point2D p : points) {
+            miny = (int) Math.min(miny, p.getY());
+            maxy = (int) Math.max(maxy, p.getY());
+            minx = (int) Math.min(minx, p.getX());
+            maxx = (int) Math.max(maxx, p.getX());
+        }
+		int x_;
+		int y_;
 
-			switch (verticalAlignment) {
-			case CellStyle.TOP:
-				y_ = -miny - rowMargin;
-				break;
-			case CellStyle.CENTER:
-				y_ = cellHeight / 2 - maxy + (maxy - miny) / 2;
-				break;
-			default:// BOTTOM
-				y_ = cellHeight - maxy;
-			}
+		switch (verticalAlignment) {
+        case CellStyle.TOP:
+            y_ = -miny - rowMargin;
+            break;
+        case CellStyle.CENTER:
+            y_ = cellHeight / 2 - maxy + (maxy - miny) / 2;
+            break;
+        default:// BOTTOM
+            y_ = cellHeight - maxy;
+        }
 
-			switch (horizontalAlignment) {
-			case CellStyle.LEFT:
-			case CellStyle.JUSTIFY:
-				x_ = -minx - rowMargin;
-				break;
-			case CellStyle.CENTER:
-				x_ = cellWidth / 2 - maxx + (maxx - minx) / 2;
-				break;
-			default:// RIGHT
-				x_ = cellWidth - maxx;
-			}
+		switch (horizontalAlignment) {
+        case CellStyle.LEFT:
+        case CellStyle.JUSTIFY:
+            x_ = -minx - rowMargin;
+            break;
+        case CellStyle.CENTER:
+            x_ = cellWidth / 2 - maxx + (maxx - minx) / 2;
+            break;
+        default:// RIGHT
+            x_ = cellWidth - maxx;
+        }
 
-			g2.translate(x_, y_);
-			g2.rotate(Math.toRadians(a), x, y);
-		}
+		g2.translate(x_, y_);
+		g2.rotate(Math.toRadians(a), x, y);
 	}
 
 	private Rectangle getTextRect() {
@@ -239,7 +237,6 @@ public class SVGReportRenderer extends JComponent implements ReportCellRenderer 
 			} else {
 				paintImage(g2, img);
 			}
-			return;
 		}
 	}
 

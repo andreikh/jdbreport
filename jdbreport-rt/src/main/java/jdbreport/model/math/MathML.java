@@ -33,7 +33,7 @@ import jdbreport.model.CellStyle;
 /**
  * @author Andrey Kholmanskih
  *
- * @version	1.0 05.05.2011
+ * @version	3.0 13.12.2014
  */
 public class MathML {
 
@@ -49,9 +49,9 @@ public class MathML {
 
 	public MathML(Reader reader) throws IOException {
 		try {
-			StringBuffer sb = new StringBuffer();
+			StringBuilder sb = new StringBuilder();
 			char[] buf = new char[1024 * 32];
-			int l = 0;
+			int l;
 			do {
 				l = reader.read(buf);
 				if (l > 0) {

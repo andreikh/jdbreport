@@ -21,11 +21,11 @@ import java.awt.*;
 import java.awt.geom.Rectangle2D;
 
 /**
- * @version 1.0 06/24/06
+ * @version 3.0 13.12.2014
  * @author Andrey Kholmanskih
  * 
  */
-public class JColorBox extends JComboBox {
+public class JColorBox extends JComboBox<JColorBox.NamedColor> {
 
 	private static final long serialVersionUID = 1L;
 	private boolean showText;
@@ -38,8 +38,7 @@ public class JColorBox extends JComboBox {
 		super();
 		this.showText = showText;
 		NamedColor[] colors = getColorItems();
-		for (int i = 0; i < colors.length; i++)
-			this.addItem(colors[i]);
+		for (NamedColor color : colors) this.addItem(color);
 		this.setRenderer(new ColorCellRenderer(showText));
 		setSelectedIndex(0);
 	}

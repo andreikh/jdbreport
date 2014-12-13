@@ -33,7 +33,7 @@ import java.io.IOException;
 import java.net.URL;
 
 /**
- * @version 1.1 03/09/08
+ * @version 3.0 13.12.2014
  * @author Andrey Kholmanskih
  * 
  */
@@ -41,15 +41,15 @@ public class HelpPane extends JPanel {
 
 	private static final long serialVersionUID = 1L;
 
-	static final String WINDOW_STATE = "help_window_state"; //$NON-NLS-1$
+	static final String WINDOW_STATE = "help_window_state";
 
-	static final String POS_X = "help_pos_x"; //$NON-NLS-1$
+	static final String POS_X = "help_pos_x";
 
-	static final String POS_Y = "help_pos_y"; //$NON-NLS-1$
+	static final String POS_Y = "help_pos_y";
 
-	static final String SIZE_WIDTH = "help_size_width"; //$NON-NLS-1$
+	static final String SIZE_WIDTH = "help_size_width";
 
-	static final String SIZE_HEIGHT = "help_size_height"; //$NON-NLS-1$
+	static final String SIZE_HEIGHT = "help_size_height";
 
 	private JScrollPane scrollPane;
 	private JEditorPane editorPane;
@@ -75,11 +75,6 @@ public class HelpPane extends JPanel {
 		}
 	}
 
-	/**
-	 * This method initializes this
-	 * 
-	 * @return void
-	 */
 	private void initialize() {
 		this.setSize(300, 200);
 		this.setLayout(new BorderLayout());
@@ -140,23 +135,20 @@ public class HelpPane extends JPanel {
 
 	public HyperlinkListener createHyperLinkListener() {
 
-		return new HyperlinkListener() {
-			public void hyperlinkUpdate(HyperlinkEvent e) {
-				if (e.getEventType() == HyperlinkEvent.EventType.ACTIVATED) {
-					if (e instanceof HTMLFrameHyperlinkEvent) {
-						((HTMLDocument) editorPane.getDocument())
-								.processHTMLFrameHyperlinkEvent((HTMLFrameHyperlinkEvent) e);
-					} else {
-						try {
-							editorPane.setPage(e.getURL());
-						} catch (IOException ioe) {
-							Utils.showError("IOE: " + ioe); //$NON-NLS-1$
-						}
-					}
-				}
-			}
-
-		};
+		return e -> {
+            if (e.getEventType() == HyperlinkEvent.EventType.ACTIVATED) {
+                if (e instanceof HTMLFrameHyperlinkEvent) {
+                    ((HTMLDocument) editorPane.getDocument())
+                            .processHTMLFrameHyperlinkEvent((HTMLFrameHyperlinkEvent) e);
+                } else {
+                    try {
+                        editorPane.setPage(e.getURL());
+                    } catch (IOException ioe) {
+                        Utils.showError("IOE: " + ioe);
+                    }
+                }
+            }
+        };
 	}
 
 }

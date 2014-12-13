@@ -26,7 +26,7 @@ import java.util.Iterator;
 import java.util.List;
 
 /**
- * @version 2.0 26.07.2011
+ * @version 3.0 13.12.2014
  * @author Andrey Kholmanskih
  * 
  */
@@ -80,7 +80,7 @@ public abstract class RootGroup extends TreeRowGroup {
 	public abstract DetailGroup createDetailGroup();
 
 	public List<DetailGroup> getDetailGroups() {
-		List<DetailGroup> list = new ArrayList<DetailGroup>();
+		List<DetailGroup> list = new ArrayList<>();
 		for (int i = 0; i < getChildCount() - 1; i++) {
 			if (getChild(i).getType() == Group.GROUP_DETAIL) {
 				list.add((DetailGroup) getChild(i));
@@ -95,7 +95,7 @@ public abstract class RootGroup extends TreeRowGroup {
 	 * @since 1.4
 	 */
 	public List<Group> getBodyGroups() {
-		List<Group> list = new ArrayList<Group>();
+		List<Group> list = new ArrayList<>();
 		for (int i = 0; i < getChildCount() - 1; i++) {
 			int type = getChild(i).getType();
 			if (type == Group.GROUP_DETAIL || type == Group.ROW_NONE) {

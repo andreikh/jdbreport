@@ -26,7 +26,7 @@ import java.util.NoSuchElementException;
 import jdbreport.design.model.CellObject;
 
 /**
- * @version 1.1 03/09/08
+ * @version 3.0 13.12.2014
  * 
  * @author Andrey Kholmanskih
  * 
@@ -43,7 +43,7 @@ public class BaseRowGroup extends AbstractGroup implements RowsGroup {
 
 	protected List<TableRow> getChildList() {
 		if (childList == null) {
-			childList = new ArrayList<TableRow>();
+			childList = new ArrayList<>();
 		}
 		return childList;
 	}
@@ -126,15 +126,14 @@ public class BaseRowGroup extends AbstractGroup implements RowsGroup {
 
 	public int getHeight() {
 		int result = 0;
-		Iterator<TableRow> it = iterator();
-		while (it.hasNext()) {
-			result += it.next().getHeight();
+		for (TableRow cells : this) {
+			result += cells.getHeight();
 		}
 		return result;
 	}
 
 	protected TableRow getRow(int row) {
-		return (TableRow) getChild(row);
+		return getChild(row);
 	}
 
 	public void updateCellChild(int row, int column) {
@@ -192,7 +191,7 @@ public class BaseRowGroup extends AbstractGroup implements RowsGroup {
 					String text = row.getCellItem(column).getText();
 					if (text != null && text.length() > 0)
 						result += Double.parseDouble(text);
-				} catch (NumberFormatException e) {
+				} catch (NumberFormatException ignored) {
 				}
 			}
 			break;
@@ -204,7 +203,7 @@ public class BaseRowGroup extends AbstractGroup implements RowsGroup {
 					String text = row.getCellItem(column).getText();
 					if (text != null && text.length() > 0)
 						result = Math.max(Double.parseDouble(text), result);
-				} catch (NumberFormatException e) {
+				} catch (NumberFormatException ignored) {
 				}
 			}
 			break;
@@ -216,7 +215,7 @@ public class BaseRowGroup extends AbstractGroup implements RowsGroup {
 					String text = row.getCellItem(column).getText();
 					if (text != null && text.length() > 0)
 						result = Math.min(Double.parseDouble(text), result);
-				} catch (NumberFormatException e) {
+				} catch (NumberFormatException ignored) {
 				}
 			}
 			break;

@@ -25,7 +25,7 @@ import javax.swing.event.TableColumnModelListener;
 import javax.swing.table.*;
 
 /**
- * @version 1.1 03/09/08
+ * @version 3.0 13.12.2014
  * 
  * @author Andrey Kholmanskih
  * 
@@ -59,7 +59,7 @@ public class ReportColumnModel extends DefaultTableColumnModel {
 				columnIndex, newIndex);
 		fireColumnMoving(event);
 
-		aColumn = (TableColumn) tableColumns.elementAt(columnIndex);
+		aColumn = tableColumns.elementAt(columnIndex);
 
 		tableColumns.removeElementAt(columnIndex);
 		boolean selected = selectionModel.isSelectedIndex(columnIndex);
@@ -68,7 +68,7 @@ public class ReportColumnModel extends DefaultTableColumnModel {
 		tableColumns.insertElementAt(aColumn, newIndex);
 		aColumn.setModelIndex(newIndex);
 
-		((TableColumn) tableColumns.elementAt(columnIndex))
+		tableColumns.elementAt(columnIndex)
 				.setModelIndex(columnIndex);
 		selectionModel.insertIndexInterval(newIndex, 1, true);
 		if (selected) {
@@ -104,7 +104,7 @@ public class ReportColumnModel extends DefaultTableColumnModel {
 	/**
 	 * Runs before column moved
 	 * 
-	 * @param e
+	 * @param e TableColumnModelEvent
 	 */
 	protected void fireColumnMoving(TableColumnModelEvent e) {
 		Object[] listeners = listenerList.getListenerList();

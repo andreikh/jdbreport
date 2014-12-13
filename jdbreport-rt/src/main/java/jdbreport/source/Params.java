@@ -21,7 +21,7 @@ package jdbreport.source;
 import java.util.ArrayList;
 
 /**
- * @version 1.1 03/09/08
+ * @version 3.0 13.12.2014
  * @author Andrey Kholmanskih
  * 
  */
@@ -80,7 +80,7 @@ public class Params extends ArrayList<Object> implements DataSetParams {
 	public String prepareParams(String asql) {
 		int i = 1, l;
 		char quote = '\0';
-		StringBuffer sql = new StringBuffer(asql);
+		StringBuilder sql = new StringBuilder(asql);
 		clear();
 		while (i < sql.length()) {
 			if (sql.charAt(i) == '\"' || sql.charAt(i) == '\'') {

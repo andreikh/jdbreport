@@ -29,7 +29,7 @@ import jdbreport.model.ReportException;
 import jdbreport.util.Utils;
 
 /**
- * @version 3.0 12.12.2014
+ * @version 3.0 13.12.2014
  * @author Andrey Kholmanskih
  * 
  */
@@ -252,8 +252,7 @@ public class BufferedDataSet implements MasterDataSet, DataSetListener {
 				Object dsValue = masterDS.getValue(name);
 				if (paramValue == null && dsValue == null)
 					continue;
-				boolean change = (paramValue == null) ? !dsValue
-						.equals(null) : !paramValue.equals(dsValue);
+				boolean change = paramValue != null && paramValue.equals(dsValue);
 				if (change) {
 					result = true;
 					linkedParams.put(name, dsValue);

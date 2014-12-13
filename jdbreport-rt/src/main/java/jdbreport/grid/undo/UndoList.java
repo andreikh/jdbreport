@@ -21,11 +21,10 @@
 
 package jdbreport.grid.undo;
 
-import java.util.Iterator;
 import java.util.LinkedList;
 
 /**
- * @version 1.1 03/09/08
+ * @version 3.0 13.12.2014
  * @author Andrey Kholmanskih
  *
  */
@@ -35,9 +34,8 @@ public class UndoList extends LinkedList<UndoItem> {
 	
 	@Override
 	public void clear() {
-		Iterator<UndoItem> it = iterator();
-		while (it.hasNext()) {
-			it.next().clear();
+		for (UndoItem undoItem : this) {
+			undoItem.clear();
 		}
 		super.clear();
 	}

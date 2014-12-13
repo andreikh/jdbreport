@@ -32,18 +32,18 @@ import com.lowagie.text.pdf.DefaultFontMapper;
 /**
  * @author Andrey Kholmanskih
  * 
- * @version 2.0 19.04.2011
+ * @version 3.0 13.12.2014
  * 
  */
 public class ReportFontMapper extends DefaultFontMapper {
 
-	private static java.util.List<String> fontPathList = new ArrayList<String>();
+	private static java.util.List<String> fontPathList = new ArrayList<>();
 	private static String defaultFont;
 	private static String systemFontPath;
 	
 	public static void addFontPath(String path) {
 		path = path.trim();
-		if (fontPathList.indexOf(path) < 0 && path != null && path.length() > 0) {
+		if (fontPathList.indexOf(path) < 0 && path.length() > 0) {
 			fontPathList.add(path);
 		}
 	}
@@ -51,9 +51,7 @@ public class ReportFontMapper extends DefaultFontMapper {
 	public static void setFontPaths(Collection<String> fontPaths) {
 		fontPathList.clear();
 		if (fontPaths != null) {
-			for (String path : fontPaths) {
-				addFontPath(path);
-			}
+			fontPaths.forEach(jdbreport.model.io.pdf.itext2.ReportFontMapper::addFontPath);
 		}
 	}
 
@@ -130,9 +128,7 @@ public class ReportFontMapper extends DefaultFontMapper {
 				return BaseFont.createFont(p.fontName, BaseFont.IDENTITY_H,
 						p.embedded, p.cached, p.ttfAfm, p.pfb);
 			}
-		} catch (DocumentException e) {
-			throw new ExceptionConverter(e);
-		} catch (IOException e) {
+		} catch (DocumentException | IOException e) {
 			throw new ExceptionConverter(e);
 		}
 		return null;
@@ -161,8 +157,8 @@ public class ReportFontMapper extends DefaultFontMapper {
 		if (files == null)
 			return 0;
 		int count = 0;
-		for (int k = 0; k < files.length; ++k) {
-			file = files[k];
+		for (File file1 : files) {
+			file = file1;
 			if (file.isDirectory()) {
 				count += insertDirectory(file.getPath());
 			} else {
@@ -185,9 +181,7 @@ public class ReportFontMapper extends DefaultFontMapper {
 						}
 						++count;
 					}
-				}
-
-				catch (Exception e) {
+				} catch (Exception ignored) {
 				}
 			}
 		}

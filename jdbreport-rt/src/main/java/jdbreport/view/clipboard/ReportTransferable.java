@@ -34,13 +34,13 @@ import java.util.List;
 import javax.imageio.ImageIO;
 
 /**
- * @version 2.0 01.06.2010
+ * @version 3.0 13.12.2014
  * @author Andrey Kholmanskih
  * 
  */
 public class ReportTransferable implements Transferable, ClipboardOwner {
 
-	public static final String FLAVOR_MIME_TYPE = "application/x-java-serialized-object; class=\"[B\"";//"text/xml; class=java.lang.String; charset=Unicode";
+	public static final String FLAVOR_MIME_TYPE = "application/x-java-serialized-object; class=\"[B\"";
 	public static final String FLAVOR_XML_MIME_TYPE = "text/xml; class=java.lang.String; charset=Unicode";
 	public static final String FLAVOR_XML_BYTE_MIME_TYPE = "text/xml; class=\"[B\"; charset=UTF-8";
 
@@ -54,8 +54,8 @@ public class ReportTransferable implements Transferable, ClipboardOwner {
 
 	public ReportTransferable() {
 		super();
-		dataFlavor = new ArrayList<DataFlavor>();
-		copyData = new ArrayList<Object>();
+		dataFlavor = new ArrayList<>();
+		copyData = new ArrayList<>();
 	}
 
 	public DataFlavor[] getTransferDataFlavors() {
@@ -80,9 +80,8 @@ public class ReportTransferable implements Transferable, ClipboardOwner {
 				ByteArrayOutputStream pipeOut = new ByteArrayOutputStream();
 				ImageIO.write((RenderedImage) copyData.get(i), flavor
 						.getSubType(), pipeOut);
-				ByteArrayInputStream pipeIn = new ByteArrayInputStream(pipeOut
+				return new ByteArrayInputStream(pipeOut
 						.toByteArray());
-				return pipeIn;
 			} else
 				return copyData.get(i);
 

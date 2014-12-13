@@ -38,7 +38,7 @@ import jdbreport.grid.JReportGrid;
 import jdbreport.model.io.SaveReportException;
 
 /**
- * @version 2.0 30.05.2011
+ * @version 3.0 13.12.2014
  * @author Andrey Kholmanskih
  * 
  */
@@ -64,7 +64,7 @@ public abstract class StoredGridUndo extends AbstractGridUndo {
 		if (getGrid().getRowCount() * getGrid().getColumnCount() > MAX_CELLS) {
 			writeToFile(writer);
 		} else {
-			StringWriter pw = null;
+			StringWriter pw;
 			pw = new StringWriter();
 			writer.save(pw, getGrid().getReportModel());
 			buffer = pw.getBuffer().toString();
@@ -95,12 +95,9 @@ public abstract class StoredGridUndo extends AbstractGridUndo {
 			SaveReportException {
 		File file = File.createTempFile("jdbr", null);
 		file.deleteOnExit();
-		Writer pw = createWriter(file);
-		try {
+		try (Writer pw = createWriter(file)) {
 			writer.save(pw, getGrid().getReportModel());
 			fileName = file.getPath();
-		} finally {
-			pw.close();
 		}
 	}
 

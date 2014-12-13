@@ -48,7 +48,7 @@ import jdbreport.source.ReportDataSet;
 /**
  * @author Andrey Kholmanskih
  * 
- * @version 2.1 20.06.2012
+ * @version 3.0 13.12.2014
  */
 public class JDBReportService implements ReportService {
 
@@ -155,7 +155,7 @@ public class JDBReportService implements ReportService {
 			Map<String, Object> dataSetList) {
 		Collection<ReportDataSet> dsList = null;
 		if (dataSetList != null && dataSetList.size() > 0) {
-			dsList = new ArrayList<ReportDataSet>();
+			dsList = new ArrayList<>();
 			for (String key : dataSetList.keySet()) {
 				dsList.add(createDataSet(key, dataSetList.get(key)));
 			}

@@ -456,8 +456,8 @@ public class HTMLWriter implements ReportWriter {
 			imgTag.append(" ALIGN=MIDDLE");
 		if (cell.isScaleIcon()) {
 			Dimension size = model.getCellSize(cell, row, col, false);
-			imgTag.append(" WIDTH=" + size.getWidth());
-			imgTag.append(" HEIGHT=" + size.getHeight());
+			imgTag.append(" WIDTH=").append(size.getWidth());
+			imgTag.append(" HEIGHT=").append(size.getHeight());
 		}
 		imgTag.append('>');
 		return imgTag.toString();

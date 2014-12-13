@@ -94,11 +94,6 @@ public class HelpWindow extends JFrame {
 		}
 	}
 
-	/**
-	 * This method initializes this
-	 * 
-	 * @return void
-	 */
 	private void initialize() {
 		this.setSize(800, 600);
 		this.setContentPane(getJContentPane());

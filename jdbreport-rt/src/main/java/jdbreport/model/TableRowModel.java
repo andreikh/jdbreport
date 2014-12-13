@@ -67,7 +67,7 @@ public interface TableRowModel extends Iterable<TableRow> {
 	/**
 	 * Adds the row to the group
 	 * 
-	 * @param group
+	 * @param group RowsGroup
 	 * @param indexInGroup
 	 *            index in group
 	 * @return row's index in rows list
@@ -77,9 +77,9 @@ public interface TableRowModel extends Iterable<TableRow> {
 	/**
 	 * Adds the row to the group
 	 * 
-	 * @param group
-	 * @param indexInGroup
-	 * @param tableRow
+	 * @param group RowsGroup
+	 * @param indexInGroup index in group
+	 * @param tableRow TableRow
 	 * @return row's index in the list
 	 */
 	public int addRow(RowsGroup group, int indexInGroup, TableRow tableRow);
@@ -481,8 +481,8 @@ public interface TableRowModel extends Iterable<TableRow> {
 	/**
 	 * Returns number of page for a cell on a row and a column
 	 * 
-	 * @param row
-	 * @param column
+	 * @param row row index
+	 * @param column column index
 	 * @return number of page
 	 */
 	public Integer getPageNumber(int row, int column);
@@ -513,7 +513,7 @@ public interface TableRowModel extends Iterable<TableRow> {
 	 * If true that pages are printed from left to right, from top to down, 
 	 * differently pages are printed from top to down, from left to right.
 	 * 
-	 * @param value
+	 * @param value left to right flag
 	 * @since 2.0
 	 */
 	public void setPrintLeftToRight(boolean value);

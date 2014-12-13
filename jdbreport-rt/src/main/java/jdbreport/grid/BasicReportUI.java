@@ -38,7 +38,7 @@ import jdbreport.model.TableRow;
 import jdbreport.model.TableRowModel;
 
 /**
- * @version 2.0 18.04.2012
+ * @version 3.0 13.12.2014
  * @author Andrey Kholmanskih
  * 
  */
@@ -46,7 +46,6 @@ public class BasicReportUI extends BasicTableUI {
 
 	private JReportGrid report;
 	private boolean isLeftToRight = true;
-	private int rm = 2;
 	private int cm = 2;
 	private TableColumnModel columnModel;
 	private TableRowModel rowModel;
@@ -226,7 +225,7 @@ public class BasicReportUI extends BasicTableUI {
 
 		for (int row = rMin; row <= rMax; row++) {
 			TableRow tableRow = rowModel.getRow(row);
-			printRow(g, rMin, cMin, cMax, row, tableRow, rect);
+			printRow(g,cMin, cMax, row,  rect);
 			rect.y += tableRow.getHeight();
 		}
 
@@ -262,9 +261,9 @@ public class BasicReportUI extends BasicTableUI {
 			}
 		}
 		
-		int x1 = 0;
-		int y1 = 0;
-		int x2 = 0;
+		int x1;
+		int y1;
+		int x2;
 		y1 = y0;
 		
 		
@@ -334,9 +333,9 @@ public class BasicReportUI extends BasicTableUI {
 			}
 		}
 		
-		int x1 = 0;
-		int y1 = 0;
-		int x2 = 0;
+		int x1;
+		int y1;
+		int x2;
 		y1 = y0;
 		
 		for (int row = rMin; row <= rMax; row++) {
@@ -402,9 +401,9 @@ public class BasicReportUI extends BasicTableUI {
 			}
 		}
 		
-		int x1 = 0;
-		int y1 = 0;
-		int y2 = 0;
+		int x1;
+		int y1;
+		int y2;
 		x1 = x0;
 		
 		for (int col = cMin; col <= cMax; col++) {
@@ -464,10 +463,9 @@ public class BasicReportUI extends BasicTableUI {
 		}
 		
 		int x1 = x0;
-		int y1 = 0;
-		int y2 = 0;
-		y1 = y0;
-		
+		int y1;
+		int y2;
+
 		for (int col = cMin; col <= cMax; col++) {
 			Border line = null;
 			y1 = y0;
@@ -544,19 +542,11 @@ public class BasicReportUI extends BasicTableUI {
 
 		r.width = rc.width;
 
+		int rm = 2;
 		r.setBounds(r.x + cm / 2, r.y + rm / 2, r.width - cm, r.height - rm);
 		return r;
 	}
 
-	/**
-	 * @param g
-	 * @param rMin
-	 * @param cMin
-	 * @param cMax
-	 * @param draggedColumn
-	 * @param row
-	 * @param aRow
-	 */
 	private void paintRow(Graphics g, int rMin, int cMin, int cMax,
 			TableColumn draggedColumn, int row, TableRow aRow, Rectangle rect) {
 
@@ -593,8 +583,8 @@ public class BasicReportUI extends BasicTableUI {
 		}
 	}
 
-	private void printRow(Graphics g, int rMin, int cMin, int cMax, int row,
-			TableRow aRow, Rectangle rect) {
+	private void printRow(Graphics g, int cMin, int cMax, int row,
+			 Rectangle rect) {
 
 		rect.x = 0;
 		if (isLeftToRight) {
@@ -742,7 +732,7 @@ public class BasicReportUI extends BasicTableUI {
 			rendererPane.paintComponent(g, component, table, cellRect.x,
 					cellRect.y, cellRect.width, cellRect.height, false);
 		}
-		paintCellGrid(g, row, column, style, cellRect);
+		paintCellGrid(g, style, cellRect);
 	}
 
 	private void printCell(Graphics g, Rectangle cellRect, int row, int column,
@@ -762,7 +752,7 @@ public class BasicReportUI extends BasicTableUI {
 		
 	}
 
-	private void paintCellGrid(Graphics g, int row, int column,
+	private void paintCellGrid(Graphics g,
 			CellStyle style, Rectangle r) {
 		r.grow(1, 1);
 		int cellWidth = r.x + r.width - 1;
@@ -840,7 +830,6 @@ public class BasicReportUI extends BasicTableUI {
 						report.getCellEditor().stopCellEditing();
 						report.removeEditor();
 					}
-					return;
 				}
 			} else {
 				if (e.getKeyCode() == KeyEvent.VK_ENTER) {

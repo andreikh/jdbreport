@@ -41,7 +41,7 @@ public class TemplateXMLReader extends XMLReportReader {
 	}
 
 	public String getDescription() {
-		return Messages.getString("TemplateXMLReader.0"); //$NON-NLS-1$
+		return Messages.getString("TemplateXMLReader.0");
 	}
 
 }

@@ -31,7 +31,7 @@ import javax.el.PropertyNotFoundException;
 /**
  * @author Andrey Kholmanskih
  *
- * @version 1.0 11.01.2011
+ * @version 3.0 13.12.2014
  */
 public class VarResolver extends ELResolver{
 
@@ -54,12 +54,12 @@ public class VarResolver extends ELResolver{
 
 	@Override
 	public Class<?> getType(ELContext context, Object base, Object property) {
-		return resolve(context, base, property) ? Object.class : null;
+		return resolve(context, base) ? Object.class : null;
 	}
 
 	@Override
 	public Object getValue(ELContext context, Object base, Object property) {
-		if (resolve(context, base, property)) {
+		if (resolve(context, base)) {
 			if (!map.containsKey(property)) {
 				throw new PropertyNotFoundException("Cannot find property " + property);
 			}
@@ -76,7 +76,7 @@ public class VarResolver extends ELResolver{
 	@Override
 	public void setValue(ELContext context, Object base, Object property,
 			Object value) {
-		if (resolve(context, base, property)) {
+		if (resolve(context, base)) {
 			map.put(property, value);
 		}
 	}
@@ -89,7 +89,7 @@ public class VarResolver extends ELResolver{
 		return base == null;
 	}
 	
-	private boolean resolve(ELContext context, Object base, Object property) {
+	private boolean resolve(ELContext context, Object base) {
 		context.setPropertyResolved(isResolvable(base));
 		return context.isPropertyResolved();
 	}

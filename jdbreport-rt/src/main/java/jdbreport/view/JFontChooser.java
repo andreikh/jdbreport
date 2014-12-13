@@ -19,12 +19,8 @@
 package jdbreport.view;
 
 import javax.swing.*;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
 import javax.swing.text.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.font.TextAttribute;
@@ -33,7 +29,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * @version 1.6 13.03.2011
+ * @version 3.0 13.12.2014
  * @author Andrey Kholmanskih
  * 
  */
@@ -45,13 +41,13 @@ public class JFontChooser extends JPanel {
 
 	private static int modalResult = CANCEL;
 
-	private JList familyList;
+	private JList<String> familyList;
 
 	private JCheckBox italicBox;
 
 	private JCheckBox boldBox;
 
-	private JList sizeList;
+	private JList<String> sizeList;
 
 	private JFormattedTextField sizeField;
 
@@ -101,13 +97,13 @@ public class JFontChooser extends JPanel {
 
 	protected void initComponents() {
 		this.setLayout(new BorderLayout());
-		familyList = new JList(GraphicsEnvironment
+		familyList = new JList<>(GraphicsEnvironment
 				.getLocalGraphicsEnvironment().getAvailableFontFamilyNames());
 		familyList.setFont(getFont());
-		familyList.setSelectedValue(UIManager.getFont("Label.font") //$NON-NLS-1$
+		familyList.setSelectedValue(UIManager.getFont("Label.font")
 				.getFamily(), true);
 
-		sizeList = new JList(
+		sizeList = new JList<>(
 				new String[] {
 						"6",
 						"7",
@@ -118,22 +114,23 @@ public class JFontChooser extends JPanel {
 						"12",
 						"14",
 						"16",
-						"18", "20", "22", "24", "26", "28", "32", "36", "42", "72", Messages.getString("JFontChooser.20") }); //$NON-NLS-10$
+						"18", "20", "22", "24", "26", "28", "32", "36", "42", "72",
+						Messages.getString("JFontChooser.20") });
 		sizeList.setFont(getFont());
-		sizeList.setSelectedValue(new Integer(UIManager.getFont("Label.font") //$NON-NLS-1$
-				.getSize()).toString(), true);
+		sizeList.setSelectedValue(Integer.toString(UIManager.getFont("Label.font")
+				.getSize()), true);
 		sizeField = new JFormattedTextField();
 		sizeField.setFont(getFont());
-		sizeField.setValue(new Integer(12));
+		sizeField.setValue(12);
 
-		italicBox = new JCheckBox(Messages.getString("JFontChooser.21"), false); //$NON-NLS-1$
+		italicBox = new JCheckBox(Messages.getString("JFontChooser.21"), false);
 		italicBox.setFont(getFont());
-		boldBox = new JCheckBox(Messages.getString("JFontChooser.22"), false); //$NON-NLS-1$
+		boldBox = new JCheckBox(Messages.getString("JFontChooser.22"), false);
 		boldBox.setFont(getFont());
 		underlineBox = new JCheckBox(
-				Messages.getString("JFontChooser.23"), false); //$NON-NLS-1$
+				Messages.getString("JFontChooser.23"), false);
 		underlineBox.setFont(getFont());
-		strikeBox = new JCheckBox(Messages.getString("JFontChooser.24"), false); //$NON-NLS-1$
+		strikeBox = new JCheckBox(Messages.getString("JFontChooser.24"), false);
 		strikeBox.setFont(getFont());
 
 		JPanel fontBox = new JPanel();
@@ -141,7 +138,7 @@ public class JFontChooser extends JPanel {
 		fontBox.setLayout(new BorderLayout());
 		JScrollPane scrollpane = new JScrollPane(familyList);
 		scrollpane.setBorder(BorderFactory.createTitledBorder(Messages
-				.getString("JFontChooser.25"))); //$NON-NLS-1$
+				.getString("JFontChooser.25")));
 		fontBox.add(scrollpane, BorderLayout.WEST);
 
 		JPanel effectsBox = new JPanel();
@@ -151,7 +148,7 @@ public class JFontChooser extends JPanel {
 		effectsBox.add(underlineBox);
 		effectsBox.add(strikeBox);
 		effectsBox.setBorder(BorderFactory.createTitledBorder(Messages
-				.getString("JFontChooser.26"))); //$NON-NLS-1$
+				.getString("JFontChooser.26")));
 		fontBox.add(effectsBox, BorderLayout.CENTER);
 
 		JPanel sizePanel = new JPanel();
@@ -159,7 +156,7 @@ public class JFontChooser extends JPanel {
 		sizePanel.add(sizeField);
 		sizePanel.add(new JScrollPane(sizeList));
 		sizePanel.setBorder(BorderFactory.createTitledBorder(Messages
-				.getString("JFontChooser.27"))); //$NON-NLS-1$
+				.getString("JFontChooser.27")));
 		fontBox.add(sizePanel, BorderLayout.EAST);
 		add(fontBox, BorderLayout.NORTH);
 
@@ -169,42 +166,37 @@ public class JFontChooser extends JPanel {
 		colorBox.setColor(Color.BLACK);
 		colorPanel.add(colorBox, BorderLayout.NORTH);
 		colorPanel.setBorder(BorderFactory.createTitledBorder(Messages
-				.getString("JFontChooser.28"))); //$NON-NLS-1$
+				.getString("JFontChooser.28")));
 		centerPanel.add(colorPanel, BorderLayout.WEST);
 		add(centerPanel, BorderLayout.CENTER);
 
 		sampleText = new JTextPane();
-		sampleText.setText(Messages.getString("JFontChooser.29")); //$NON-NLS-1$
+		sampleText.setText(Messages.getString("JFontChooser.29"));
 		sampleText.setPreferredSize(new Dimension(100, 40));
 		JPanel samplePanel = new JPanel(new BorderLayout());
 		samplePanel.add(new JScrollPane(sampleText), BorderLayout.CENTER);
 		samplePanel.setBorder(BorderFactory.createTitledBorder(Messages
-				.getString("JFontChooser.30"))); //$NON-NLS-1$
+				.getString("JFontChooser.30")));
 		add(samplePanel, BorderLayout.SOUTH);
 	}
 
 	protected void initListeners() {
-		familyList.addListSelectionListener(new ListSelectionListener() {
+		familyList.addListSelectionListener(e -> {
+            updateFont();
+            firePropertyChange("family", null, familyList
+                    .getSelectedValue());
+        });
 
-			public void valueChanged(ListSelectionEvent e) {
-				updateFont();
-				firePropertyChange("family", null, familyList
-						.getSelectedValue());
-			}
-		});
-
-		sizeList.addListSelectionListener(new ListSelectionListener() {
-			public void valueChanged(ListSelectionEvent e) {
-				Integer value = new Integer((String) sizeList
-						.getSelectedValue());
-				if (!sizeField.getValue().equals(value)) {
-					sizeField.setValue(value);
-					updateFont();
-					firePropertyChange("size", null, new Float(sizeField
-							.getValue().toString()));
-				}
-			}
-		});
+		sizeList.addListSelectionListener(e -> {
+            Integer value = new Integer(sizeList
+                    .getSelectedValue());
+            if (!sizeField.getValue().equals(value)) {
+                sizeField.setValue(value);
+                updateFont();
+                firePropertyChange("size", null, new Float(sizeField
+                        .getValue().toString()));
+            }
+        });
 
 		sizeField.addKeyListener(new KeyListener() {
 
@@ -228,54 +220,44 @@ public class JFontChooser extends JPanel {
 
 		});
 
-		boldBox.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				updateFont();
-				firePropertyChange("bold", null, new Boolean(boldBox
-						.isSelected()));
-			}
-		});
+		boldBox.addActionListener(e -> {
+            updateFont();
+            firePropertyChange("bold", null, boldBox
+					.isSelected());
+        });
 
-		italicBox.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				updateFont();
-				firePropertyChange("italic", null, new Boolean(italicBox
-						.isSelected()));
-			}
-		});
+		italicBox.addActionListener(e -> {
+            updateFont();
+            firePropertyChange("italic", null, italicBox
+					.isSelected());
+        });
 
-		underlineBox.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				updateFont();
-				firePropertyChange("underline", null, new Boolean(underlineBox
-						.isSelected()));
-			}
-		});
+		underlineBox.addActionListener(e -> {
+            updateFont();
+            firePropertyChange("underline", null, underlineBox
+					.isSelected());
+        });
 
-		strikeBox.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				updateFont();
-				firePropertyChange("strike", null, new Boolean(strikeBox
-						.isSelected()));
-			}
-		});
+		strikeBox.addActionListener(e -> {
+            updateFont();
+            firePropertyChange("strike", null, strikeBox
+					.isSelected());
+        });
 
-		colorBox.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				updateFont();
-				firePropertyChange("color", null, colorBox.getColor());
-			}
-		});
+		colorBox.addActionListener(e -> {
+            updateFont();
+            firePropertyChange("color", null, colorBox.getColor());
+        });
 	}
 
 	public void assignStyleAttributes(Document doc) {
 		if (!(doc instanceof StyledDocument))
 			return;
 		MutableAttributeSet attr = new SimpleAttributeSet();
-		StyleConstants.setFontFamily(attr, (String) familyList
+		StyleConstants.setFontFamily(attr, familyList
 				.getSelectedValue());
 		Integer value = (Integer) sizeField.getValue();
-		StyleConstants.setFontSize(attr, value.intValue());
+		StyleConstants.setFontSize(attr, value);
 		StyleConstants.setBold(attr, isBold());
 		StyleConstants.setItalic(attr, isItalic());
 		StyleConstants.setUnderline(attr, isUnderline());
@@ -339,7 +321,7 @@ public class JFontChooser extends JPanel {
 			return;
 		}
 		assignStyleAttributes(sampleText.getDocument());
-		Map<TextAttribute, Object> fontAttrs = new HashMap<TextAttribute, Object>();
+		Map<TextAttribute, Object> fontAttrs = new HashMap<>();
 		fontAttrs.put(TextAttribute.FAMILY, familyList
 				.getSelectedValue());
 		fontAttrs.put(TextAttribute.SIZE, new Float(sizeField.getValue()
@@ -401,7 +383,7 @@ public class JFontChooser extends JPanel {
 	public void setFontValue(MutableAttributeSet attr) {
 		familyList.setSelectedValue(StyleConstants.getFontFamily(attr), true);
 		sizeList.setSelectedValue(
-				new Integer(StyleConstants.getFontSize(attr)), true);
+				StyleConstants.getFontSize(attr), true);
 		boldBox.setSelected(StyleConstants.isBold(attr));
 		italicBox.setSelected(StyleConstants.isItalic(attr));
 		underlineBox.setSelected(StyleConstants.isUnderline(attr));
@@ -453,19 +435,15 @@ public class JFontChooser extends JPanel {
 		buttonsBox.add(Box.createHorizontalGlue());
 		dialog.getContentPane().add(buttonsBox, BorderLayout.SOUTH);
 		dialog.pack();
-		okBtn.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				dialog.setVisible(false);
-				modalResult = OK;
-			}
-		});
+		okBtn.addActionListener(e -> {
+            dialog.setVisible(false);
+            modalResult = OK;
+        });
 
-		cancelBtn.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				dialog.setVisible(false);
-				modalResult = CANCEL;
-			}
-		});
+		cancelBtn.addActionListener(e -> {
+            dialog.setVisible(false);
+            modalResult = CANCEL;
+        });
 
 		screenCenter(dialog, windowParent);
 		dialog.setVisible(true);

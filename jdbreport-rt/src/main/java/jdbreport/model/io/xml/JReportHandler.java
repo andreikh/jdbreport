@@ -61,7 +61,7 @@ public class JReportHandler extends DefaultReaderHandler {
 		super.startElement(uri, localName, qName, attributes);
 		if (rootName == null) {
 			rootName = qName;
-			if (rootName.equals("jdbreport")) { //$NON-NLS-1$
+			if (rootName.equals("jdbreport")) {
 				version = attributes.getValue("Version"); //$NON-NLS-1$
 				getReportBook().setReportCaption(attributes.getValue("Name")); //$NON-NLS-1$
 				isDbreport = true;

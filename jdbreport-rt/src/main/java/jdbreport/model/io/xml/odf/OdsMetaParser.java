@@ -73,7 +73,6 @@ class OdsMetaParser extends DefaultReportParser {
 		}
 		if (name.equals("office:meta")) {
 			getHandler().popHandler(name);
-			return;
 		}
 	}
 

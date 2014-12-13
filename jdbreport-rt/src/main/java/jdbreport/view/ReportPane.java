@@ -72,8 +72,6 @@ import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
 import javax.swing.SwingUtilities;
 import javax.swing.WindowConstants;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
 import javax.swing.filechooser.FileFilter;
 import javax.swing.table.TableCellRenderer;
 
@@ -110,7 +108,7 @@ import jdbreport.print.PrintPreview;
 import jdbreport.util.Utils;
 
 /**
- * @version 3.0 12.12.2014
+ * @version 3.0 13.12.2014
  * @author Andrey Kholmanskih
  * 
  */
@@ -121,11 +119,11 @@ public class ReportPane extends JPanel implements ReportListListener,
 	private static final Logger logger = Logger.getLogger(ReportPane.class
 			.getName());
 
-	private static final String REPORT_BOOK_PROPERTY = "reportBook";//$NON-NLS-1$
+	private static final String REPORT_BOOK_PROPERTY = "reportBook";
 
-	private static final String CAPTION = "caption";//$NON-NLS-1$
+	private static final String CAPTION = "caption";
 
-	private static final String REPORT_CAPTION_PROPERTY = "reportCaption";//$NON-NLS-1$
+	private static final String REPORT_CAPTION_PROPERTY = "reportCaption";
 
 	private static final String SHOW_GRID_PROPERTY = "showGrid";//$NON-NLS-1$
 
@@ -464,20 +462,16 @@ public class ReportPane extends JPanel implements ReportListListener,
 						getTabbedIcon(), new JScrollPane(grid));
 			}
 			add(tabbedPane, BorderLayout.CENTER);
-			tabbedPane.addChangeListener(new ChangeListener() {
-
-				public void stateChanged(ChangeEvent e) {
-					if (tabbedPane.getSelectedIndex() >= 0) {
-						JScrollPane scrollPane = (JScrollPane) tabbedPane
-								.getSelectedComponent();
-						JReportGrid grid = (JReportGrid) scrollPane
-								.getViewport().getComponent(0);
-						int index = getReportGridList().indexOf(grid);
-						setFocusedGrid(index);
-					}
-				}
-
-			});
+			tabbedPane.addChangeListener(e -> {
+                if (tabbedPane.getSelectedIndex() >= 0) {
+                    JScrollPane scrollPane1 = (JScrollPane) tabbedPane
+                            .getSelectedComponent();
+                    JReportGrid grid1 = (JReportGrid) scrollPane1
+                            .getViewport().getComponent(0);
+                    int index = getReportGridList().indexOf(grid1);
+                    setFocusedGrid(index);
+                }
+            });
 			tabbedPane.setComponentPopupMenu(getTabMenu());
 		}
 		return tabbedPane;
@@ -626,8 +620,6 @@ public class ReportPane extends JPanel implements ReportListListener,
 	/**
 	 * Printing of all report
 	 * 
-	 * @param showPrintDialog
-	 * @param interactive
 	 * @return true if the print has been successful
 	 * @throws PrinterException
 	 * @throws HeadlessException
@@ -694,8 +686,8 @@ public class ReportPane extends JPanel implements ReportListListener,
 		printError = null;
 
 
-		final sun.swing.PrintingStatus printingStatus = interactive ? sun.swing.PrintingStatus
-				.createPrintingStatus(component, job) : null;
+		final sun.swing.PrintingStatus printingStatus = sun.swing.PrintingStatus
+                        .createPrintingStatus(component, job);
 
 		Runnable runnable = () -> {
             try {
@@ -813,7 +805,7 @@ public class ReportPane extends JPanel implements ReportListListener,
 				FileInputStream textStream = null;
 				try {
 					textStream = new FileInputStream(file);
-				} catch (FileNotFoundException ffne) {
+				} catch (FileNotFoundException ignored) {
 				}
 				if (textStream == null) {
 					return;
@@ -1415,14 +1407,12 @@ public class ReportPane extends JPanel implements ReportListListener,
 
 	public boolean find(FindParams findParams) {
 		Finder finder = getFocusedGrid();
-		if (finder != null)
-			return getFocusedGrid().find(findParams);
-		return false;
+		return finder != null && getFocusedGrid().find(findParams);
 	}
 
 	public boolean incrementalFind(FindParams findParams) {
 		Finder finder = getFocusedGrid();
-        return finder != null ? getFocusedGrid().incrementalFind(findParams) : false;
+        return finder != null && getFocusedGrid().incrementalFind(findParams);
     }
 
 	protected LinkedList<UndoItem> getUndoStack() {
@@ -1487,9 +1477,7 @@ public class ReportPane extends JPanel implements ReportListListener,
 	}
 
 	public boolean isModified() {
-		if (isDirty())
-			return true;
-		return hasUndo();
+		return isDirty() || hasUndo();
 	}
 
 	protected void updateUndoRedoState() {
@@ -1564,12 +1552,12 @@ public class ReportPane extends JPanel implements ReportListListener,
 				numbers[i] = pageCount;
 			}
 			numberOfPages = 0;
-			for (int i = 0; i < numbers.length; i++) {
-				if (numbers[i] == 0) {
+			for (int number : numbers) {
+				if (number == 0) {
 					numberOfPages = UNKNOWN_NUMBER_OF_PAGES;
 					break;
 				} else {
-					numberOfPages += numbers[i];
+					numberOfPages += number;
 				}
 
 			}
@@ -1632,7 +1620,7 @@ public class ReportPane extends JPanel implements ReportListListener,
 		public int print(final Graphics graphics, final PageFormat pageFormat,
 				final int pageIndex) throws PrinterException {
 
-			Runnable runnable = () -> {
+			final Runnable runnable = () -> {
                 try {
                     printPage(graphics, pageFormat, pageIndex);
                 } catch (Throwable throwable) {

@@ -53,7 +53,7 @@ public class OdsReader implements ReportReader {
 
 	public void load(Reader reader, ReportBook reportBook)
 			throws LoadReportException {
-		throw new LoadReportException(Messages.getString("OdsReader.0")); //$NON-NLS-1$
+		throw new LoadReportException(Messages.getString("OdsReader.0"));
 	}
 
 	public void load(InputStream in, ReportBook reportBook)
@@ -66,24 +66,24 @@ public class OdsReader implements ReportReader {
 
 		String tmpPath = null;
 		try {
-			File file = File.createTempFile("dbr", "1"); //$NON-NLS-1$ //$NON-NLS-2$
+			File file = File.createTempFile("dbr", "1");
 			tmpPath = file.getPath();
 			file.delete();
 		} catch (IOException e1) {
 			e1.printStackTrace();
 		}
 		if (tmpPath == null || tmpPath.trim().length() == 0)
-			tmpPath = "~jdbr.tmp"; //$NON-NLS-1$
+			tmpPath = "~jdbr.tmp";
 		File path = new File(tmpPath);
 		if (!path.mkdir())
-			throw new LoadReportException(Messages.getString("OdsReader.4")); //$NON-NLS-1$
+			throw new LoadReportException(Messages.getString("OdsReader.4"));
 		ArrayList<File> files = new ArrayList<>();
 		try {
 			try {
 				ZipEntry entry =  zipStream.getNextEntry();
 				if (entry == null)
 					throw new LoadReportException(Messages
-							.getString("OdsReader.5")); //$NON-NLS-1$
+							.getString("OdsReader.5"));
 				while (entry != null) {
 					File file = new File(path.getAbsolutePath() + '/'
 							+ entry.getName());
@@ -113,15 +113,15 @@ public class OdsReader implements ReportReader {
 				reportBook.clear();
 				String mime = null;
                 for (File file1 : files) {
-                    if ("mimetype".equals(file1.getName())) { //$NON-NLS-1$
+                    if ("mimetype".equals(file1.getName())) {
                         FileReader reader = new FileReader(file1);
                         char[] text = new char[1024];
                         int l = reader.read(text);
                         mime = new String(text, 0, l);
-                        if (!"application/vnd.oasis.opendocument.spreadsheet" //$NON-NLS-1$
+                        if (!"application/vnd.oasis.opendocument.spreadsheet"
                                 .equals(mime)) {
                             throw new LoadReportException(Messages
-                                    .getString("OdsReader.unknow") //$NON-NLS-1$
+                                    .getString("OdsReader.unknow")
                                     + mime);
                         }
                         break;
@@ -129,29 +129,29 @@ public class OdsReader implements ReportReader {
                 }
 				if (mime == null)
 					throw new LoadReportException(Messages
-							.getString("OdsReader.unknow2")); //$NON-NLS-1$
+							.getString("OdsReader.unknow2"));
 
                 for (File file : files) {
-                    if ("meta.xml".equals(file.getName())) { //$NON-NLS-1$
+                    if ("meta.xml".equals(file.getName())) {
                         parseFile(file, handler);
                         break;
                     }
                 }
                 for (File file : files) {
-                    if ("styles.xml".equals(file.getName())) { //$NON-NLS-1$
+                    if ("styles.xml".equals(file.getName())) {
                         parseFile(file, handler);
                         break;
                     }
                 }
                 for (File file : files) {
-                    if ("content.xml".equals(file.getName())) { //$NON-NLS-1$
+                    if ("content.xml".equals(file.getName())) {
                         parseFile(file, handler);
                         removeDoubleBorders(reportBook);
                         break;
                     }
                 }
                 for (File file : files) {
-                    if ("settings.xml".equals(file.getName())) { //$NON-NLS-1$
+                    if ("settings.xml".equals(file.getName())) {
                         parseFile(file, handler);
                         break;
                     }

@@ -35,7 +35,7 @@ import javax.imageio.ImageIO;
 import org.w3c.dom.Document;
 
 /**
- * @version 3.0 22.02.2014
+ * @version 3.0 13.12.2014
  * @author Andrey Kholmanskih
  * 
  */
@@ -76,9 +76,9 @@ public class SVGImage {
 
 	public SVGImage(Reader reader) throws IOException {
 		try {
-			StringBuffer sb = new StringBuffer();
+			StringBuilder sb = new StringBuilder();
 			char[] buf = new char[1024 * 32];
-			int l = 0;
+			int l;
 			do {
 				l = reader.read(buf);
 				if (l > 0) {

@@ -37,12 +37,7 @@ import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.swing.JButton;
-import javax.swing.JCheckBox;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JSpinner;
-import javax.swing.SpinnerNumberModel;
+import javax.swing.*;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
@@ -56,7 +51,7 @@ import jdbreport.view.JFontChooser;
 import jdbreport.view.JRotateChooser;
 
 /**
- * @version 3.0 12.12.2014
+ * @version 3.0 13.12.2014
  * @author Andrey Kholmanskih
  * 
  */
@@ -73,9 +68,9 @@ public class CellPropertiesDlg extends javax.swing.JDialog implements
 	private JSpinner carryField;
 	private JCheckBox wrapLineBox;
 	private javax.swing.JCheckBox autoHeightBox;
-	private javax.swing.JComboBox hAlignBox;
+	private javax.swing.JComboBox<String> hAlignBox;
 	private javax.swing.JTabbedPane tabbedPane;
-	private javax.swing.JComboBox vAlignBox;
+	private javax.swing.JComboBox<String> vAlignBox;
 
 	private JFontChooser fontPanel = null;
 	private List<Cell> cells = null;
@@ -177,34 +172,34 @@ public class CellPropertiesDlg extends javax.swing.JDialog implements
 	private JPanel createAlignPanel() {
 		JPanel alignPanel = new javax.swing.JPanel(new java.awt.GridBagLayout());
 		
-		hAlignBox = new javax.swing.JComboBox();
-		hAlignBox.setActionCommand("halign"); //$NON-NLS-1$
+		hAlignBox = new JComboBox<>();
+		hAlignBox.setActionCommand("halign");
 		hAlignBox.addActionListener(this);
 		
-		vAlignBox = new javax.swing.JComboBox();
-		vAlignBox.setActionCommand("valign"); //$NON-NLS-1$
+		vAlignBox = new JComboBox<>();
+		vAlignBox.setActionCommand("valign");
 		vAlignBox.addActionListener(this);
 		
 
 		wrapLineBox = new javax.swing.JCheckBox(Messages
-				.getString("CellPropertiesDlg.wrap")); //$NON-NLS-1$
-		wrapLineBox.setActionCommand("wrap_line"); //$NON-NLS-1$
+				.getString("CellPropertiesDlg.wrap"));
+		wrapLineBox.setActionCommand("wrap_line");
 		wrapLineBox.addActionListener(this);
 		
 		autoHeightBox = new javax.swing.JCheckBox();
-		autoHeightBox.setActionCommand("auto_height"); //$NON-NLS-1$
+		autoHeightBox.setActionCommand("auto_height");
 		autoHeightBox.addActionListener(this);
 
 		carryField = new JSpinner();
 		carryField.setModel(new SpinnerNumberModel(0, 0, null, 1));
 		carryField.setToolTipText(Messages
-				.getString("CellPropertiesDlg.rowscount")); //$NON-NLS-1$
+				.getString("CellPropertiesDlg.rowscount"));
 		carryField.addChangeListener(this);
 		
 		lineSpacingField = new JSpinner();
 		lineSpacingField.setModel(new SpinnerNumberModel(new Float(0), new Float(
 				-10), new Float(20), new Float(0.1)));
-		lineSpacingField.setToolTipText(Messages.getString("CellPropertiesDlg.line_spacing")); //$NON-NLS-1$
+		lineSpacingField.setToolTipText(Messages.getString("CellPropertiesDlg.line_spacing"));
 		lineSpacingField.addChangeListener(this);
 		
 		java.awt.GridBagConstraints gridBagConstraints;
@@ -216,9 +211,12 @@ public class CellPropertiesDlg extends javax.swing.JDialog implements
 		alignPanel.add(new JLabel(Messages.getString("CellPropertiesDlg.horz")), gridBagConstraints);
 
 		hAlignBox
-				.setModel(new javax.swing.DefaultComboBoxModel(
+				.setModel(new DefaultComboBoxModel<>(
 						new String[] {
-								Messages.getString("CellPropertiesDlg.left"), Messages.getString("CellPropertiesDlg.center"), Messages.getString("CellPropertiesDlg.right"), Messages.getString("CellPropertiesDlg.filled") })); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
+								Messages.getString("CellPropertiesDlg.left"),
+								Messages.getString("CellPropertiesDlg.center"),
+								Messages.getString("CellPropertiesDlg.right"),
+								Messages.getString("CellPropertiesDlg.filled") }));
 		hAlignBox.setToolTipText(Messages
 				.getString("CellPropertiesDlg.horz_align"));
 		gridBagConstraints = new java.awt.GridBagConstraints();
@@ -236,11 +234,12 @@ public class CellPropertiesDlg extends javax.swing.JDialog implements
 		alignPanel.add(new JLabel(Messages.getString("CellPropertiesDlg.vert")), gridBagConstraints);
 
 		vAlignBox
-				.setModel(new javax.swing.DefaultComboBoxModel(
+				.setModel(new javax.swing.DefaultComboBoxModel<>(
 						new String[] {
-								Messages.getString("CellPropertiesDlg.top"), Messages.getString("CellPropertiesDlg.vcenter"), Messages.getString("CellPropertiesDlg.bottom") })); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+								Messages.getString("CellPropertiesDlg.top"), Messages.getString("CellPropertiesDlg.vcenter"),
+								Messages.getString("CellPropertiesDlg.bottom") }));
 		vAlignBox
-				.setToolTipText(Messages.getString("CellPropertiesDlg.valign")); //$NON-NLS-1$
+				.setToolTipText(Messages.getString("CellPropertiesDlg.valign"));
 		gridBagConstraints = new java.awt.GridBagConstraints();
 		gridBagConstraints.gridx = 2;
 		gridBagConstraints.gridy = 1;
@@ -253,7 +252,7 @@ public class CellPropertiesDlg extends javax.swing.JDialog implements
 		rotatePanel.setPreferredSize(new Dimension(120, 120));
 		
 		rotateChooser = new JRotateChooser();
-		rotateChooser.addPropertyChangeListener("angle", this); //$NON-NLS-1$
+		rotateChooser.addPropertyChangeListener("angle", this);
 		rotatePanel.add(rotateChooser, BorderLayout.CENTER);
 		gridBagConstraints = new java.awt.GridBagConstraints();
 		gridBagConstraints.gridx = 0;
@@ -554,7 +553,7 @@ public class CellPropertiesDlg extends javax.swing.JDialog implements
 				}
 			}
 			fontPanel.setBold(equals && style.isBold());
-			fontPanel.setItalic(equals ? style.isItalic() : false);
+			fontPanel.setItalic(equals && style.isItalic());
 		} else {
 			Font font = new Font(fontFamily, style.getStyle(), style.getSize());
 			fontPanel.setFontValue(font, style.getForegroundColor());
@@ -631,22 +630,31 @@ public class CellPropertiesDlg extends javax.swing.JDialog implements
 
 	public void propertyChange(PropertyChangeEvent evt) {
 		String pn = evt.getPropertyName();
-		if (pn.equals("family")) {
-			fontFamilyChange = true;
-		} else if (pn.equals("size")) {
-			fontSizeChange = true;
-		} else if (pn.equals("color")) {
-			fontColorChange = true;
-		} else if (pn.equals("bold")) {
-			fontBoldChange = true;
-		} else if (pn.equals("italic")) {
-			fontItalicChange = true;
-		} else if (pn.equals("underline")) {
-			fontUnderlineChange = true;
-		} else if (pn.equals("strike")) {
-			fontStrikeChange = true;
-		} else if (pn.equals("angle")) {
-			rotateChange = true;
+		switch (pn) {
+			case "family":
+				fontFamilyChange = true;
+				break;
+			case "size":
+				fontSizeChange = true;
+				break;
+			case "color":
+				fontColorChange = true;
+				break;
+			case "bold":
+				fontBoldChange = true;
+				break;
+			case "italic":
+				fontItalicChange = true;
+				break;
+			case "underline":
+				fontUnderlineChange = true;
+				break;
+			case "strike":
+				fontStrikeChange = true;
+				break;
+			case "angle":
+				rotateChange = true;
+				break;
 		}
 	}
 

@@ -31,7 +31,7 @@ import jdbreport.model.ReportBook;
 import jdbreport.model.ReportModel;
 
 /**
- * @version 2.0 15.02.2012
+ * @version 3.0 13.12.2014
  * @author Andrey Kholmanskih
  * 
  */
@@ -71,7 +71,7 @@ public class PreferencesUndo extends AbstractGridUndo {
 		
 		public List<ReplaceItem> copyReplaceList(List<ReplaceItem> list) {
 			if (list != null && list.size() > 0) {
-				ArrayList<ReplaceItem> replList = new ArrayList<ReplaceItem>();
+				ArrayList<ReplaceItem> replList = new ArrayList<>();
 				for (ReplaceItem item : list) {
 					replList.add(item.clone());
 				}
@@ -86,7 +86,7 @@ public class PreferencesUndo extends AbstractGridUndo {
 	private Preferences preferences;
 
 	public PreferencesUndo(JReportGrid grid, ReportBook book) {
-		super(grid, Messages.getString("PreferencesUndo.0")); //$NON-NLS-1$
+		super(grid, Messages.getString("PreferencesUndo.0"));
 		this.book = book;
 		preferences = new Preferences(getGrid().getReportModel(), book);
 	}

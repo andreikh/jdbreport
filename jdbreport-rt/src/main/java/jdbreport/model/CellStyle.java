@@ -33,7 +33,7 @@ import jdbreport.util.GraphicUtil;
 /**
  * The cell attributes form the definition of a cell to be rendered.
  * 
- * @version 2.1 17.05.2012
+ * @version 3.0 13.12.2014
  * 
  * @author Andrey Kholmanskih
  * 
@@ -75,22 +75,14 @@ public class CellStyle implements Cloneable, SwingConstants {
 	 */
 	public static final int JUSTIFY = 16;
 
-    /**
-     * No type offsetting (not super or subscript)
-     */
-
-    public final static int SS_NONE = 0;
-
-    /**
+     /**
      * Superscript
      */
-
     public final static int SS_SUPER = 1;
 
     /**
      * Subscript
      */
-
     public final static int SS_SUB = 2;
 	
 	/**
@@ -123,8 +115,6 @@ public class CellStyle implements Cloneable, SwingConstants {
 	private boolean wrapLine = true;
 
 	private Object id;
-
-	private float spaceAbove = 0.0f;
 
 	private float lineSpacing = DEFAULT_LINE_SPACING;
 
@@ -252,6 +242,7 @@ public class CellStyle implements Cloneable, SwingConstants {
 			return true;
 		}
 		if (obj != null) {
+			if (!(obj instanceof CellStyle)) return false;
 			try {
 				CellStyle otherStyle = (CellStyle) obj;
 
@@ -271,7 +262,7 @@ public class CellStyle implements Cloneable, SwingConstants {
 						&& carryRows == otherStyle.carryRows
 						&& typeOffset == otherStyle.typeOffset
 						&& lineSpacing == otherStyle.lineSpacing;
-			} catch (ClassCastException e) {
+			} catch (ClassCastException ignored) {
 			}
 		}
 		return false;
@@ -551,7 +542,7 @@ public class CellStyle implements Cloneable, SwingConstants {
 	}
 	
 	public Object clone() {
-		CellStyle clone = null;
+		CellStyle clone;
 		try {
 			clone = (CellStyle) super.clone();
 			clone.borders = new Border[4];
@@ -698,7 +689,7 @@ public class CellStyle implements Cloneable, SwingConstants {
 	}
 
 	public float getSpaceAbove() {
-		return spaceAbove;
+		return 0.0f;
 	}
 
 	public float getLineSpacing() {

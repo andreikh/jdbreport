@@ -32,7 +32,7 @@ import jdbreport.model.io.ReportWriter;
  */
 public class DbrFileType implements FileType {
 
-	private static final String[] extensions = { "jdbr" }; //$NON-NLS-1$
+	private static final String[] extensions = { "jdbr" };
 	private ReportReader reader;
 	private ReportWriter writer;
 
@@ -41,7 +41,7 @@ public class DbrFileType implements FileType {
 	}
 
 	public String getDescription() {
-		return Messages.getString("DbrFileType.1"); //$NON-NLS-1$
+		return Messages.getString("DbrFileType.1");
 	}
 
 	public ReportReader getReader() {
@@ -59,7 +59,7 @@ public class DbrFileType implements FileType {
 	}
 
 	public String getContentType() {
-		return "application/jdbr"; //$NON-NLS-1$
+		return "application/jdbr";
 	}
 
 	public int getOrder() {

@@ -25,7 +25,7 @@ import java.awt.Insets;
 import javax.swing.JPanel;
 
 /**
- * @version 2.0 12.12.2009
+ * @version 3.0 13.12.2014
  * @author Andrey Kholmanskih
  * 
  */
@@ -46,10 +46,7 @@ class PreviewContainer extends JPanel {
 		int w = dc.width;
 		Dimension dp = getParent().getSize();
 		int nCol = Math.max((dp.width - H_GAP) / (w + H_GAP), 1);
-		int nRow = n / nCol;
-		if (nRow * nCol < n)
-			nRow++;
-		
+
 		int nc = 0;
 		int wc = 0;
 		int wc1 = 0;

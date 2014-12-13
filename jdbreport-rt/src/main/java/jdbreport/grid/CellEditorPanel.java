@@ -36,7 +36,6 @@ import javax.swing.KeyStroke;
 
 import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 
 import javax.swing.JScrollPane;
@@ -51,7 +50,7 @@ import jdbreport.model.math.MathValue;
 import jdbreport.util.Utils;
 
 /**
- * @version 3.0 12.12.2014
+ * @version 3.0 13.12.2014
  * @author Andrey Kholmanskih
  * 
  */
@@ -390,30 +389,26 @@ public class CellEditorPanel extends JPanel {
 	private JToggleButton getContentButton() {
 		if (contentButton == null) {
 			contentButton = new JToggleButton();
-			contentButton.setText(Messages.getString("CellEditorPanel.HTML")); //$NON-NLS-1$
-			contentButton.addActionListener(new ActionListener() {
-
-				public void actionPerformed(ActionEvent e) {
-					String content = textPane.getContentType();
-					text = textPane.getText();
-					if (content.equals(Cell.TEXT_HTML)) {
-						text = Utils.html2Plain(text);
-						contentButton.setText(Messages
-								.getString("CellEditorPanel.Plain")); //$NON-NLS-1$
-						textPane.setContentType(Cell.TEXT_PLAIN);
-						getToolBar().setVisible(true);
-					} else {
-						contentButton.setText(Messages
-								.getString("CellEditorPanel.HTML")); //$NON-NLS-1$
-						textPane.setContentType(Cell.TEXT_HTML);
-						getToolBar().setVisible(false);
-					}
-					textPane.setText(text);
-					textPane.setSelectionStart(0);
-					textPane.setSelectionEnd(0);
-				}
-
-			});
+			contentButton.setText(Messages.getString("CellEditorPanel.HTML"));
+			contentButton.addActionListener(e -> {
+                String content = textPane.getContentType();
+                text = textPane.getText();
+                if (content.equals(Cell.TEXT_HTML)) {
+                    text = Utils.html2Plain(text);
+                    contentButton.setText(Messages
+                            .getString("CellEditorPanel.Plain"));
+                    textPane.setContentType(Cell.TEXT_PLAIN);
+                    getToolBar().setVisible(true);
+                } else {
+                    contentButton.setText(Messages
+                            .getString("CellEditorPanel.HTML"));
+                    textPane.setContentType(Cell.TEXT_HTML);
+                    getToolBar().setVisible(false);
+                }
+                textPane.setText(text);
+                textPane.setSelectionStart(0);
+                textPane.setSelectionEnd(0);
+            });
 		}
 		return contentButton;
 	}
@@ -422,14 +417,8 @@ public class CellEditorPanel extends JPanel {
 		if (cancelButton == null) {
 			cancelButton = new JButton();
 			cancelButton.setText(Messages
-					.getString("CellEditorPanel.cancel_text")); //$NON-NLS-1$
-			cancelButton.addActionListener(new ActionListener() {
-
-				public void actionPerformed(ActionEvent e) {
-					dialog.setVisible(false);
-				}
-
-			});
+					.getString("CellEditorPanel.cancel_text"));
+			cancelButton.addActionListener(e -> dialog.setVisible(false));
 		}
 		return cancelButton;
 	}
@@ -438,15 +427,11 @@ public class CellEditorPanel extends JPanel {
 		if (okButton == null) {
 			okButton = new JButton();
 			okButton.setMnemonic(KeyEvent.VK_ENTER);
-			okButton.setText(Messages.getString("CellEditorPanel.ok_text")); //$NON-NLS-1$
-			okButton.addActionListener(new ActionListener() {
-
-				public void actionPerformed(ActionEvent e) {
-					exitCode = OK;
-					dialog.setVisible(false);
-				}
-
-			});
+			okButton.setText(Messages.getString("CellEditorPanel.ok_text"));
+			okButton.addActionListener(e -> {
+                exitCode = OK;
+                dialog.setVisible(false);
+            });
 		}
 		return okButton;
 	}

@@ -39,13 +39,13 @@ public class DefaultErrorHandler implements ErrorHandler {
 				.getCause().getMessage()
 				: e.getMessage();
 		JOptionPane.showMessageDialog(null, msg, Messages
-				.getString("DefaultErrorHandler.0"), //$NON-NLS-1$
+				.getString("DefaultErrorHandler.0"),
 				JOptionPane.ERROR_MESSAGE);
 	}
 
 	public synchronized void showError(String msg) {
 		JOptionPane.showMessageDialog(null, msg, Messages
-				.getString("DefaultErrorHandler.0"), //$NON-NLS-1$
+				.getString("DefaultErrorHandler.0"),
 				JOptionPane.ERROR_MESSAGE);
 	}
 

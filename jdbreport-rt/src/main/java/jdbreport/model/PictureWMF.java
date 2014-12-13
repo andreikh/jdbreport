@@ -33,32 +33,17 @@ import org.apache.batik.transcoder.wmf.tosvg.WMFRecordStore;
 /**
  * @author Andrey Kholmanskih
  *
- * @version	1.0 15.10.2010
+ * @version	3.0 13.12.2014
  */
 public class PictureWMF extends PictureSVG {
 
 	private WMFRecordStore currentStore;
 
 	/**
-	 * @param format
+	 * @param format format
 	 */
 	public PictureWMF(String format) {
 		super(format);
-	}
-
-	/**
-	 * @param buf
-	 */
-	public PictureWMF(byte[] buf) {
-		super(buf);
-	}
-
-	/**
-	 * @param buf
-	 * @param format
-	 */
-	public PictureWMF(byte[] buf, String format) {
-		super(buf, format);
 	}
 
 	@Override

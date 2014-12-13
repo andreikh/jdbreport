@@ -58,23 +58,23 @@ public class OdsWriter implements ReportWriter, ImageWriter {
 		try {
 			zipStream = new ZipOutputStream(out);
 			try {
-				ZipEntry entry = new ZipEntry("mimetype"); //$NON-NLS-1$
+				ZipEntry entry = new ZipEntry("mimetype");
 				zipStream.putNextEntry(entry);
 				mimeWrite(zipStream);
 
-				entry = new ZipEntry("styles.xml"); //$NON-NLS-1$
+				entry = new ZipEntry("styles.xml");
 				zipStream.putNextEntry(entry);
 				getStylesWriter().save(zipStream, reportBook);
 
-				entry = new ZipEntry("content.xml"); //$NON-NLS-1$
+				entry = new ZipEntry("content.xml");
 				zipStream.putNextEntry(entry);
 				getContentWriter().save(zipStream, reportBook);
 
-				entry = new ZipEntry("Pictures/"); //$NON-NLS-1$
+				entry = new ZipEntry("Pictures/");
 				zipStream.putNextEntry(entry);
 				if (images != null)
 					for (String fileName : images.keySet()) {
-						entry = new ZipEntry("Pictures/" + fileName); //$NON-NLS-1$
+						entry = new ZipEntry("Pictures/" + fileName);
 						zipStream.putNextEntry(entry);
 						RenderedImage image = images.get(fileName);
 
@@ -82,15 +82,15 @@ public class OdsWriter implements ReportWriter, ImageWriter {
 								Utils.getFileExtension(fileName), zipStream);
 					}
 
-				entry = new ZipEntry("settings.xml"); //$NON-NLS-1$
+				entry = new ZipEntry("settings.xml");
 				zipStream.putNextEntry(entry);
 				getSettingsWriter().save(zipStream, reportBook);
 
-				entry = new ZipEntry("meta.xml"); //$NON-NLS-1$
+				entry = new ZipEntry("meta.xml");
 				zipStream.putNextEntry(entry);
 				getMetaWriter().save(zipStream, reportBook);
 
-				entry = new ZipEntry("META-INF/manifest.xml"); //$NON-NLS-1$
+				entry = new ZipEntry("META-INF/manifest.xml");
 				zipStream.putNextEntry(entry);
 				writeManifest(zipStream);
 			} finally {
@@ -116,9 +116,9 @@ public class OdsWriter implements ReportWriter, ImageWriter {
 
 	protected void writeManifest(OutputStream stream) {
 		PrintWriter fw = new PrintWriter(new OutputStreamWriter(stream,
-				java.nio.charset.Charset.forName("UTF-8"))); //$NON-NLS-1$
+				java.nio.charset.Charset.forName("UTF-8")));
 		try {
-			fw.println("<?xml version=\"1.0\" encoding=\"UTF-8\"?>"); //$NON-NLS-1$
+			fw.println("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
 			fw
 					.println("<!DOCTYPE manifest:manifest PUBLIC \"-//OpenOffice.org//DTD Manifest 1.0//EN\" \"Manifest.dtd\">"); //$NON-NLS-1$
 			fw
@@ -127,7 +127,7 @@ public class OdsWriter implements ReportWriter, ImageWriter {
 					.println("<manifest:file-entry manifest:media-type=\"application/vnd.oasis.opendocument.spreadsheet\" manifest:full-path=\"/\"/>"); //$NON-NLS-1$
 			writeIconsManifest(fw);
 			writeManifestFiles(fw);
-			fw.println("</manifest:manifest>"); //$NON-NLS-1$
+			fw.println("</manifest:manifest>");
 		} finally {
 			fw.flush();
 		}
@@ -149,18 +149,18 @@ public class OdsWriter implements ReportWriter, ImageWriter {
 	protected void writeIconsManifest(PrintWriter fw) {
 		if (images != null)
 			for (String fileName : images.keySet()) {
-				fw.print("<manifest:file-entry manifest:media-type=\"image/"); //$NON-NLS-1$
+				fw.print("<manifest:file-entry manifest:media-type=\"image/");
 				fw.print(Utils.getFileExtension(fileName));
-				fw.print("\" manifest:full-path=\"Pictures/"); //$NON-NLS-1$
+				fw.print("\" manifest:full-path=\"Pictures/");
 				fw.print(fileName);
-				fw.println("\"/>"); //$NON-NLS-1$
+				fw.println("\"/>");
 			}
 	}
 
 	protected void mimeWrite(OutputStream stream) {
 		PrintWriter fw = new PrintWriter(new OutputStreamWriter(stream,
-				java.nio.charset.Charset.forName("UTF-8"))); //$NON-NLS-1$
-		fw.print("application/vnd.oasis.opendocument.spreadsheet"); //$NON-NLS-1$
+				java.nio.charset.Charset.forName("UTF-8")));
+		fw.print("application/vnd.oasis.opendocument.spreadsheet");
 		fw.flush();
 	}
 
@@ -170,7 +170,7 @@ public class OdsWriter implements ReportWriter, ImageWriter {
 
 	public void save(Writer writer, ReportBook reportBook)
 			throws SaveReportException {
-		throw new SaveReportException(Messages.getString("OdsWriter.24")); //$NON-NLS-1$
+		throw new SaveReportException(Messages.getString("OdsWriter.24"));
 	}
 
 	public void save(File file, ReportBook reportBook)

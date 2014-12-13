@@ -94,11 +94,6 @@ public class HelpDlg extends JDialog {
 		Properties.put(HelpPane.SIZE_HEIGHT, r.height);
 	}
 
-	/**
-	 * This method initializes this
-	 * 
-	 * @return void
-	 */
 	private void initialize() {
 		this.setSize(300, 200);
 		this.setContentPane(getJContentPane());

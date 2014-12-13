@@ -28,7 +28,7 @@ import jdbreport.model.io.ReportReader;
 import jdbreport.model.io.ReportWriter;
 
 /**
- * @version 1.3 16.05.2009
+ * @version 3.0 13.12.2014
  * @author Andrey Kholmanskih
  * 
  */
@@ -45,7 +45,7 @@ public class ReportFileFilter extends FileFilter {
 	private FileType fileType;
 
 	public ReportFileFilter(FileType fileType) {
-		this.filters = new Hashtable<String, ReportFileFilter>();
+		this.filters = new Hashtable<>();
 		this.fileType = fileType;
 		for (int i = 0; i < fileType.getExtensions().length; i++)
 			addExtension(fileType.getExtensions()[i]);
@@ -93,7 +93,7 @@ public class ReportFileFilter extends FileFilter {
 	 */
 	public void addExtension(String extension) {
 		if (filters == null) {
-			filters = new Hashtable<String, ReportFileFilter>(5);
+			filters = new Hashtable<>(5);
 		}
 		filters.put(extension.toLowerCase(), this);
 		fullDescription = null;
@@ -113,7 +113,7 @@ public class ReportFileFilter extends FileFilter {
 				if (extensions != null) {
 					while (extensions.hasMoreElements()) {
 						exts += ", "
-								+ (String) extensions.nextElement();
+								+ extensions.nextElement();
 					}
 					exts = exts.substring(1);
 				}

@@ -57,10 +57,10 @@ public interface CellValue<E> extends Serializable {
 	/**
 	 * Writes to XML
 	 * 
-	 * @param writer
-	 * @param model
-	 * @param row
-	 * @param column
+	 * @param writer PrintWriter
+	 * @param model ReportModel
+	 * @param row row number
+	 * @param column column number
 	 * @return true if supported
 	 * @throws SaveReportException 
 	 */
@@ -68,11 +68,11 @@ public interface CellValue<E> extends Serializable {
 
 	/**
 	 * Writes to writer
-	 * @param writer
-	 * @param model
-	 * @param row
-	 * @param column
-	 * @param format
+	 * @param writer PrintWriter
+	 * @param model ReportModel
+	 * @param row row number
+	 * @param column column number
+	 * @param format format string
 	 * @return true if supported
 	 */
 	boolean write(PrintWriter writer, ReportModel model, int row, int column,
@@ -80,12 +80,12 @@ public interface CellValue<E> extends Serializable {
 
 	/**
 	 *  Writes to writer
-	 * @param writer
-	 * @param model
-	 * @param row
-	 * @param column
-	 * @param resourceWriter
-	 * @param format
+	 * @param writer PrintWriter
+	 * @param model ReportModel
+	 * @param row row number
+	 * @param column column number
+	 * @param resourceWriter ResourceWriter
+	 * @param format format string
 	 * @return true if supported
 	 * @throws SaveReportException 
 	 * @since 2.0

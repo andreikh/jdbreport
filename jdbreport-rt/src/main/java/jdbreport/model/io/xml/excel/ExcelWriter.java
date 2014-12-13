@@ -39,7 +39,7 @@ import jdbreport.model.io.ReportWriter;
 import jdbreport.model.io.SaveReportException;
 
 /**
- * @version 2.0 30.03.2012
+ * @version 3.0 13.12.2014
  * @author Andrey Kholmanskih
  * 
  */
@@ -47,13 +47,10 @@ public class ExcelWriter implements ReportWriter {
 
 	public void save(OutputStream out, ReportBook reportBook)
 			throws SaveReportException {
-		PrintWriter fw = new PrintWriter(new BufferedWriter(
+		try (PrintWriter fw = new PrintWriter(new BufferedWriter(
 				new OutputStreamWriter(out, java.nio.charset.Charset
-						.forName("UTF-8"))));
-		try {
+						.forName("UTF-8"))))) {
 			save(fw, reportBook);
-		} finally {
-			fw.close();
 		}
 	}
 
@@ -100,7 +97,7 @@ public class ExcelWriter implements ReportWriter {
 
 		ExcelSheetParser sheetSaver = new ExcelSheetParser();
 
-		Set<String> titles = new HashSet<String>();
+		Set<String> titles = new HashSet<>();
 		for (int i = 0; i < reportBook.size(); i++) {
 			JReportModel model = reportBook.getReportModel(i);
 			String reportTitle = model.getReportTitle();
@@ -122,11 +119,8 @@ public class ExcelWriter implements ReportWriter {
 			throws SaveReportException {
 		try {
 			file.createNewFile();
-			FileOutputStream out = new FileOutputStream(file);
-			try {
+			try (FileOutputStream out = new FileOutputStream(file)) {
 				save(out, reportBook);
-			} finally {
-				out.close();
 			}
 		} catch (IOException e) {
 			throw new SaveReportException(e);

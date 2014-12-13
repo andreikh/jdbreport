@@ -61,7 +61,7 @@ public class ReportRow implements TableRow {
 	private RowsGroup group;
 
 	public ReportRow(int colcount) {
-		colList = new ArrayList<Cell>(colcount);
+		colList = new ArrayList<>(colcount);
 		for (int i = 0; i < colcount; i++) {
 			addColumn(getNullCell());
 		}
@@ -136,7 +136,7 @@ public class ReportRow implements TableRow {
 
 	public Cell getCellItem(int column) {
 		if (column >= 0 && column < colList.size())
-			return (Cell) colList.get(column);
+			return colList.get(column);
 		return getNullCell();
 	}
 
@@ -313,7 +313,7 @@ public class ReportRow implements TableRow {
 	public void setHeight(float h) {
 		double old = this.height;
 		if (old != h) {
-			this.height = (float)h;
+			this.height = h;
 			firePropertyChange("height", unit.getXPixels(old), getHeight());
 		}
 	}

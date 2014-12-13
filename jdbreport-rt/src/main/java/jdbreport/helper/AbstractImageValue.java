@@ -50,122 +50,116 @@ import org.xml.sax.SAXException;
 
 /**
  * @author Andrey Kholmanskih
- * 
  * @version 3.0 12.12.2014
  */
 public abstract class AbstractImageValue<E> extends AbstractValue<E> {
 
-	private static final long serialVersionUID = 1L;
-	private String format;
-	protected ImageIcon icon;
+    private static final long serialVersionUID = 1L;
+    private String format;
+    protected ImageIcon icon;
 
-	public abstract void setValue(Image image);
-	
-	public Icon getIcon() {
-		return icon;
-	}
+    public abstract void setValue(Image image);
 
-	public Image getImage() {
-		return icon.getImage();
-	}
-	
-	public void setImageFormat(String format) {
-		this.format = format;
-	}
+    public Icon getIcon() {
+        return icon;
+    }
 
-	public String getImageFormat() {
-		return format;
-	}
+    public Image getImage() {
+        return icon.getImage();
+    }
 
-	public boolean write(PrintWriter writer, ReportModel model, int row, int column) {
-		RenderedImage image = null;
-		Image img = getImage();
-		if (img instanceof RenderedImage)
-			image = (RenderedImage) img;
-		else {
-			Icon icon = getIcon();
-			image = new BufferedImage(getIcon().getIconWidth(), getIcon()
-					.getIconHeight(), BufferedImage.TYPE_3BYTE_BGR);
-			Graphics2D g = ((BufferedImage) image).createGraphics();
-			icon.paintIcon(null, g, 0, 0);
-		}
+    public void setImageFormat(String format) {
+        this.format = format;
+    }
 
-		if (image != null) {
-			ByteArrayOutputStream stream = new ByteArrayOutputStream();
-			try {
-				String format = getImageFormat();
-				if (format == null || !checkImageWriterFormat(format)) {
-					format = "png";
-				}
-				if (ImageIO.write(image, format, stream)) {
-					String iconStr = new String(XMLCoder.base64Encode(stream
-							.toByteArray()));
-					String params = "type=\"" + format + "\" ";
-					writer.print("<value class=\"");
-					writer.print(getClass().getName());
-					writer.println("\">");
-					writer.print("<img " + params + " >");
-					writer.print(iconStr);
-					writer.println("</img>");
-					writer.println("</value>");
-				}
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-		}
-		return true;
-	}
+    public String getImageFormat() {
+        return format;
+    }
 
-	private boolean checkImageWriterFormat(String format) {
-		String[] formats = ImageIO.getWriterFormatNames();
-		for (int i = 0; i < formats.length; i++) {
-			if (format.equals(formats[i])) {
-				return true;
-			}
-		}
-		return false;
-	}
+    public boolean write(PrintWriter writer, ReportModel model, int row, int column) {
+        RenderedImage image;
+        Image img = getImage();
+        if (img instanceof RenderedImage)
+            image = (RenderedImage) img;
+        else {
+            Icon icon = getIcon();
+            image = new BufferedImage(getIcon().getIconWidth(), getIcon()
+                    .getIconHeight(), BufferedImage.TYPE_3BYTE_BGR);
+            Graphics2D g = ((BufferedImage) image).createGraphics();
+            icon.paintIcon(null, g, 0, 0);
+        }
 
-	public boolean startElement(String name, Attributes attributes)
-			throws SAXException {
-		if (name.equals("img")) {
-			return true;
-		}
-		return false;
-	}
+        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+        try {
+            String format = getImageFormat();
+            if (format == null || !checkImageWriterFormat(format)) {
+                format = "png";
+            }
+            if (ImageIO.write(image, format, stream)) {
+                String iconStr = new String(XMLCoder.base64Encode(stream
+                        .toByteArray()));
+                String params = "type=\"" + format + "\" ";
+                writer.print("<value class=\"");
+                writer.print(getClass().getName());
+                writer.println("\">");
+                writer.print("<img " + params + " >");
+                writer.print(iconStr);
+                writer.println("</img>");
+                writer.println("</value>");
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return true;
+    }
 
-	public void endElement(String name, StringBuffer value) throws SAXException {
-		if (name.equals("img")) {
-			if (value.length() > 0) {
-				try {
-					Image image = ImageIO.read(new ByteArrayInputStream(
-							XMLCoder.base64Decode(value.toString().trim()
-									.getBytes())));
-					setValue(image);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-			return;
-		}
-		if (name.equals("value")) {
-			getHandler().popHandler(name);
-			handler = null;
-		}
-	}
+    private boolean checkImageWriterFormat(String format) {
+        String[] formats = ImageIO.getWriterFormatNames();
+        for (String format1 : formats) {
+            if (format.equals(format1)) {
+                return true;
+            }
+        }
+        return false;
+    }
 
-	public Image getAsImage() {
-		return getImage();
-	}
+    public boolean startElement(String name, Attributes attributes)
+            throws SAXException {
+        return name.equals("img");
+    }
 
-	public boolean write(PrintWriter writer, ReportModel model, int row,
-			int column, ResourceWriter resourceWriter, String format) throws SaveReportException {
-		return write(writer, model, row, column, format);
-	}
+    public void endElement(String name, StringBuffer value) throws SAXException {
+        if (name.equals("img")) {
+            if (value.length() > 0) {
+                try {
+                    Image image = ImageIO.read(new ByteArrayInputStream(
+                            XMLCoder.base64Decode(value.toString().trim()
+                                    .getBytes())));
+                    setValue(image);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+            return;
+        }
+        if (name.equals("value")) {
+            getHandler().popHandler(name);
+            handler = null;
+        }
+    }
 
-	public XMLParser createParser(XMLReaderHandler handler,
-			ResourceReader resourceReader) {
-		return createParser(handler);
-	}
+    public Image getAsImage() {
+        return getImage();
+    }
+
+    public boolean write(PrintWriter writer, ReportModel model, int row,
+                         int column, ResourceWriter resourceWriter, String format) throws SaveReportException {
+        return write(writer, model, row, column, format);
+    }
+
+    public XMLParser createParser(XMLReaderHandler handler,
+                                  ResourceReader resourceReader) {
+        return createParser(handler);
+    }
 
 }

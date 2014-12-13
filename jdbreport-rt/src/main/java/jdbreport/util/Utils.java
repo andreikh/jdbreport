@@ -132,7 +132,7 @@ public class Utils {
 			int c = Integer.parseInt(color);
 			b = (c >> 16) & 0xff;
 			g = (c >> 8) & 0xff;
-			r = (c >> 0) & 0xff;
+			r = (c) & 0xff;
 		}
 		return new Color(r, g, b);
 	}
@@ -272,7 +272,7 @@ public class Utils {
 	}
 
 	public static String html2Plain(String text) {
-		StringBuffer result = new StringBuffer();
+		StringBuilder result = new StringBuilder();
 		for (int i = 0; i < text.length(); i++) {
 			if (text.charAt(i) != '&' || i >= text.length() - 2) {
 				result.append(text.charAt(i));

@@ -30,8 +30,8 @@ public interface Finder {
     /**
      * The method is called if the search template is changed
      * 
-     * @param findParams
-     * @return 
+     * @param findParams FindParams
+     * @return  true if found
      */
     boolean incrementalFind(FindParams findParams);
     

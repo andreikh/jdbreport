@@ -21,20 +21,21 @@
 package jdbreport.model;
 
 import java.beans.PropertyChangeListener;
-import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Iterator;
+import java.util.List;
 
 import javax.swing.table.TableCellRenderer;
 
 /**
- * @version 2.0 12.05.2011
+ * @version 3.0 13.12.2014
  * 
  * @author Andrey Kholmanskih
  * 
  */
 public class NullReportRow implements TableRow {
 
-	private static final ArrayList<Cell> list = new ArrayList<Cell>();
+	private static final List<Cell> list = Collections.emptyList();
 
 	/*
 	 * (non-Javadoc)

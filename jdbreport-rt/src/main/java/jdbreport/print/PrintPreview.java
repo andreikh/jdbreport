@@ -63,7 +63,7 @@ import javax.swing.BorderFactory;
 import javax.swing.border.BevelBorder;
 
 /**
- * @version 3.0 12.12.2014
+ * @version 3.0 13.12.2014
  * @author Andrey Kholmanskih
  * 
  */
@@ -72,11 +72,11 @@ public class PrintPreview extends JDialog implements ActionListener {
 	private static final long serialVersionUID = 1L;
 	
 
-	private static final String SCALE = "preview_scale"; //$NON-NLS-1$
+	private static final String SCALE = "preview_scale";
 
-	private static final String PAGE_COUNT = "preview_page_count"; //$NON-NLS-1$
+	private static final String PAGE_COUNT = "preview_page_count";
 
-	protected JComboBox scaleBox;
+	protected JComboBox<String> scaleBox;
 
 	protected PreviewContainer previewPanel;
 
@@ -96,7 +96,7 @@ public class PrintPreview extends JDialog implements ActionListener {
 
 	private int countInPanel = 1;
 
-	private Map<Integer, PagePreview> pageMap = new HashMap<Integer, PagePreview>();
+	private Map<Integer, PagePreview> pageMap = new HashMap<>();
 
 	private int currentPage = -1;
 
@@ -106,13 +106,11 @@ public class PrintPreview extends JDialog implements ActionListener {
 
 	private JLabel numberLabel;
 
-	private JComboBox countPageBox;
+	private JComboBox<String> countPageBox;
 
 	private PagePreview focusedPage;
 
 	private FocusListener focusListener;
-
-	private int calcCountPage;
 
 	private List<JReportGrid> gridList;
 
@@ -134,7 +132,7 @@ public class PrintPreview extends JDialog implements ActionListener {
 		this.reportPane = reportPane;
 		setTitle(reportPane.getReportBook().getReportCaption());
 		getContentPane().setLayout(new BorderLayout());
-		ArrayList<JReportGrid> grids = new ArrayList<JReportGrid>();
+		ArrayList<JReportGrid> grids = new ArrayList<>();
 		for (JReportGrid grid : reportPane.getReportGridList()) {
 			if (grid.getReportModel().isVisible()) {
 				grid.updatePages(0);
@@ -233,15 +231,12 @@ public class PrintPreview extends JDialog implements ActionListener {
 	}
 
 	private void updateStatus() {
-		String t = Messages.getString("PrintPreview.3"); //$NON-NLS-1$
+		String t = Messages.getString("PrintPreview.3");
 		int current = getFocusedPageNumber();
 		if (current >= 0) {
 			t += " " + (current + 1);
 			if (countPage < Integer.MAX_VALUE)
-				t += " / " + countPage; //$NON-NLS-1$
-			else if (calcCountPage > 0) {
-				t += " / " + calcCountPage; //$NON-NLS-1$
-			}
+				t += " / " + countPage;
 		}
 		numberLabel.setText(t);
 	}
@@ -275,8 +270,8 @@ public class PrintPreview extends JDialog implements ActionListener {
 	}
 
 	/**
-	 * @param pageIndex
-	 * @return
+	 * @param pageIndex page index
+	 * @return page preview
 	 * @throws PrinterException
 	 */
 	private PagePreview printPage(int pageIndex) throws PrinterException {
@@ -342,12 +337,8 @@ public class PrintPreview extends JDialog implements ActionListener {
 			toolBar.add(getCountPageBox());
 
 			toolBar.addSeparator();
-			JButton bt = new JButton(Messages.getString("PrintPreview.22")); //$NON-NLS-1$
-			bt.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent e) {
-					dispose();
-				}
-			});
+			JButton bt = new JButton(Messages.getString("PrintPreview.22"));
+			bt.addActionListener(e -> dispose());
 
 			toolBar.add(bt);
 		}
@@ -357,28 +348,24 @@ public class PrintPreview extends JDialog implements ActionListener {
 	private JComboBox getCountPageBox() {
 		if (countPageBox == null) {
 			String[] count = {"1", "2", "4", "6", "8"};
-			countPageBox = new JComboBox(count);
+			countPageBox = new JComboBox<>(count);
 			countPageBox.setToolTipText(Messages.getString("PrintPreview.11"));
 			countPageBox.setEditable(false);
 			countPageBox.setSelectedItem("" + countInPanel);
 			countPageBox.setMaximumSize(countPageBox.getPreferredSize());
-			countPageBox.addActionListener(new ActionListener() {
-
-				public void actionPerformed(ActionEvent e) {
-					String str = countPageBox.getSelectedItem().toString();
-					countInPanel = Integer.parseInt(str);
-					if (currentPage + countInPanel >= countPage) {
-						currentPage = countPage - countInPanel;
-						if (currentPage < 0) currentPage = 0;
-					}
-					try {
-						revalidatePage();
-					} catch (PrinterException e1) {
-						Utils.showError(e1);
-					}
-				}
-
-			});
+			countPageBox.addActionListener(e -> {
+                String str = countPageBox.getSelectedItem().toString();
+                countInPanel = Integer.parseInt(str);
+                if (currentPage + countInPanel >= countPage) {
+                    currentPage = countPage - countInPanel;
+                    if (currentPage < 0) currentPage = 0;
+                }
+                try {
+                    revalidatePage();
+                } catch (PrinterException e1) {
+                    Utils.showError(e1);
+                }
+            });
 		}
 		return countPageBox;
 	}
@@ -466,10 +453,10 @@ public class PrintPreview extends JDialog implements ActionListener {
 	 */
 	private JComboBox getScaleBox() {
 		if (scaleBox == null) {
-			String[] scales = { "25 %", "50 %", "75 %", "100 %", "125 %", "150 %" }; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
-			scaleBox = new JComboBox(scales);
+			String[] scales = { "25 %", "50 %", "75 %", "100 %", "125 %", "150 %" };
+			scaleBox = new JComboBox<>(scales);
 			scaleBox.setSelectedItem(scale + " %");
-			scaleBox.setToolTipText(Messages.getString("PrintPreview.20")); //$NON-NLS-1$
+			scaleBox.setToolTipText(Messages.getString("PrintPreview.20"));
 			scaleBox.setActionCommand("scale");
 			scaleBox.addActionListener(this);
 
@@ -488,7 +475,7 @@ public class PrintPreview extends JDialog implements ActionListener {
 	}
 
 	/**
-	 * @return
+	 * @return print action
 	 */
 	private Action getPrintAction() {
 		if (printAction == null) {
@@ -610,7 +597,7 @@ public class PrintPreview extends JDialog implements ActionListener {
 		for (int i = 0; i < previewPanel.getComponentCount(); i++) {
 			Component comp = previewPanel.getComponent(i);
 			if (comp instanceof PagePreview) {
-				((PagePreview) comp).removeMouseListener(focusListener);
+				comp.removeMouseListener(focusListener);
 			}
 		}
 		focusedPage = null;
@@ -649,7 +636,7 @@ public class PrintPreview extends JDialog implements ActionListener {
 	}
 
 	/**
-	 * @param pp
+	 * @param pp PagePreview
 	 */
 	private void addPage(PagePreview pp) {
 		previewPanel.add(pp);

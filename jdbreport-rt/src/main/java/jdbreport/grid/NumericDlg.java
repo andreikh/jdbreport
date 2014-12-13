@@ -37,7 +37,7 @@ import jdbreport.model.Units;
 import jdbreport.util.Utils;
 
 /**
- * @version 3.0 12.12.2014
+ * @version 3.0 13.12.2014
  * @author Andrey Kholmanskih
  * 
  */
@@ -65,7 +65,7 @@ public class NumericDlg extends JDialog {
 	private JButton cancelButton = null;
 	private JPanel centerPanel = null;
 	private JTextField valueField = null;
-	private JComboBox unitsBox = null;
+	private JComboBox<String> unitsBox = null;
 	private int result = CANCEL;
 	private int unitInd;
 	private double value;
@@ -187,17 +187,15 @@ public class NumericDlg extends JDialog {
 		if (okButton == null) {
 			okButton = new JButton();
 			okButton.setText(Messages.getString("NumericDlg.1"));
-			okButton.addActionListener(new java.awt.event.ActionListener() {
-				public void actionPerformed(java.awt.event.ActionEvent e) {
-					String s = valueField.getText();
-					if (s != null) {
-						saveValue(Double.parseDouble(s), unitInd);
-					} else
-						value = 0;
-					setVisible(false);
-					result = OK;
-				}
-			});
+			okButton.addActionListener(e -> {
+                String s = valueField.getText();
+                if (s != null) {
+                    saveValue(Double.parseDouble(s), unitInd);
+                } else
+                    value = 0;
+                setVisible(false);
+                result = OK;
+            });
 		}
 		return okButton;
 	}
@@ -206,12 +204,10 @@ public class NumericDlg extends JDialog {
 		if (cancelButton == null) {
 			cancelButton = new JButton();
 			cancelButton.setText(Messages.getString("NumericDlg.2"));
-			cancelButton.addActionListener(new java.awt.event.ActionListener() {
-				public void actionPerformed(java.awt.event.ActionEvent e) {
-					setVisible(false);
-					result = CANCEL;
-				}
-			});
+			cancelButton.addActionListener(e -> {
+                setVisible(false);
+                result = CANCEL;
+            });
 		}
 		return cancelButton;
 	}
@@ -278,18 +274,13 @@ public class NumericDlg extends JDialog {
 	 */
 	private JComboBox getUnitsBox() {
 		if (unitsBox == null) {
-			unitsBox = new JComboBox();
+			unitsBox = new JComboBox<>();
 			unitsBox.addItem(Messages.getString("NumericDlg.0"));
 			unitsBox.addItem(Messages.getString("NumericDlg.7"));
 			unitsBox.addItem(Messages.getString("NumericDlg.8"));
 			if (unitInd < unitsBox.getItemCount())
 				unitsBox.setSelectedIndex(unitInd);
-			unitsBox.addActionListener(new java.awt.event.ActionListener() {
-				public void actionPerformed(java.awt.event.ActionEvent e) {
-					changeUnit();
-				}
-
-			});
+			unitsBox.addActionListener(e -> changeUnit());
 		}
 		return unitsBox;
 	}

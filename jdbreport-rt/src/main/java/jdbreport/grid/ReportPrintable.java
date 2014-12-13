@@ -44,7 +44,7 @@ import jdbreport.model.TableRowModel;
 import jdbreport.util.GraphicUtil;
 
 /**
- * @version 2.0 12.05.2011
+ * @version 3.0 13.12.2014
  * @author Andrey Kholmanskih
  * 
  */
@@ -52,12 +52,6 @@ public class ReportPrintable implements Printable {
 
 	/** The table to print. */
 	private JReportGrid table;
-
-	/** For quick reference to the page header. */
-	private Group pageHeader;
-
-	/** For quick reference to the page footer. */
-	private Group pageFooter;
 
 	/** For quick reference to the table's column model. */
 	private TableColumnModel colModel;
@@ -134,7 +128,7 @@ public class ReportPrintable implements Printable {
 		tableModel = table.getReportModel();
 
 		if (isPreview) {
-			pageClips = new HashMap<Integer, PageClip>();
+			pageClips = new HashMap<>();
 		}
 		init();
 
@@ -150,17 +144,19 @@ public class ReportPrintable implements Printable {
 		this.printMode = tableModel.getReportPage().isShrinkWidth() ? PrintMode.FIT_WIDTH
 				: PrintMode.NORMAL;
 
-		pageClips = new HashMap<Integer, PageClip>();
+		pageClips = new HashMap<>();
 		init();
 
 	}
 
 	private void init() {
-		pageHeader = tableModel.getRowModel().getRootGroup()
+		/* For quick reference to the page header. */
+		Group pageHeader = tableModel.getRowModel().getRootGroup()
 				.getGroup(Group.ROW_PAGE_HEADER);
 		if (pageHeader != null && pageHeader.getChildCount() == 0)
 			pageHeader = null;
-		pageFooter = tableModel.getRowModel().getRootGroup()
+		/* For quick reference to the page footer. */
+		Group pageFooter = tableModel.getRowModel().getRootGroup()
 				.getGroup(Group.ROW_PAGE_FOOTER);
 		if (pageFooter != null && pageFooter.getChildCount() == 0)
 			pageFooter = null;
@@ -261,11 +257,6 @@ public class ReportPrintable implements Printable {
 		}
 	}
 
-	/**
-	 * 
-	 * @param pageIndex
-	 * @return
-	 */
 	private boolean fromTopToDown(int scaledWidth, int scaledHeight,
 			int pageIndex) {
 		while (last < pageIndex) {
@@ -282,11 +273,6 @@ public class ReportPrintable implements Printable {
 		return true;
 	}
 
-	/**
-	 * 
-	 * @param pageIndex
-	 * @return
-	 */
 	private boolean fromLeftToRight(int scaledWidth, int scaledHeight,
 			int pageIndex) {
 		while (last < pageIndex) {
@@ -495,9 +481,6 @@ public class ReportPrintable implements Printable {
 		}
 	}
 
-	/**
-	 * @return
-	 */
 	private boolean isEndPage() {
 		TableRowModel rowModel = tableModel.getRowModel();
 		TableRow tableRow = rowModel.getRow(row - 1);

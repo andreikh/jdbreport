@@ -38,7 +38,7 @@ import jdbreport.util.Utils;
 import jdbreport.util.xml.XMLProperties;
 
 /**
- * @version 3.0 12.12.2014
+ * @version 3.0 13.12.2014
  * @author Andrey Kholmanskih
  * 
  */
@@ -93,12 +93,12 @@ public class ReportEditor extends JFrame implements
 				|| getReportBook().getReportCaption().length() == 0)
 			this.setTitle(getReportPane().getCaption());
 		else
-			this.setTitle(getReportPane().getCaption() + " - " //$NON-NLS-1$
+			this.setTitle(getReportPane().getCaption() + " - "
 					+ getReportBook().getReportCaption());
 		this.addWindowListener(new java.awt.event.WindowAdapter() {
 
 			public void windowClosing(java.awt.event.WindowEvent e) {
-				exitForm(e);
+				exitForm();
 			}
 
 			@Override
@@ -141,11 +141,7 @@ public class ReportEditor extends JFrame implements
 		setJMenuBar(menuBar);
 	}
 
-	/**
-	 * @return
-	 */
-
-	private void exitForm(WindowEvent evt) {
+	private void exitForm() {
 		if (!getReportPane().saveQuestion())
 			return;
 		setDefaultCloseOperation(getCloseOperation());

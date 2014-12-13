@@ -66,20 +66,20 @@ public class DocxWriter implements ReportWriter {
 		try {
 			zipStream = new ZipOutputStream(out);
 			try {
-				ZipEntry entry = new ZipEntry("[Content_Types].xml"); //$NON-NLS-1$
+				ZipEntry entry = new ZipEntry("[Content_Types].xml");
 				zipStream.putNextEntry(entry);
 				writeContentTypes(zipStream);
 
 				
-				entry = new ZipEntry("content.xml"); //$NON-NLS-1$
+				entry = new ZipEntry("content.xml");
 				zipStream.putNextEntry(entry);
 				getContentWriter().save(zipStream, reportBook);
 
 				if (images != null)
-					entry = new ZipEntry("word/media/"); //$NON-NLS-1$
+					entry = new ZipEntry("word/media/");
 					zipStream.putNextEntry(entry);
 					for (String fileName : images.keySet()) {
-						entry = new ZipEntry("word/media/" + fileName); //$NON-NLS-1$
+						entry = new ZipEntry("word/media/" + fileName);
 						zipStream.putNextEntry(entry);
 						RenderedImage image = images.get(fileName);
 
@@ -87,24 +87,24 @@ public class DocxWriter implements ReportWriter {
 								.getFileExtension(fileName), zipStream);
 					}
 
-				entry = new ZipEntry("settings.xml"); //$NON-NLS-1$
+				entry = new ZipEntry("settings.xml");
 				zipStream.putNextEntry(entry);
 				getSettingsWriter().save(zipStream, reportBook);
 
-				entry = new ZipEntry("meta.xml"); //$NON-NLS-1$
+				entry = new ZipEntry("meta.xml");
 				zipStream.putNextEntry(entry);
 				getMetaWriter().save(zipStream, reportBook);
 
 				
-				entry = new ZipEntry("docProps/app.xml"); //$NON-NLS-1$
+				entry = new ZipEntry("docProps/app.xml");
 				zipStream.putNextEntry(entry);
 				writeDocPropApp(zipStream);
 
-				entry = new ZipEntry("docProps/core.xml"); //$NON-NLS-1$
+				entry = new ZipEntry("docProps/core.xml");
 				zipStream.putNextEntry(entry);
 				writeDocPropCore(zipStream);
 
-				entry = new ZipEntry("_rels/rels"); //$NON-NLS-1$
+				entry = new ZipEntry("_rels/rels");
 				zipStream.putNextEntry(entry);
 				writeRels(zipStream);
 				
@@ -135,7 +135,7 @@ public class DocxWriter implements ReportWriter {
 	
 	private void writeContentTypes(OutputStream stream) {
 		PrintWriter fw = new PrintWriter(new OutputStreamWriter(stream,
-				java.nio.charset.Charset.forName("UTF-8"))); //$NON-NLS-1$
+				java.nio.charset.Charset.forName("UTF-8")));
 		writeXmlHead(fw);
 		fw
 				.print("<Types xmlns=\"http://schemas.openxmlformats.org/package/2006/content-types\">");
@@ -208,7 +208,7 @@ public class DocxWriter implements ReportWriter {
 
 	private void writeDocPropCore(OutputStream stream) {
 		PrintWriter fw = new PrintWriter(new OutputStreamWriter(stream,
-				java.nio.charset.Charset.forName("UTF-8"))); //$NON-NLS-1$
+				java.nio.charset.Charset.forName("UTF-8")));
 		writeXmlHead(fw);
 		fw.print("<cp:coreProperties xmlns:cp=\"http://schemas.openxmlformats.org/package/2006/metadata/core-properties\" xmlns:dc=\"http://purl.org/dc/elements/1.1/\" xmlns:dcterms=\"http://purl.org/dc/terms/\" xmlns:dcmitype=\"http://purl.org/dc/dcmitype/\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">");
 		fw.print("<dc:title></dc:title>");
@@ -231,7 +231,7 @@ public class DocxWriter implements ReportWriter {
 
 	private void writeRels(OutputStream stream) {
 		PrintWriter fw = new PrintWriter(new OutputStreamWriter(stream,
-				java.nio.charset.Charset.forName("UTF-8"))); //$NON-NLS-1$
+				java.nio.charset.Charset.forName("UTF-8")));
 		writeXmlHead(fw);
 		fw.print("<Relationships xmlns=\"http://schemas.openxmlformats.org/package/2006/relationships\">");
 		fw.print("<Relationship Id=\"rId3\" Type=\"http://schemas.openxmlformats.org/officeDocument/2006/relationships/extended-properties\" Target=\"docProps/app.xml\"/>");
@@ -242,7 +242,7 @@ public class DocxWriter implements ReportWriter {
 	
 	public void save(Writer writer, ReportBook reportBook)
 			throws SaveReportException {
-		throw new SaveReportException("Method not supported"); //$NON-NLS-1$
+		throw new SaveReportException("Method not supported");
 	}
 
 	public void save(File file, ReportBook reportBook)
@@ -265,7 +265,7 @@ public class DocxWriter implements ReportWriter {
 
 	public void writeIcon(String fileName, RenderedImage image) {
 		if (images == null) {
-			images = new HashMap<String, RenderedImage>();
+			images = new HashMap<>();
 		}
 		images.put(fileName, image);
 	}

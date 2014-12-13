@@ -47,7 +47,7 @@ abstract class CommonStyle implements Cloneable {
 	/**
 	 * If true getBreak() returns break_before properties else
 	 * returns break_after
-	 * @return 
+	 * @return true if break_after
 	 */
 	public boolean isAfter() {
 		return after; 

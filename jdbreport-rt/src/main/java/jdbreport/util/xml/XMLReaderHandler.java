@@ -27,7 +27,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 /**
- * @version 1.7 19.06.2012
+ * @version 3.0 13.12.2014
  * @author Andrey Kholmanskih
  * 
  */
@@ -35,8 +35,8 @@ public abstract class XMLReaderHandler extends DefaultHandler {
 
 	private StringBuffer currentValue = new StringBuffer();
 	private static final StringBuffer nullValue = new StringBuffer();
-	private List<XMLParser> stack = new LinkedList<XMLParser>();
-	private List<StringBuffer> valueStack = new LinkedList<StringBuffer>();
+	private List<XMLParser> stack = new LinkedList<>();
+	private List<StringBuffer> valueStack = new LinkedList<>();
 	protected XMLParser handler;
 	protected boolean isParse = false;
 	protected String rootName;

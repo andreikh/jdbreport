@@ -47,7 +47,7 @@ import jdbreport.util.Utils;
 import jdbreport.view.model.JReportModel;
 
 /**
- * @version 3.0 12.12.2014
+ * @version 3.0 13.12.2014
  * @author Andrey Kholmanskih
  * 
  */
@@ -221,9 +221,7 @@ public class ReportBook implements Iterable<ReportModel>, TableRowModelListener 
 						.newInstance();
 				return fileType.getReader();
 			}
-		} catch (InstantiationException | IllegalAccessException e) {
-			logger.log(Level.SEVERE, e.getMessage(), e);
-		} catch (ClassNotFoundException e) {
+		} catch (InstantiationException | IllegalAccessException | ClassNotFoundException e) {
 			logger.log(Level.SEVERE, e.getMessage(), e);
 		}
 		return null;
@@ -418,7 +416,7 @@ public class ReportBook implements Iterable<ReportModel>, TableRowModelListener 
 
 				Object newKey = getStyleList().size();
 				while (getStyleList().containsKey(newKey)
-						|| book.getStyleList().containsKey(newKey)) newKey = ((Integer) newKey).intValue() + 1;
+						|| book.getStyleList().containsKey(newKey)) newKey = (Integer) newKey + 1;
 				style.setId(newKey);
 				book.replaceStyles(key, newKey);
 				getStyleList().put(newKey, style);
@@ -996,7 +994,7 @@ public class ReportBook implements Iterable<ReportModel>, TableRowModelListener 
 		if (id == null || styleList.containsKey(id)) {
 			id = styleList.size();
 			while (styleList.containsKey(id))
-                id = ((Integer) id).intValue() + 1;
+                id = (Integer) id + 1;
 		}
 		style.setId(id);
 		styleList.put(id, style);

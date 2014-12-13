@@ -28,7 +28,7 @@ import java.util.Set;
  *
  */
 public enum SystemVar {
-    _PAGE, _ROW, _PAGE_COUNT; // "_СТРАНИЦА",  "_СТРОКА",  "_КОЛ_СТРАНИЦ"
+    _PAGE, _ROW, _PAGE_COUNT;
 
     public String getLocalName() {
         String v = Messages.getString(name());

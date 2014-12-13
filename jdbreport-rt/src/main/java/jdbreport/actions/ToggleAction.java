@@ -21,7 +21,6 @@ package jdbreport.actions;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -34,19 +33,7 @@ public abstract class ToggleAction extends BaseAction {
     private static final long serialVersionUID = 1L;
 
     private boolean selected;
-    private List<ButtonModel> buttonModels = new ArrayList<ButtonModel>();
-
-    public ToggleAction(String name, ActionListener l) {
-        super(name, l);
-    }
-
-    public ToggleAction(String name, String delimiter, ActionListener l) {
-        super(name, delimiter, l);
-    }
-
-    public ToggleAction(String name) {
-        super(name);
-    }
+    private List<ButtonModel> buttonModels = new ArrayList<>();
 
     public ToggleAction(String name, String delimiter) {
         super(name, delimiter);
@@ -61,10 +48,6 @@ public abstract class ToggleAction extends BaseAction {
     public void addButtonModel(ButtonModel model) {
         if (buttonModels.indexOf(model) < 0)
             buttonModels.add(model);
-    }
-
-    public void removeButtonModel(ButtonModel model) {
-        buttonModels.remove(model);
     }
 
     /**
@@ -82,12 +65,10 @@ public abstract class ToggleAction extends BaseAction {
 
         if (oldValue != selected) {
             this.selected = selected;
-            for (int i = 0; i < buttonModels.size(); i++) {
-                ButtonModel buttonModel = buttonModels.get(i);
+            for (ButtonModel buttonModel : buttonModels) {
                 buttonModel.setSelected(selected);
             }
-            firePropertyChange("selected", Boolean.valueOf(oldValue), Boolean
-                    .valueOf(selected));
+            firePropertyChange("selected", oldValue, selected);
         }
     }
 
@@ -96,8 +77,7 @@ public abstract class ToggleAction extends BaseAction {
 
         if (oldValue != newValue) {
             super.setEnabled(newValue);
-            for (int i = 0; i < buttonModels.size(); i++) {
-                ButtonModel buttonModel = buttonModels.get(i);
+            for (ButtonModel buttonModel : buttonModels) {
                 buttonModel.setEnabled(newValue);
             }
         }

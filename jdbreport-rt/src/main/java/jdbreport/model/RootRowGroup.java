@@ -19,7 +19,7 @@
 package jdbreport.model;
 
 /**
- * @version 1.4 17.04.2010
+ * @version 3.0 13.12.2014
  * 
  * @author Andrey Kholmanskih
  * 
@@ -110,11 +110,12 @@ public class RootRowGroup extends RootGroup {
 				getChildList().add(0, group);
 				return group;
 			} else {
-				for (int i = getChildList().size() - 1; i >= 0 ; i--) {
-					int childType = getChild(i).getType(); 
+				if (getChildList().size() > 0) {
+					group = getChild(getChildList().size() - 1);
+					int childType = getChild(getChildList().size() - 1).getType();
 					if (childType == type) {
-						return getChild(i);
-					} else  if (childType != type) {
+						return group;
+					} else {
 						group = createRowGroup(type);
 						getChildList().add(group);
 						return group;

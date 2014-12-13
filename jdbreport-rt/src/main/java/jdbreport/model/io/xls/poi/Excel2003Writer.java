@@ -67,7 +67,7 @@ import jdbreport.model.print.ReportPage.PaperSize;
 import jdbreport.util.Utils;
 
 /**
- * @version 3.0 12.12.2014
+ * @version 3.0 13.12.2014
  * @author Andrey Kholmanskih
  * 
  */
@@ -404,39 +404,47 @@ public class Excel2003Writer implements ReportWriter {
 			String name = key.toString();
 			String attribute = attributeSet.getAttribute(key).toString();
 
-			if (name.equals("font-weight")) {
-				bold = attribute.equals("bold");
-			} else if (name.equals("font-style")) {
-				italic = attribute.equals("italic");
-			} else if (name.equals("text-decoration")) {
-				if (attribute.equals("underline")) {
-					underline = true;
-				} else if (attribute.equals("line-through")) {
-					line_through = true;
-				}
-			} else if (name.equals("font-family")) {
-				family = attribute;
-			} else if (name.equals("font-size")) {
-				sizeStr = attribute;
-
-			} else if (name.equals("color")) {
-				Color fontColor = Utils.colorByName(attribute);
-				if (fontColor == null) {
-					try {
-						fontColor = Utils.stringToColor(attribute);
-					} catch (Exception ignored) {
-
+			switch (name) {
+				case "font-weight":
+					bold = attribute.equals("bold");
+					break;
+				case "font-style":
+					italic = attribute.equals("italic");
+					break;
+				case "text-decoration":
+					if (attribute.equals("underline")) {
+						underline = true;
+					} else if (attribute.equals("line-through")) {
+						line_through = true;
 					}
-				}
-				if (fontColor != null) {
-					color = colorToIndex(wb, fontColor);
-				}
-			} else if (name.equals("vertical-align")) {
-				if (attribute.equals("sub")) {
-					sub = true;
-				} else if (attribute.equals("sup")) {
-					sup = true;
-				}
+					break;
+				case "font-family":
+					family = attribute;
+					break;
+				case "font-size":
+					sizeStr = attribute;
+
+					break;
+				case "color":
+					Color fontColor = Utils.colorByName(attribute);
+					if (fontColor == null) {
+						try {
+							fontColor = Utils.stringToColor(attribute);
+						} catch (Exception ignored) {
+
+						}
+					}
+					if (fontColor != null) {
+						color = colorToIndex(wb, fontColor);
+					}
+					break;
+				case "vertical-align":
+					if (attribute.equals("sub")) {
+						sub = true;
+					} else if (attribute.equals("sup")) {
+						sup = true;
+					}
+					break;
 			}
 		}
 		if (family != null || bold || italic || underline || line_through

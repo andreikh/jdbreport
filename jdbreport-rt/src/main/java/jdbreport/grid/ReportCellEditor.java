@@ -47,7 +47,7 @@ import jdbreport.model.Cell;
 import jdbreport.model.CellStyle;
 
 /**
- * @version 1.1 03/09/08
+ * @version 3.0 13.12.2014
  * @author Andrey Kholmanskih
  * 
  */
@@ -60,10 +60,6 @@ public class ReportCellEditor extends AbstractCellEditor implements
 
 	private int clickCountToStart = 2;
 
-	private EditorDelegate delegate;
-
-	private boolean notWrapLine;
-
 	public ReportCellEditor(String contentType) {
 		editorComponent = new JTextPane();
 		editorComponent.setContentType(contentType);
@@ -73,10 +69,10 @@ public class ReportCellEditor extends AbstractCellEditor implements
 			editorComponent.setEditorKit(new NoWrapEditorKit());
 		}
 		initKeyMap();
-		delegate = new EditorDelegate() {
-			
+		EditorDelegate delegate = new EditorDelegate() {
+
 			private static final long serialVersionUID = 1L;
-			
+
 			public void setValue(Object value) {
 				editorComponent
 						.setText((value != null) ? value.toString() : ""); //$NON-NLS-1$
@@ -100,9 +96,9 @@ public class ReportCellEditor extends AbstractCellEditor implements
 		Cell cell = grid.getReportModel().getReportCell(row, column);
 		CellStyle style = grid.getReportModel().getStyles(cell.getStyleId());
 		setWordWrap(style.isWrapLine());
-		String s = value != null ? value.toString() : ""; //$NON-NLS-1$
+		String s = value != null ? value.toString() : "";
 		editorComponent.setBorder(new LineBorder(Color.black));
-		editorComponent.setAutoscrolls(!notWrapLine);
+		editorComponent.setAutoscrolls(true);
 		editorComponent.setText(s);
 		editorComponent.getStyledDocument().setParagraphAttributes(0,
 				s.length(), style.getAttributeSet(), true);
@@ -128,10 +124,7 @@ public class ReportCellEditor extends AbstractCellEditor implements
 	}
 
 	public boolean isCellEditable(EventObject anEvent) {
-		if (anEvent instanceof MouseEvent) {
-			return ((MouseEvent) anEvent).getClickCount() >= clickCountToStart;
-		}
-		return true;
+		return !(anEvent instanceof MouseEvent) || ((MouseEvent) anEvent).getClickCount() >= clickCountToStart;
 	}
 
 	protected void insertLineBreak() {

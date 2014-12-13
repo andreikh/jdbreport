@@ -37,22 +37,22 @@ public class DaoException extends Exception {
 	}
 
 	/**
-	 * @param message
+	 * @param message message
 	 */
 	public DaoException(String message) {
 		super(message);
 	}
 
 	/**
-	 * @param cause
+	 * @param cause Throwable
 	 */
 	public DaoException(Throwable cause) {
 		super(cause);
 	}
 
 	/**
-	 * @param message
-	 * @param cause
+	 * @param message message
+	 * @param cause Throwable
 	 */
 	public DaoException(String message, Throwable cause) {
 		super(message, cause);

@@ -35,7 +35,6 @@ import jdbreport.model.ReportColumn;
 import jdbreport.model.ReportModel;
 import jdbreport.model.TableRow;
 import jdbreport.model.Units;
-import jdbreport.model.io.ResourceWriter;
 import jdbreport.model.io.SaveReportException;
 import jdbreport.model.io.xml.CellParser;
 import jdbreport.model.io.xml.DBReportParser;
@@ -45,7 +44,7 @@ import jdbreport.model.io.xml.StyleReportParser;
 import org.xml.sax.Attributes;
 
 /**
- * @version 2.0 19.12.2009
+ * @version 3.0 13.12.2014
  * @author Andrey Kholmanskih
  * 
  */
@@ -211,10 +210,7 @@ public class ClipboardParser extends DefaultReportParser {
 				return;
 			}
 		}
-		if (name.equals(SHEET)) {
-			inSheet = false;
-			return;
-		}
+		if (name.equals(SHEET)) inSheet = false;
 	}
 
 	protected CellParser createCellHandler(Cell cell) {
@@ -223,7 +219,7 @@ public class ClipboardParser extends DefaultReportParser {
 
 	protected Map<Object, Object> getRecodeMap() {
 		if (recodeMap == null) {
-			recodeMap = new HashMap<Object, Object>();
+			recodeMap = new HashMap<>();
 		}
 		return recodeMap;
 	}
@@ -262,7 +258,7 @@ public class ClipboardParser extends DefaultReportParser {
 
 	protected void writeStyles(ReportModel model, PrintWriter fw) {
 		fw.println("<Styles>");
-		ArrayList<Object> list = new ArrayList<Object>();
+		ArrayList<Object> list = new ArrayList<>();
 		Iterator<Cell> cellit = model.getSelectedCells(selectionRect);
 		while (cellit.hasNext()) {
 			Object key = cellit.next().getStyleId();
@@ -342,7 +338,7 @@ public class ClipboardParser extends DefaultReportParser {
 	}
 
 	protected CellParser createCellHandler() {
-		return new CellParser(getDefaultReportHandler(), (ResourceWriter) null);
+		return new CellParser(getDefaultReportHandler(), null);
 	}
 
 }

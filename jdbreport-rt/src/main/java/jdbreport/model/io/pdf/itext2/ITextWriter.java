@@ -39,22 +39,21 @@ import jdbreport.model.io.pdf.Messages;
 /**
  * @author Andrey Kholmanskih
  * 
- * @version 2.0 13.04.2011
+ * @version 3.0 13.12.2014
  * 
  */
 public abstract class ITextWriter implements ReportWriter {
 
 	private JTextComponent htmlReportRenderer;
 	private static ReportFontMapper fontMapper;
-	Map<Object, com.lowagie.text.Font> fonts = new HashMap<Object, com.lowagie.text.Font>();
-	List<CellStyle> textStyles = new ArrayList<CellStyle>();
+	Map<Object, com.lowagie.text.Font> fonts = new HashMap<>();
+	List<CellStyle> textStyles = new ArrayList<>();
 
 	/**
 	 * @since 2.0
 	 */
 	synchronized public static void initFontMapper() {
-		ReportFontMapper mapper = new ReportFontMapper();
-		fontMapper = mapper;
+		fontMapper = new ReportFontMapper();
 	}
 	
 	protected ReportFontMapper getFontMapper() {

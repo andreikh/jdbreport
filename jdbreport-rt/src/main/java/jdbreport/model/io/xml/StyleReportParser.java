@@ -30,7 +30,7 @@ import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 
 /**
- * @version 2.0 15.02.2012
+ * @version 3.0 13.12.2014
  * @author Andrey Kholmanskih
  * 
  */
@@ -108,7 +108,7 @@ public class StyleReportParser extends DefaultReportParser {
 			if (id != null) {
 				try {
 					id = new Integer(id.toString());
-				} catch (NumberFormatException e) {
+				} catch (NumberFormatException ignored) {
 				}
 				currentStyle = (CellStyle) CellStyle.getDefaultStyle().clone();
 				currentStyle.setId(id);
@@ -161,27 +161,38 @@ public class StyleReportParser extends DefaultReportParser {
 			return true;
 		}
 		if (inStyle && name.equals(ALIGNMENT)) {
-			int flags = 0;
+			int flags;
 			String s = attributes.getValue(HORIZONTAL);
 			if (s != null) {
-				if (s.equals(CENTER))
-					flags = CellStyle.CENTER;
-				else if (s.equals("Right"))
-					flags = CellStyle.RIGHT;
-				else if (s.equals("Justify"))
-					flags = CellStyle.JUSTIFY;
-				else
-					flags = CellStyle.LEFT;
+				switch (s) {
+					case CENTER:
+						flags = CellStyle.CENTER;
+						break;
+					case "Right":
+						flags = CellStyle.RIGHT;
+						break;
+					case "Justify":
+						flags = CellStyle.JUSTIFY;
+						break;
+					default:
+						flags = CellStyle.LEFT;
+						break;
+				}
 				currentStyle = getCurrentStyle().deriveHAlign(flags);
 			}
 			s = attributes.getValue(VERTICAL);
 			if (s != null) {
-				if (s.equals(CENTER))
-					flags = CellStyle.CENTER;
-				else if (s.equals(BOTTOM))
-					flags = CellStyle.BOTTOM;
-				else
-					flags = CellStyle.TOP;
+				switch (s) {
+					case CENTER:
+						flags = CellStyle.CENTER;
+						break;
+					case BOTTOM:
+						flags = CellStyle.BOTTOM;
+						break;
+					default:
+						flags = CellStyle.TOP;
+						break;
+				}
 				currentStyle = getCurrentStyle().deriveVAlign(flags);
 			}
 
@@ -321,20 +332,11 @@ public class StyleReportParser extends DefaultReportParser {
 	}
 
 	private static String paragraphToXML(CellStyle style) {
-		StringBuilder result = new StringBuilder("<");
-		result.append(PARAGRAPH).append(" ");
-		result.append(LS).append("=\"").append(style.getLineSpacing())
-		.append("\" />");
-		return result.toString();
+		return "<" + PARAGRAPH + " " + LS + "=\"" + style.getLineSpacing() + "\" />";
 	}
 
 	private static Object colorToXML(CellStyle style) {
-		StringBuilder result = new StringBuilder("<");
-		result.append(BACKGROUND).append(" ").append(COLOR).append("=\"");
-		result.append(Utils.colorToHex(style.getBackground()));
-		result.append("\" ");
-		result.append("/>");
-		return result.toString();
+		return "<" + BACKGROUND + " " + COLOR + "=\"" + Utils.colorToHex(style.getBackground()) + "\" " + "/>";
 	}
 
 	private static String alignToXML(CellStyle style) {
@@ -360,7 +362,7 @@ public class StyleReportParser extends DefaultReportParser {
 			result.append(AUTO_HEIGHT).append("=\"true\" ");
 		}
 		if (!style.isWrapLine())
-			result.append(WRAP_LINE).append("=\"" + style.isWrapLine() + "\" ");
+			result.append(WRAP_LINE).append("=\"").append(style.isWrapLine()).append("\" ");
 		if (style.getCarryRows() > 0) {
 			result.append(CARRY).append("=\"");
 			result.append(style.getCarryRows());
@@ -399,21 +401,9 @@ public class StyleReportParser extends DefaultReportParser {
 	}
 
 	private static String lineToXML(int pos, Border line) {
-		StringBuilder result = new StringBuilder("<");
-		result.append(BORDER).append(" ");
-		result.append(POSITION).append("=\"");
-		result.append(Border.borderPosition[pos]);
-		result.append("\" ").append(WIDTH).append("=\"");
-		result.append(line.getLineWidth());
-		result.append("\" ");
-		result.append(STYLE).append("=\"");
-		result.append(line.getStyle());
-		result.append("\" ");
-		result.append(COLOR).append("=\"");
-		result.append(Utils.colorToHex(line.getColor()));
-		result.append("\" ");
-		result.append("/>");
-		return result.toString();
+		return "<" + BORDER + " " + POSITION + "=\"" + Border.borderPosition[pos] + "\" " + WIDTH + "=\""
+				+ line.getLineWidth() + "\" " + STYLE + "=\"" + line.getStyle() + "\" " + COLOR + "=\""
+				+ Utils.colorToHex(line.getColor()) + "\" " + "/>";
 	}
 
 }

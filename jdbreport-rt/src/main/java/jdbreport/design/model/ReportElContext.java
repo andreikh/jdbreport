@@ -33,7 +33,7 @@ import javax.el.VariableMapper;
  * 
  * @author Andrey Kholmanskih
  *
- * @version 1.0 04.03.2011
+ * @version 3.0 13.12.2014
  */
 public class ReportElContext extends ELContext {
 	
@@ -46,7 +46,7 @@ public class ReportElContext extends ELContext {
 	}
 
 	static class Functions extends FunctionMapper {
-		Map<String, Method> map = new HashMap<String, Method>();
+		Map<String, Method> map = new HashMap<>();
 
 		@Override
 		public Method resolveFunction(String prefix, String localName) {
@@ -59,7 +59,7 @@ public class ReportElContext extends ELContext {
 	}
 
 	static class Variables extends VariableMapper {
-		Map<String, ValueExpression> map = new HashMap<String, ValueExpression>();
+		Map<String, ValueExpression> map = new HashMap<>();
 
 		@Override
 		public ValueExpression resolveVariable(String variable) {
@@ -120,7 +120,7 @@ public class ReportElContext extends ELContext {
 	/**
 	 * Set our resolver.
 	 * 
-	 * @param resolver
+	 * @param resolver ELResolver
 	 */
 	public void setELResolver(ELResolver resolver) {
 		this.resolver = resolver;

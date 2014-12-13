@@ -31,7 +31,7 @@ import java.util.ResourceBundle;
  */
 public class Messages implements Resources {
 
-    private static final String ICONS_PATH= "/jdbreport/view/finder/";
+    private static final String ICONS_PATH= "/jdbreport/resources/";
     
 	public static ResourceBundle resource = 
 	    	ResourceBundle.getBundle("jdbreport.view.finder.messages",

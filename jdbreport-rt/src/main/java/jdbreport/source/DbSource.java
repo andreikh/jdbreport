@@ -34,7 +34,7 @@ import java.util.Properties;
 import java.util.zip.DataFormatException;
 
 /**
- * @version 1.7 20.06.2012
+ * @version 3.0 13.12.2014
  * @author Andrey Kholmanskih
  * 
  */
@@ -96,13 +96,7 @@ public class DbSource implements JdbcSource, XMLStored, Serializable {
 		try {
 			inTransaction = false;
 			getConnection().commit();
-		} catch (InstantiationException e) {
-			throw new SQLException(e.getMessage());
-		} catch (IllegalAccessException e) {
-			throw new SQLException(e.getMessage());
-		} catch (ClassNotFoundException e) {
-			throw new SQLException(e.getMessage());
-		} catch (NamingException e) {
+		} catch (InstantiationException | NamingException | ClassNotFoundException | IllegalAccessException e) {
 			throw new SQLException(e.getMessage());
 		}
 	}
@@ -222,7 +216,7 @@ public class DbSource implements JdbcSource, XMLStored, Serializable {
 	/**
 	 * Save to XML
 	 * 
-	 * @param node
+	 * @param node xml element
 	 */
 	protected void storeAttributes(Element node) {
 		node.setAttribute("alias", getAlias());
@@ -261,7 +255,7 @@ public class DbSource implements JdbcSource, XMLStored, Serializable {
 	/**
 	 * Load from XML
 	 * 
-	 * @param node
+	 * @param node xml element
 	 */
 	protected void loadAttributes(Element node) {
 		alias = node.getAttribute("alias");
@@ -330,8 +324,8 @@ public class DbSource implements JdbcSource, XMLStored, Serializable {
 			Connection conn;
 			if (user != null && user.length() > 0) 
 				conn = dataSource.getConnection(user, getPassword());
-
-			conn = dataSource.getConnection();
+			else
+				conn = dataSource.getConnection();
 			conn.setAutoCommit(isAutoCommit());
 			return conn;
 		}
@@ -349,7 +343,7 @@ public class DbSource implements JdbcSource, XMLStored, Serializable {
 		if (properties != null) {
 			for (Object key : properties.keySet()) {
 				String value = properties.get(key).toString();
-				if (value != null && value.length() > 0)
+				if (value.length() > 0)
 					connectionProperties.put(key, value);
 			}
 		}
@@ -411,19 +405,7 @@ public class DbSource implements JdbcSource, XMLStored, Serializable {
 				connection = createConnection();
 				keepConnection = false;
 			}
-		} catch (SQLException e) {
-			disconnect();
-			throw e;
-		} catch (InstantiationException e) {
-			disconnect();
-			throw e;
-		} catch (IllegalAccessException e) {
-			disconnect();
-			throw e;
-		} catch (ClassNotFoundException e) {
-			disconnect();
-			throw e;
-		} catch (NamingException e) {
+		} catch (SQLException | ClassNotFoundException | NamingException | InstantiationException | IllegalAccessException e) {
 			disconnect();
 			throw e;
 		}
@@ -440,7 +422,7 @@ public class DbSource implements JdbcSource, XMLStored, Serializable {
 				tmpConnection.rollback();
 				tmpConnection.close();
 			}
-		} catch (Exception e) {
+		} catch (Exception ignored) {
 		}
 	}
 
@@ -463,7 +445,7 @@ public class DbSource implements JdbcSource, XMLStored, Serializable {
 		if (pass == null) {
 			return null;
 		}
-		StringBuffer tmp = new StringBuffer();
+		StringBuilder tmp = new StringBuilder();
 		tmp.append(PREFIX);
 		tmp.append(pass);
 		tmp.append(POSTFIX);
@@ -474,8 +456,7 @@ public class DbSource implements JdbcSource, XMLStored, Serializable {
 			b[i] = (byte) ~b[i];
 		}
 		b = XMLCoder.base64Encode(b);
-		String result = new String(b);
-		return result;
+		return new String(b);
 	}
 
 	private static String decodePassword(String pass) {
@@ -546,14 +527,12 @@ public class DbSource implements JdbcSource, XMLStored, Serializable {
 			if (delim == null) {
 				delim = "^";
 			}
-			InputStreamReader reader = new InputStreamReader(url.openStream(),
-					charSet);
 			int bufSize = 16384;
-			try {
-				Statement stat = connection.createStatement();
-				try {
+			try (InputStreamReader reader = new InputStreamReader(url.openStream(),
+					charSet)) {
+				try (Statement stat = connection.createStatement()) {
 					StringBuffer script = new StringBuffer();
-					int l = 0;
+					int l;
 					char[] buf = new char[bufSize];
 					do {
 						l = reader.read(buf);
@@ -574,11 +553,7 @@ public class DbSource implements JdbcSource, XMLStored, Serializable {
 							}
 						}
 					}
-				} finally {
-					stat.close();
 				}
-			} finally {
-				reader.close();
 			}
 		} catch (DaoException e) {
 			throw e;
@@ -590,15 +565,15 @@ public class DbSource implements JdbcSource, XMLStored, Serializable {
 	protected static void findAndExecSql(Connection connection,
 			String delimiter, Statement stat, StringBuffer script)
 			throws DaoException {
-		int i = 0;
 		String sql = null;
 		try {
+			int i;
 			do {
 				i = script.indexOf(delimiter);
 				if (i > 0) {
 					sql = script.substring(0, i).trim();
 					script.delete(0, i + 1);
-					if (sql != null && sql.length() > 0) {
+					if (sql.length() > 0) {
 						if (sql.equalsIgnoreCase("COMMIT")
 								|| sql.equalsIgnoreCase("COMMIT WORK")) {
 							connection.commit();

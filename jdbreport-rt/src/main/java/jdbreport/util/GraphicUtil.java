@@ -51,7 +51,7 @@ public class GraphicUtil {
 			
 			screenScale_x = getScaleX();
 			screenScale_y = getScaleY();
-		} catch (Throwable e) {
+		} catch (Throwable ignored) {
 
 		}
 	}

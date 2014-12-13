@@ -39,9 +39,6 @@ import java.awt.event.KeyEvent;
  */
 public class FindPanel extends JPanel {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 	private JTextField findField;
 	private static Resources resource;
@@ -258,7 +255,7 @@ public class FindPanel extends JPanel {
 		private static final long serialVersionUID = 1L;
 
 		/**
-		 * @param name
+		 * @param name action name
 		 */
 		public FindPanelAction(String name) {
 			super(name);

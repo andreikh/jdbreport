@@ -36,7 +36,7 @@ import java.util.Iterator;
 import java.util.List;
 
 /**
- * @version 3.0 22.02.2014
+ * @version 3.0 13.12.2014
  * 
  * @author Andrey Kholmanskih
  * 

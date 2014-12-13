@@ -32,7 +32,7 @@ import jdbreport.model.io.ReportWriter;
  */
 public class OdsFileType implements FileType {
 
-	private final static String[] fileExtensions = { "ods" }; //$NON-NLS-1$
+	private final static String[] fileExtensions = { "ods" };
 	private ReportReader reader;
 	private ReportWriter writer;
 
@@ -41,7 +41,7 @@ public class OdsFileType implements FileType {
 	}
 
 	public String getDescription() {
-		return Messages.getString("OdsFileType.1"); //$NON-NLS-1$
+		return Messages.getString("OdsFileType.1");
 	}
 
 	public ReportReader getReader() {
@@ -59,7 +59,7 @@ public class OdsFileType implements FileType {
 	}
 
 	public String getContentType() {
-		return "application/vnd.oasis.opendocument.spreadsheet"; //$NON-NLS-1$
+		return "application/vnd.oasis.opendocument.spreadsheet";
 	}
 
 	public int getOrder() {

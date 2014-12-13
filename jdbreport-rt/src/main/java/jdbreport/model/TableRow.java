@@ -52,7 +52,7 @@ public interface TableRow extends Iterable<Cell> {
 	 * 
 	 * @param height
 	 *            new row's height
-	 * @param dragging
+	 * @param dragging dragging flag
 	 */
 	public void setHeight(int height, boolean dragging);
 
@@ -70,7 +70,7 @@ public interface TableRow extends Iterable<Cell> {
 
 	/**
 	 * 
-	 * @param column
+	 * @param column column index
 	 * @return Cell for specified column
 	 */
 	public Cell getCellItem(int column);
@@ -88,7 +88,7 @@ public interface TableRow extends Iterable<Cell> {
 	/**
 	 * Creates a new Cell for specified column in the current row
 	 * 
-	 * @param column
+	 * @param column column index
 	 * @return created Cell
 	 */
 	public Cell createCellItem(int column);
@@ -102,7 +102,7 @@ public interface TableRow extends Iterable<Cell> {
 	/**
 	 * Sets column's count
 	 * 
-	 * @param count
+	 * @param count  column's count
 	 */
 	public void setColCount(int count);
 

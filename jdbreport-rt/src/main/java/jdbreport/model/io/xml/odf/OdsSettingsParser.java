@@ -82,7 +82,6 @@ class OdsSettingsParser extends OdsReportParser {
 		}
 		if (name.equals("office:settings")) {
 			getHandler().popHandler(name);
-			return;
 		}
 	}
 

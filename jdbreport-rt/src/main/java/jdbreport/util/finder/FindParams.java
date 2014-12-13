@@ -134,7 +134,7 @@ public class FindParams {
     /**
      * if true - search on all fields of the table
      * else search on a field column
-     * @return
+     * @return true if find by all columns
      */
     public boolean isAllColumn() {
         return column < 0;

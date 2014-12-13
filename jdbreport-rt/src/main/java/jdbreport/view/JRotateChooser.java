@@ -17,13 +17,11 @@
 package jdbreport.view;
 
 import javax.swing.*;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
 import java.awt.*;
 import java.awt.event.*;
 
 /**
- * @version 1.1 03/09/08
+ * @version 3.0 13.12.2014
  * @author Andrey Kholmanskih
  * 
  */
@@ -50,7 +48,7 @@ public class JRotateChooser extends JPanel {
 	protected void initComponents() {
 		JPanel spinnerPanel = new JPanel();
 		spinnerPanel
-				.add(new JLabel(Messages.getString("JRotateChooser.angle"))); //$NON-NLS-1$
+				.add(new JLabel(Messages.getString("JRotateChooser.angle")));
 		rotateSpinner = new JSpinner();
 		rotateSpinner.setPreferredSize(new Dimension(50, 20));
 		spinnerPanel.add(rotateSpinner);
@@ -90,32 +88,24 @@ public class JRotateChooser extends JPanel {
 
 		});
 
-		label.addMouseWheelListener(new MouseWheelListener() {
+		label.addMouseWheelListener(e -> {
+            if (e.getWheelRotation() != 0) {
+                int old = angle;
+                setAngle(old + e.getWheelRotation() * -2);
+                firePropertyChange(JRotateChooser.ANGLE, old, angle);
+            }
+        });
 
-			public void mouseWheelMoved(MouseWheelEvent e) {
-				if (e.getWheelRotation() != 0) {
-					int old = angle;
-					setAngle(old + e.getWheelRotation() * -2);
-					firePropertyChange(JRotateChooser.ANGLE, old, angle);
-				}
-			}
-
-		});
-
-		rotateSpinner.addChangeListener(new ChangeListener() {
-
-			public void stateChanged(ChangeEvent e) {
-				int old = angle;
-				angle = ((Integer) rotateSpinner.getValue()).intValue();
-				if (angle == 360) {
-					angle = 0;
-					rotateSpinner.setValue(new Integer(0));
-				}
-				label.repaint();
-				firePropertyChange(JRotateChooser.ANGLE, old, angle);
-			}
-
-		});
+		rotateSpinner.addChangeListener(e -> {
+            int old = angle;
+            angle = (Integer) rotateSpinner.getValue();
+            if (angle == 360) {
+                angle = 0;
+                rotateSpinner.setValue(0);
+            }
+            label.repaint();
+            firePropertyChange(JRotateChooser.ANGLE, old, angle);
+        });
 
 	}
 
@@ -130,7 +120,7 @@ public class JRotateChooser extends JPanel {
 			angle -= 360;
 		if (this.angle != angle) {
 			this.angle = angle;
-			rotateSpinner.setValue(new Integer(angle));
+			rotateSpinner.setValue(angle);
 			label.repaint();
 		}
 	}

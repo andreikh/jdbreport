@@ -34,9 +34,9 @@ import jdbreport.model.io.ReportWriter;
  */
 public abstract class PdfFileType implements FileType {
 
-	private static final String[] EXTENSIONS = { "pdf" };  //$NON-NLS-1$
-	public static final String FONT_PATHS = "fontPaths"; //$NON-NLS-1$
-	public static final String DEFAULT_FONT = "defaultPdfFont"; //$NON-NLS-1$
+	private static final String[] EXTENSIONS = { "pdf" };
+	public static final String FONT_PATHS = "fontPaths";
+	public static final String DEFAULT_FONT = "defaultPdfFont";
 	
 	private ReportWriter writer;
 
@@ -45,7 +45,7 @@ public abstract class PdfFileType implements FileType {
 	}
 
 	public String getDescription() {
-		return Messages.getString("PdfFileType.0"); //$NON-NLS-1$
+		return Messages.getString("PdfFileType.0");
 	}
 
 	public ReportReader getReader() {
@@ -61,7 +61,7 @@ public abstract class PdfFileType implements FileType {
 
 
 	public String getContentType() {
-		return "application/pdf"; //$NON-NLS-1$
+		return "application/pdf";
 	}
 
 	public int getOrder() {

@@ -113,10 +113,7 @@ public class PageCount implements CellValue<Integer>, XMLParser {
 
 	public boolean startElement(String name, Attributes attributes)
 			throws SAXException {
-		if (name.equals("format")) {
-			return true;
-		}
-		return false;
+		return name.equals("format");
 	}
 
 	public Image getAsImage(ReportModel model, int row, int column) {

@@ -56,10 +56,7 @@ public abstract class AbstractValue<E> implements CellValue<E>, XMLParser {
 
 	public boolean write(PrintWriter writer, ReportModel model, int row,
 			int column, String format) throws SaveReportException {
-		if (ReportBook.JRPT.equals(format)) {
-			return write(writer, model, row, column);
-		} 
-		return false;
+		return ReportBook.JRPT.equals(format) && write(writer, model, row, column);
 	}
 
 	public Image getAsImage(ReportModel model, int row,

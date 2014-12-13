@@ -61,11 +61,6 @@ public class CellPropertiesPanel extends JPanel {
 			initValues();
 	}
 
-	/**
-	 * This method initializes this
-	 * 
-	 * @return void
-	 */
 	private void initialize() {
 		this.setSize(300, 200);
 		GridBagLayout layout = new GridBagLayout();

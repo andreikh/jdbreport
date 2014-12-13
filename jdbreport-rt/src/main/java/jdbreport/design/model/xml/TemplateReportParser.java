@@ -19,7 +19,6 @@
 package jdbreport.design.model.xml;
 
 import jdbreport.design.model.GroupKey;
-import jdbreport.design.model.TemplateModel;
 import jdbreport.model.Cell;
 import jdbreport.model.DetailGroup;
 import jdbreport.model.io.ResourceReader;
@@ -30,7 +29,7 @@ import jdbreport.model.io.xml.DefaultReaderHandler;
 import org.xml.sax.Attributes;
 
 /**
- * @version 2.0 21.12.2009
+ * @version 3.0 13.12.2014
  * @author Andrey Kholmanskih
  * 
  */
@@ -38,10 +37,6 @@ public class TemplateReportParser extends DBReportParser {
 
 	public TemplateReportParser(DefaultReaderHandler reportHandler, ResourceReader rr) {
 		super(reportHandler, rr);
-	}
-
-	public TemplateModel getTemplateModel() {
-		return (TemplateModel) getReportModel();
 	}
 
 	protected CellParser createCellHandler(Cell cell) {

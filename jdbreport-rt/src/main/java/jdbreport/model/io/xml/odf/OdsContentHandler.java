@@ -29,7 +29,7 @@ import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
 
 /**
- * @version 1.1 03/09/08
+ * @version 3.0 13.12.2014
  * @author Andrey Kholmanskih
  * 
  */
@@ -51,6 +51,7 @@ class OdsContentHandler extends DefaultReaderHandler {
 	public OdsContentHandler(ReportBook reportBook, String basePath,
 			XMLReader reader) {
 		super(reportBook, reader);
+		this.basePath = basePath;
 	}
 
 	public void startElement(String uri, String localName, String qName,
@@ -58,27 +59,24 @@ class OdsContentHandler extends DefaultReaderHandler {
 		super.startElement(uri, localName, qName, attributes);
 		if (rootName == null) {
 			rootName = qName;
-			if (rootName.equals("office:document") //$NON-NLS-1$
-					|| rootName.equals("office:document-content") //$NON-NLS-1$
-					|| rootName.equals("office:document-styles") //$NON-NLS-1$
-					|| rootName.equals("office:document-meta")) { //$NON-NLS-1$
-				version = attributes.getValue("office:version"); //$NON-NLS-1$
+			if (rootName.equals("office:document")
+					|| rootName.equals("office:document-content")
+					|| rootName.equals("office:document-styles")
+					|| rootName.equals("office:document-meta")) {
+				version = attributes.getValue("office:version");
 				handler = getOdsParser();
 				return;
 			}
 			throw new SAXException(
-					Messages.getString("OdsContentHandler.5") + rootName); //$NON-NLS-1$
+					Messages.getString("OdsContentHandler.5") + rootName);
 		}
 		if (handler != null) {
 			isParse = handler.startElement(qName, attributes);
 			return;
 		}
-		throw new SAXException(Messages.getString("OdsContentHandler.6")); //$NON-NLS-1$
+		throw new SAXException(Messages.getString("OdsContentHandler.6"));
 	}
 
-	/**
-	 * @return
-	 */
 	private OdsParser getOdsParser() {
 		if (parser == null)
 			parser = new OdsParser(this);
@@ -87,35 +85,35 @@ class OdsContentHandler extends DefaultReaderHandler {
 
 	public Map<Object, ColumnStyle> getColumnStyles() {
 		if (columnStyles == null) {
-			columnStyles = new HashMap<Object, ColumnStyle>();
+			columnStyles = new HashMap<>();
 		}
 		return columnStyles;
 	}
 
 	public Map<Object, RowStyle> getRowStyles() {
 		if (rowStyles == null) {
-			rowStyles = new HashMap<Object, RowStyle>();
+			rowStyles = new HashMap<>();
 		}
 		return rowStyles;
 	}
 
 	public Map<Object, PageStyle> getPageStyles() {
 		if (pageStyles == null) {
-			pageStyles = new HashMap<Object, PageStyle>();
+			pageStyles = new HashMap<>();
 		}
 		return pageStyles;
 	}
 
 	public Map<Object, MasterPageStyle> getMasterPageStyles() {
 		if (masterPageStyles == null) {
-			masterPageStyles = new HashMap<Object, MasterPageStyle>();
+			masterPageStyles = new HashMap<>();
 		}
 		return masterPageStyles;
 	}
 
 	public Map<Object, TableStyle> getTableStyles() {
 		if (tableStyles == null) {
-			tableStyles = new HashMap<Object, TableStyle>();
+			tableStyles = new HashMap<>();
 		}
 		return tableStyles;
 	}

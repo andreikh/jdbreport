@@ -32,7 +32,7 @@ import jdbreport.model.io.ReportWriter;
  */
 public class XMLFileType implements FileType {
 
-	private static final String[] extensions = { "xml" }; //$NON-NLS-1$
+	private static final String[] extensions = { "xml" };
 	private ReportReader reader;
 
 	public String[] getExtensions() {
@@ -40,7 +40,7 @@ public class XMLFileType implements FileType {
 	}
 
 	public String getDescription() {
-		return Messages.getString("XMLFileType.1"); //$NON-NLS-1$
+		return Messages.getString("XMLFileType.1");
 	}
 
 	public ReportReader getReader() {

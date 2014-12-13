@@ -24,7 +24,7 @@ import java.io.File;
 /**
  * @author Andrey Kholmanskih
  * 
- * @version 1.0 28.02.2010
+ * @version 3.0 13.12.2014
  */
 public class ExtensionFileFilter extends FileFilter {
 
@@ -38,10 +38,10 @@ public class ExtensionFileFilter extends FileFilter {
 	public ExtensionFileFilter(String[] exts, String descr) {
 		this.exts = exts;
 		if (descr != null) {
-			StringBuffer result = new StringBuffer(descr + " (");
-			for (int i = 0; i < exts.length; i++) {
+			StringBuilder result = new StringBuilder(descr + " (");
+			for (String ext : exts) {
 				result.append('*');
-				result.append(exts[i]);
+				result.append(ext);
 				result.append(';');
 			}
 			result.deleteCharAt(result.length() - 1);
@@ -53,8 +53,8 @@ public class ExtensionFileFilter extends FileFilter {
 	public boolean accept(File pathname) {
 		if (pathname.isDirectory())
 			return true;
-		for (int i = 0; i < exts.length; i++) {
-			if (pathname.getName().toLowerCase().endsWith(exts[i]))
+		for (String ext : exts) {
+			if (pathname.getName().toLowerCase().endsWith(ext))
 				return true;
 		}
 		return false;

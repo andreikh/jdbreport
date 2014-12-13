@@ -32,21 +32,13 @@ import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 
 /**
- * @version 1.1 03/09/08
+ * @version 3,0 13.12.2014
  * 
  * @author Andrey Kholmanskih
  * 
  */
 public class ExcelStyleParser extends DefaultReportParser {
 
-	public final static int BS_SOLID = 0;
-	public final static int BS_CLEAR = 1;
-	public final static int BS_HORIZONTAL = 2;
-	public final static int BS_VERTICAL = 3;
-	public final static int BS_FDIAGONAL = 4;
-	public final static int BS_BDIAGONAL = 5;
-	public final static int BS_CROSS = 6;
-	public final static int BS_DIAGCROSS = 7;
 	private final static String[] BRUSH_STYLE_NAME = { "Solid", "Clear",
 			"Horizontal", "Vertical", "FDiagonal", "BDiagonal", "Cross",
 			"DiagCross" };
@@ -245,7 +237,7 @@ public class ExcelStyleParser extends DefaultReportParser {
 
 	private void addFormat(String format) {
 		if (format != null) {
-			int flags = getCurrentStyle().getHorizontalAlignment();
+			int flags;
 			if (format.equals("Short Date") || format.equals("Short Time"))
 				flags = CellStyle.RIGHT;
 			else
@@ -273,8 +265,8 @@ public class ExcelStyleParser extends DefaultReportParser {
 	/**
 	 * save style to XML
 	 * 
-	 * @param writer
-	 * @param style
+	 * @param writer PrintWriter
+	 * @param style CellStyle
 	 */
 	public static void saveStyle(PrintWriter writer, CellStyle style) {
 
@@ -301,7 +293,7 @@ public class ExcelStyleParser extends DefaultReportParser {
 	}
 
 	private static String alignToXML(CellStyle style) {
-		StringBuffer result = new StringBuffer("<Alignment ");
+		StringBuilder result = new StringBuilder("<Alignment ");
 		if (style.getVerticalAlignment() != CellStyle.BOTTOM) {
 			result.append("ss:Vertical=\"");
 			result
@@ -326,7 +318,7 @@ public class ExcelStyleParser extends DefaultReportParser {
 	}
 
 	private static String fontToXML(CellStyle font) {
-		StringBuffer style = new StringBuffer("<Font ");
+		StringBuilder style = new StringBuilder("<Font ");
 		style.append("ss:FontName=\"");
 		style.append(font.getFamily());
 		style.append("\" ");
@@ -355,7 +347,7 @@ public class ExcelStyleParser extends DefaultReportParser {
 	}
 
 	private static void saveBorders(PrintWriter writer, CellStyle style) {
-		StringBuffer str = new StringBuffer();
+		StringBuilder str = new StringBuilder();
 		for (int i = 0; i < 4; i++) {
 			Border b = style.getBorders(i);
 			if (b != null && b.getLineWidth() > 0) {
@@ -376,7 +368,7 @@ public class ExcelStyleParser extends DefaultReportParser {
 	}
 
 	private static String lineToStr(Border line) {
-		StringBuffer result = new StringBuffer();
+		StringBuilder result = new StringBuilder();
 
 		switch (line.getStyle()) {
 		case Border.psSolid:
@@ -399,7 +391,7 @@ public class ExcelStyleParser extends DefaultReportParser {
 		}
 		result.insert(0, "ss:LineStyle=\"");
 		result.append("\" ss:Weight=\"");
-		result.append("" + (line.getLineWidth() > 3 ? 3 : line.getLineWidth()));
+		result.append("").append(line.getLineWidth() > 3 ? 3 : line.getLineWidth());
 		result.append('"');
 		if (!line.getColor().equals(Color.BLACK)) {
 			result.append(" ss:Color=\"");
@@ -416,7 +408,7 @@ public class ExcelStyleParser extends DefaultReportParser {
 
 	private static String backgrToStr(CellStyle style) {
 		if (style.getBackground() != Color.WHITE) {
-			StringBuffer result = new StringBuffer();
+			StringBuilder result = new StringBuilder();
 			result.append("ss:Color=\"");
 			result.append(colorToStr(style.getBackground()));
 			result.append('"');

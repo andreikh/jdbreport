@@ -21,7 +21,6 @@ package jdbreport.view;
 import java.io.*;
 import java.awt.Dialog;
 import java.awt.Frame;
-import java.awt.event.*;
 
 import javax.swing.*;
 
@@ -40,7 +39,7 @@ import jdbreport.util.Utils;
 import jdbreport.util.xml.XMLProperties;
 
 /**
- * @version 3.0 12.12.2014
+ * @version 3.0 13.12.2014
  * @author Andrey Kholmanskih
  * 
  */
@@ -128,7 +127,7 @@ public class ReportDialog extends JDialog implements
 		this.addWindowListener(new java.awt.event.WindowAdapter() {
 
 			public void windowClosing(java.awt.event.WindowEvent e) {
-				exitForm(e);
+				exitForm();
 			}
 
 		});
@@ -157,7 +156,7 @@ public class ReportDialog extends JDialog implements
 		setJMenuBar(getReportPane().createJMenuBar());
 	}
 
-	private void exitForm(WindowEvent evt) {
+	private void exitForm() {
 		if (!getReportPane().saveQuestion())
 			return;
 		setDefaultCloseOperation(getCloseOperation());

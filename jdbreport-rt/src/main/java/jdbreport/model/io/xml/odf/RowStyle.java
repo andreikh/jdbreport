@@ -31,9 +31,9 @@ class RowStyle extends CommonStyle {
 	/**
 	 * @param height -
 	 *            height of row in 1/72 of an inch
-	 * @param brk
-	 * @param after
-	 * @param optimalHeight
+	 * @param brk break type
+	 * @param after break_after
+	 * @param optimalHeight optimal width flag
 	 */
 	public RowStyle(double height, Break brk, boolean after,
 			boolean optimalHeight) {

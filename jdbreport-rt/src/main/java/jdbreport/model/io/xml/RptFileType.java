@@ -32,7 +32,7 @@ import jdbreport.model.io.ReportWriter;
  */
 public class RptFileType implements FileType {
 
-	private final static String[] fileExtensions = { "jrpt" }; //$NON-NLS-1$
+	private final static String[] fileExtensions = { "jrpt" };
 	private ReportReader reader;
 	private ReportWriter writer;
 
@@ -41,7 +41,7 @@ public class RptFileType implements FileType {
 	}
 
 	public String getDescription() {
-		return Messages.getString("RptFileType.1"); //$NON-NLS-1$
+		return Messages.getString("RptFileType.1");
 	}
 
 	public ReportReader getReader() {
@@ -59,7 +59,7 @@ public class RptFileType implements FileType {
 	}
 
 	public String getContentType() {
-		return "application/jrpt"; //$NON-NLS-1$
+		return "application/jrpt";
 	}
 
 	public int getOrder() {

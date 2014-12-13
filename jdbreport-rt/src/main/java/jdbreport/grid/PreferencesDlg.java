@@ -60,7 +60,7 @@ import java.io.File;
 import java.util.Vector;
 
 /**
- * @version 2.0 15.02.2012
+ * @version 3.0 13.12.2014
  * @author Andrey Kholmanskih
  * 
  */
@@ -68,11 +68,11 @@ public class PreferencesDlg extends JDialog implements ActionListener {
 
 	private static final long serialVersionUID = 1L;
 
-	private static final String OK_COMMAND = "ok"; //$NON-NLS-1$
-	private static final String CANCEL_COMMAND = "cancel"; //$NON-NLS-1$
-	private static final String ADD_FONT_PATH_COMMAND = "addFontPath"; //$NON-NLS-1$
-	private static final String DELETE_FONT_PATH_COMMAND = "delFontPath"; //$NON-NLS-1$
-	private static final String DEFAULT_FONT_COMMAND = "defaultFont"; //$NON-NLS-1$
+	private static final String OK_COMMAND = "ok";
+	private static final String CANCEL_COMMAND = "cancel";
+	private static final String ADD_FONT_PATH_COMMAND = "addFontPath";
+	private static final String DELETE_FONT_PATH_COMMAND = "delFontPath";
+	private static final String DEFAULT_FONT_COMMAND = "defaultFont";
 	public static final int CANCEL = 1;
 	public static final int OK = 0;
 
@@ -253,8 +253,8 @@ public class PreferencesDlg extends JDialog implements ActionListener {
 		if (pdfPanel == null) {
 			pdfPanel = new JPanel(new BorderLayout());
 
-			fontPaths = new Vector<String>();
-			String defaultFont = ""; //$NON-NLS-1$
+			fontPaths = new Vector<>();
+			String defaultFont = "";
 
 			if (ReportBook.pdfExists()) {
 				PdfFileType fileType = (PdfFileType) ReportBook
@@ -718,10 +718,6 @@ public class PreferencesDlg extends JDialog implements ActionListener {
 		return modalResult;
 	}
 
-	public JReportGrid getReportGrid() {
-		return grid;
-	}
-
 	public void setReportGrid(JReportGrid grid, ReportBook reportBook) {
 		this.grid = grid;
 		this.reportBook = reportBook;
@@ -731,7 +727,7 @@ public class PreferencesDlg extends JDialog implements ActionListener {
 		getNameReportField().setText(getReportBook().getReportCaption());
 		getTemplateField().setText(
 				getReportBook().getSourceTemplate() != null ? getReportBook()
-						.getSourceTemplate() : ""); //$NON-NLS-1$
+						.getSourceTemplate() : "");
 		getShowGridBox().setSelected(getReportBook().isShowGrid());
 		getGlobalPageNumberBox().setSelected(
 				getReportBook().isGlobalPageNumber());

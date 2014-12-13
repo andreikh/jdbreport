@@ -54,7 +54,7 @@ import jdbreport.model.print.ReportPage.PaperSize;
 import jdbreport.util.Utils;
 
 /**
- * @version 2.0 13.03.2011
+ * @version 3.0 13.12.2014
  * @author Andrey Kholmanskih
  * 
  */
@@ -62,6 +62,10 @@ public class PageSetup extends JDialog implements ActionListener {
 
 	private static final long serialVersionUID = 1L;
 	private static final Units unit = Units.MM;
+	private static final String OK_COMMAND = "ok";
+	private static final String CANCEL_COMMAND = "cancel";
+	private static final String FORMAT_COMMAND = "format";
+
 	private JPanel jContentPane = null;
 	private JPanel buttonPanel = null;
 	private JPanel centerPanel = null;
@@ -83,7 +87,7 @@ public class PageSetup extends JDialog implements ActionListener {
 	private ReportPage page;
 	private InputVerifier numericVerifier;
 	private UndoListener undoListener;
-	private JComboBox formatBox;
+	private JComboBox<ReportPage.PaperSize> formatBox;
 	private JTextField widthField;
 	private JTextField heightField;
 	private PaperSize currentPaperSize;
@@ -245,12 +249,12 @@ public class PageSetup extends JDialog implements ActionListener {
 	 */
 	private JComboBox getFormatBox() {
 		if (formatBox == null) {
-			formatBox = new JComboBox();
+			formatBox = new JComboBox<>();
 			currentPaperSize = page.getPaperSize();
-			formatBox.setModel(new DefaultComboBoxModel(ReportPage.PaperSize
+			formatBox.setModel(new DefaultComboBoxModel<>(ReportPage.PaperSize
 					.values()));
 			formatBox.setSelectedIndex(page.getPaperSize().ordinal());
-			formatBox.setActionCommand("format"); //$NON-NLS-1$
+			formatBox.setActionCommand(FORMAT_COMMAND);
 			formatBox.addActionListener(this);
 		}
 		return formatBox;
@@ -267,7 +271,7 @@ public class PageSetup extends JDialog implements ActionListener {
 			orientationPanel = new JPanel();
 			orientationPanel
 					.setBorder(javax.swing.BorderFactory
-							.createTitledBorder(Messages.getString("PageSetup.1"))); //$NON-NLS-1$
+							.createTitledBorder(Messages.getString("PageSetup.1")));
 			orientationPanel.setLayout(new BoxLayout(orientationPanel,
 					BoxLayout.Y_AXIS));
 			orientationPanel.add(getPortraitButton());
@@ -291,14 +295,12 @@ public class PageSetup extends JDialog implements ActionListener {
 			portraitButton
 					.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
 			portraitButton
-					.addChangeListener(new javax.swing.event.ChangeListener() {
-						public void stateChanged(javax.swing.event.ChangeEvent e) {
-							if (portraitButton.isSelected()) {
-								getLandscapeButton().setSelected(false);
-								getImageLabel().setIcon(portraitIcon);
-							}
-						}
-					});
+					.addChangeListener(e -> {
+                        if (portraitButton.isSelected()) {
+                            getLandscapeButton().setSelected(false);
+                            getImageLabel().setIcon(portraitIcon);
+                        }
+                    });
 		}
 		return portraitButton;
 	}
@@ -315,14 +317,12 @@ public class PageSetup extends JDialog implements ActionListener {
 			landscapeButton
 					.setSelected(page.getOrientation() == ReportPage.LANDSCAPE);
 			landscapeButton
-					.addChangeListener(new javax.swing.event.ChangeListener() {
-						public void stateChanged(javax.swing.event.ChangeEvent e) {
-							if (landscapeButton.isSelected()) {
-								getPortraitButton().setSelected(false);
-								getImageLabel().setIcon(landscapeIcon);
-							}
-						}
-					});
+					.addChangeListener(e -> {
+                        if (landscapeButton.isSelected()) {
+                            getPortraitButton().setSelected(false);
+                            getImageLabel().setIcon(landscapeIcon);
+                        }
+                    });
 		}
 		return landscapeButton;
 	}
@@ -505,7 +505,7 @@ public class PageSetup extends JDialog implements ActionListener {
 		if (okButton == null) {
 			okButton = new JButton();
 			okButton.setText(Messages.getString("PageSetup.17")); //$NON-NLS-1$
-			okButton.setActionCommand("ok"); //$NON-NLS-1$
+			okButton.setActionCommand(OK_COMMAND); //$NON-NLS-1$
 			okButton.addActionListener(this);
 		}
 		return okButton;
@@ -557,11 +557,6 @@ public class PageSetup extends JDialog implements ActionListener {
 		undoListener = l;
 	}
 
-	public void removeUndoListener(UndoListener l) {
-		if (undoListener == l)
-			undoListener = null;
-	}
-
 	protected void pushUndo(UndoItem undo) {
 		if (undoListener != null) {
 			undoListener.pushUndo(new UndoEvent(this, undo));
@@ -576,29 +571,29 @@ public class PageSetup extends JDialog implements ActionListener {
 	private JButton getCancelButton() {
 		if (cancelButton == null) {
 			cancelButton = new JButton();
-			cancelButton.setText(Messages.getString("PageSetup.18")); //$NON-NLS-1$
-			cancelButton.setActionCommand("cancel"); //$NON-NLS-1$
+			cancelButton.setText(Messages.getString("PageSetup.18"));
+			cancelButton.setActionCommand(CANCEL_COMMAND);
 			cancelButton.addActionListener(this);
 		}
 		return cancelButton;
 	}
 
 	public void actionPerformed(ActionEvent e) {
-		if ("format".equals(e.getActionCommand())) { //$NON-NLS-1$
+		if (FORMAT_COMMAND.equals(e.getActionCommand())) {
 			ReportPage.PaperSize ps = (PaperSize) getFormatBox().getSelectedItem();
 			if (!ps.equals(currentPaperSize)) {
 				boolean editable = ps.equals(PaperSize.User);
 				if (!editable)  {
-					heightField.setText("" + Utils.round(unit.getValue(ps.getHeight()), 1));  //$NON-NLS-1$
-					widthField.setText("" + Utils.round(unit.getValue(ps.getWidth()), 1)); //$NON-NLS-1$
+					heightField.setText("" + Utils.round(unit.getValue(ps.getHeight()), 1));
+					widthField.setText("" + Utils.round(unit.getValue(ps.getWidth()), 1));
 				}
 				heightField.setEditable(editable);
 				widthField.setEditable(editable);
 				currentPaperSize = ps;
 			}
-		} else if ("cancel".equals(e.getActionCommand())) { //$NON-NLS-1$
+		} else if (CANCEL_COMMAND.equals(e.getActionCommand())) {
 			setVisible(false);	
-		} else if ("ok".equals(e.getActionCommand())) { //$NON-NLS-1$
+		} else if (OK_COMMAND.equals(e.getActionCommand())) {
 			apply();
 			setVisible(false);
 		}

@@ -32,7 +32,7 @@ import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 
 /**
- * @version 1.2 04/10/08
+ * @version 3.0 13.12.2014
  * @author Andrey Kholmanskih
  * 
  */
@@ -105,7 +105,7 @@ class OdsStyleParser extends OdsReportParser {
 						currentStyle = (CellStyle) style.clone();
 				} else {
 					if (defaultStyle == null) {
-						currentStyle = (CellStyle) CellStyle.getDefaultStyle()
+						currentStyle = CellStyle.getDefaultStyle()
 								.deriveWrapLine(false);
 					} else
 						currentStyle = (CellStyle) defaultStyle.clone();
@@ -133,7 +133,7 @@ class OdsStyleParser extends OdsReportParser {
 		} else if (name.equals("style:default-style")) {
 			currentId = "Default";
 			if (attributes.getValue("style:family").equals("table-cell")) {
-				defaultStyle = (CellStyle) CellStyle.getDefaultStyle()
+				defaultStyle = CellStyle.getDefaultStyle()
 						.deriveVAlign(CellStyle.BOTTOM);
 				defaultStyle = defaultStyle.deriveWrapLine(false);
 				currentStyle = defaultStyle;
@@ -206,7 +206,6 @@ class OdsStyleParser extends OdsReportParser {
 		}
 		if (name.equals("office:master-styles")) {
 			getHandler().popHandler(name);
-			return;
 		}
 	}
 
@@ -397,9 +396,7 @@ class OdsStyleParser extends OdsReportParser {
 
 		s = attributes.getValue("fo:background-color");
 		if (s != null) {
-			if ("transparent".equals(s)) {
-				
-			} else {
+			if (!"transparent".equals(s)) {
 				try {
 					Color bgColor = new Color(Integer.decode(s));
 					currentStyle = getCurrentStyle().deriveBackground(bgColor);
@@ -447,15 +444,14 @@ class OdsStyleParser extends OdsReportParser {
 		int style = Border.psSolid;
 		String ss = token.nextToken();
 		for (int i = 0; i < LINE_STYLE.length; i++) {
-			if (LINE_STYLE.equals(ss)) {
+			if (LINE_STYLE[i].equals(ss)) {
 				style = i;
 				break;
 			}
 		}
 		Color color = Color.getColor(token.nextToken());
 		Border border = new Border(color, width, style);
-		if (border != null)
-			currentStyle = getCurrentStyle().deriveBorder(pos, border);
+		currentStyle = getCurrentStyle().deriveBorder(pos, border);
 	}
 
 	private void addTextProperties(Attributes attributes) {

@@ -23,7 +23,7 @@ import javax.swing.*;
 /**
  * @author Andrey Kholmanskih
  * 
- * @version 1.1 04/30/08
+ * @version 3.0 13.12.2014
  */
 public class TableFinder implements Finder {
 
@@ -52,8 +52,8 @@ public class TableFinder implements Finder {
 	}
 
 	/**
-	 * @param findParams
-	 * @return
+	 * @param findParams FindParams
+	 * @return true if found
 	 */
 	private boolean findNextIncr(FindParams findParams) {
 		int curRow = table.getSelectedRow();
@@ -101,8 +101,8 @@ public class TableFinder implements Finder {
 	}
 
 	/**
-	 * @param findParams
-	 * @return
+	 * @param findParams FindParams
+	 * @return true if found
 	 */
 	private boolean findPrevIncr(FindParams findParams) {
 		int curRow = table.getSelectionModel().getAnchorSelectionIndex();
@@ -146,7 +146,7 @@ public class TableFinder implements Finder {
 	}
 
 	private boolean findNext(FindParams findParams) {
-		int curRow = 0;
+		int curRow;
 		int col = 0;
 		if (findParams.getScope() == FindParams.SCOPE_ALL) {
 			curRow = 0;
@@ -194,7 +194,7 @@ public class TableFinder implements Finder {
 	}
 
 	private boolean findPrevious(FindParams findParams) {
-		int curRow = 0;
+		int curRow;
 		int col = table.getColumnCount() - 1;
 		if (findParams.getScope() == FindParams.SCOPE_ALL)
 			curRow = table.getRowCount() - 1;
@@ -253,7 +253,7 @@ public class TableFinder implements Finder {
 				otherText = value.toString();
 			else
 				otherText = value.toString().toLowerCase();
-			boolean result = findParams.isIncremental() ? otherText.startsWith(text) : otherText.indexOf(text) >= 0;
+			boolean result = findParams.isIncremental() ? otherText.startsWith(text) : otherText.contains(text);
 			if (result) {
 				table.changeSelection(row, col, false, false);
 				return true;

@@ -28,14 +28,14 @@ import java.lang.reflect.*;
 import jdbreport.model.ReportException;
 
 /**
- * @version 2.0 02.12.2011
+ * @version 3.0 13.12.2014
  * @author Andrey Kholmanskih
  * 
  */
 public abstract class ReflectDataSet extends AbstractDataSet {
 
 	private Map<String, Object> columnMap;
-	private Class<? extends Object> objectClass;
+	private Class<?> objectClass;
 	protected Object current;
 
 	public ReflectDataSet(String id) {
@@ -43,33 +43,33 @@ public abstract class ReflectDataSet extends AbstractDataSet {
 	}
 
 	protected void reflect(Object o) {
-		columnMap = new TreeMap<String, Object>();
+		columnMap = new TreeMap<>();
 		if (o == null) {
 			return;
 		}
 		objectClass = o.getClass();
 		Field[] f = objectClass.getFields();
-		for (int i = 0; i < f.length; i++) {
-			String name = f[i].getName();
+		for (Field aF : f) {
+			String name = aF.getName();
 			if (!columnMap.containsKey(name)) {
-				columnMap.put(name, f[i]);
+				columnMap.put(name, aF);
 			}
 		}
 		Method[] m = objectClass.getMethods();
-		for (int i = 0; i < m.length; i++) {
-			if (m[i].getParameterTypes().length == 0) {
-				String name = m[i].getName();
+		for (Method aM : m) {
+			if (aM.getParameterTypes().length == 0) {
+				String name = aM.getName();
 				if (name.startsWith("get") && name.length() > 3) {
 					name = name.substring(3, 4).toLowerCase()
 							+ name.substring(4);
 					if (!columnMap.containsKey(name)) {
-						columnMap.put(name, m[i]);
+						columnMap.put(name, aM);
 					}
 				} else if (name.startsWith("is") && name.length() > 2) {
 					name = name.substring(2, 3).toLowerCase()
 							+ name.substring(3);
 					if (!columnMap.containsKey(name)) {
-						columnMap.put(name, m[i]);
+						columnMap.put(name, aM);
 					}
 				}
 			}

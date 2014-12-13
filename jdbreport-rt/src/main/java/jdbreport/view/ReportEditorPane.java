@@ -40,6 +40,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.StringTokenizer;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.swing.AbstractButton;
 import javax.swing.Action;
@@ -101,15 +103,18 @@ import jdbreport.util.xml.XMLProperties;
 /**
  * @author Andrey Kholmanskih
  * 
- * @version 3.0 12.12.2014
+ * @version 3.0 13.12.2014
  * 
  */
 public class ReportEditorPane extends ReportPane implements CellSelectListener,
 		ActionListener {
 
-	private static final String LF_CHANGE_COMMAND = "lf_change"; //$NON-NLS-1$
-	private static final String FONT_SIZE_COMMAND = "font_size"; //$NON-NLS-1$
-	private static final String SHOW_BORDER_DLG_COMMAND = "show_border_dlg"; //$NON-NLS-1$
+	private static final String LF_CHANGE_COMMAND = "lf_change";
+	private static final String FONT_SIZE_COMMAND = "font_size";
+	private static final String SHOW_BORDER_DLG_COMMAND = "show_border_dlg";
+
+	private static final Logger logger = Logger.getLogger(ReportEditorPane.class
+			.getName());
 
 	private static final long serialVersionUID = 1L;
 
@@ -151,9 +156,9 @@ public class ReportEditorPane extends ReportPane implements CellSelectListener,
 
 	private JPanel fontPanel;
 
-	private JComboBox fontSizeBox = null;
+	private JComboBox<Integer> fontSizeBox = null;
 
-	private JComboBox fontNameBox;
+	private JComboBox<String> fontNameBox;
 
 	private int enableAction = 0;
 
@@ -534,7 +539,7 @@ public class ReportEditorPane extends ReportPane implements CellSelectListener,
 	}
 
 	protected JPanel createCoolBar() {
-		JPanel coolBar = new JPanel(new FlowLayout(FlowLayout.LEFT, 0, 0)) {
+		return new JPanel(new FlowLayout(FlowLayout.LEFT, 0, 0)) {
 
 			private static final long serialVersionUID = 1L;
 
@@ -558,7 +563,6 @@ public class ReportEditorPane extends ReportPane implements CellSelectListener,
 			}
 
 		};
-		return coolBar;
 	}
 
 	protected void addToolBars() {
@@ -648,9 +652,9 @@ public class ReportEditorPane extends ReportPane implements CellSelectListener,
 			if (!isWindows)
 				excel_exists = false;
 			if (excel_exists) {
-				String ext = ReportBook.fileTypeExists(ReportBook.XLS) ? ".xls" //$NON-NLS-1$
-						: ".xml"; //$NON-NLS-1$
-				tmpFile = File.createTempFile("~rpt", null); //$NON-NLS-1$
+				String ext = ReportBook.fileTypeExists(ReportBook.XLS) ? ".xls"
+						: ".xml";
+				tmpFile = File.createTempFile("~rpt", null);
 				tmpFile.delete();
 				tmpFile = new File(Utils.changeFileExtension(
 						tmpFile.getPath(), ext));
@@ -658,12 +662,8 @@ public class ReportEditorPane extends ReportPane implements CellSelectListener,
 				ProcessBuilder pb = createProcess(getExcelCommand(),
 						tmpFile.getPath());
 				try {
-					Process p = pb.start();
-					if (p == null) {
-						excel_exists = false;
-						excelCommand = null;
-					} else
-						return;
+					pb.start();
+					return;
 				} catch (IOException e) {
 					excel_exists = false;
 					excelCommand = null;
@@ -673,7 +673,7 @@ public class ReportEditorPane extends ReportPane implements CellSelectListener,
 			}
 			setEnabled(ods_exists || excel_exists);
 		} catch (IOException e) {
-			e.printStackTrace();
+			logger.log(Level.SEVERE, e.getMessage(), e);
 		}
 	}
 
@@ -1014,37 +1014,37 @@ public class ReportEditorPane extends ReportPane implements CellSelectListener,
 	 */
 	private JComboBox getFontSizeBox() {
 		if (fontSizeBox == null) {
-			fontSizeBox = new JComboBox();
+			fontSizeBox = new JComboBox<>();
 			fontSizeBox.setPreferredSize(new Dimension(46, 22));
 			fontSizeBox.setEditable(true);
 			fontSizeBox.setActionCommand(FONT_SIZE_COMMAND);
 			fontSizeBox.addActionListener(this);
 			for (int i = 8; i <= 18; i++) {
-				fontSizeBox.addItem(new Integer(i));
+				fontSizeBox.addItem(i);
 			}
 			for (int i = 20; i <= 36; i = i + 2) {
-				fontSizeBox.addItem(new Integer(i));
+				fontSizeBox.addItem(i);
 			}
-			fontSizeBox.addItem(new Integer(40));
-			fontSizeBox.addItem(new Integer(44));
-			fontSizeBox.addItem(new Integer(48));
-			fontSizeBox.addItem(new Integer(56));
-			fontSizeBox.addItem(new Integer(64));
-			fontSizeBox.addItem(new Integer(72));
+			fontSizeBox.addItem(40);
+			fontSizeBox.addItem(44);
+			fontSizeBox.addItem(48);
+			fontSizeBox.addItem(56);
+			fontSizeBox.addItem(64);
+			fontSizeBox.addItem(72);
 		}
 		return fontSizeBox;
 	}
 
 	private JComboBox getFontNameBox() {
 		if (fontNameBox == null) {
-			fontNameBox = new JComboBox();
+			fontNameBox = new JComboBox<>();
 			fontNameBox.setMaximumSize(new Dimension(150, 22));
 			fontNameBox.setPreferredSize(new java.awt.Dimension(150, 22));
 			GraphicsEnvironment ge = GraphicsEnvironment
 					.getLocalGraphicsEnvironment();
 			String[] fonts = ge.getAvailableFontFamilyNames();
-			for (int i = 0; i < fonts.length; i++) {
-				fontNameBox.addItem(fonts[i]);
+			for (String font : fonts) {
+				fontNameBox.addItem(font);
 			}
 			fontNameBox.addPopupMenuListener(new PopupMenuListener() {
 
@@ -1264,7 +1264,7 @@ public class ReportEditorPane extends ReportPane implements CellSelectListener,
 		else
 			getFontNameBox().setSelectedItem(rep.getFont().getFamily());
 
-		Integer size = new Integer(style.getSize());
+		Integer size = style.getSize();
 		getFontSizeBox().setSelectedItem(size);
 		getFontSizeBox().getEditor().setItem(size);
 		getAlignLeftAction().setSelected(
@@ -1361,7 +1361,7 @@ public class ReportEditorPane extends ReportPane implements CellSelectListener,
 
 	private ProcessBuilder createProcess(String programm, String tmpFile) {
 		StringTokenizer tokenizer = new StringTokenizer(programm);
-		java.util.List<String> command = new ArrayList<String>();
+		java.util.List<String> command = new ArrayList<>();
 		while (tokenizer.hasMoreTokens()) {
 			command.add(tokenizer.nextToken());
 		}
@@ -1372,11 +1372,11 @@ public class ReportEditorPane extends ReportPane implements CellSelectListener,
 	}
 
 	private void updateDecimalLabel(int n) {
-		String d = ""; //$NON-NLS-1$
+		String d = "";
 		if (n >= 0) {
-			d = "0."; //$NON-NLS-1$
+			d = "0.";
 			for (int i = 1; i <= n; i++)
-				d += "0"; //$NON-NLS-1$
+				d += "0";
 		}
 		decimalLabel.setText(d);
 		incDecimalAction.setEnabled(n < 15);
@@ -1385,11 +1385,11 @@ public class ReportEditorPane extends ReportPane implements CellSelectListener,
 
 	public void propertyChange(PropertyChangeEvent evt) {
 		super.propertyChange(evt);
-		if (evt.getPropertyName().equals("addGrid")) { //$NON-NLS-1$
+		if (evt.getPropertyName().equals("addGrid")) {
 			updateSheetActions();
-		} else if (evt.getPropertyName().equals("removeGrid")) { //$NON-NLS-1$
+		} else if (evt.getPropertyName().equals("removeGrid")) {
 			updateSheetActions();
-		} else if (evt.getPropertyName().equals("dirty")) { //$NON-NLS-1$
+		} else if (evt.getPropertyName().equals("dirty")) {
 			updateUndoRedoState();
 		}
 
@@ -1716,8 +1716,8 @@ public class ReportEditorPane extends ReportPane implements CellSelectListener,
 		lfMenu = new JMenu();
 		lfMenu.setText(ReportResources.getInstance().getString("menu.lf")); //$NON-NLS-1$
 		LookAndFeelInfo[] looks = UIManager.getInstalledLookAndFeels();
-		for (int i = 0; i < looks.length; i++) {
-			JMenuItem item = new JCheckBoxMenuItem(looks[i].getName());
+		for (LookAndFeelInfo look : looks) {
+			JMenuItem item = new JCheckBoxMenuItem(look.getName());
 			item.setActionCommand(LF_CHANGE_COMMAND);
 			item.addActionListener(this);
 			if (item.getText().equals(defaultLf))
@@ -1845,7 +1845,7 @@ public class ReportEditorPane extends ReportPane implements CellSelectListener,
 		if (sheetMenu == null) {
 			sheetMenu = new JMenu();
 			sheetMenu.setText(ReportResources.getInstance().getString(
-					"menu.sheet")); //$NON-NLS-1$
+					"menu.sheet"));
 			sheetMenu.add(getAddSheetAction());
 			sheetMenu.add(getDelSheetAction());
 			sheetMenu.add(getLoadSheetAction());
@@ -1861,9 +1861,9 @@ public class ReportEditorPane extends ReportPane implements CellSelectListener,
 
 	private static String findLookAndFeel(String name) {
 		LookAndFeelInfo[] looks = UIManager.getInstalledLookAndFeels();
-		for (int i = 0; i < looks.length; i++) {
-			if (looks[i].getName().equals(name))
-				return looks[i].getClassName();
+		for (LookAndFeelInfo look : looks) {
+			if (look.getName().equals(name))
+				return look.getClassName();
 		}
 		return null;
 	}
@@ -1892,14 +1892,8 @@ public class ReportEditorPane extends ReportPane implements CellSelectListener,
 				try {
 					UIManager.setLookAndFeel(className);
 					SwingUtilities.updateComponentTreeUI(getRootPane());
-				} catch (UnsupportedLookAndFeelException e1) {
-					e1.printStackTrace();
-				} catch (ClassNotFoundException e1) {
-					e1.printStackTrace();
-				} catch (InstantiationException e1) {
-					e1.printStackTrace();
-				} catch (IllegalAccessException e1) {
-					e1.printStackTrace();
+				} catch (UnsupportedLookAndFeelException | IllegalAccessException | InstantiationException | ClassNotFoundException e1) {
+					logger.log(Level.SEVERE, e1.getMessage(), e1);
 				}
 		}
 	}
@@ -1908,35 +1902,26 @@ public class ReportEditorPane extends ReportPane implements CellSelectListener,
 		try {
 			if (properties == null) {
 				properties = new XMLProperties();
-				String confFile = System.getProperty("user.home") + "/" //$NON-NLS-1$ //$NON-NLS-2$
+				String confFile = System.getProperty("user.home") + "/"
 						+ JDBREPORT_CONF;
-				File file = new File(confFile);
-				if (file.exists()) {// Удалить в версии 2.1
-					properties.load(confFile);
-				} else {
-					try {// Удалить в версии 2.1
-						properties.load("jdbreport.conf"); //$NON-NLS-1$
-					} finally {
-						properties.setFileName(confFile);
-					}
-				}
+				properties.load(confFile);
 			}
 			CURRENT_DIRECTORY_PATH = properties.getString(
-					ReportPane.CURRENT_DIRECTORY, "."); //$NON-NLS-1$
-			CURRENT_FILTER = properties.getString(CURRENT_FILE_FILTER, ""); //$NON-NLS-1$
+					ReportPane.CURRENT_DIRECTORY, ".");
+			CURRENT_FILTER = properties.getString(CURRENT_FILE_FILTER, "");
 			CURRENT_IMAGE_PATH = properties.getString(
-					ReportPane.CURRENT_IMAGE_DIRECTORY, "."); //$NON-NLS-1$
-			defaultLf = properties.getString(LOOK_AND_FEEL, ""); //$NON-NLS-1$
-			excelCommand = properties.getString(EXCEL_COMMAND, ""); //$NON-NLS-1$
-			odsCommand = properties.getString(ODS_COMMAND, ""); //$NON-NLS-1$
+					ReportPane.CURRENT_IMAGE_DIRECTORY, ".");
+			defaultLf = properties.getString(LOOK_AND_FEEL, "");
+			excelCommand = properties.getString(EXCEL_COMMAND, "");
+			odsCommand = properties.getString(ODS_COMMAND, "");
 			if (ReportBook.pdfExists()) {
 				PdfFileType fileType = (PdfFileType) ReportBook.getFileTypeClass(ReportBook.PDF);
 				if (fileType != null) {
 					String paths = properties.getString(PdfFileType.FONT_PATHS, "");
 					String font = properties.getString(PdfFileType.DEFAULT_FONT, "");
 					if (paths.length() > 0) {
-						List<String> fonts = new ArrayList<String>();
-						StringTokenizer st = new StringTokenizer(paths, ";"); //$NON-NLS-1$
+						List<String> fonts = new ArrayList<>();
+						StringTokenizer st = new StringTokenizer(paths, ";");
 						while (st.hasMoreTokens()) {
 							String path = st.nextToken();
 							if (path.length() > 0) {
@@ -1949,7 +1934,7 @@ public class ReportEditorPane extends ReportPane implements CellSelectListener,
 				}
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.log(Level.SEVERE, e.getMessage(), e);
 		}
 	}
 
@@ -2097,7 +2082,7 @@ public class ReportEditorPane extends ReportPane implements CellSelectListener,
 			if (getFocusedGrid() != null && isEnabledAction()) {
 				JComboBox cb = (JComboBox) e.getSource();
 				getFocusedGrid().setFontSize(
-						((Integer) cb.getSelectedItem()).intValue());
+						(Integer) cb.getSelectedItem());
 			}
 		} else if (LF_CHANGE_COMMAND.equals(e.getActionCommand())) {
 			JMenuItem item = (JMenuItem) e.getSource();
@@ -2114,14 +2099,8 @@ public class ReportEditorPane extends ReportPane implements CellSelectListener,
 					SwingUtilities.updateComponentTreeUI(w);
 					getCoolBar().invalidate();
 					defaultLf = item.getText();
-				} catch (UnsupportedLookAndFeelException e1) {
-					e1.printStackTrace();
-				} catch (ClassNotFoundException e1) {
-					e1.printStackTrace();
-				} catch (InstantiationException e1) {
-					e1.printStackTrace();
-				} catch (IllegalAccessException e1) {
-					e1.printStackTrace();
+				} catch (UnsupportedLookAndFeelException | IllegalAccessException | InstantiationException | ClassNotFoundException e1) {
+					logger.log(Level.SEVERE, e1.getMessage(), e1);
 				}
 
 		} else if ("help".equals(e.getActionCommand())) { //$NON-NLS-1$

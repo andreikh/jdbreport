@@ -27,7 +27,7 @@ import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 
 /**
- * @version 1.1 03/09/08
+ * @version 3.0 13.12.2014
  * @author Andrey Kholmanskih
  * 
  */
@@ -91,15 +91,12 @@ public class ReportPageParser extends DefaultReportParser {
 	public void endElement(String name, StringBuffer value) throws SAXException {
 		if (name.equals("Orientation")) {
 			String s = value.toString();
-			if (s != null) {
-				if ("Landscape".equals(s))
-					reportPage.setOrientation(ReportPage.LANDSCAPE);
-				else if ("Reverse_Landscape".equals(s))
-					reportPage.setOrientation(ReportPage.REVERSE_LANDSCAPE);
-				else
-					reportPage.setOrientation(ReportPage.PORTRAIT);
-			} else
-				reportPage.setOrientation(ReportPage.PORTRAIT);
+			if ("Landscape".equals(s))
+                reportPage.setOrientation(ReportPage.LANDSCAPE);
+            else if ("Reverse_Landscape".equals(s))
+                reportPage.setOrientation(ReportPage.REVERSE_LANDSCAPE);
+            else
+                reportPage.setOrientation(ReportPage.PORTRAIT);
 		}
 		if (name.equals("ShrinkWidth")) {
 			reportPage.setShrinkWidth(Boolean.parseBoolean(value.toString()));
@@ -107,7 +104,6 @@ public class ReportPageParser extends DefaultReportParser {
 		}
 		if (name.equals("RepPage")) {
 			getHandler().popHandler(name);
-			return;
 		}
 	}
 
@@ -119,7 +115,7 @@ public class ReportPageParser extends DefaultReportParser {
 		else if (reportPage.getOrientation() == ReportPage.REVERSE_LANDSCAPE)
 			writer.println("<Orientation>Reverse_Landscape</Orientation>");
 
-		StringBuffer params = new StringBuffer();
+		StringBuilder params = new StringBuilder();
 		params.append("Top=\"");
 		params.append(reportPage.getTopMargin(unit));
 		params.append("\" Left=\"");
