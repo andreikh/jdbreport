@@ -1159,7 +1159,7 @@ public class JReportModel extends AbstractTableModel implements ReportModel {
 		return r;
 	}
 
-	public void updateCarryRows(HeighCalculator hCalc, int row, int column) {
+	public void updateCarryRows(HeightCalculator hCalc, int row, int column) {
 		Cell cell = getReportCell(row, column);
 		if (!cell.isChild() && getStyles(cell.getStyleId()).getCarryRows() > 0
 				&& cell.getValue() != null) {
@@ -1167,7 +1167,7 @@ public class JReportModel extends AbstractTableModel implements ReportModel {
 		}
 	}
 
-	public void updateRowHeight(HeighCalculator hCalc, int row, int column) {
+	public void updateRowHeight(HeightCalculator hCalc, int row, int column) {
 		Cell cell = getReportCell(row, column);
 		if (!cell.isChild() && getStyles(cell.getStyleId()).isAutoHeight()
 				&& (cell.getValue() != null || cell.getPicture() != null)) {
@@ -1372,7 +1372,7 @@ public class JReportModel extends AbstractTableModel implements ReportModel {
 		}
 	}
 
-	public void updateRowAndPageHeight(HeighCalculator hCalc) {
+	public void updateRowAndPageHeight(HeightCalculator hCalc) {
 		getRowModel().startUpdate();
 		double scaleY = GraphicUtil.getScaleY();
 		double scaleX = GraphicUtil.getScaleX();

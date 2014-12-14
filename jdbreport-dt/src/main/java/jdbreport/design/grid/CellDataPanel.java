@@ -86,7 +86,7 @@ public class CellDataPanel extends javax.swing.JPanel {
 		fieldBox.addItem(EMPTY_STRING); //$NON-NLS-1$
 
 		functionsBox.removeAllItems();
-		functionsBox.addItem(EMPTY_STRING); //$NON-NLS-1$
+		functionsBox.addItem(EMPTY_STRING);
 		for (String name : model.getFunctionsList().keySet()) {
 			functionsBox.addItem(name);
 		}
@@ -94,16 +94,6 @@ public class CellDataPanel extends javax.swing.JPanel {
 		varButton.setSelected(false);
 		fieldButton.setSelected(false);
 
-		if (cell.getType() == CellObject.TYPE_VAR) {
-			updateBox(true);
-			varBox.setSelectedItem(cell.getValue());
-			varButton.setSelected(true);
-		} else if (cell.getType() == CellObject.TYPE_FIELD) {
-			fieldButton.setSelected(true);
-			updateBox(false);
-			dataSetBox.setSelectedItem(cell.getDataSetId());
-			fieldBox.setSelectedItem(cell.getValue());
-		}
 		functionsBox.setSelectedItem(cell.getFunctionName());
 	}
 
@@ -270,9 +260,7 @@ public class CellDataPanel extends javax.swing.JPanel {
 			if (varChange && varBox.getSelectedItem() != null
 					&& varBox.getSelectedItem().toString().length() > 0) {
 				cell.setValue(varBox.getSelectedItem());
-				cell.setType(CellObject.TYPE_VAR);
 			}
-			cell.setDataSetId(null);
 		} else {
 			if (fieldButton.isSelected()) {
 				if (fieldChange) {
@@ -280,9 +268,6 @@ public class CellDataPanel extends javax.swing.JPanel {
 							&& fieldBox.getSelectedItem().toString().length() > 0) {
 						cell.setValue(fieldBox.getSelectedItem());
 					}
-				}
-				if (dataSetChange) {
-					cell.setDataSetId((String) dataSetBox.getSelectedItem());
 				}
 			}
 		}

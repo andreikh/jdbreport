@@ -30,7 +30,7 @@ import javax.swing.WindowConstants;
 import jdbreport.grid.JReportGrid;
 import jdbreport.grid.TargetGrid;
 import jdbreport.model.Cell;
-import jdbreport.model.HeighCalculator;
+import jdbreport.model.HeightCalculator;
 import jdbreport.model.ReportBook;
 import jdbreport.model.ReportModel;
 import jdbreport.model.StringMetrics;
@@ -44,7 +44,7 @@ import jdbreport.util.xml.XMLProperties;
  * 
  */
 public class ReportDialog extends JDialog implements 
-		TargetGrid, HeighCalculator {
+		TargetGrid, HeightCalculator {
 
 
 	private static final long serialVersionUID = 1L;

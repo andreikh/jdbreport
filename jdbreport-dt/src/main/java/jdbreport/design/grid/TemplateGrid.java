@@ -36,7 +36,6 @@ import javax.swing.table.TableModel;
 import org.xml.sax.XMLReader;
 import org.xml.sax.helpers.DefaultHandler;
 
-import jdbreport.design.grid.undo.DsAliasUndoItem;
 import jdbreport.design.grid.undo.FunctionUndoItem;
 import jdbreport.design.grid.undo.TemplateGridHandler;
 import jdbreport.design.grid.undo.TemplateGridParser;
@@ -59,7 +58,7 @@ import jdbreport.view.clipboard.ClipboardParser;
 import jdbreport.util.Utils;
 
 /**
- * @version 2.0 04.03.2011
+ * @version 3.1 14.12.2014
  * @author Andrey Kholmanskih
  * 
  */
@@ -68,10 +67,6 @@ public class TemplateGrid extends JReportGrid {
 	private static final long serialVersionUID = 1L;
 
 	private static Icon functionIcon;
-
-	private static Icon varIcon;
-
-	private static Icon fieldIcon;
 
 	private static Icon totalIcon;
 
@@ -84,7 +79,7 @@ public class TemplateGrid extends JReportGrid {
 	protected static Icon getTotalIcon() {
 		if (totalIcon == null) {
 			totalIcon = TemplateReportResources.getInstance().getIcon(
-					"total_ovr.png"); //$NON-NLS-1$
+					"total_ovr.png");
 		}
 		return totalIcon;
 	}
@@ -92,25 +87,9 @@ public class TemplateGrid extends JReportGrid {
 	protected static Icon getFunctionIcon() {
 		if (functionIcon == null) {
 			functionIcon = TemplateReportResources.getInstance().getIcon(
-					"function.gif"); //$NON-NLS-1$
+					"function.gif");
 		}
 		return functionIcon;
-	}
-
-	protected static Icon getVarIcon() {
-		if (varIcon == null) {
-			varIcon = TemplateReportResources.getInstance().getIcon(
-					"vars_ovr.gif"); //$NON-NLS-1$
-		}
-		return varIcon;
-	}
-
-	protected static Icon getFieldIcon() {
-		if (fieldIcon == null) {
-			fieldIcon = TemplateReportResources.getInstance().getIcon(
-					"field_ovr.gif"); //$NON-NLS-1$
-		}
-		return fieldIcon;
 	}
 
 	/**
@@ -191,50 +170,6 @@ public class TemplateGrid extends JReportGrid {
 					getColumnCount() - 1));
 		else
 			getSelectionModel().clearSelection();
-	}
-
-	public void setCellField(GridRect selectionRect, boolean isField) {
-		int type = isField ? CellObject.TYPE_FIELD : CellObject.TYPE_NONE;
-		Iterator<Cell> it = getReportModel().getSelectedCells(selectionRect);
-		while (it.hasNext()) {
-			((CellObject) it.next()).setType(type);
-		}
-		repaint();
-	}
-
-	/**
-	 * Sets the DataSet's alias to the selected cells
-	 * 
-	 * @param alias
-	 *            - the DataSet's alias
-	 */
-	public void setCellDsAlias(String alias) {
-		GridRect r = getSelectionRect();
-		if (r == null) {
-			return;
-		}
-		if (alias != null && alias.trim().length() == 0) {
-			alias = null;
-		}
-		int type;
-		pushDsAliasUndo();
-		Iterator<Cell> it = getReportModel().getSelectedCells(r);
-		while (it.hasNext()) {
-			CellObject cell = (CellObject) it.next();
-			cell.setDataSetId(alias);
-			if (alias == null) {
-				type = getTemplateModel().getVars().containsKey(cell.getText()) ? CellObject.TYPE_VAR
-						: CellObject.TYPE_NONE;
-			} else {
-				type = CellObject.TYPE_FIELD;
-			}
-			cell.setType(type);
-		}
-		repaint();
-	}
-
-	private void pushDsAliasUndo() {
-		unionUndo(new DsAliasUndoItem(this));
 	}
 
 	/**
@@ -326,7 +261,7 @@ public class TemplateGrid extends JReportGrid {
 				event.getPoint().y);
 		int column = getColumnModel().getColumnIndexAtX(event.getPoint().x);
 		String result = getReportModel().getToolTipText(row, column);
-		if (!"".equals(result)) //$NON-NLS-1$
+		if (!"".equals(result))
 			return result;
 		return super.getToolTipText(event);
 	}
@@ -355,10 +290,10 @@ public class TemplateGrid extends JReportGrid {
 			return;
 		pushUndo(new CellUndoItem(this, UndoItem.NOT_REPEATE));
 		CellObject cell = (CellObject) getSelectedCell();
-		boolean notrepeate = !cell.isNotRepeate();
+		boolean notrepeate = !cell.isNotRepeat();
 		Iterator<Cell> it = getReportModel().getSelectedCells(selectionRect);
 		while (it.hasNext()) {
-			((CellObject) it.next()).setNotRepeate(notrepeate);
+			((CellObject) it.next()).setNotRepeat(notrepeate);
 		}
 	}
 
@@ -399,11 +334,6 @@ public class TemplateGrid extends JReportGrid {
 			CellObject cellObject = (CellObject) cell;
 			setSelectionStart(0);
 			setSelectionEnd(0);
-			if (cellObject.getType() == CellObject.TYPE_VAR) {
-				insertIcon(TemplateGrid.getVarIcon());
-			} else if (cellObject.getType() == CellObject.TYPE_FIELD) {
-				insertIcon(TemplateGrid.getFieldIcon());
-			}
 			if (cellObject.getFunctionName() != null) {
 				insertIcon(TemplateGrid.getFunctionIcon());
 			}

@@ -28,7 +28,7 @@ import jdbreport.model.Cell;
 import jdbreport.model.CellStyle;
 import jdbreport.model.GridRect;
 import jdbreport.model.Group;
-import jdbreport.model.HeighCalculator;
+import jdbreport.model.HeightCalculator;
 import jdbreport.view.model.JReportModel;
 import jdbreport.model.TableRowModel;
 import jdbreport.source.JdbcReportSource;
@@ -90,18 +90,6 @@ public class TemplateModel extends JReportModel {
 		}
 	}
 
-	/**
-	 * 
-	 * @param row
-	 *            the row's number
-	 * @param col
-	 *            the column's number
-	 * @return true, if the cell's type is the CellObject.TYPE_FIELD
-	 */
-	public boolean isCellField(int row, int col) {
-		return getCellObject(row, col).getType() == CellObject.TYPE_FIELD;
-	}
-
 	@Override
 	public String getToolTipText(int row, int column) {
 		CellObject cell = (CellObject) getOwnerReportCell(row, column);
@@ -109,42 +97,28 @@ public class TemplateModel extends JReportModel {
 			return null;
 		StringBuilder result = new StringBuilder();
 		if (cell.getFunctionName() != null) {
-			result.append(Messages.getString("TemplateModel.0")); //$NON-NLS-1$
-			result.append(" <b>"); //$NON-NLS-1$
+			result.append(Messages.getString("TemplateModel.function"));
+			result.append(" <b>");
 			result.append(cell.getFunctionName());
-			result.append("</b><br>"); //$NON-NLS-1$
+			result.append("</b><br>");
 		}
-		if (cell.getType() == CellObject.TYPE_FIELD) {
-			result.append(Messages.getString("TemplateModel.3")); //$NON-NLS-1$
-			result.append(" <b>"); //$NON-NLS-1$
-			result.append(cell.getFieldName());
-			result.append("</b> "); //$NON-NLS-1$
-			result.append(Messages.getString("TemplateModel.6")); //$NON-NLS-1$
-			result.append(" <b>"); //$NON-NLS-1$
-			result.append(cell.getDataSetId());
-			result.append("</b><br>"); //$NON-NLS-1$
-		} else if (cell.getType() == CellObject.TYPE_VAR) {
-			result.append(Messages.getString("TemplateModel.9")); //$NON-NLS-1$
-			result.append(" <b>"); //$NON-NLS-1$
-			result.append(cell.getText());
-			result.append("</b><br>"); //$NON-NLS-1$
-		}
+
 		if (cell.getTotalFunction() != CellObject.AF_NONE) {
 			Group group = getRowModel().getGroup(row);
 			if (group.getType() == Group.ROW_FOOTER
 					|| group.getType() == Group.ROW_GROUP_FOOTER
 					|| group.getType() == Group.ROW_GROUP_HEADER) {
-				result.append(Messages.getString("TemplateModel.12")); //$NON-NLS-1$
-				result.append("	<b>"); //$NON-NLS-1$
+				result.append(Messages.getString("TemplateModel.total_function"));
+				result.append("	<b>");
 				result
 						.append(CellObject.AGR_FUNC_NAME[cell
 								.getTotalFunction()]);
-				result.append("</b><br>"); //$NON-NLS-1$
+				result.append("</b><br>");
 			}
 		}
 		if (result.length() > 0) {
-			result.insert(0, "<html>"); //$NON-NLS-1$
-			result.append("</html>"); //$NON-NLS-1$
+			result.insert(0, "<html>");
+			result.append("</html>");
 		}
 		return result.toString();
 	}
@@ -247,7 +221,7 @@ public class TemplateModel extends JReportModel {
 		return ((TemplateRowModel) getRowModel()).addRows(count, index, type);
 	}
 
-	public void updateRowAndPageHeight(HeighCalculator hCalc) {
+	public void updateRowAndPageHeight(HeightCalculator hCalc) {
 
 	}
 

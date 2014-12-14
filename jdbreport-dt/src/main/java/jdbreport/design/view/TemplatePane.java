@@ -21,16 +21,13 @@
 
 package jdbreport.design.view;
 
-import java.awt.Component;
 import java.awt.Cursor;
 import java.awt.Dialog;
-import java.awt.Dimension;
 import java.awt.Frame;
 import java.awt.Point;
 import java.awt.Window;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.KeyEvent;
 import java.beans.PropertyChangeEvent;
 import java.io.File;
 import java.net.URL;
@@ -40,15 +37,12 @@ import java.util.LinkedList;
 import javax.swing.AbstractAction;
 import javax.swing.AbstractButton;
 import javax.swing.Action;
-import javax.swing.ComboBoxEditor;
 import javax.swing.JButton;
 import javax.swing.JCheckBoxMenuItem;
-import javax.swing.JComboBox;
 import javax.swing.JFileChooser;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
-import javax.swing.JOptionPane;
 import javax.swing.JPopupMenu;
 import javax.swing.JSeparator;
 import javax.swing.JToggleButton;
@@ -74,27 +68,24 @@ import jdbreport.model.Group;
 import jdbreport.model.ReportBook;
 import jdbreport.model.ReportModel;
 import jdbreport.model.event.CellValueChangeListener;
-import jdbreport.source.JdbcReportSource;
 import jdbreport.util.xml.XMLProperties;
 import jdbreport.view.ReportEditor;
 import jdbreport.view.ReportEditorPane;
 import jdbreport.view.ReportFileFilter;
 
 /**
- * @version 3.0 12.12.2014
+ * @version 3.1 14.12.2014
  * @author Andrey Kholmanskih
  * 
  */
 public class TemplatePane extends ReportEditorPane implements
 		CellValueChangeListener {
 
-	private static final String DATASET_CHANGE_COMMAND = "dataset_change"; //$NON-NLS-1$
-
 	private static final long serialVersionUID = 1L;
 
 	private static final int MAX_RECENT_COUNT = 5;
 
-	private static final String RECENT = "recent"; //$NON-NLS-1$
+	private static final String RECENT = "recent";
 
 	private LinkedList<String> recentFiles;
 
@@ -103,8 +94,6 @@ public class TemplatePane extends ReportEditorPane implements
 	private JPopupMenu rowTypeMenu;
 
 	private JToolBar designBar;
-
-	private JComboBox dsAliasBox;
 
 	private VarList varList;
 
@@ -242,46 +231,12 @@ public class TemplatePane extends ReportEditorPane implements
 		return varListAction;
 	}
 
-	private JComboBox getDSAliasBox() {
-		if (dsAliasBox == null) {
-			dsAliasBox = new JComboBox();
-			dsAliasBox.setEditable(true);
-			dsAliasBox.setToolTipText(TemplateReportResources.getInstance()
-					.getString("dataset_alias_box.tooltip"));
-			dsAliasBox.setMaximumSize(new Dimension(100, 22));
-			dsAliasBox.setPreferredSize(new java.awt.Dimension(100, 22));
-			dsAliasBox.setActionCommand(DATASET_CHANGE_COMMAND);
-			dsAliasBox.addActionListener(this);
-
-			Component editor = dsAliasBox.getEditor().getEditorComponent();
-			if (editor != null) {
-
-				editor.addKeyListener(new java.awt.event.KeyAdapter() {
-
-					public void keyReleased(KeyEvent e) {
-						if (getFocusedGrid() != null && isEnabledAction()) {
-							ComboBoxEditor ce = dsAliasBox.getEditor();
-							Object item = ce.getItem();
-							if (item != null) {
-								((TemplateGrid) getFocusedGrid())
-										.setCellDsAlias(item.toString());
-							}
-						}
-					}
-				});
-			}
-
-		}
-		return dsAliasBox;
-	}
-
-	
 	private JToggleButton getReplacementButton() {
 		if (replacementButton == null) {
 			replacementButton = new JToggleButton();
 			replacementButton.setIcon(TemplateReportResources.getInstance().getIcon(
 					"replacement.png")); //$NON-NLS-1$
-			replacementButton.setToolTipText(Messages.getString("TemplatePane.replacement")); //$NON-NLS-1$
+			replacementButton.setToolTipText(Messages.getString("TemplatePane.replacement"));
 			replacementButton.setActionCommand("formatting");
 			replacementButton.addActionListener(this);
 		}
@@ -293,7 +248,7 @@ public class TemplatePane extends ReportEditorPane implements
 		GridRect selectionRect = grid.getSelectionRect();
 		if (selectionRect == null)
 			return;
-		pushUndo(new CellUndoItem(grid, Messages.getString("TemplatePane.cell_properties"))); //$NON-NLS-1$
+		pushUndo(new CellUndoItem(grid, Messages.getString("TemplatePane.cell_properties")));
 		CellObject cell = (CellObject) grid.getSelectedCell();
 		boolean replace = cell.isReplacement();
 		Iterator<Cell> it = grid.getReportModel().getSelectedCells(
@@ -306,34 +261,6 @@ public class TemplatePane extends ReportEditorPane implements
 	}
 
 	public void cellValueChange(CellValueChangedEvent evt) {
-		Cell eCell = getFocusedGrid().getReportModel().getOwnerReportCell(
-				evt.getRow(), evt.getColumn());
-		if (!eCell.isNull() && eCell instanceof CellObject) {
-			CellObject cell = (CellObject) eCell;
-			if (getTemplateBook().findVar(cell.getText())) {
-				cell.setType(CellObject.TYPE_VAR);
-			} else if (cell.getType() == CellObject.TYPE_VAR) {
-				if (cell.getText().length() > 0
-						&& (evt.getOldValue() == null || !getTemplateBook()
-								.findVar(evt.getOldValue().toString()))) {
-					int result = JOptionPane
-							.showConfirmDialog(
-									this,
-									String.format(TemplateReportResources
-											.getInstance().getString(
-													"var_not_found.message"), //$NON-NLS-1$
-											cell.getText()),
-									TemplateReportResources.getInstance()
-											.getString("var_not_found.caption"), JOptionPane.YES_NO_OPTION); //$NON-NLS-1$
-					if (result == JOptionPane.YES_OPTION) {
-						getTemplateBook().setVarValue(cell.getText(), null);
-						firePropertyChange("vars", null, cell.getText()); //$NON-NLS-1$
-					} else
-						cell.setType(CellObject.TYPE_NONE);
-				} else
-					cell.setType(CellObject.TYPE_NONE);
-			}
-		} 
 	}
 
 	@Override
@@ -366,8 +293,6 @@ public class TemplatePane extends ReportEditorPane implements
 		designBar.add(getReplacementButton());
 		designBar.add(getVarListAction());
 		designBar.add(getSelectFunctionAction());
-		designBar.addSeparator();
-		designBar.add(getDSAliasBox());
 		designBar.addSeparator();
 		designBar.add(genReportAction);
 		return designBar;
@@ -551,17 +476,12 @@ public class TemplatePane extends ReportEditorPane implements
 			getGroupAction().setEnabled(false);
 		}
 
-		if (((CellObject) cell).getType() == CellObject.TYPE_FIELD) {
-			addToAliasBox(((CellObject) cell).getDataSetId());
-		} else {
-			getDSAliasBox().setSelectedItem(null);
-		}
 		if (group.getType() == Group.ROW_DETAIL) {
 			getNotRepeateAction().setEnabled(true);
 			getNotRepeateButton().setSelected(
-					((CellObject) cell).isNotRepeate());
+					((CellObject) cell).isNotRepeat());
 			getNotRepeateMenuItem().setSelected(
-					((CellObject) cell).isNotRepeate());
+					((CellObject) cell).isNotRepeat());
 		} else {
 			getNotRepeateButton().setSelected(false);
 			getNotRepeateMenuItem().setSelected(false);
@@ -573,33 +493,10 @@ public class TemplatePane extends ReportEditorPane implements
 
 	}
 
-	private void addToAliasBox(String tableId) {
-		for (int i = 0; i < getDSAliasBox().getItemCount(); i++) {
-			Object o = getDSAliasBox().getItemAt(i);
-			if (o != null && o.equals(tableId)) {
-				getDSAliasBox().setSelectedItem(tableId);
-				return;
-			}
-		}
-		getDSAliasBox().addItem(tableId);
-		getDSAliasBox().setSelectedItem(tableId);
-	}
-
-	protected void updateDsAliasBox() {
-		dsAliasBox.removeAllItems();
-		for (int i = 0; i < getTemplateBook().getSourcesList().size(); i++) {
-			JdbcReportSource source = getTemplateBook()
-					.getSourcesList().get(i);
-			for (int n = 0; n < source.getDataSetCount(); n++) {
-				dsAliasBox.addItem(source.getDataSet(n).getId());
-			}
-		}
-	}
-
 	public void propertyChange(PropertyChangeEvent evt) {
-		if (evt.getPropertyName().equals("vars")) { //$NON-NLS-1$
+		if (evt.getPropertyName().equals("vars")) {
 			getVarList().updateVarList();
-		} else if (evt.getPropertyName().equals("reportBook")) { //$NON-NLS-1$
+		} else if (evt.getPropertyName().equals("reportBook")) {
 			varList = null;
 		} else {
 			super.propertyChange(evt);
@@ -701,7 +598,6 @@ public class TemplatePane extends ReportEditorPane implements
 					}
 					se.addUndoListener(TemplatePane.this);
 					se.setVisible(true);
-					updateDsAliasBox();
 				}
 
 			};
@@ -948,26 +844,22 @@ public class TemplatePane extends ReportEditorPane implements
 
 	private ActionListener getRecentListener() {
 		if (recentListener == null) {
-			recentListener = new ActionListener() {
-
-				public void actionPerformed(ActionEvent e) {
-					JMenuItem menuItem = (JMenuItem) e.getSource();
-					String s = menuItem.getText();
-					if (!saveQuestion()) {
-						return;
-					}
-					if (!open(new File(s))) {
-						getRecentFiles().remove(s);
-						getFileMenu().remove(menuItem);
-					} else {
-						if (getRecentFiles().indexOf(s) > 0) {
-							getRecentFiles().remove(s);
-							getRecentFiles().addFirst(s);
-						}
-					}
-				}
-
-			};
+			recentListener = e -> {
+                JMenuItem menuItem = (JMenuItem) e.getSource();
+                String s = menuItem.getText();
+                if (!saveQuestion()) {
+                    return;
+                }
+                if (!open(new File(s))) {
+                    getRecentFiles().remove(s);
+                    getFileMenu().remove(menuItem);
+                } else {
+                    if (getRecentFiles().indexOf(s) > 0) {
+                        getRecentFiles().remove(s);
+                        getRecentFiles().addFirst(s);
+                    }
+                }
+            };
 		}
 		return recentListener;
 	}
@@ -1006,7 +898,6 @@ public class TemplatePane extends ReportEditorPane implements
 			super.setReportBook(reportBook);
 			functionEditor = null;
 			varList = null;
-			updateDsAliasBox();
 			File file = getReportFile();
 			if (file != null) {
 				if (getRecentFiles().indexOf(file.getPath()) < 0) {
@@ -1041,20 +932,7 @@ public class TemplatePane extends ReportEditorPane implements
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		if (DATASET_CHANGE_COMMAND.equals(e.getActionCommand())) {
-			JComboBox cb = (JComboBox) e.getSource();
-			if (cb.getSelectedItem() != null)
-				if (getFocusedGrid() != null
-						&& isEnabledAction()
-						&& (cb.isFocusOwner() || cb.getEditor()
-								.getEditorComponent().isFocusOwner())) {
-					Object item = cb.getSelectedItem();
-					if (item != null) {
-						((TemplateGrid) getFocusedGrid()).setCellDsAlias(item
-								.toString());
-					}
-				}
-		} else if ("formatting".equals(e.getActionCommand()) ){
+		if ("formatting".equals(e.getActionCommand()) ){
 					setReplacement();
 		}else
 			super.actionPerformed(e);

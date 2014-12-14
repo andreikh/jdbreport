@@ -22,7 +22,7 @@ import jdbreport.model.Cell;
 import jdbreport.model.NullCell;
 
 /**
- * @version 2.0 30.01.2012
+ * @version 3.1 14.12.2014
  * @author Andrey Kholmanskih
  *
  */
@@ -35,46 +35,27 @@ public class NullCellObject extends NullCell implements CellObject {
 		super();
 	}
 
-	public String getFieldName() {
-		return null;
-	}
-
-	public void setFieldName(String name) {
-
-	}
-
-	public String getDataSetId() {
-		return null;
-	}
-
-	public void setDataSetId(String tableId) {
-
-	}
-
-	public int getType() {
-		return 0;
-	}
-
-	public void setType(int type) {
-
-	}
-
+	@Override
 	public Cell createCellItem() {
 		return null;
 	}
 
-	public boolean isNotRepeate() {
+	@Override
+	public boolean isNotRepeat() {
 		return false;
 	}
 
-	public void setNotRepeate(boolean noRepeate) {
+	@Override
+	public void setNotRepeat(boolean noRepeate) {
 		
 	}
 
+	@Override
 	public String getFunctionName() {
 		return null;
 	}
 
+	@Override
 	public void setFunctionName(String functionName) {
 	}
 
@@ -88,25 +69,31 @@ public class NullCellObject extends NullCell implements CellObject {
 
 	}
 
+	@Override
 	public boolean isOldEquals(Object value) {
 		return false;
 	}
 
+	@Override
 	public void setOldValue(Object oldValue) {
 	}
 
+	@Override
 	public Expression[] getExpressions() {
 		return null;
 	}
 
+	@Override
 	public void setExpressions(Expression[] expr) {
 		
 	}
 
+	@Override
 	public String[] getDataSetIds() {
 		return null;
 	}
 
+	@Override
 	public String[] getFieldNames(String dsId) {
 		return null;
 	}

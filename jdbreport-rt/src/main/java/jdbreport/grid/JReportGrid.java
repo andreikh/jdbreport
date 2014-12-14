@@ -100,7 +100,7 @@ import java.util.logging.Logger;
  * 
  */
 public class JReportGrid extends JTable implements TableRowModelListener,
-		PropertyChangeListener, HeighCalculator, ReportColumnModelListener,
+		PropertyChangeListener, HeightCalculator, ReportColumnModelListener,
 		Finder {
 
 	private static final long serialVersionUID = 1265975931384658496L;

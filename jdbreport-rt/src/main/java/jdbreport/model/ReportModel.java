@@ -524,7 +524,7 @@ public interface ReportModel extends TableModel {
 	 * @param column
 	 *            the column's number
 	 */
-	public void updateRowHeight(HeighCalculator hCalc, int row, int column);
+	public void updateRowHeight(HeightCalculator hCalc, int row, int column);
 
 	/**
 	 * Determines whether report should be visible
@@ -565,7 +565,7 @@ public interface ReportModel extends TableModel {
 	 */
 	public void updatePages(int startRow);
 
-	public void updateRowAndPageHeight(HeighCalculator hCalc);
+	public void updateRowAndPageHeight(HeightCalculator hCalc);
 	
 	/**
 	 * Adds a PropertyChangeListener to the listener list. The listener is

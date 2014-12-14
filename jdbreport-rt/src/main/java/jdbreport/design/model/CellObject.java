@@ -24,7 +24,7 @@ import jdbreport.model.Cell;
  * 
  * Interface for cell in TemplateReport
  * 
- * @version 2.0 30.01.2012
+ * @version 3.1 14.12.2014
  * @author Andrey Kholmanskih
  * 
  */
@@ -66,51 +66,18 @@ public interface CellObject extends Cell {
 	 */
 	public final static String[] AGR_FUNC_NAME = {
 			null,
-			Messages.getString("CellObject.0"), Messages.getString("CellObject.1"), Messages.getString("CellObject.2"), Messages.getString("CellObject.3") }; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
-
-
-	/**
-	 * @return the field's name
-	 */
-	public String getFieldName();
-
-	/**
-	 * 
-	 * @param name the field's name
-	 */
-	public void setFieldName(String name);
-
-	/**
-	 * @return the DataSet's alias
-	 */
-	public String getDataSetId();
-
-	/**
-	 * 
-	 * @param dataSetId the DataSet's alias
-	 */
-	public void setDataSetId(String dataSetId);
-
-	/**
-	 * @return Data type (TYPE_VAR, TYPE_FIELD or TYPE_NONE)
-	 */
-	public int getType();
-
-	/**
-	 * @param type Data type (TYPE_VAR, TYPE_FIELD or TYPE_NONE)
-	 */
-	public void setType(int type);
-
+			Messages.getString("CellObject.sum"), Messages.getString("CellObject.max"),
+			Messages.getString("CellObject.min"), Messages.getString("CellObject.avg") };
 	/**
 	 * @return Not repeated value for column
 	 */
-	public boolean isNotRepeate();
+	public boolean isNotRepeat();
 
 	/**
 	 * 
 	 * @param notRepeate not repeated value for column
 	 */
-	public void setNotRepeate(boolean notRepeate);
+	public void setNotRepeat(boolean notRepeate);
 
 	public Object clone();
 

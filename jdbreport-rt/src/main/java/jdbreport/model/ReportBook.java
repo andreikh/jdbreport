@@ -72,7 +72,7 @@ public class ReportBook implements Iterable<ReportModel>, TableRowModelListener 
 
 	protected static TreeMap<Object, String> READERS_MAP = new TreeMap<>();
 
-	public static final String CURRENT_VERSION = "8";
+	public static final String CURRENT_VERSION = "9";
 
 	private static final Logger logger = Logger.getLogger(ReportBook.class
 			.getName());
@@ -1161,7 +1161,7 @@ public class ReportBook implements Iterable<ReportModel>, TableRowModelListener 
 		return "application/jdbreport";
 	}
 
-	public void updateRowAndPageHeight(HeighCalculator hCalc) {
+	public void updateRowAndPageHeight(HeightCalculator hCalc) {
 		for (ReportModel model : list) {
 			model.updateRowAndPageHeight(hCalc);
 		}

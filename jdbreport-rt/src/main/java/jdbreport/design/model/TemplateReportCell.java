@@ -25,16 +25,14 @@ import jdbreport.model.Cell;
 import jdbreport.model.ReportCell;
 
 /**
- * @version 2.2 13.04.2013
+ * @version 3.1 14.12.2014
  * @author Andrey Kholmanskih
  * 
  */
 public class TemplateReportCell extends ReportCell implements CellObject {
 
 	private static final long serialVersionUID = 1L;
-	private String dataSetId;
-	private int type;
-	private boolean notRepeate;
+	private boolean notRepeat;
 	private String functionText;
 	private byte[] compiledFunction;
 	private String functionName;
@@ -45,38 +43,6 @@ public class TemplateReportCell extends ReportCell implements CellObject {
 
 	public TemplateReportCell() {
 		super();
-	}
-
-	public String getFieldName() {
-		return type == CellObject.TYPE_FIELD ? getText() : "";
-	}
-
-	public void setFieldName(String name) {
-		setValue(name);
-	}
-
-	public String getDataSetId() {
-		return dataSetId;
-	}
-
-	public void setDataSetId(String tableId) {
-		if (dataSetId != null || tableId != null) {
-			this.dataSetId = tableId != null && tableId.trim().length() == 0 ? null
-					: tableId;
-			if (dataSetId == null) {
-				if (type == CellObject.TYPE_FIELD)
-					type = CellObject.TYPE_NONE;
-			} else
-				type = CellObject.TYPE_FIELD;
-		}
-	}
-
-	public int getType() {
-		return type;
-	}
-
-	public void setType(int type) {
-		this.type = type;
 	}
 
 	public Cell createCellItem() {
@@ -95,12 +61,12 @@ public class TemplateReportCell extends ReportCell implements CellObject {
 		return cell;
 	}
 
-	public boolean isNotRepeate() {
-		return notRepeate;
+	public boolean isNotRepeat() {
+		return notRepeat;
 	}
 
-	public void setNotRepeate(boolean noRepeate) {
-		this.notRepeate = noRepeate;
+	public void setNotRepeat(boolean noRepeate) {
+		this.notRepeat = noRepeate;
 	}
 
 	public String getFunctionText() {
@@ -140,9 +106,7 @@ public class TemplateReportCell extends ReportCell implements CellObject {
 
 	public void clear() {
 		super.clear();
-		dataSetId = null;
-		type = 0;
-		notRepeate = false;
+		notRepeat = false;
 		functionText = null;
 		compiledFunction = null;
 		functionName = null;
@@ -169,9 +133,7 @@ public class TemplateReportCell extends ReportCell implements CellObject {
 	}
 
 	public String[] getDataSetIds() {
-		if (type == CellObject.TYPE_FIELD)
-			return new String[] { dataSetId };
-		else if (type == CellObject.TYPE_NONE && expressions != null) {
+		if (expressions != null) {
 			if (expressions.length > 0) {
 				String[] result = new String[expressions.length];
 				int i = 0;
@@ -188,10 +150,7 @@ public class TemplateReportCell extends ReportCell implements CellObject {
 	}
 
 	public String[] getFieldNames(String dsId) {
-		if (type == CellObject.TYPE_FIELD) {
-			return new String[] { getFieldName() };
-		}
-		if (type == CellObject.TYPE_NONE && expressions != null) {
+		if (expressions != null) {
 			List<String> list = new ArrayList<>();
 			for (Expression expr : expressions) {
 				if (dsId.equals(expr.getBaseName())) {

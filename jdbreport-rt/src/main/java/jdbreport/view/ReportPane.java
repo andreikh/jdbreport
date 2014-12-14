@@ -89,7 +89,7 @@ import jdbreport.grid.undo.AbstractGridUndo;
 import jdbreport.grid.undo.UndoItem;
 import jdbreport.grid.undo.UndoList;
 import jdbreport.model.Cell;
-import jdbreport.model.HeighCalculator;
+import jdbreport.model.HeightCalculator;
 import jdbreport.util.finder.FindParams;
 import jdbreport.util.finder.Finder;
 import jdbreport.util.xml.XMLProperties;
@@ -113,7 +113,7 @@ import jdbreport.util.Utils;
  * 
  */
 public class ReportPane extends JPanel implements ReportListListener,
-		UndoListener, PropertyChangeListener, TargetGrid, HeighCalculator,
+		UndoListener, PropertyChangeListener, TargetGrid, HeightCalculator,
 		Finder {
 
 	private static final Logger logger = Logger.getLogger(ReportPane.class

@@ -34,7 +34,7 @@ import org.xml.sax.SAXException;
 
 /**
  * @author Andrey Kholmanskih
- * @version 3.0 13.12.2014
+ * @version 3.1 14.12.2014
  */
 public class TemplCellHandler extends CellParser {
 
@@ -63,18 +63,6 @@ public class TemplCellHandler extends CellParser {
     public boolean startElement(String name, Attributes attributes)
             throws SAXException {
         if (inExtProp) {
-            if (name.equals("prop")) {
-                String s;
-                s = attributes.getValue("tableID");
-                if (s != null && s.length() > 0) {
-                    cellObject.setDataSetId(s);
-                }
-                s = attributes.getValue("type");
-                if (s != null && s.length() > 0) {
-                    cellObject.setType(Integer.parseInt(s));
-                }
-                return false;
-            }
             return name.equals("agr-func") || name.equals("norep") || name.equals("function-name")
                     || name.equals(REPLACE);
         }
@@ -102,7 +90,7 @@ public class TemplCellHandler extends CellParser {
             }
             if (name.equals("norep")) {
                 cellObject
-                        .setNotRepeate(Boolean.parseBoolean(value.toString()));
+                        .setNotRepeat(Boolean.parseBoolean(value.toString()));
                 return;
             }
             if (name.equals("function-name")) {
@@ -125,9 +113,9 @@ public class TemplCellHandler extends CellParser {
     }
 
     protected void writeCellObject(PrintWriter writer, CellObject cell) {
-        if (cell.getType() <= 1 && cell.getFunctionName() == null
+        if (cell.getFunctionName() == null
                 && cell.getTotalFunction() == CellObject.AF_NONE
-                && !cell.isNotRepeate() && !cell.isReplacement())
+                && !cell.isNotRepeat() && !cell.isReplacement())
             return;
         writer.println("<" + EXTPROP + ">");
         writeExtProperty(writer, cell);
@@ -135,25 +123,11 @@ public class TemplCellHandler extends CellParser {
     }
 
     protected void writeExtProperty(PrintWriter writer, CellObject cell) {
-        StringBuilder prop = null;
-        if (cell.getType() > 1) {
-            prop = new StringBuilder("type=\"");
-            prop.append("").append(cell.getType());
-            prop.append('"');
-            if (cell.getDataSetId() != null) {
-                prop.append(" tableID=\"");
-                prop.append(cell.getDataSetId());
-                prop.append('"');
-            }
-        }
-        if (prop != null) {
-            writer.println("<prop " + prop + "/>");
-        }
         if (cell.getTotalFunction() != CellObject.AF_NONE) {
             writer.println("<agr-func>"
                     + AGR_FUNC_NAME[cell.getTotalFunction()] + "</agr-func>");
         }
-        if (cell.isNotRepeate()) {
+        if (cell.isNotRepeat()) {
             writer.println("<norep>true</norep>");
         }
         if (cell.getFunctionName() != null) {
