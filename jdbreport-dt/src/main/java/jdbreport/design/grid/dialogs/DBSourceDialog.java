@@ -23,8 +23,6 @@ import jdbreport.util.Utils;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 /**
  * @version 3.0 12.12.2014
@@ -50,9 +48,9 @@ public class DBSourceDialog extends JDialog {
 
 	private void init(JdbcSource dbItm) throws Exception {
 		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
-		setTitle(Messages.getString("DBSourceDialog.0")); //$NON-NLS-1$
+		setTitle(Messages.getString("DBSourceDialog.0"));
 		if (dbItm == null) {
-			throw new Exception("JdbcSource is null"); //$NON-NLS-1$
+			throw new Exception("JdbcSource is null");
 		}
 		this.dbItem = dbItm;
 		initControls();
@@ -85,29 +83,19 @@ public class DBSourceDialog extends JDialog {
 		JPanel bottomPanel = new JPanel(new BorderLayout());
 
 		JPanel buttonPanel = new JPanel();
-		JButton okButton = new JButton(Messages.getString("DBSourceDialog.13")); //$NON-NLS-1$
+		JButton okButton = new JButton(Messages.getString("DBSourceDialog.13"));
 		buttonPanel.add(okButton);
-		okButton.addActionListener(new ActionListener() {
-
-			public void actionPerformed(ActionEvent e) {
-				dbPanel.saveProperty();
-				exitCode = OK;
-				close();
-			}
-
-		});
+		okButton.addActionListener(e -> {
+            dbPanel.saveProperty();
+            exitCode = OK;
+            close();
+        });
 
 		JButton cancelButton = new JButton(Messages
-				.getString("DBSourceDialog.14")); //$NON-NLS-1$
+				.getString("DBSourceDialog.14"));
 		cancelButton.setFont(getFont());
 		buttonPanel.add(cancelButton);
-		cancelButton.addActionListener(new ActionListener() {
-
-			public void actionPerformed(ActionEvent e) {
-				close();
-			}
-
-		});
+		cancelButton.addActionListener(e -> close());
 
 		bottomPanel.add(buttonPanel, BorderLayout.SOUTH);
 

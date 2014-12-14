@@ -43,7 +43,7 @@ public interface Cell extends Cloneable, Serializable {
 
 	public final static String TEXT_HTML = "text/html";
 	
-	public static final String EMPTY_STRING = ""; //$NON-NLS-1$
+	public static final String EMPTY_STRING = "";
 
 	/**
 	 * Returns the value for the cell

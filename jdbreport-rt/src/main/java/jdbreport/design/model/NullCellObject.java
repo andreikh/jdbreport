@@ -78,6 +78,16 @@ public class NullCellObject extends NullCell implements CellObject {
 	public void setFunctionName(String functionName) {
 	}
 
+	@Override
+	public int getTotalFunction() {
+		return 0;
+	}
+
+	@Override
+	public void setTotalFunction(int func) {
+
+	}
+
 	public boolean isOldEquals(Object value) {
 		return false;
 	}
