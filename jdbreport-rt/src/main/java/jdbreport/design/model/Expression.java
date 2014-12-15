@@ -29,45 +29,49 @@ import jdbreport.model.ReportException;
  * <i><b>Customer: ${customer.name}</b></i> contains two expressions:
  * <i><b>Customer: </b><i> and  <i><b>${customer.name}</b></i>.
  *
- * @version 2.0 10.01.2011
+ * @version 3.1 15.12.2014
  * @author Andrey Kholmanskih
  *
  */
 public interface Expression {
 
+	int TYPE_NONE = 0;
+	int TYPE_VAR = 5;
+	int TYPE_FIELD = 6;
+
 	/**
 	 * Text of the expression
 	 * @return text of the expression
 	 */
-	public String getText();
+	String getText();
 	
 	/**
 	 * The name of basic object
 	 * @return the name of object
 	 */
-	public String getBaseName();
+	String getBaseName();
 	
 	/**
 	 * The name of property
 	 * @return the name of property
 	 * @since 2.0
 	 */
-	public String getProperty();
+	String getProperty();
 	
 	/**
 	 * The meaning of the expression
 	 * @return the meaning of the expression
 	 * @throws ReportException
 	 */
-	public Object getValue() throws ReportException;
+	Object getValue() throws ReportException;
 	
 	/**
 	 * The type of the expression
-	 * Can accept the meanings: CellObject.TYPE_NONE, 
-	 * CellObject.TYPE_VAR, CellObject.TYPE_FIELD
+	 * Can accept the meanings: TYPE_NONE,
+	 * TYPE_VAR, TYPE_FIELD
 	 * @return the type of the expression
 	 */
-	public int getType();
+	int getType();
 	
 	/**
 	 * Returns a formatted string
@@ -75,5 +79,5 @@ public interface Expression {
 	 * @throws ReportException 
 	 * @since 1.4
 	 */
-	public String getFormatValue() throws ReportException;
+	String getFormatValue() throws ReportException;
 }

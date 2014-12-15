@@ -28,7 +28,7 @@ import java.lang.reflect.*;
 import jdbreport.model.ReportException;
 
 /**
- * @version 3.0 13.12.2014
+ * @version 3.1 15.12.2014
  * @author Andrey Kholmanskih
  * 
  */
@@ -57,7 +57,8 @@ public abstract class ReflectDataSet extends AbstractDataSet {
 		}
 		Method[] m = objectClass.getMethods();
 		for (Method aM : m) {
-			if (aM.getParameterTypes().length == 0) {
+			if (aM.getParameterTypes().length == 0
+					&& aM.getReturnType() != Void.TYPE) {
 				String name = aM.getName();
 				if (name.startsWith("get") && name.length() > 3) {
 					name = name.substring(3, 4).toLowerCase()
@@ -65,7 +66,8 @@ public abstract class ReflectDataSet extends AbstractDataSet {
 					if (!columnMap.containsKey(name)) {
 						columnMap.put(name, aM);
 					}
-				} else if (name.startsWith("is") && name.length() > 2) {
+				} else if (name.startsWith("is") && name.length() > 2
+						&& aM.getReturnType() == Boolean.TYPE) {
 					name = name.substring(2, 3).toLowerCase()
 							+ name.substring(3);
 					if (!columnMap.containsKey(name)) {
@@ -93,6 +95,15 @@ public abstract class ReflectDataSet extends AbstractDataSet {
 	}
 
 	public Object getValue(String name) throws ReportException {
+		return getValue(current, name);
+	}
+
+	public boolean hasNext() {
+		return current != null;
+	}
+
+	@Override
+	public Object getValue(Object current, String name) throws ReportException {
 		try {
 			Object o = getColumnMap().get(name);
 			if (o == null)
@@ -107,8 +118,11 @@ public abstract class ReflectDataSet extends AbstractDataSet {
 		return null;
 	}
 
-	public boolean hasNext() {
-		return current != null;
+
+	@Override
+	public boolean containsKey(String name) {
+		return columnMap.containsKey(name);
 	}
+
 
 }

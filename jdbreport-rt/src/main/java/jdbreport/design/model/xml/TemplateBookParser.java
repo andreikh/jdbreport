@@ -388,8 +388,8 @@ public class TemplateBookParser extends ReportBookParser {
 				GroupKey key = dGroup.getKey(i);
 				if (key.getName() != null) {
 					String dsId;
-					if (key.getDatasetID() != null)
-						dsId = " dataset=\"" + key.getDatasetID() + "\"";
+					if (key.getDataSetID() != null)
+						dsId = " dataset=\"" + key.getDataSetID() + "\"";
 					else
 						dsId = "";
 					writer.println("<GroupKey name=\"" + key.getName() + "\""

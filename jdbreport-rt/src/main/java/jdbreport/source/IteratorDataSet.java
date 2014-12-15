@@ -24,7 +24,7 @@ import jdbreport.model.ReportException;
 
 
 /**
- * @version 1.4 15.03.2010
+ * @version 3.1 15.12.2014
  * @author Andrey Kholmanskih
  * 
  */
@@ -49,7 +49,6 @@ public class IteratorDataSet extends ReflectDataSet {
 			return false;
 		}
 	}
-
 
 	protected void setIterator(Iterator<?> it) {
 		this.it = it;

@@ -37,9 +37,7 @@ public class BufferedDataSet implements MasterDataSet, DataSetListener {
 
 	private ReportDataSet ds;
 
-	private Map<String, Object> values = new HashMap<>();
-
-	private boolean inCashe = false;
+	private boolean inCache = false;
 
 	private boolean eof = false;
 
@@ -80,7 +78,7 @@ public class BufferedDataSet implements MasterDataSet, DataSetListener {
 			return;
 		initValues();
 		dsEof = !ds.hasNext();
-		eof = !readToCashe();
+		eof = !readToCache();
 		setOpened(true);
 		fireDataSetCursorChanged();
 	}
@@ -89,18 +87,14 @@ public class BufferedDataSet implements MasterDataSet, DataSetListener {
 	 * @throws ReportException
 	 */
 	private void initValues() throws ReportException {
-		if (values.size() == 0)
-			for (String name : ds.getColumnNames()) {
-				values.put(name, null);
-			}
+		currentObject = null;
 	}
 
 	public boolean reopen() throws ReportException {
-		inCashe = false;
-//		dsEof = false;
+		inCache = false;
 		dsEof = !ds.reopen();
 		initValues();
-		eof = !readToCashe();
+		eof = !readToCache();
 		setOpened(true);
 		cursorChange = true;
 		fireDataSetCursorChanged();
@@ -115,17 +109,14 @@ public class BufferedDataSet implements MasterDataSet, DataSetListener {
 		return opened;
 	}
 
-	private boolean readToCashe() {
-		if (inCashe)
+	private boolean readToCache() {
+		if (inCache)
 			return !eof;
 		if (dsEof) {
 			return false;
 		}
-		inCashe = true;
+		inCache = true;
 		try {
-			for (String key : values.keySet()) {
-				values.put(key, ds.getValue(key));
-			}
 			currentObject = ds.getCurrentObject();
 			dsEof = !ds.next();
 			return true;
@@ -138,10 +129,10 @@ public class BufferedDataSet implements MasterDataSet, DataSetListener {
 	public boolean next() throws ReportException {
 		if (!isOpened())
 			throw new ReportException(MessageFormat.format(Messages
-					.getString("BufferedDataSet.0"), getId())); //$NON-NLS-1$
+					.getString("BufferedDataSet.not_opened"), getId()));
 		cursorChange = true;
-		inCashe = false;
-		eof = !readToCashe();
+		inCache = false;
+		eof = !readToCache();
 		if (!eof) {
 			fireDataSetCursorChanged();
 		}
@@ -157,11 +148,21 @@ public class BufferedDataSet implements MasterDataSet, DataSetListener {
 	}
 
 	public Object getValue(String name) throws ReportException {
-		return values.get(name);
+		return ds.getValue(currentObject, name);
+	}
+
+	@Override
+	public Object getValue(Object current, String name) throws ReportException {
+		return ds.getValue(current, name);
+	}
+
+	@Override
+	public boolean containsKey(String name) {
+		return ds.containsKey(name);
 	}
 
 	public boolean findColumn(String name) {
-		return values.containsKey(name);
+		return ds.containsKey(name);
 	}
 
 	public String getId() {
@@ -172,7 +173,6 @@ public class BufferedDataSet implements MasterDataSet, DataSetListener {
 		try {
 			BufferedDataSet newDataSet = (BufferedDataSet) super.clone();
 			newDataSet.ds = (ReportDataSet) this.ds.clone();
-			newDataSet.values = new HashMap<>();
 			return newDataSet;
 		} catch (CloneNotSupportedException e) {
 			e.printStackTrace();
@@ -230,8 +230,9 @@ public class BufferedDataSet implements MasterDataSet, DataSetListener {
 		linkedParams = new HashMap<>();
 		Collection<String> masterFields = masterDS.getColumnNames();
 		for (int i = 0; i < getParams().size(); i++) {
-			if (masterFields.contains(getParams().getName(i))) {
-				linkedParams.put(getParams().getName(i), getParams()
+			String paramName = getParams().getName(i);
+			if (masterFields.contains(paramName)) {
+				linkedParams.put(paramName, getParams()
 						.getValue(i));
 			}
 		}

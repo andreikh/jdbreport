@@ -36,7 +36,7 @@ import jdbreport.model.io.xml.CellParser;
 import jdbreport.util.xml.XMLParser;
 
 /**
- * @version 3.0 12.12.2014
+ * @version 3.1 15.12.2014
  * @author Andrey Kholmanskih
  *
  */
@@ -72,8 +72,8 @@ public class TemplateGridParser extends GridParser {
 				GroupKey key = dGroup.getKey(i);
 				if (key.getName() != null) {
 					String dsId;
-					if (key.getDatasetID() != null)
-						dsId = " dataset=\"" + key.getDatasetID() + "\"";
+					if (key.getDataSetID() != null)
+						dsId = " dataset=\"" + key.getDataSetID() + "\"";
 					else
 						dsId = "";
 					writer.println("<GroupKey name=\"" + key.getName() + "\""

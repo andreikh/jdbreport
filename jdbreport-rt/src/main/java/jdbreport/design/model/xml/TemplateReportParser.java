@@ -29,7 +29,7 @@ import jdbreport.model.io.xml.DefaultReaderHandler;
 import org.xml.sax.Attributes;
 
 /**
- * @version 3.0 13.12.2014
+ * @version 3.1 15.12.2014
  * @author Andrey Kholmanskih
  * 
  */
@@ -53,7 +53,7 @@ public class TemplateReportParser extends DBReportParser {
 						GroupKey key = new GroupKey(attributes.getValue("name"));
 						String ds = attributes.getValue("dataset");
 						if (ds != null) {
-							key.setDatasetID(ds);
+							key.setDataSetID(ds);
 						}
 						((DetailGroup) currentGroup).addKey(key);
 						return true;

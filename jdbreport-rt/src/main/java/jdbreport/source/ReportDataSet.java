@@ -53,6 +53,10 @@ public interface ReportDataSet extends Cloneable {
 	 */
 	Object getValue(String name) throws ReportException;
 
+	Object getValue(Object current, String name) throws ReportException;
+
+	boolean containsKey(String name);
+
 	/**
 	 * Returns names' collection of columns or properties
 	 * 
@@ -66,7 +70,7 @@ public interface ReportDataSet extends Cloneable {
 	 * 
 	 * @return - current object
 	 */
-	Object getCurrentObject();
+	Object getCurrentObject() throws ReportException;
 
 	/**
 	 * Returns parameters

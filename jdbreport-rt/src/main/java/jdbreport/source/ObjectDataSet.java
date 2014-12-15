@@ -23,14 +23,14 @@ package jdbreport.source;
 import jdbreport.model.ReportException;
 
 /**
- * @version 1.4 15.03.2010
+ * @version 3.1 15.12.2014
  * @author Andrey Kholmanskih
  * 
  */
 public class ObjectDataSet extends ReflectDataSet {
 
 	public ObjectDataSet(Object object) {
-		this(object.getClass().getName(), object);
+		this(object.getClass().getSimpleName().toLowerCase(), object);
 	}
 
 	public ObjectDataSet(String id, Object object) {

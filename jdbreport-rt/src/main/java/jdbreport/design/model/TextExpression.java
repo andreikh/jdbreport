@@ -61,7 +61,7 @@ public class TextExpression implements Expression {
 	}
 	
 	public int getType() {
-		return CellObject.TYPE_NONE;
+		return TYPE_NONE;
 	}
 	
 	/* (non-Javadoc)

@@ -21,14 +21,14 @@ package jdbreport.design.model;
 /**
  * Object for working with the group's keys
  * 
- * @version 1.3 03.08.2009
+ * @version 3.1 15.12.2014
  * @author Andrey Kholmanskih
  *
  */
 public class GroupKey implements Cloneable {
 
 	private String name;
-	private String datasetID;
+	private String dataSetID;
 	private Object value;
 	
 	public GroupKey() {
@@ -44,11 +44,6 @@ public class GroupKey implements Cloneable {
 		this.name = name;
 	}
 
-	public GroupKey(String name, String datasetID) {
-		this(name);
-		setDatasetID(datasetID);
-	}
-	
 	/**
 	 * Returns the type of the key.
 	 * It can accept the meanings TYPE_VAR or TYPE_FIELD
@@ -56,7 +51,7 @@ public class GroupKey implements Cloneable {
 	 * @return the type.
 	 */
 	public int getType() {
-		return (datasetID == null) ? CellObject.TYPE_VAR : CellObject.TYPE_FIELD;
+		return (dataSetID == null) ? Expression.TYPE_VAR : Expression.TYPE_FIELD;
 	}
 
 
@@ -81,22 +76,22 @@ public class GroupKey implements Cloneable {
 	
 	/**
 	 * Sets alias DataSet for the key 
-	 * @param datasetID The datasetID to set.
+	 * @param dataSetID The dataSetID to set.
 	 */
-	public void setDatasetID(String datasetID) {
-		if (datasetID != null && datasetID.trim().length() == 0)
-			this.datasetID = null;
+	public void setDataSetID(String dataSetID) {
+		if (dataSetID != null && dataSetID.trim().isEmpty())
+			this.dataSetID = null;
 		else
-			this.datasetID = datasetID;
+			this.dataSetID = dataSetID;
 	}
 
 	/**
 	 * Returns the alias DataSet for the key.
 	 * 
-	 * @return Returns the datasetID.
+	 * @return Returns the dataSetID.
 	 */
-	public String getDatasetID() {
-		return datasetID;
+	public String getDataSetID() {
+		return dataSetID;
 	}
 
 	/**
@@ -118,7 +113,7 @@ public class GroupKey implements Cloneable {
 	public Object clone() {
 			GroupKey key = new GroupKey(); 
 			key.name = name;
-			key.datasetID = datasetID;
+			key.dataSetID = dataSetID;
 			return key;
 	}
 }

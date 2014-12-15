@@ -30,11 +30,6 @@ public class NullCellObject extends NullCell implements CellObject {
 	
 	private static final long serialVersionUID = 1L;
 
-
-	public NullCellObject() {
-		super();
-	}
-
 	@Override
 	public Cell createCellItem() {
 		return null;
@@ -46,7 +41,7 @@ public class NullCellObject extends NullCell implements CellObject {
 	}
 
 	@Override
-	public void setNotRepeat(boolean noRepeate) {
+	public void setNotRepeat(boolean noRepeat) {
 		
 	}
 

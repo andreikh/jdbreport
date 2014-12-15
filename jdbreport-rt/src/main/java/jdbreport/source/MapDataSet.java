@@ -41,6 +41,16 @@ public class MapDataSet extends AbstractDataSet {
 		return map.get(name);
 	}
 
+	@Override
+	public Object getValue(Object current, String name) throws ReportException {
+		return map.get(name);
+	}
+
+	@Override
+	public boolean containsKey(String name) {
+		return map.containsKey(name);
+	}
+
 	public Collection<String> getColumnNames() throws ReportException {
 		return map.keySet();
 	}

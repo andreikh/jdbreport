@@ -25,15 +25,13 @@ import java.sql.SQLException;
 import java.sql.Types;
 import java.text.DateFormat;
 import java.text.MessageFormat;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Date;
-import java.util.Map;
+import java.util.*;
+import java.util.logging.Level;
 
 import jdbreport.model.ReportException;
 
 /**
- * @version 3.0 12.12.2014
+ * @version 3.1 15.12.2014
  * @author Andrey Kholmanskih
  * 
  */
@@ -58,6 +56,7 @@ public class JdbcDataSet extends  AbstractDataSet {
 	private String preparedQuery;
 
 	private Map<Object, Object> vars;
+	private Collection<String> columns;
 
 	public JdbcDataSet() {
 		super();
@@ -138,7 +137,7 @@ public class JdbcDataSet extends  AbstractDataSet {
 		if (!preparedQuery.toUpperCase().startsWith("SELECT ")) { //$NON-NLS-1$
 			preparedQuery = null;
 			throw new ReportException(MessageFormat.format(Messages
-					.getString("JdbcDataSet.1"), getQuery(), getId())); //$NON-NLS-1$
+					.getString("JdbcDataSet.invalid_query"), getQuery(), getId())); //$NON-NLS-1$
 		}
 		initParams();
 	}
@@ -183,7 +182,7 @@ public class JdbcDataSet extends  AbstractDataSet {
 				rs.close();
 			}
 		} catch (SQLException e) {
-			e.printStackTrace();
+			logger.log(Level.SEVERE, e.getMessage(), e);
 		} finally {
 			rs = null;
 		}
@@ -248,17 +247,27 @@ public class JdbcDataSet extends  AbstractDataSet {
 		}
 	}
 
+	@Override
+	public Object getValue(Object current, String name) throws ReportException {
+		return ((Map)current).get(name);
+	}
+
+	@Override
+	public boolean containsKey(String name) {
+		return columns.contains(name);
+	}
+
 	public Collection<String> getColumnNames() throws ReportException {
 		open();
-		Collection<String> result = new ArrayList<>();
+		columns = new HashSet<>();
 		try {
 			for (int i = 0; i < rs.getMetaData().getColumnCount(); i++) {
-				result.add(rs.getMetaData().getColumnName(i + 1));
+				columns.add(rs.getMetaData().getColumnName(i + 1));
 			}
 		} catch (SQLException e) {
 			throw new ReportException(e);
 		}
-		return result;
+		return columns;
 	}
 
 	public DataSetParams getParams() throws ReportException  {
@@ -268,8 +277,12 @@ public class JdbcDataSet extends  AbstractDataSet {
 		return params;
 	}
 
-	public Object getCurrentObject() {
-		return null;
+	public Object getCurrentObject() throws ReportException {
+		HashMap<String, Object> map = new HashMap<>();
+		for (String column : columns) {
+			map.put(column, getValue(column));
+		}
+		return map;
 	}
 
 	public boolean hasNext() {

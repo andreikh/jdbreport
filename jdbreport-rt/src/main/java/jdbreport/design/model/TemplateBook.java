@@ -284,11 +284,11 @@ public class TemplateBook extends ReportBook {
     private void prepareCellExpr(CellObject co, List<Expression> tokens) {
         String s = co.getText();
         while (s.length() > 0) {
-            int b = s.indexOf("${"); //$NON-NLS-1$
+            int b = s.indexOf("${");
             if (b < 0)
                 b = s.indexOf("#{");
             if (b >= 0) {
-                int e = s.indexOf("}", b); //$NON-NLS-1$
+                int e = s.indexOf("}", b);
                 if (e > 0) {
                     String beforeExpr = s.substring(0, b);
                     if (beforeExpr.length() > 0)
@@ -388,10 +388,10 @@ public class TemplateBook extends ReportBook {
                         new BufferedDataSet(ds, getVars()));
             }
         }
+
         for (BufferedDataSet ds : getDataSetList().values()) {
             openMasterDs(ds);
         }
-
     }
 
     private void closeSources() {
@@ -942,14 +942,14 @@ public class TemplateBook extends ReportBook {
                 cellFunction.run();
             } catch (OutOfMemoryError e) {
                 System.err.println(String.format(
-                        Messages.getString("TemplateBook.errorfunc"), //$NON-NLS-1$
+                        Messages.getString("TemplateBook.errorfunc"),
                         cell.getFunctionName(), row, column));
                 e.printStackTrace();
                 throw new OutOfMemoryError(
-                        Messages.getString("TemplateBook.outofmemory")); //$NON-NLS-1$
+                        Messages.getString("TemplateBook.outofmemory"));
             } catch (Exception e) {
                 throw new ReportException(String.format(
-                        Messages.getString("TemplateBook.errorfunc"), //$NON-NLS-1$
+                        Messages.getString("TemplateBook.errorfunc"),
                         cell.getFunctionName(), row, column), e);
             }
         }
@@ -1099,7 +1099,7 @@ public class TemplateBook extends ReportBook {
         try {
             bds.open();
         } catch (ReportException e) {
-            e.printStackTrace();
+            logger.log(Level.SEVERE, e.getMessage(), e);
         }
 
         try {
@@ -1173,11 +1173,11 @@ public class TemplateBook extends ReportBook {
             keyComparator = new KeyComparator() {
 
                 public void init(GroupKey groupKey) throws ReportException {
-                    if (groupKey.getType() == CellObject.TYPE_VAR) {
+                    if (groupKey.getType() == Expression.TYPE_VAR) {
                         groupKey.setValue(vars.get(groupKey.getName()));
                     } else {
                         BufferedDataSet ds = getDataSetList().get(
-                                groupKey.getDatasetID());
+                                groupKey.getDataSetID());
                         if (ds != null && !ds.isEof())
                             groupKey.setValue(ds.getValue(groupKey.getName()));
                     }
@@ -1187,11 +1187,11 @@ public class TemplateBook extends ReportBook {
                 public boolean compare(GroupKey groupKey)
                         throws ReportException {
                     Object newValue = null;
-                    if (groupKey.getType() == CellObject.TYPE_VAR) {
+                    if (groupKey.getType() == Expression.TYPE_VAR) {
                         newValue = getVars().get(groupKey.getName());
                     } else {
                         BufferedDataSet ds = getDataSetList().get(
-                                groupKey.getDatasetID());
+                                groupKey.getDataSetID());
                         if (ds != null && !ds.isEof()) {
                             if (ds.isDsEof())
                                 return false;
@@ -1224,7 +1224,7 @@ public class TemplateBook extends ReportBook {
     }
 
     public String getMimeType() {
-        return "application/jdbreport.template"; //$NON-NLS-1$
+        return "application/jdbreport.template";
     }
 
     private class ElExpression implements Expression {
@@ -1275,7 +1275,7 @@ public class TemplateBook extends ReportBook {
         }
 
         public int getType() {
-            return CellObject.TYPE_FIELD;
+            return TYPE_FIELD;
         }
 
         public String getFormatValue() throws ReportException {
@@ -1283,7 +1283,7 @@ public class TemplateBook extends ReportBook {
             if (value instanceof Date) {
                 return getDateFormatter().format(value);
             }
-            return value != null ? value.toString() : ""; //$NON-NLS-1$
+            return value != null ? value.toString() : "";
         }
 
     }

@@ -43,7 +43,7 @@ import javax.swing.JToolBar;
 import javax.swing.JButton;
 import javax.swing.table.AbstractTableModel;
 
-import jdbreport.design.model.CellObject;
+import jdbreport.design.model.Expression;
 import jdbreport.design.model.GroupKey;
 import jdbreport.grid.JReportGrid;
 import jdbreport.grid.ReportResources;
@@ -55,7 +55,7 @@ import jdbreport.model.DetailGroup;
 import jdbreport.util.Utils;
 
 /**
- * @version 3.0 12.12.2014
+ * @version 3.1 15.12.2014
  * @author Andrey Kholmanskih
  * 
  */
@@ -77,7 +77,7 @@ public class GroupsDlg extends JDialog implements ActionListener {
 	private JPanel bottomPanel;
 	private JTextField minRowsField;
 	private JTextField maxRowsField;
-	private JCheckBox repeateHeaderBox;
+	private JCheckBox repeatHeaderBox;
 
 	public GroupsDlg(Frame owner, JReportGrid grid, DetailGroup group)
 			throws HeadlessException {
@@ -110,25 +110,15 @@ public class GroupsDlg extends JDialog implements ActionListener {
 		}
 	}
 
-	/**
-	 * This method initializes this
-	 * 
-	 * @return void
-	 */
 	private void initialize() {
 		this.setSize(300, 300);
 		Utils.screenCenter(this);
 		this
-				.setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE); // Generated
+				.setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 		this.setTitle(Messages.getString("GroupsDlg.title"));
 		this.setContentPane(getJContentPane());
 	}
 
-	/**
-	 * This method initializes jContentPane
-	 * 
-	 * @return javax.swing.JPanel
-	 */
 	private JPanel getJContentPane() {
 		if (jContentPane == null) {
 			jContentPane = new JPanel();
@@ -136,7 +126,7 @@ public class GroupsDlg extends JDialog implements ActionListener {
 			jContentPane.add(createKeyPanel(), java.awt.BorderLayout.CENTER);
 			jContentPane.add(getJToolBar(), java.awt.BorderLayout.EAST);
 			jContentPane
-					.add(getRepeateHeaderBox(), java.awt.BorderLayout.NORTH);
+					.add(getRepeatHeaderBox(), java.awt.BorderLayout.NORTH);
 			jContentPane.add(getBottomPanel(), java.awt.BorderLayout.SOUTH);
 		}
 		return jContentPane;
@@ -145,18 +135,17 @@ public class GroupsDlg extends JDialog implements ActionListener {
 	/**
 	 * To repeat a group header in top of page
 	 * 
-	 * @return
 	 */
-	private JCheckBox getRepeateHeaderBox() {
-		if (repeateHeaderBox == null) {
-			repeateHeaderBox = new JCheckBox(Messages
-					.getString("GroupsDlg.repeateHeader")); //$NON-NLS-1$
-			repeateHeaderBox.setSelected(group.isRepeateHeader());
+	private JCheckBox getRepeatHeaderBox() {
+		if (repeatHeaderBox == null) {
+			repeatHeaderBox = new JCheckBox(Messages
+					.getString("GroupsDlg.repeateHeader"));
+			repeatHeaderBox.setSelected(group.isRepeateHeader());
 			updateButtons();
-			repeateHeaderBox.setActionCommand("repeateHeader");
-			repeateHeaderBox.addActionListener(this);
+			repeatHeaderBox.setActionCommand("repeateHeader");
+			repeatHeaderBox.addActionListener(this);
 		}
-		return repeateHeaderBox;
+		return repeatHeaderBox;
 	}
 
 	private JPanel createKeyPanel() {
@@ -357,7 +346,7 @@ public class GroupsDlg extends JDialog implements ActionListener {
 					group)));
 		}
 
-		group.setRepeateHeader(getRepeateHeaderBox().isSelected());
+		group.setRepeateHeader(getRepeatHeaderBox().isSelected());
 		group.clearKeys();
 		if (!group.isRepeateHeader()) {
 			for (int i = 0; i < getKeyListModel().getRowCount(); i++) {
@@ -404,7 +393,7 @@ public class GroupsDlg extends JDialog implements ActionListener {
 	}
 
 	private void updateButtons() {
-		boolean repeateHeader = getRepeateHeaderBox().isSelected();
+		boolean repeateHeader = getRepeatHeaderBox().isSelected();
 		getAddButton().setEnabled(!repeateHeader);
 		getDelButton().setEnabled(!repeateHeader);
 	}
@@ -486,9 +475,9 @@ public class GroupsDlg extends JDialog implements ActionListener {
 			case COLUMN_NAME:
 				return getList().get(row).getName();
 			case COLUMN_TABLE:
-				return getList().get(row).getDatasetID();
+				return getList().get(row).getDataSetID();
 			case COLUMN_TYPE:
-				return getList().get(row).getType() == CellObject.TYPE_VAR ? Messages
+				return getList().get(row).getType() == Expression.TYPE_VAR ? Messages
 						.getString("GroupsDlg.type_var") : Messages.getString("GroupsDlg.type_field"); //$NON-NLS-1$ //$NON-NLS-2$
 			}
 			return null;
@@ -502,7 +491,7 @@ public class GroupsDlg extends JDialog implements ActionListener {
 						(aValue == null) ? null : aValue.toString());
 				break;
 			case COLUMN_TABLE:
-				getList().get(row).setDatasetID(
+				getList().get(row).setDataSetID(
 						(aValue == null) ? null : aValue.toString());
 				fireTableCellUpdated(row, COLUMN_TYPE);
 				break;
@@ -511,7 +500,7 @@ public class GroupsDlg extends JDialog implements ActionListener {
 
 		@Override
 		public boolean isCellEditable(int rowIndex, int columnIndex) {
-			return !getRepeateHeaderBox().isSelected()
+			return !getRepeatHeaderBox().isSelected()
 					&& (columnIndex == COLUMN_TABLE || columnIndex == COLUMN_NAME);
 		}
 

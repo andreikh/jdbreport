@@ -138,7 +138,7 @@ public class TemplateReportCell extends ReportCell implements CellObject {
 				String[] result = new String[expressions.length];
 				int i = 0;
 				for (Expression expr : expressions) {
-					if (expr.getType() == CellObject.TYPE_FIELD) {
+					if (expr.getType() == Expression.TYPE_FIELD) {
 						result[i] = expr.getBaseName();
 						i++;
 					}
