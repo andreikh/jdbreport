@@ -29,7 +29,7 @@ import jdbreport.model.ReportException;
 import jdbreport.util.Utils;
 
 /**
- * @version 3.0 13.12.2014
+ * @version 3.1 15.12.2014
  * @author Andrey Kholmanskih
  * 
  */

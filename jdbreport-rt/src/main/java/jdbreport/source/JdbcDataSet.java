@@ -134,10 +134,10 @@ public class JdbcDataSet extends  AbstractDataSet {
 	private void prepareParams() throws ReportException {
 		params = new Params();
 		preparedQuery = params.prepareParams(getQuery());
-		if (!preparedQuery.toUpperCase().startsWith("SELECT ")) { //$NON-NLS-1$
+		if (!preparedQuery.toUpperCase().startsWith("SELECT ")) {
 			preparedQuery = null;
 			throw new ReportException(MessageFormat.format(Messages
-					.getString("JdbcDataSet.invalid_query"), getQuery(), getId())); //$NON-NLS-1$
+					.getString("JdbcDataSet.invalid_query"), getQuery(), getId()));
 		}
 		initParams();
 	}
@@ -164,9 +164,18 @@ public class JdbcDataSet extends  AbstractDataSet {
 			for (int i = 0; i < getParams().size(); i++) {
 				getParams().setSQLType(i, md.getParameterType(i + 1));
 			}
+			columns = new HashSet<>();
+			try {
+				for (int i = 0; i < stat.getMetaData().getColumnCount(); i++) {
+					columns.add(stat.getMetaData().getColumnName(i + 1));
+				}
+			} catch (SQLException e) {
+				throw new ReportException(e);
+			}
 		} catch (Exception e) {
 			throw new ReportException(e);
 		}
+
 	}
 
 	public void open() throws ReportException {
@@ -220,7 +229,7 @@ public class JdbcDataSet extends  AbstractDataSet {
 			rs.close();
 			stat.close();
 		} catch (SQLException e) {
-			e.printStackTrace();
+			logger.log(Level.SEVERE, e.getMessage());
 		} finally { 
 			stat = null;
 			rs = null;
@@ -249,6 +258,7 @@ public class JdbcDataSet extends  AbstractDataSet {
 
 	@Override
 	public Object getValue(Object current, String name) throws ReportException {
+		if (current == null) return null;
 		return ((Map)current).get(name);
 	}
 
@@ -259,14 +269,6 @@ public class JdbcDataSet extends  AbstractDataSet {
 
 	public Collection<String> getColumnNames() throws ReportException {
 		open();
-		columns = new HashSet<>();
-		try {
-			for (int i = 0; i < rs.getMetaData().getColumnCount(); i++) {
-				columns.add(rs.getMetaData().getColumnName(i + 1));
-			}
-		} catch (SQLException e) {
-			throw new ReportException(e);
-		}
 		return columns;
 	}
 
@@ -278,6 +280,8 @@ public class JdbcDataSet extends  AbstractDataSet {
 	}
 
 	public Object getCurrentObject() throws ReportException {
+		if (columns == null)
+			open();
 		HashMap<String, Object> map = new HashMap<>();
 		for (String column : columns) {
 			map.put(column, getValue(column));
@@ -286,6 +290,12 @@ public class JdbcDataSet extends  AbstractDataSet {
 	}
 
 	public boolean hasNext() {
+		if (preparedQuery == null)
+			try {
+				open();
+			} catch (ReportException e) {
+				logger.log(Level.SEVERE, e.getMessage(), e);
+			}
 		return !eof;
 	}
 }

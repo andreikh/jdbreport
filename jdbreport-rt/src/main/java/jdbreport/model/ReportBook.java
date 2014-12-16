@@ -736,7 +736,7 @@ public class ReportBook implements Iterable<ReportModel>, TableRowModelListener 
 			}
 		} else
 			throw new LoadReportException(
-					Messages.getString("ReportBook.unknow_ext")); //$NON-NLS-1$
+					Messages.getString("ReportBook.unknow_ext"));
 	}
 
 	/**

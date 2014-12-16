@@ -789,7 +789,7 @@ public class TemplateBook extends ReportBook {
     private Object getExprValue(Expression[] expressions)
             throws ReportException {
         if (expressions.length > 1) {
-            String value = ""; //$NON-NLS-1$
+            String value = "";
             for (Expression expression : expressions) {
                 try {
                     value += expression.getFormatValue();

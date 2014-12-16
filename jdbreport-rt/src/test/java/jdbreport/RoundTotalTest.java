@@ -21,13 +21,12 @@ import jdbreport.model.io.LoadReportException;
  *
  * @version 1.0 19.03.2011
  */
-@Ignore
 public class RoundTotalTest {
 
 	
 	public void roundTest() throws LoadReportException {
-		Map<String, Object> dsList = new HashMap<String, Object>();
-		List<Value> values = new ArrayList<Value>();
+		Map<String, Object> dsList = new HashMap<>();
+		List<Value> values = new ArrayList<>();
 		values.add(new Value(34485l));
 		values.add(new Value(3886.0));
 		values.add(new Value(4406538866l));
@@ -37,7 +36,7 @@ public class RoundTotalTest {
 //		JDBReport.showReport(getClass().getResource("roundtotal.jdbr"), dsList);
 		
 		dsList.put("traffic", values);
-		JDBReport.showReport(getClass().getResource("traffic.jdbr"), dsList);
+		JDBReport.showReport(getClass().getResource("/jdbreport/templates/traffic.jdbr"), dsList);
 		
 	}
 	

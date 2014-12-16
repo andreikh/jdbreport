@@ -26,7 +26,7 @@ import jdbreport.model.ReportException;
 /**
  * @author Andrey Kholmanskih
  *
- * @version	1.0 07.02.2011
+ * @version	3.1 15.12.2014
  */
 public class MapDataSet extends AbstractDataSet {
 

@@ -23,7 +23,7 @@ import java.util.Collection;
 import jdbreport.model.ReportException;
 
 /**
- * @version 3.0 12.12.2014
+ * @version 3.1 15.12.2014
  * @author Andrey Kholmanskih
  * 
  */

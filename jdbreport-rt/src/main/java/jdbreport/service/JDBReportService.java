@@ -128,6 +128,7 @@ public class JDBReportService implements ReportService {
 	public ReportBook createReportBook(URL templateUrl,
 			Collection<ReportDataSet> dataSetList, Map<Object, Object> vars, Connection connection)
 			throws LoadReportException {
+		if (templateUrl == null) throw new LoadReportException("URL is null");
 		TemplateBook tbook = new TemplateBook();
 		tbook.open(templateUrl);
 		if (connection != null) {
@@ -174,7 +175,7 @@ public class JDBReportService implements ReportService {
 			return new IterableDataSet(id, (Iterable<?>) ds);
 		}
 		if (ds instanceof Map) {
-			return new MapDataSet(id, (Map<String, Object>) ds);
+			return new MapDataSet(id, (Map) ds);
 		}
 		if (ds.getClass().isArray()) {
 			return new ArrayDataSet(id, (Object[]) ds);

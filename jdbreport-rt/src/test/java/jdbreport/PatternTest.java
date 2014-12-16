@@ -8,7 +8,7 @@ import java.util.regex.Pattern;
 import org.junit.Ignore;
 import org.junit.Test;
 
-@Ignore
+
 public class PatternTest {
 
 	@Test

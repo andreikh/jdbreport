@@ -35,7 +35,6 @@ import jdbreport.model.ReportException;
 public abstract class ReflectDataSet extends AbstractDataSet {
 
 	private Map<String, Object> columnMap;
-	private Class<?> objectClass;
 	protected Object current;
 
 	public ReflectDataSet(String id) {
@@ -47,7 +46,7 @@ public abstract class ReflectDataSet extends AbstractDataSet {
 		if (o == null) {
 			return;
 		}
-		objectClass = o.getClass();
+		Class<?> objectClass = o.getClass();
 		Field[] f = objectClass.getFields();
 		for (Field aF : f) {
 			String name = aF.getName();
@@ -80,10 +79,6 @@ public abstract class ReflectDataSet extends AbstractDataSet {
 
 	protected Map<String, Object> getColumnMap() {
 		return columnMap;
-	}
-
-	protected Class<? extends Object> getObjectClass() {
-		return objectClass;
 	}
 
 	public Collection<String> getColumnNames() throws ReportException {
