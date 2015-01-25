@@ -1017,11 +1017,13 @@ public class ReportRowModel implements TableRowModel, PropertyChangeListener,
 					if (detailGroup.getHeaderGroup() != null
 							&& detailGroup.isRepeateHeader()) {
 						header = detailGroup.getHeaderGroup();
-						for (int i = 0; i < header.getChildCount(); i++) {
-							TableRow tableRow = header.getChild(i);
-							rowList.add(index++, tableRow);
-							h += tableRow.getHeight();
-							rowsInPage++;
+						if (h + header.getHeight() < pHeight) {
+							for (int i = 0; i < header.getChildCount(); i++) {
+								TableRow tableRow = header.getChild(i);
+								rowList.add(index++, tableRow);
+								h += tableRow.getHeight();
+								rowsInPage++;
+							}
 						}
 					}
 				}
