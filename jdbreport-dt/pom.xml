@@ -13,6 +13,14 @@
 	</properties>
 
 
+	<distributionManagement>
+
+		<repository>
+			<id>internal</id>
+			<url>http://localhost:8080/repository/internal/</url>
+		</repository>
+	</distributionManagement>
+
 	<dependencies> 
 
 		<dependency>
@@ -28,7 +36,7 @@
 			<scope>test</scope>
 		</dependency>
 	</dependencies>
-	
+
 	<build>
 		<plugins>
 		<plugin>

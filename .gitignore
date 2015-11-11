@@ -1,6 +1,7 @@
 .*
 *.class
 *.iml
+*.log
 bin
 target
 

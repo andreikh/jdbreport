@@ -9,7 +9,7 @@
     <packaging>pom</packaging>
 
     <name>JDBReport3</name>
-    <url>http://www.jdbreport.com</url>
+    <url>http://www.jdbreport.ru</url>
 
     <modules>
         <module>jdbreport-rt</module>
