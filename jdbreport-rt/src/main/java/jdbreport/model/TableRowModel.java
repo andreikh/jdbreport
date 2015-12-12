@@ -32,9 +32,9 @@ import jdbreport.model.event.TableRowModelListener;
  */
 public interface TableRowModel extends Iterable<TableRow> {
 
-	public static int minHeight = 2;
+	int minHeight = 2;
 
-	public static int maxHeight = 4096;
+	int maxHeight = 4096;
 
 	/**
 	 * Adds the row at the specified position
@@ -44,14 +44,14 @@ public interface TableRowModel extends Iterable<TableRow> {
 	 * 
 	 * @return the inserted TableRow
 	 */
-	public TableRow addRow(int row);
+	TableRow addRow(int row);
 
 	/**
 	 * Adds the new row
 	 * 
 	 * @return the index of the inserted row
 	 */
-	public TableRow addRow();
+	TableRow addRow();
 
 	/**
 	 * Adds the row at the specified position
@@ -62,7 +62,7 @@ public interface TableRowModel extends Iterable<TableRow> {
 	 *            the TableRow object
 	 * @return the index of the inserted row
 	 */
-	public int addRow(int row, TableRow tableRow);
+	int addRow(int row, TableRow tableRow);
 
 	/**
 	 * Adds the row to the group
@@ -72,7 +72,7 @@ public interface TableRowModel extends Iterable<TableRow> {
 	 *            index in group
 	 * @return row's index in rows list
 	 */
-	public int addRow(RowsGroup group, int indexInGroup);
+	int addRow(RowsGroup group, int indexInGroup);
 
 	/**
 	 * Adds the row to the group
@@ -82,7 +82,7 @@ public interface TableRowModel extends Iterable<TableRow> {
 	 * @param tableRow TableRow
 	 * @return row's index in the list
 	 */
-	public int addRow(RowsGroup group, int indexInGroup, TableRow tableRow);
+	int addRow(RowsGroup group, int indexInGroup, TableRow tableRow);
 
 	/**
 	 * Adds column in the model
@@ -90,7 +90,7 @@ public interface TableRowModel extends Iterable<TableRow> {
 	 * @param column
 	 *            the specified position in this model
 	 */
-	public void addColumn(int column);
+	void addColumn(int column);
 
 	/**
 	 * Removes column from the model
@@ -98,14 +98,14 @@ public interface TableRowModel extends Iterable<TableRow> {
 	 * @param column
 	 *            the index of the removing column
 	 */
-	public void removeColumn(int column);
+	void removeColumn(int column);
 
 	/**
 	 * Returns columns' count in the model
 	 * 
 	 * @return the columns count
 	 */
-	public int getColCount();
+	int getColCount();
 
 	/**
 	 * Sets the columns' count in the model If the columns' count is bigger than
@@ -115,14 +115,14 @@ public interface TableRowModel extends Iterable<TableRow> {
 	 * @param count
 	 *            new columns' count
 	 */
-	public void setColCount(int count);
+	void setColCount(int count);
 
 	/**
 	 * Returns rows' count in the model
 	 * 
 	 * @return the rows count
 	 */
-	public int getRowCount();
+	int getRowCount();
 
 	/**
 	 * Returns the TableRow from the specified position
@@ -131,7 +131,7 @@ public interface TableRowModel extends Iterable<TableRow> {
 	 *            the row's number
 	 * @return the TableRow
 	 */
-	public TableRow getRow(int row);
+	TableRow getRow(int row);
 
 	/**
 	 * Returns row's position in the model
@@ -141,7 +141,7 @@ public interface TableRowModel extends Iterable<TableRow> {
 	 * @return the index in this model of the first occurrence of the specified
 	 *         tableRow, or -1 if this model does not contain this tableRow.
 	 */
-	public int getRowIndex(TableRow tableRow);
+	int getRowIndex(TableRow tableRow);
 
 	/**
 	 * Returns the index of the row that lies on the vertical point, y; or -1 if
@@ -151,7 +151,7 @@ public interface TableRowModel extends Iterable<TableRow> {
 	 *            y coordinate of point
 	 * @return the index of the row; or -1 if no row is found
 	 */
-	public int getRowIndexAtY(int y);
+	int getRowIndexAtY(int y);
 
 	/**
 	 * Adds a listener for report row model events.
@@ -159,7 +159,7 @@ public interface TableRowModel extends Iterable<TableRow> {
 	 * @param x
 	 *            a TableRowModelListener object
 	 */
-	public void addRowModelListener(TableRowModelListener x);
+	void addRowModelListener(TableRowModelListener x);
 
 	/**
 	 * Removes a listener for report row model events.
@@ -167,14 +167,14 @@ public interface TableRowModel extends Iterable<TableRow> {
 	 * @param x
 	 *            a TableRowModelListener object
 	 */
-	public void removeRowModelListener(TableRowModelListener x);
+	void removeRowModelListener(TableRowModelListener x);
 
 	/**
 	 * Returns the total height of all the rows.
 	 * 
 	 * @return the total computed height of all rows
 	 */
-	public int getTotalRowHeight();
+	int getTotalRowHeight();
 
 	/**
 	 * Moves the row and its header at rowIndex to newIndex. The old row at
@@ -188,7 +188,25 @@ public interface TableRowModel extends Iterable<TableRow> {
 	 * @param newIndex
 	 *            index of the row's new location
 	 */
-	public void moveRow(int rowIndex, int newIndex);
+	void moveRow(int rowIndex, int newIndex);
+
+	/**
+	 * Move row
+	 * @param group old group
+	 * @param index old row index in group
+	 * @param newGroup new group
+	 * @param newIndex new row index in group
+	 * @since version 3.1
+     */
+	void moveRow(Group group, int index, Group newGroup, int newIndex);
+
+	/**
+	 * Move group
+	 * @param group moved group
+	 * @param parent group parent
+	 * @param newIndex new index for group in parent
+     */
+	int moveGroup(Group group, int newIndex, TreeRowGroup parent);
 
 	/**
 	 * Moves the dragged row and its header at rowIndex to newIndex.
@@ -205,7 +223,7 @@ public interface TableRowModel extends Iterable<TableRow> {
 	 * 
 	 * @return the margin, in pixels, between the cells
 	 */
-	public int getRowMargin();
+	int getRowMargin();
 
 	/**
 	 * Returns the minimum height of a report row, in pixels. The default
@@ -213,7 +231,7 @@ public interface TableRowModel extends Iterable<TableRow> {
 	 * 
 	 * @return the mimimum height in pixels of a report row
 	 */
-	public int getMinRowHeight();
+	int getMinRowHeight();
 
 	/**
 	 * Returns the maximum height of a report row, in pixels. The default
@@ -221,7 +239,7 @@ public interface TableRowModel extends Iterable<TableRow> {
 	 * 
 	 * @return the maximum height in pixels of a report row
 	 */
-	public int getMaxRowHeight();
+	int getMaxRowHeight();
 
 	/**
 	 * Returns the preferred height of a report row, in pixels. The default row
@@ -229,7 +247,7 @@ public interface TableRowModel extends Iterable<TableRow> {
 	 * 
 	 * @return the preferred height in pixels of a report row
 	 */
-	public int getPreferredRowHeight();
+	int getPreferredRowHeight();
 
 	/**
 	 * Sets the preferred height for row.
@@ -237,7 +255,7 @@ public interface TableRowModel extends Iterable<TableRow> {
 	 * @param preferredHeight
 	 *            new preferred row height, in pixels
 	 */
-	public void setPreferredRowHeight(int preferredHeight);
+	void setPreferredRowHeight(int preferredHeight);
 
 	/**
 	 * Moves the column at columnIndex to newIndex.
@@ -247,7 +265,7 @@ public interface TableRowModel extends Iterable<TableRow> {
 	 * @param newIndex
 	 *            index of the column's new location
 	 */
-	public void moveColumn(int columnIndex, int newIndex);
+	void moveColumn(int columnIndex, int newIndex);
 
 	/**
 	 * Returns the height, in pixels, of the row. The default row height is
@@ -257,7 +275,7 @@ public interface TableRowModel extends Iterable<TableRow> {
 	 *            the row whose height is to be returned
 	 * @return the height in pixels of a report row
 	 */
-	public int getRowHeight(int row);
+	int getRowHeight(int row);
 
 	/**
 	 * Sets the height for row to rowHeight. The height of the cells in this row
@@ -268,7 +286,7 @@ public interface TableRowModel extends Iterable<TableRow> {
 	 * @param rowHeight
 	 *            new row height, in pixels
 	 */
-	public void setRowHeight(int row, int rowHeight);
+	void setRowHeight(int row, int rowHeight);
 
 	/**
 	 * Sets the height for tableRow to newHeight. The height of the cells in
@@ -279,7 +297,7 @@ public interface TableRowModel extends Iterable<TableRow> {
 	 * @param newHeight
 	 *            new row height, in pixels
 	 */
-	public void setRowHeight(TableRow tableRow, int newHeight);
+	void setRowHeight(TableRow tableRow, int newHeight);
 
 	/**
 	 * Sets the height for row to h. The height of the cells in this row will be
@@ -290,13 +308,13 @@ public interface TableRowModel extends Iterable<TableRow> {
 	 * @param h
 	 *            new row height, in 1/72 of inch
 	 */
-	public void setRowHeight(int row, double h);
+	void setRowHeight(int row, double h);
 
 	/**
 	 * 
 	 * @return the RootGroup of repoprt model
 	 */
-	public RootGroup getRootGroup();
+	RootGroup getRootGroup();
 
 	/**
 	 * Returns the group which contains the TableRow by specified row index
@@ -305,7 +323,7 @@ public interface TableRowModel extends Iterable<TableRow> {
 	 *            the row's index in rowList
 	 * @return the RowsGroup object
 	 */
-	public RowsGroup getGroup(int row);
+	RowsGroup getGroup(int row);
 
 	/**
 	 * Returns the group which contains the tableRow
@@ -314,13 +332,13 @@ public interface TableRowModel extends Iterable<TableRow> {
 	 *            the TableRow object
 	 * @return the RowsGroup object
 	 */
-	public RowsGroup getGroup(TableRow tableRow);
+	RowsGroup getGroup(TableRow tableRow);
 
     /**
      * append group
      * @param group Group object
      */
-    public void appendGroup(Group group);
+    void appendGroup(Group group);
 
 	/**
 	 * If parameter b is true, sets the group that is visible in report,
@@ -331,7 +349,7 @@ public interface TableRowModel extends Iterable<TableRow> {
 	 * @param b
 	 *            visible property
 	 */
-	public void setVisibleGroup(Group group, boolean b);
+	void setVisibleGroup(Group group, boolean b);
 
 	/**
 	 * Returns the index of the first group's row in rowList
@@ -340,7 +358,7 @@ public interface TableRowModel extends Iterable<TableRow> {
 	 *            the Group object
 	 * @return index first group's row in rowList
 	 */
-	public int getGroupRowIndex(Group group);
+	int getGroupRowIndex(Group group);
 
 	/**
 	 * Returns value for row's header
@@ -349,7 +367,7 @@ public interface TableRowModel extends Iterable<TableRow> {
 	 *            the row's number
 	 * @return value for row's header
 	 */
-	public Object getHeaderValue(int row);
+	Object getHeaderValue(int row);
 
 	/**
 	 * Calculates pages' size
@@ -359,7 +377,7 @@ public interface TableRowModel extends Iterable<TableRow> {
 	 * @param pageHeight
 	 *            page height in pixels
 	 */
-	public void updatePages(int startRow, int pageHeight);
+	void updatePages(int startRow, int pageHeight);
 
 	/**
 	 * Unions the cells by coordinates
@@ -373,7 +391,7 @@ public interface TableRowModel extends Iterable<TableRow> {
 	 * @param rightColumn
 	 *            the number of the right column
 	 */
-	public void unionCells(int topRow, int leftColumn, int bottomRow,
+	void unionCells(int topRow, int leftColumn, int bottomRow,
 			int rightColumn);
 
 	/**
@@ -388,18 +406,18 @@ public interface TableRowModel extends Iterable<TableRow> {
 	 * @param rightColumn
 	 *            the number of the right column
 	 */
-	public void clearUnion(int topRow, int leftColumn, int bottomRow,
+	void clearUnion(int topRow, int leftColumn, int bottomRow,
 			int rightColumn);
 
 	/**
 	 * Clears all cells unions before moving of rows or columns
 	 */
-	public void disableSpan();
+	void disableSpan();
 
 	/**
 	 * Restores all cells unions after moving of rows or columns
 	 */
-	public void enableSpan();
+	void enableSpan();
 
 	/**
 	 * Adds rows' count to the index of the model. The new rows will contain
@@ -411,13 +429,13 @@ public interface TableRowModel extends Iterable<TableRow> {
 	 *            the row index of the rows to be inserted
 	 * @return rows' count in the model
 	 */
-	public int addRows(int count, int index);
+	int addRows(int count, int index);
 
 	/**
 	 * Removes all rows
 	 * 
 	 */
-	public void removeRows();
+	void removeRows();
 
 	/**
 	 * Removes rows' count begining with the index from the model.
@@ -427,32 +445,46 @@ public interface TableRowModel extends Iterable<TableRow> {
 	 * @param index
 	 *            index of the first removed row
 	 */
-	public void removeRows(int count, int index);
+	void removeRows(int count, int index);
+
+	/**
+	 * Remove row
+	 * @param row table row
+	 * @since version 3.1
+     */
+	void removeRow(TableRow row);
+
+	/**
+	 * Remove group and all group rows
+	 * @param group Group
+	 * @since version 3.1
+	 */
+	void removeGroupRows(Group group);
 
 	/**
 	 * Creates new default TableRow
 	 * 
 	 * @return the TableRow object
 	 */
-	public TableRow createTableRow();
+	TableRow createTableRow();
 
 	/**
 	 * Bans notification of listeners before updates of model
 	 * 
 	 */
-	public void startUpdate();
+	void startUpdate();
 
 	/**
 	 * Allows notification of listeners after updates of model
 	 */
-	public void endUpdate();
+	void endUpdate();
 
 	/**
 	 * Returns the possibility of calculation of pages' size
 	 * 
 	 * @return if true, pages' size are calculated automatically
 	 */
-	public boolean isCanUpdatePages();
+	boolean isCanUpdatePages();
 
 	/**
 	 * Sets canUpdatePages property
@@ -460,23 +492,23 @@ public interface TableRowModel extends Iterable<TableRow> {
 	 * @param b
 	 *            the canUpdatePages property
 	 */
-	public void setCanUpdatePages(boolean b);
+	void setCanUpdatePages(boolean b);
 
-	public boolean isCanHideGroup();
+	boolean isCanHideGroup();
 
 	/**
 	 * Returns number of the first page
 	 * @return number of the first page
 	 * @since 1.4
 	 */
-	public int getFirstPageNumber();
+	int getFirstPageNumber();
 	
 	/**
 	 * Sets number of the first page
 	 * @param firstPageNumber number of the first page
 	 * @since 1.4
 	 */
-	public void setFirstPageNumber(int firstPageNumber);
+	void setFirstPageNumber(int firstPageNumber);
 
 	/**
 	 * Returns number of page for a cell on a row and a column
@@ -485,18 +517,18 @@ public interface TableRowModel extends Iterable<TableRow> {
 	 * @param column column index
 	 * @return number of page
 	 */
-	public Integer getPageNumber(int row, int column);
+	Integer getPageNumber(int row, int column);
 
 	/**
 	 * Returns count of pages
 	 * 
 	 * @return count of pages
 	 */
-	public int getPageCount();
+	int getPageCount();
 
-	public Group getGroup(int[] path);
+	Group getGroup(int[] path);
 
-	public void setShowPageNumber(boolean show);
+	void setShowPageNumber(boolean show);
 
 	/**
 	 * Direction of an output of pages on the printer. 
@@ -506,7 +538,7 @@ public interface TableRowModel extends Iterable<TableRow> {
 	 * @return true if pages are printed from left to right, otherwise false
 	 * @since 2.0
 	 */
-	public boolean isPrintLeftToRight();
+	boolean isPrintLeftToRight();
 	
 	/**
 	 * Direction of an output of pages on the printer. 
@@ -516,6 +548,6 @@ public interface TableRowModel extends Iterable<TableRow> {
 	 * @param value left to right flag
 	 * @since 2.0
 	 */
-	public void setPrintLeftToRight(boolean value);
+	void setPrintLeftToRight(boolean value);
 
 }

@@ -60,9 +60,9 @@ public class ReportRow implements TableRow {
 
 	private RowsGroup group;
 
-	public ReportRow(int colcount) {
-		colList = new ArrayList<>(colcount);
-		for (int i = 0; i < colcount; i++) {
+	public ReportRow(int colCount) {
+		colList = new ArrayList<>(colCount);
+		for (int i = 0; i < colCount; i++) {
 			addColumn(getNullCell());
 		}
 	}
@@ -339,6 +339,17 @@ public class ReportRow implements TableRow {
 				return true;
 		}
 		return false;
+	}
+
+	@Override
+	public String toString() {
+		String s = getHeaderValue() == null ? "" : String.valueOf(getHeaderValue());
+		int i = s.indexOf(' ');
+		if (i > 0) {
+			return s.substring(0, i);
+		} else {
+			return s;
+		}
 	}
 
 }

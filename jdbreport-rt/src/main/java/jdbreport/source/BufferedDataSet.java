@@ -253,7 +253,8 @@ public class BufferedDataSet implements MasterDataSet, DataSetListener {
 				Object dsValue = masterDS.getValue(name);
 				if (paramValue == null && dsValue == null)
 					continue;
-				boolean change = paramValue != null && paramValue.equals(dsValue);
+				boolean change = (paramValue != null && !paramValue.equals(dsValue))
+						|| (dsValue != null && !dsValue.equals(paramValue));
 				if (change) {
 					result = true;
 					linkedParams.put(name, dsValue);

@@ -14,6 +14,7 @@
     <modules>
         <module>jdbreport-rt</module>
         <module>jdbreport-dt</module>
+        <module>jdbr-samlpe</module>
     </modules>
 
 </project>

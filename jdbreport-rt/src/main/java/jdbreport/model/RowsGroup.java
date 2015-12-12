@@ -25,14 +25,16 @@ package jdbreport.model;
  */
 public interface RowsGroup extends Group {
 
-	public TableRow getChild(int index);
+	TableRow getChild(int index);
 
-	public void addRow(int index, TableRow row);
+	void addRow(int index, TableRow row);
 
-	public boolean addRow(TableRow row);
+	boolean addRow(TableRow row);
 
-	public Object getHeaderValue();
+	boolean removeRow(TableRow row);
 
-	public TableRow remove(int index);
+	Object getHeaderValue();
+
+	TableRow remove(int index);
 
 }

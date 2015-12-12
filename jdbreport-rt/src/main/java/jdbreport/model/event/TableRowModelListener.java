@@ -34,26 +34,26 @@ import javax.swing.event.ChangeEvent;
  */
 public interface TableRowModelListener extends java.util.EventListener {
 	/** Tells listeners that a row was added to the model. */
-	public void rowAdded(TableRowModelEvent e);
+	void rowAdded(TableRowModelEvent e);
 
 	/** Tells listeners that a row was removed from the model. */
-	public void rowRemoved(TableRowModelEvent e);
+	void rowRemoved(TableRowModelEvent e);
 
 	/** Tells listeners that a row was repositioned. */
-	public void rowMoved(TableRowModelEvent e);
+	void rowMoved(TableRowModelEvent e);
 
 	/** Tells listeners that a row was resized. */
-	public void rowResized(TableRowModelEvent e);
+	void rowResized(TableRowModelEvent e);
 
 	/** Tells listeners that a row was moved due to a margin change. */
-	public void rowMarginChanged(ChangeEvent e);
+	void rowMarginChanged(ChangeEvent e);
 
 	/**
 	 * Tells listeners that the selection model of the TableRowModel changed.
 	 */
-	public void rowSelectionChanged(ListSelectionEvent e);
+	void rowSelectionChanged(ListSelectionEvent e);
 
 	/** Tells listeners that a rows was change. */
-	public void rowUpdated(TableRowModelEvent e);
+	void rowUpdated(TableRowModelEvent e);
 
 }

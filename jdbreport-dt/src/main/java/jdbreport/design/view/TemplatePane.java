@@ -34,24 +34,12 @@ import java.net.URL;
 import java.util.Iterator;
 import java.util.LinkedList;
 
-import javax.swing.AbstractAction;
-import javax.swing.AbstractButton;
-import javax.swing.Action;
-import javax.swing.JButton;
-import javax.swing.JCheckBoxMenuItem;
-import javax.swing.JFileChooser;
-import javax.swing.JMenu;
-import javax.swing.JMenuBar;
-import javax.swing.JMenuItem;
-import javax.swing.JPopupMenu;
-import javax.swing.JSeparator;
-import javax.swing.JToggleButton;
-import javax.swing.JToolBar;
-import javax.swing.SwingUtilities;
+import javax.swing.*;
 import javax.swing.filechooser.FileFilter;
 
 import jdbreport.design.grid.*;
 import jdbreport.design.grid.DesignAction.InsertTypedRowAction;
+import jdbreport.design.grid.dialogs.StructureDialog;
 import jdbreport.design.model.CellObject;
 import jdbreport.design.model.TemplateBook;
 import jdbreport.grid.CellValueChangedEvent;
@@ -150,6 +138,8 @@ public class TemplatePane extends ReportEditorPane implements
 	private InsertTypedRowAction addGroupRowsAction;
 
 	private Action genReportAction;
+
+	private Action structureAction;
 
 	private Action helpApiAction;
 
@@ -336,6 +326,12 @@ public class TemplatePane extends ReportEditorPane implements
 				generateReport();
 			}
 		};
+		structureAction = new DesignAction.DesignBasedAction("structure_report") { //$NON-NLS-1$
+			public void actionPerformed(ActionEvent e) {
+				showStructureReport();
+			}
+		};
+
 		rowTitleAction = new DesignAction.SetTypeRowAction(Group.ROW_TITLE,
 				this);
 		rowPageHeaderAction = new DesignAction.SetTypeRowAction(
@@ -373,6 +369,16 @@ public class TemplatePane extends ReportEditorPane implements
 		} finally {
 			setCursor(Cursor.getDefaultCursor());
 		}
+	}
+
+	/**
+	 * Show report structure
+	 *
+	 */
+	private void showStructureReport() {
+		StructureDialog dialog = new StructureDialog(getParentFrame(),
+				(TemplateGrid) getFocusedGrid());
+		dialog.setVisible(true);
 	}
 
 	protected ReportEditor createReportEditor() {
@@ -711,6 +717,10 @@ public class TemplatePane extends ReportEditorPane implements
 		return genReportAction;
 	}
 
+	public Action getStructureAction() {
+		return structureAction;
+	}
+
 	public Action getSumAction() {
 		return sumAction;
 	}
@@ -744,6 +754,8 @@ public class TemplatePane extends ReportEditorPane implements
 		designMenu.add(getInsertGroupMenu());
 		designMenu.add(getTotalMenu());
 		designMenu.add(getNotRepeateMenuItem());
+		designMenu.addSeparator();
+		designMenu.add(getStructureAction());
 		designMenu.addSeparator();
 		designMenu.add(getGenReportAction());
 		return designMenu;

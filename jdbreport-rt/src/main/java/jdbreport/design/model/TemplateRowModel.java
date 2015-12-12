@@ -365,7 +365,7 @@ public class TemplateRowModel extends ReportRowModel {
 				if (newIndex > rowIndex) {
 					newIndex++;
 				}
-				moveGroup(collapsedGroup(group), newIndex);
+				moveGroup((Group) collapsedGroup(group), (int) newIndex);
 				return;
 			}
 			Group otherGroup = getGroup(newIndex);
@@ -410,15 +410,7 @@ public class TemplateRowModel extends ReportRowModel {
 	private void moveGroup(Group group, int newRowIndex) {
 		setDirtyHeader(true);
 		if (newRowIndex <= 0 || newRowIndex >= rowList.size()) {
-			disableSpan();
-			try {
-				removeGroup(group);
-				addGroup(getRootGroup(), newRowIndex <= 0 ? 0
-						: getRootGroup().getChildCount(), group);
-			} finally {
-				enableSpan();
-			}
-			fireRowUpdated();
+			moveGroup(group, newRowIndex, getRootGroup());
 			return;
 		}
 		TableRow row = getRow(newRowIndex);
@@ -485,6 +477,7 @@ public class TemplateRowModel extends ReportRowModel {
 
 	}
 
+
 	private void splitGroup(RowsGroup targetGroup, TableRow row) {
 		TreeRowGroup parent = (TreeRowGroup) targetGroup.getParent();
 		int index = targetGroup.getChildIndex(row);
@@ -498,12 +491,6 @@ public class TemplateRowModel extends ReportRowModel {
 			newGroup.addRow(0, tableRow);
 		}
 		parent.addGroup(parent.getChildIndex(targetGroup) + 1, newGroup);
-	}
-
-	private void addGroup(TreeRowGroup parentGroup, int groupIndex, Group group) {
-		parentGroup.addGroup(groupIndex, group);
-		hideGroup(parentGroup);
-		showGroup(parentGroup);
 	}
 
 	int insertDetailGroup(int rowIndex) {

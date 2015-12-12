@@ -27,66 +27,67 @@ import java.util.Iterator;
  */
 public interface Group extends Iterable<TableRow> {
 
-	public static final String typeNames[] = {
-			"", Messages.getString("Group.1"), Messages.getString("Group.2"), Messages.getString("Group.3"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
-			Messages.getString("Group.4"), Messages.getString("Group.5"), Messages.getString("Group.6"), Messages.getString("Group.7"), Messages.getString("Group.8") }; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$
-	public static final int ROW_NONE = 0;
-	public static final int ROW_TITLE = 1;
-	public static final int ROW_PAGE_HEADER = 2;
-	public static final int ROW_GROUP_HEADER = 3;
-	public static final int ROW_DETAIL = 4;
-	public static final int ROW_GROUP_FOOTER = 5;
-	public static final int ROW_PAGE_FOOTER = 6;
-	public static final int ROW_FOOTER = 7;
-	public static final int GROUP_DETAIL = 8;
+	String typeNames[] = {
+			"", Messages.getString("Group.1"), Messages.getString("Group.2"), Messages.getString("Group.3"),
+			Messages.getString("Group.4"), Messages.getString("Group.5"), Messages.getString("Group.6"),
+			Messages.getString("Group.7"), Messages.getString("Group.8") };
+	int ROW_NONE = 0;
+	int ROW_TITLE = 1;
+	int ROW_PAGE_HEADER = 2;
+	int ROW_GROUP_HEADER = 3;
+	int ROW_DETAIL = 4;
+	int ROW_GROUP_FOOTER = 5;
+	int ROW_PAGE_FOOTER = 6;
+	int ROW_FOOTER = 7;
+	int GROUP_DETAIL = 8;
 
-	public int getType();
+	int getType();
 
-	public String getTypeName();
+	String getTypeName();
 
-	public int getChildCount();
+	int getChildCount();
 
-	public RowsGroup getGroup(TableRow row);
+	RowsGroup getGroup(TableRow row);
 
-	public GroupsGroup getParent();
+	GroupsGroup getParent();
 
-	public int getChildIndex(Object child);
+	int getChildIndex(Object child);
 
-	public boolean remove(Object child);
+	boolean remove(Object child);
 
-	public int getLevel();
+	int getLevel();
 
 	/**
 	 * Returns all TableRow objects in group
 	 * 
 	 * @return all TableRow objects
 	 */
-	public int getRowCount();
+	int getRowCount();
 
-	public TableRow getFirstGroupRow();
+	TableRow getFirstGroupRow();
 
-	public boolean isVisible();
+	boolean isVisible();
 
-	public void setVisible(boolean visible);
+	void setVisible(boolean visible);
 
 	/**
 	 * Returns all rows
 	 */
-	public Iterator<TableRow> iterator();
+	Iterator<TableRow> iterator();
 
 	/**
 	 * Returns all visible rows
 	 * 
 	 * @return all visible rows
 	 */
-	public Iterator<TableRow> getVisibleRowIterator();
+	Iterator<TableRow> getVisibleRowIterator();
 
 	/**
 	 * Returns group's height in pixels
 	 * 
 	 * @return the group's height in pixels
 	 */
-	public int getHeight();
+	int getHeight();
 
 	/**
 	 * Calculates the grand total by column and all rows
@@ -97,17 +98,19 @@ public interface Group extends Iterable<TableRow> {
 	 *            the column's number
 	 * @return the grand total by column
 	 */
-	public double getTotalResult(int func, int column);
+	double getTotalResult(int func, int column);
 
 	/**
 	 * Removes all groups and rows from group
 	 * 
 	 */
-	public void clear();
+	void clear();
 
-	public int[] getIndexPath();
+	int[] getIndexPath();
 
-	public Group[] getPath();
+	Group[] getPath();
 
-	public Object getChild(int index);
+	Object getChild(int index);
+
+	int getRowIndex(TableRow tableRow);
 }

@@ -134,19 +134,19 @@ public class ReportRowModel implements TableRowModel, PropertyChangeListener,
 
     public void removeColumn(int column) {
         List<Cell> list = new ArrayList<>();
-        for (Iterator<TableRow> it = getRootGroup().iterator(); it.hasNext(); ) {
-            TableRow tableRow = it.next();
+        for (TableRow tableRow : getRootGroup()) {
             Cell cell = tableRow.getCellItem(column);
             if (cell.isChild()) {
                 if (list.indexOf(cell.getOwner()) < 0) {
                     list.add(cell.getOwner());
                 }
             }
-
         }
+
         for (Cell cell : list) {
             cell.setColSpan(cell.getColSpan() - 1);
         }
+
         disableSpan();
         try {
             for (TableRow cells : getRootGroup()) {
@@ -272,6 +272,17 @@ public class ReportRowModel implements TableRowModel, PropertyChangeListener,
         getRootGroup().clear();
     }
 
+    public void removeGroupRows(Group group) {
+        disableSpan();
+        try {
+            removeGroup(group);
+            setDirtyHeader(true);
+        } finally {
+            enableSpan();
+        }
+        fireRowUpdated();
+    }
+
     /**
      * @param group Group
      */
@@ -280,6 +291,28 @@ public class ReportRowModel implements TableRowModel, PropertyChangeListener,
         for (TableRow tableRow : group) {
             rowList.remove(tableRow);
         }
+    }
+
+
+    protected int addGroup(TreeRowGroup parentGroup, int groupIndex, Group group) {
+        int index = parentGroup.addGroup(groupIndex, group);
+        hideGroup(parentGroup);
+        showGroup(parentGroup);
+        return index;
+    }
+
+    public int moveGroup(Group group, int newIndex, TreeRowGroup parent) {
+        int index;
+        disableSpan();
+        try {
+            removeGroup(group);
+            index = addGroup(parent, newIndex, group);
+            setDirtyHeader(true);
+        } finally {
+            enableSpan();
+        }
+        fireRowUpdated();
+        return index;
     }
 
     public void removeRows(int count, int index) {
@@ -299,9 +332,46 @@ public class ReportRowModel implements TableRowModel, PropertyChangeListener,
         }
     }
 
+    public void removeRow(TableRow tableRow) {
+        int index = rowList.indexOf(tableRow);
+        if (index < 0 ) return;
+
+        disableSpan();
+        try {
+            if (rowList.remove(tableRow)) {
+                updateCells(tableRow);
+                tableRow.removePropertyChangeListener(this);
+                invalidateHeightCache();
+                setDirtyHeader(true);
+                RowsGroup group = getGroup(tableRow);
+                if (group != null) {
+                    group.removeRow(tableRow);
+                }
+                fireRowRemoved(new TableRowModelEvent(this, index, 0));
+            }
+        } finally {
+            enableSpan();
+        }
+    }
+
     private TableRow removeRow(int row) {
         TableRow tableRow = rowList.remove(row);
 
+       if (tableRow != null) {
+            updateCells(tableRow);
+            tableRow.removePropertyChangeListener(this);
+            invalidateHeightCache();
+            setDirtyHeader(true);
+            Group group = getGroup(tableRow);
+            if (group != null) {
+                group.remove(tableRow);
+            }
+            fireRowRemoved(new TableRowModelEvent(this, row, 0));
+        }
+        return tableRow;
+    }
+
+    private void updateCells(TableRow tableRow) {
         List<Cell> list = new ArrayList<>();
         for (Cell cell : tableRow) {
             if (cell.isChild()) {
@@ -313,18 +383,6 @@ public class ReportRowModel implements TableRowModel, PropertyChangeListener,
         for (Cell cell : list) {
             cell.setRowSpan(cell.getRowSpan() - 1);
         }
-
-        if (tableRow != null) {
-            tableRow.removePropertyChangeListener(this);
-            invalidateHeightCache();
-            setDirtyHeader(true);
-            Group group = getGroup(tableRow);
-            if (group != null) {
-                group.remove(tableRow);
-            }
-            fireRowRemoved(new TableRowModelEvent(this, row, 0));
-        }
-        return tableRow;
     }
 
     public int getRowCount() {
@@ -369,8 +427,7 @@ public class ReportRowModel implements TableRowModel, PropertyChangeListener,
     }
 
     public TableRowModelListener[] getRowModelListeners() {
-        return (TableRowModelListener[]) listenerList
-                .getListeners(TableRowModelListener.class);
+        return  listenerList.getListeners(TableRowModelListener.class);
     }
 
     public int getRowIndexAtY(int y) {
@@ -440,6 +497,28 @@ public class ReportRowModel implements TableRowModel, PropertyChangeListener,
             }
         }
         fireRowMoved(new TableRowModelEvent(this, rowIndex, newIndex));
+    }
+
+    public void moveRow(Group group, int index, Group newGroup, int newIndex) {
+        TableRow tableRow = (TableRow) group.getChild(index);
+        if (tableRow == null)
+            return;
+        int rowIndex = rowList.indexOf(tableRow);
+        int newRowIndex = 0;
+        disableSpan();
+        try {
+
+            rowList.remove(tableRow);
+            group.remove(tableRow);
+            setDirtyHeader(true);
+            ((BaseRowGroup) newGroup).addRow(newIndex, tableRow);
+            newRowIndex = getGroupRowIndex(newGroup) + newIndex;
+            rowList.add(newRowIndex, tableRow);
+
+        } finally {
+            enableSpan();
+        }
+        fireRowMoved(new TableRowModelEvent(this, rowIndex, newRowIndex));
     }
 
     public boolean isCollapse(Group group) {
@@ -758,13 +837,27 @@ public class ReportRowModel implements TableRowModel, PropertyChangeListener,
     }
 
     public void showGroup(Group group) {
-        if (group.getChildCount() == 0)
+        if (group.getRowCount() == 0)
             return;
-        int row = rowList.indexOf(group.getFirstGroupRow()) + 1;
+
+        TableRow firstRow = group.getFirstGroupRow();
+        int row = rowList.indexOf(firstRow);
+
+        Group parent = group.getParent();
+        while (row < 0 && rowList.size() > 0 && parent != null) {
+            TableRow parentRow = parent.getFirstGroupRow();
+            if (parentRow != firstRow) {
+                row = rowList.indexOf(parentRow);
+                if (row >= 0) {
+                    row += parent.getRowIndex(firstRow) - 1;
+                }
+            }
+        }
+        row++;
         Iterator<TableRow> it = group.getVisibleRowIterator();
         if (it.hasNext()) {
             TableRow tableRow = it.next();
-            if (row == 0) {
+            if (!rowList.contains(tableRow)) {
                 rowList.add(row++, tableRow);
             }
         }
@@ -1003,12 +1096,12 @@ public class ReportRowModel implements TableRowModel, PropertyChangeListener,
                         if (us.height + header.getHeight() + detailHeight > pHeight) {
                             newPage(pageHeaderGroup, us);
                         } else
-                        for (int i = 0; i < header.getChildCount(); i++) {
-                            TableRow tableRow = header.getChild(i);
-                            rowList.add(us.index++, tableRow);
-                            us.height += tableRow.getHeight();
-                            us.rowsInPage++;
-                        }
+                            for (int i = 0; i < header.getChildCount(); i++) {
+                                TableRow tableRow = header.getChild(i);
+                                rowList.add(us.index++, tableRow);
+                                us.height += tableRow.getHeight();
+                                us.rowsInPage++;
+                            }
                     }
                 }
 

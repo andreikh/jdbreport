@@ -103,5 +103,12 @@ public abstract class AbstractGroup implements Group {
 		}
 		return result;
 	}
-	
+
+	@Override
+	public String toString() {
+		if (getType() >= 0 && getType() < typeNames.length) {
+			return typeNames[getType()];
+		}
+		return "";
+	}
 }

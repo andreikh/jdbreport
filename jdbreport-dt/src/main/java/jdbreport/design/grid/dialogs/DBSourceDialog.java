@@ -48,7 +48,7 @@ public class DBSourceDialog extends JDialog {
 
 	private void init(JdbcSource dbItm) throws Exception {
 		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
-		setTitle(Messages.getString("DBSourceDialog.0"));
+		setTitle(Messages.getString("DBSourceDialog.title"));
 		if (dbItm == null) {
 			throw new Exception("JdbcSource is null");
 		}
@@ -83,7 +83,7 @@ public class DBSourceDialog extends JDialog {
 		JPanel bottomPanel = new JPanel(new BorderLayout());
 
 		JPanel buttonPanel = new JPanel();
-		JButton okButton = new JButton(Messages.getString("DBSourceDialog.13"));
+		JButton okButton = new JButton(Messages.getString("Dialog.ok"));
 		buttonPanel.add(okButton);
 		okButton.addActionListener(e -> {
             dbPanel.saveProperty();
@@ -92,7 +92,7 @@ public class DBSourceDialog extends JDialog {
         });
 
 		JButton cancelButton = new JButton(Messages
-				.getString("DBSourceDialog.14"));
+				.getString("Dialog.cancel"));
 		cancelButton.setFont(getFont());
 		buttonPanel.add(cancelButton);
 		cancelButton.addActionListener(e -> close());

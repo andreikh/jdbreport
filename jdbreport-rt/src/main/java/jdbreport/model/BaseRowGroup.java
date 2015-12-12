@@ -77,6 +77,11 @@ public class BaseRowGroup extends AbstractGroup implements RowsGroup {
 		return result;
 	}
 
+	public boolean removeRow(TableRow row) {
+		((ReportRow)row).setGroup(null);
+		return getChildList().remove(row);
+	}
+
 	public TableRow getFirstGroupRow() {
 		if (getChildCount() == 0)
 			return null;
@@ -164,6 +169,11 @@ public class BaseRowGroup extends AbstractGroup implements RowsGroup {
 
 	public TableRow getChild(int index) {
 		return getChildList().get(index);
+	}
+
+	@Override
+	public int getRowIndex(TableRow tableRow) {
+		return getChildIndex(tableRow);
 	}
 
 	public RowsGroup getGroup(TableRow row) {

@@ -111,6 +111,22 @@ public abstract class TreeRowGroup extends AbstractGroup implements GroupsGroup 
         return null;
     }
 
+    public int getRowIndex(TableRow tableRow) {
+        int count = getChildCount();
+        if (count == 0) return 0;
+        int result = 0;
+        for (int i = 0; i < count; i++) {
+            Group group = getChild(i);
+            int index = group.getRowIndex(tableRow);
+            if (index >= 0) {
+                return result + index;
+            } else {
+                result += group.getRowCount();
+            }
+        }
+        return -1;
+    }
+
     public Group getGroup(int type) {
         for (int i = 0; i < getChildCount(); i++) {
             if (getChildList().get(i).getType() == type) {

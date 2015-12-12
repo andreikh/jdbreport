@@ -58,5 +58,4 @@ public class TemplateRow extends ReportRow {
 		return new TemplateReportCell();
 	}
 
-	
 }

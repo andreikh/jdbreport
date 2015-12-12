@@ -1,0 +1,20 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>lowagie</groupId>
+    <artifactId>itext</artifactId>
+    <version>2.1.7-1</version>
+    <name>iText, a Free Java-PDF library</name>
+    <description>iText, a free Java-PDF library, modified for jdbreport</description>
+    <licenses>
+        <license>
+            <name>Mozilla Public License</name>
+            <url>http://www.mozilla.org/MPL/MPL-1.1.html</url>
+            <comments>
+                iText was originally published under the LGPLicense.
+                LGPL can be used as an alternative license for the MPL.
+            </comments>
+        </license>
+    </licenses>
+
+</project>

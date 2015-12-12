@@ -27,19 +27,19 @@ import java.util.Iterator;
  */
 public interface GroupsGroup extends Group {
 
-	public Group addGroup(int type);
+	Group addGroup(int type);
 
-	public Group getChild(int index);
+	Group getChild(int index);
 
-	public Group getGroup(int type);
+	Group getGroup(int type);
 
-	public Iterator<Group> getGroupIterator();
+	Iterator<Group> getGroupIterator();
 
 	/**
 	 * Returns all RowsGroup
 	 * 
 	 * @return iterator
 	 */
-	public Iterator<RowsGroup> getAllGroupIterator();
+	Iterator<RowsGroup> getAllGroupIterator();
 
 }

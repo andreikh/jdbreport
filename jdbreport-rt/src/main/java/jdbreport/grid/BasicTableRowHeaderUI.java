@@ -234,8 +234,7 @@ public class BasicTableRowHeaderUI extends TableRowHeaderUI {
 			TableRow resizingRow = header.getResizingRow();
 			if (index != -1) {
 				header.getRowModel().moveDraggedRow(index, draggedIndex);
-				header.table.pushRowMovedUndo(draggedIndex, index);
-				header.getRowModel().moveRow(draggedIndex, index);
+				header.table.moveRow(draggedIndex, index);
 			} else if (resizingRow != null) {
 				resizingRow.setHeight(resizingRow.getHeight(), false);
 			}

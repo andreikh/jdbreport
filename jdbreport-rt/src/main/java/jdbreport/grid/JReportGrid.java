@@ -217,6 +217,21 @@ public class JReportGrid extends JTable implements TableRowModelListener,
 		repaint();
 	}
 
+	public void moveRow(int rowIndex, int newIndex) {
+		pushRowMovedUndo(rowIndex, newIndex);
+		getReportModel().getRowModel().moveRow(rowIndex, newIndex);
+	}
+
+	public void moveRow(Group group, int rowIndex, Group newGroup, int newIndex) {
+		pushRowMovedUndo(0, 1);
+		getReportModel().getRowModel().moveRow(group, rowIndex, newGroup, newIndex);
+	}
+
+	public int moveGroup(Group group, int newIndex, TreeRowGroup parent) {
+		pushRowMovedUndo(0, 1);
+		return getReportModel().getRowModel().moveGroup(group, newIndex, parent);
+	}
+
 	void pushRowMovedUndo(int fromIndex, int toIndex) {
 		if (fromIndex != toIndex && canUndo())
 			try {
@@ -1874,6 +1889,52 @@ public class JReportGrid extends JTable implements TableRowModelListener,
 				Utils.showError(e);
 			}
 		getReportModel().addRows(count, index);
+	}
+
+	public TableRow addRow(RowsGroup group) {
+		if (canUndo())
+			try {
+				pushUndo(new BackupItem(this, UndoItem.ADD_ROWS)); //$NON-NLS-1$
+			} catch (Throwable e) {
+				Utils.showError(e);
+			}
+		TableRow row = getReportModel().getRowModel().createTableRow();
+		getReportModel().getRowModel().addRow(group, group.getChildCount(), row);
+		return row;
+	}
+
+	public Group addGroup(GroupsGroup parent, int type) {
+		if (canUndo())
+			try {
+				pushUndo(new BackupItem(this, UndoItem.ADD_ROWS)); //$NON-NLS-1$
+			} catch (Throwable e) {
+				Utils.showError(e);
+			}
+		Group childGroup = parent.addGroup(type);
+		if (childGroup instanceof RowsGroup) {
+			getReportModel().getRowModel().addRow((RowsGroup) childGroup, childGroup.getChildCount());
+		}
+		return childGroup;
+	}
+
+	public void removeGroup(Group group) {
+		if (canUndo())
+			try {
+				pushUndo(new BackupItem(this, UndoItem.REMOVE_ROWS)); //$NON-NLS-1$
+			} catch (Exception e) {
+				Utils.showError(e);
+			}
+		getReportModel().getRowModel().removeGroupRows(group);
+	}
+
+	public void removeRow(TableRow row) {
+		if (canUndo())
+			try {
+				pushUndo(new BackupItem(this, UndoItem.REMOVE_ROWS)); //$NON-NLS-1$
+			} catch (Exception e) {
+				Utils.showError(e);
+			}
+		getReportModel().getRowModel().removeRow(row);
 	}
 
 	public void removeRows(int count, int index) {

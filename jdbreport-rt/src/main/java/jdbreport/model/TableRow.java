@@ -37,7 +37,7 @@ public interface TableRow extends Iterable<Cell> {
 	/**
 	 * @return row's height in pixels
 	 */
-	public int getHeight();
+	int getHeight();
 
 	/**
 	 * Sets the row's height
@@ -45,7 +45,7 @@ public interface TableRow extends Iterable<Cell> {
 	 * @param height
 	 *            new row's height
 	 */
-	public void setHeight(int height);
+	void setHeight(int height);
 
 	/**
 	 * Sets the row's height when resizing
@@ -54,26 +54,26 @@ public interface TableRow extends Iterable<Cell> {
 	 *            new row's height
 	 * @param dragging dragging flag
 	 */
-	public void setHeight(int height, boolean dragging);
+	void setHeight(int height, boolean dragging);
 
 	/**
 	 * @return row's height in points
 	 */
-	public float getNativeHeight();
+	float getNativeHeight();
 	
 	/**
 	 * Returns renderer for the row's header
 	 * 
 	 * @return TableCellRenderer
 	 */
-	public TableCellRenderer getHeaderRenderer();
+	TableCellRenderer getHeaderRenderer();
 
 	/**
 	 * 
 	 * @param column column index
 	 * @return Cell for specified column
 	 */
-	public Cell getCellItem(int column);
+	Cell getCellItem(int column);
 
 	/**
 	 * Sets Cell for specified column
@@ -83,7 +83,7 @@ public interface TableRow extends Iterable<Cell> {
 	 * @param column
 	 *            the column's index
 	 */
-	public void setCellItem(Cell cellItem, int column);
+	void setCellItem(Cell cellItem, int column);
 
 	/**
 	 * Creates a new Cell for specified column in the current row
@@ -91,20 +91,20 @@ public interface TableRow extends Iterable<Cell> {
 	 * @param column column index
 	 * @return created Cell
 	 */
-	public Cell createCellItem(int column);
+	Cell createCellItem(int column);
 
 	/**
 	 * 
 	 * @return column's count
 	 */
-	public int getColCount();
+	int getColCount();
 
 	/**
 	 * Sets column's count
 	 * 
 	 * @param count  column's count
 	 */
-	public void setColCount(int count);
+	void setColCount(int count);
 
 	/**
 	 * Inserts the null cell at the specified position in this row
@@ -112,7 +112,7 @@ public interface TableRow extends Iterable<Cell> {
 	 * @param index
 	 *            index at which the column is to be inserted.
 	 */
-	public void addColumn(int index);
+	void addColumn(int index);
 
 	/**
 	 * Inserts the Cell at the specified position in this row
@@ -122,7 +122,7 @@ public interface TableRow extends Iterable<Cell> {
 	 * @param cellItem
 	 *            Cell to be inserted.
 	 */
-	public void addColumn(int index, Cell cellItem);
+	void addColumn(int index, Cell cellItem);
 
 	/**
 	 * Removes the cell at the specified position in this row Makes the columns'
@@ -132,7 +132,7 @@ public interface TableRow extends Iterable<Cell> {
 	 *            the index of the cell to removed.
 	 * @return the Cell previously at the specified position.
 	 */
-	public Cell removeColumn(int index);
+	Cell removeColumn(int index);
 
 	/**
 	 * Replaces the cell at the specified position by NullCell
@@ -141,14 +141,14 @@ public interface TableRow extends Iterable<Cell> {
 	 *            the index of the cell to removed.
 	 * @return the Cell previously at the specified position.
 	 */
-	public Cell removeCell(int index);
+	Cell removeCell(int index);
 
 	/**
 	 * Returns true if this row is the end of the page.
 	 * 
 	 * @return pageBreak property
 	 */
-	public boolean isPageBreak();
+	boolean isPageBreak();
 
 	/**
 	 * Sets pageBreak property
@@ -156,7 +156,7 @@ public interface TableRow extends Iterable<Cell> {
 	 * @param b
 	 *            if true, the sets horizontal page break after row
 	 */
-	public void setPageBreak(boolean b);
+	void setPageBreak(boolean b);
 
 	/**
 	 * Adds a PropertyChangeListener to the listener list.
@@ -164,7 +164,7 @@ public interface TableRow extends Iterable<Cell> {
 	 * @param listener
 	 *            the PropertyChangeListener to be added
 	 */
-	public void addPropertyChangeListener(PropertyChangeListener listener);
+	void addPropertyChangeListener(PropertyChangeListener listener);
 
 	/**
 	 * Removes a PropertyChangeListener from the listener list. This method
@@ -174,21 +174,21 @@ public interface TableRow extends Iterable<Cell> {
 	 * @param listener
 	 *            the PropertyChangeListener to be removed
 	 */
-	public void removePropertyChangeListener(PropertyChangeListener listener);
+	void removePropertyChangeListener(PropertyChangeListener listener);
 
 	/**
 	 * If true, the row is null
 	 * 
 	 * @return if true, the row is null
 	 */
-	public boolean isNull();
+	boolean isNull();
 
 	/**
 	 * Returns the value of the row's header
 	 * 
 	 * @return the value of the row's header
 	 */
-	public Object getHeaderValue();
+	Object getHeaderValue();
 
 	/**
 	 * Sets the value of the row's header
@@ -196,27 +196,27 @@ public interface TableRow extends Iterable<Cell> {
 	 * @param value
 	 *            new header's value
 	 */
-	public void setHeaderValue(Object value);
+	void setHeaderValue(Object value);
 
 	/**
 	 * Returns an iterator over the cells in this row in proper sequence.
 	 * 
 	 * @return iterator of cells
 	 */
-	public Iterator<Cell> iterator();
+	Iterator<Cell> iterator();
 
 	/**
 	 * Returns parental group
 	 *	
 	 * @return parental group
 	 */
-	public RowsGroup getGroup();
+	RowsGroup getGroup();
 
 	/**
 	 * Determines  an accessory of a row to page heading
 	 * @return true, if row in page header, otherwise false
 	 * @since 2.0
 	 */
-	public boolean isPageHeader();
+	boolean isPageHeader();
 	
 }
