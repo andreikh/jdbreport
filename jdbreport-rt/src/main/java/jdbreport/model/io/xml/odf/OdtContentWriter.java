@@ -68,11 +68,11 @@ class OdtContentWriter extends OdsContentWriter {
 							+ "\" table:style-name=\"ta" + n + "_"
 							+ (leftCol + 1) + "\">");
 					for (int c = leftCol + 1; c <= rightCol + 1; c++) {
-						fw.println("<table:table-column table:style-name=\"co"
-								+ n + c + "\"/>");
+						fw.println("<table:table-column table:style-name=\""
+								+ getColStyleName(n, c) + "\"/>");
 					}
 					while (r < model.getRowCount()) {
-						String styleName = "ro" + n + (r + 1);
+						String styleName = getRowStyleName(n, (r + 1));
 						fw.println("<table:table-row table:style-name=\""
 								+ rowStylesMap.get(styleName) + "\">");
 						writeRow(fw, n, model, r, leftCol, rightCol);

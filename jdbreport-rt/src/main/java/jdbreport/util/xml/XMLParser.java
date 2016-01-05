@@ -48,7 +48,7 @@ public interface XMLParser {
 	 *            attributes, it shall be an empty Attributes object.
 	 */
 
-	public boolean startElement(String name, final Attributes attributes)
+	boolean startElement(String name, final Attributes attributes)
 			throws SAXException;
 
 	/**
@@ -63,7 +63,7 @@ public interface XMLParser {
 	 * @param name
 	 *            The qualified name (with prefix)
 	 */
-	public void endElement(String name, final StringBuffer value)
+	void endElement(String name, final StringBuffer value)
 			throws SAXException;
 
 	/**
@@ -76,6 +76,6 @@ public interface XMLParser {
 	 * </p>
 	 * 
 	 */
-	public void characters(StringBuffer ch) throws SAXException;
+	void characters(StringBuffer ch) throws SAXException;
 
 }

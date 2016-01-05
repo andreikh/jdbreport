@@ -131,11 +131,11 @@ class OdsContentWriter extends OdfBaseWriter {
 			fw.println("<table:table table:name=\"" + reportTitle
 					+ "\" table:style-name=\"ta" + n + "\">");
 			for (int c = 1; c <= model.getColumnCount(); c++) {
-				fw.println("<table:table-column table:style-name=\"co" + n + c
+				fw.println("<table:table-column table:style-name=\"" + getColStyleName(n, c)
 						+ "\"/>");
 			}
 			for (int r = 0; r < model.getRowCount(); r++) {
-				String styleName = "ro" + n + (r + 1);
+				String styleName = getRowStyleName(n, (r + 1));
 				fw.println("<table:table-row table:style-name=\""
 						+ rowStylesMap.get(styleName) + "\">");
 				writeRow(fw, n, model, r);
@@ -189,7 +189,7 @@ class OdsContentWriter extends OdfBaseWriter {
 
 		for (ReportModel model : reportBook) {
 			for (int r = 1; r <= model.getRowCount(); r++) {
-				String styleName = "ro" + n + r;
+				String styleName = getRowStyleName(n, r);
 				RowStyle rowStyle = new RowStyle(styleName);
 				rowStyle.setBreakBefore(r > 1 && model.isLastRowInPage(r - 2));
 				rowStyle.setHeight(Utils.round((model
@@ -217,11 +217,31 @@ class OdsContentWriter extends OdfBaseWriter {
 		}
 	}
 
+	/**
+	 * Get row style name
+	 * @param n model number
+	 * @param r row number since 1
+     * @return style name for row
+     */
+	protected String getRowStyleName(int n, int r) {
+		return "ro" + n + "_" + r;
+	}
+
+	/**
+	 * Get column style name
+	 * @param n model number
+	 * @param c column number since 1
+	 * @return style name for column
+	 */
+	protected String getColStyleName(int n, int c) {
+		return "co" + n + "_" + c;
+	}
+
 	protected void writeColumnStyles(PrintWriter fw, ReportBook reportBook) {
 		int n = 1;
 		for (ReportModel model : reportBook) {
 			for (int c = 1; c <= model.getColumnCount(); c++) {
-				fw.print("<style:style style:name=\"co" + n + c
+				fw.print("<style:style style:name=\"" + getColStyleName(n, c)
 						+ "\" style:family=\"table-column\">");
 				fw.print("<style:table-column-properties fo:break-before=");
 				if (c > 1 && model.isColumnBreak(c - 2)) {

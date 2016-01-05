@@ -759,14 +759,14 @@ public interface ReportModel extends TableModel {
 	 * @return column number
 	 * @since 1.3
 	 */
-	public int findRightColumn(int leftCol);
+	int findRightColumn(int leftCol);
 	
 	/**
 	 * 
 	 * @param map styles
 	 * @since 2.0
 	 */
-	public void setStyleList(Map<Object, CellStyle> map);
+	void setStyleList(Map<Object, CellStyle> map);
 
 	/**
 	 * Direction of an output of pages on the printer. 
@@ -776,7 +776,7 @@ public interface ReportModel extends TableModel {
 	 * @return if true that pages are printed from left to right, otherwise from top to down
 	 * @since 2.0
 	 */
-	public boolean isPrintLeftToRight();
+	boolean isPrintLeftToRight();
 	
 	/**
 	 * Direction of an output of pages on the printer. 

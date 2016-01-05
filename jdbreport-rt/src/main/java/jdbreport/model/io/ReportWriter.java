@@ -31,13 +31,13 @@ import jdbreport.model.ReportBook;
  */
 public interface ReportWriter extends ResourceWriter {
 
-	public void save(OutputStream out, ReportBook reportBook)
+	void save(OutputStream out, ReportBook reportBook)
 			throws SaveReportException;
 
-	public void save(Writer writer, ReportBook reportBook)
+	void save(Writer writer, ReportBook reportBook)
 			throws SaveReportException;
 
-	public void save(File file, ReportBook reportBook)
+	void save(File file, ReportBook reportBook)
 			throws SaveReportException;
 	
 	

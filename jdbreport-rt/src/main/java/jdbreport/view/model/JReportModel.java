@@ -919,6 +919,7 @@ public class JReportModel extends AbstractTableModel implements ReportModel {
 		for (int row = 0; row < getRowCount(); row++) {
 			for (int column = 0; column < getColumnCount(); column++) {
 				Cell cell = getReportCell(row, column);
+				if (cell.isChild() || cell.isNull()) continue;
 				Object index = cell.getStyleId();
 				if (index != null && index.equals(oldStyleId)) {
 					cell.setStyleId(newStyleId);

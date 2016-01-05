@@ -33,44 +33,44 @@ import javax.swing.Icon;
  */
 public interface Cell extends Cloneable, Serializable {
 
-	static final long serialVersionUID = 1L;
+	long serialVersionUID = 1L;
 
-	public enum Type {
+	enum Type {
 		STRING, FLOAT, DATE, TIME, BOOLEAN, PERCENTAGE, CURRENCY
 	}
 
-	public final static String TEXT_PLAIN = "text/plain";
+	String TEXT_PLAIN = "text/plain";
 
-	public final static String TEXT_HTML = "text/html";
+	String TEXT_HTML = "text/html";
 	
-	public static final String EMPTY_STRING = "";
+	String EMPTY_STRING = "";
 
 	/**
 	 * Returns the value for the cell
 	 * 
 	 * @return the value Object at the cell
 	 */
-	public Object getValue();
+	Object getValue();
 
 	/**
 	 * 
 	 * @param value
 	 *            to assign to cell
 	 */
-	public void setValue(Object value);
+	void setValue(Object value);
 
 	/**
 	 * 
 	 * @return the string value of the cell
 	 */
-	public String getText();
+	String getText();
 
 	/**
 	 * Key of the CellStyle in the map of the CellStyles
 	 * 
 	 * @return the CellStyle's id
 	 */
-	public Object getStyleId();
+	Object getStyleId();
 
 	/**
 	 * Sets the CellStyle's id for the cell
@@ -78,14 +78,14 @@ public interface Cell extends Cloneable, Serializable {
 	 * @param id
 	 *            the CellStyle's id
 	 */
-	public void setStyleId(Object id);
+	void setStyleId(Object id);
 
 	/**
 	 * Returns a number of spanned rows for the cell
 	 * 
 	 * @return rowSpan of the cell
 	 */
-	public int getRowSpan();
+	int getRowSpan();
 
 	/**
 	 * Sets a number of spanned rows for the cell
@@ -93,14 +93,14 @@ public interface Cell extends Cloneable, Serializable {
 	 * @param value
 	 *            a number of spanned rows
 	 */
-	public void setRowSpan(int value);
+	void setRowSpan(int value);
 
 	/**
 	 * Returns a number of spanned columns for the cell
 	 * 
 	 * @return colSpan of the cell
 	 */
-	public int getColSpan();
+	int getColSpan();
 
 	/**
 	 * Sets a number of spanned columns for the cell
@@ -108,27 +108,27 @@ public interface Cell extends Cloneable, Serializable {
 	 * @param value
 	 *            a number of spanned columns
 	 */
-	public void setColSpan(int value);
+	void setColSpan(int value);
 
 	/**
 	 * Returns true if the cell has an owner
 	 * 
 	 * @return true if the cell has an owner
 	 */
-	public boolean isChild();
+	boolean isChild();
 
 	/**
 	 * 
 	 * @return true if the rowSpan or the columnSpan is more than zero
 	 */
-	public boolean isSpan();
+	boolean isSpan();
 
 	/**
 	 * Returns the owner of the cell, can be null
 	 * 
 	 * @return owner of the cell
 	 */
-	public Cell getOwner();
+	Cell getOwner();
 
 	/**
 	 * Sets the owner of the cell
@@ -136,29 +136,29 @@ public interface Cell extends Cloneable, Serializable {
 	 * @param cell
 	 *            the owner of the cell, can be null
 	 */
-	public void setOwner(Cell cell);
+	void setOwner(Cell cell);
 
 	/**
 	 * Determines if the cell is null
 	 * 
 	 * @return true if the cell is null
 	 */
-	public boolean isNull();
+	boolean isNull();
 
 	/**
 	 * 
 	 * @return extFlags property
 	 */
-	public int getExtFlags();
+	int getExtFlags();
 
-	public void setExtFlags(int i);
+	void setExtFlags(int i);
 
 	/**
 	 * Returns true if the cell is not printed
 	 * 
 	 * @return true if the cell is not printed
 	 */
-	public boolean isNotPrint();
+	boolean isNotPrint();
 
 	/**
 	 * Sets the notPrint property, which must be true to disable printing of the
@@ -167,9 +167,9 @@ public interface Cell extends Cloneable, Serializable {
 	 * @param b
 	 *            if true the cell is not printed
 	 */
-	public void setNotPrint(boolean b);
+	void setNotPrint(boolean b);
 
-	public Object clone();
+	Object clone();
 
 	/**
 	 * Sets an icon to the cell
@@ -177,7 +177,7 @@ public interface Cell extends Cloneable, Serializable {
 	 * @param icon
 	 *            the cell icon
 	 */
-	public void setIcon(Icon icon);
+	void setIcon(Icon icon);
 
 	/**
 	 * Sets an icon to the cell
@@ -186,7 +186,7 @@ public interface Cell extends Cloneable, Serializable {
 	 *            the cell image
 	 * @since 1.2           
 	 */
-	public void setImage(Image image);
+	void setImage(Image image);
 	
 	/**
 	 * Returns the icon of the cell
@@ -194,7 +194,7 @@ public interface Cell extends Cloneable, Serializable {
 	 * @return the icon of the cell
 	 * @deprecated use getPicture()
 	 */
-	public Icon getIcon();
+	Icon getIcon();
 
 	/**
 	 * Returns the picture of the cell
@@ -202,7 +202,7 @@ public interface Cell extends Cloneable, Serializable {
 	 * @return the picture of the cell
 	 * @since 2.0
 	 */
-	public Picture getPicture();
+	Picture getPicture();
 
 	/**
 	 * Sets an picture to the cell
@@ -210,7 +210,7 @@ public interface Cell extends Cloneable, Serializable {
 	 * @param picture the cell picture
 	 * @since 2.0
 	 */
-	public void setPicture(Picture picture);
+	void setPicture(Picture picture);
 	
 	/**
 	 * Sets a scale of the icon. If true, the icon's sizes are set like the
@@ -219,59 +219,59 @@ public interface Cell extends Cloneable, Serializable {
 	 * @param scale
 	 *            scaleIcon property
 	 */
-	public void setScaleIcon(boolean scale);
+	void setScaleIcon(boolean scale);
 
 	/**
 	 * Determines whether the icons are scaled
 	 * 
 	 * @return true if the icon is scaled
 	 */
-	public boolean isScaleIcon();
+	boolean isScaleIcon();
 
 	/**
 	 * 
 	 * @param format
 	 *            the image's format e.g. "bmp", "png", "jpg"
 	 */
-	public void setImageFormat(String format);
+	void setImageFormat(String format);
 
 	/**
 	 * 
 	 * @return the image's format e.g. "bmp", "png", "jpg"
 	 */
-	public String getImageFormat();
+	String getImageFormat();
 
 	/**
 	 * 
 	 * @return the cell's content e.g. "text/plain" or "text/html"
 	 */
-	public String getContentType();
+	String getContentType();
 
 	/**
 	 * Sets all properties by default
 	 * 
 	 */
-	public void clear();
+	void clear();
 
 	/**
 	 * 
 	 * @return the type of the cell's value
 	 */
-	public Type getValueType();
+	Type getValueType();
 
 	/**
 	 * 
 	 * @param valueType
 	 *            new type of the cell's value
 	 */
-	public void setValueType(Type valueType);
+	void setValueType(Type valueType);
 
 	/**
 	 * Default true
 	 * 
 	 * @return editable
 	 */
-	public boolean isEditable();
+	boolean isEditable();
 
 	/**
 	 * Sets the editable property, which must be false to disable edit of the
@@ -280,7 +280,7 @@ public interface Cell extends Cloneable, Serializable {
 	 * @param b
 	 *            if true the cell is editable
 	 */
-	public void setEditable(boolean b);
+	void setEditable(boolean b);
 
 	/**
 	 * Cell formula. Not calculate value. Only for export to Spreadsheet 
@@ -288,7 +288,7 @@ public interface Cell extends Cloneable, Serializable {
 	 * @return Spreadsheet formula
 	 * @since 2.2
 	 */
-	public String getCellFormula();
+	String getCellFormula();
 
 	/**
 	 * Cell formula. Not calculate value. Only for export to Spreadsheet
@@ -296,5 +296,5 @@ public interface Cell extends Cloneable, Serializable {
 	 * @param formula Spreadsheet formula
 	 * @since 2.2
 	 */
-	public void setCellFormula(String formula);
+	void setCellFormula(String formula);
 }

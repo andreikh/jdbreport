@@ -27,8 +27,8 @@ import org.w3c.dom.Element;
  */
 public interface XMLStored {
 
-	public void store(Element parent);
+	void store(Element parent);
 
-	public void load(Element parent);
+	void load(Element parent);
 
 }
