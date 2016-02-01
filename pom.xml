@@ -5,10 +5,10 @@
 
     <groupId>jdbreport</groupId>
     <artifactId>jdbreport</artifactId>
-    <version>3.1</version>
+    <version>3.1.1</version>
     <packaging>pom</packaging>
 
-    <name>JDBReport3</name>
+    <name>JDBReport</name>
     <url>http://www.jdbreport.ru</url>
 
     <modules>
