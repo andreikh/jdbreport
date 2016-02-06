@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2009-2014 Andrey Kholmanskih
+ * Copyright (C) 2009-2016 Andrey Kholmanskih
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,18 +22,18 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 
+import com.itextpdf.awt.DefaultFontMapper;
 import jdbreport.model.CellStyle;
 
 import com.itextpdf.text.BaseColor;
 import com.itextpdf.text.DocumentException;
 import com.itextpdf.text.ExceptionConverter;
 import com.itextpdf.text.pdf.BaseFont;
-import com.itextpdf.text.pdf.DefaultFontMapper;
 
 /**
  * @author Andrey Kholmanskih
  * 
- * @version 3.0 13.12.2014
+ * @version 3.1 06.02.2016
  * 
  */
 public class ReportFontMapper extends DefaultFontMapper {
@@ -113,7 +113,8 @@ public class ReportFontMapper extends DefaultFontMapper {
 			java.awt.Font font = new java.awt.Font(style.getFamily(), style.getStyle(), style.getSize());
 			BaseFont baseFont = awtToPdf(font);
 			if (baseFont != null) {
-				return new com.itextpdf.text.Font(baseFont, (float)style.getSize(), style.getStyle(), new BaseColor(style.getForegroundColor()));
+				return new com.itextpdf.text.Font(baseFont, (float)style.getSize(), style.getStyle(),
+						new BaseColor(style.getForegroundColor().getRGB()));
 			}
 		} catch (Exception e) {
 			throw new ExceptionConverter(e);

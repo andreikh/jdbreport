@@ -3,7 +3,7 @@
  *
  * JDBReport Generator
  * 
- * Copyright (C) 2004-2014 Andrey Kholmanskih
+ * Copyright (C) 2004-2016 Andrey Kholmanskih
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -38,7 +38,7 @@ import jdbreport.model.TableRow;
 import jdbreport.model.TableRowModel;
 
 /**
- * @version 3.0 13.12.2014
+ * @version 3.1.1 06.02.2016
  * @author Andrey Kholmanskih
  * 
  */
@@ -145,9 +145,7 @@ public class BasicReportUI extends BasicTableUI {
 		int pageHeaderIndex = -1;
 		int pageFooterIndex = -1;
 		Rectangle rect = new Rectangle();
-		for (int i = 0; i < rMin; i++) {
-			rect.y += rowModel.getRow(i).getHeight();
-		}
+		rect.y = getY0(rMin);
 
 		for (int row = rMin; row <= rMax; row++) {
 			TableRow tableRow = rowModel.getRow(row);
@@ -171,10 +169,7 @@ public class BasicReportUI extends BasicTableUI {
 		}
 
 		if (pageHeaderIndex >= 0) {
-			rect.y = 0;
-			for (int i = 0; i < pageHeaderIndex; i++) {
-				rect.y += report.getReportModel().getRowHeight(i);
-			}
+			rect.y = getY0(pageHeaderIndex);
 			for (int row = pageHeaderIndex; row <= pageFooterIndex; row++) {
 				TableRow aRow = rowModel.getRow(row);
 				Group group = aRow.getGroup();
@@ -200,10 +195,10 @@ public class BasicReportUI extends BasicTableUI {
 			}
 		}
 
-		if (draggedColumn != null && header != null) {
+		if (draggedColumn != null) {
 			paintDraggedArea(g, rMin, rMax, draggedColumn, header
 					.getDraggedDistance());
-		} else if (draggedRow != null && rowHeader != null) {
+		} else if (draggedRow != null) {
 			paintRowDraggedArea(g, cMin, cMax, draggedRow, rowHeader
 					.getDraggedDistance());
 		}
@@ -219,9 +214,7 @@ public class BasicReportUI extends BasicTableUI {
 		rowModel = report.getReportModel().getRowModel();
 
 		Rectangle rect = new Rectangle();
-		for (int i = 0; i < rMin; i++) {
-			rect.y += rowModel.getRow(i).getHeight();
-		}
+		rect.y = getY0(rMin);
 
 		for (int row = rMin; row <= rMax; row++) {
 			TableRow tableRow = rowModel.getRow(row);
@@ -244,29 +237,15 @@ public class BasicReportUI extends BasicTableUI {
 			int cMax) {
 		
 		int position = Border.LINE_TOP;
-		
-		int y0 = 0;
-		for (int i = 0; i < rMin; i++) {
-			y0 += rowModel.getRow(i).getHeight();
-		}
-		
-		int x0 = 0;
-		if (isLeftToRight) {
-			for (int i = 0; i < cMin; i++) {
-				x0 += columnModel.getColumn(i).getWidth();
-			}
-		} else {
-			for (int i = columnModel.getColumnCount() - 1; i > cMin; i--) {
-				x0 += columnModel.getColumn(i).getWidth();
-			}
-		}
+
+		int y0 = getY0(rMin);
+		int x0 = getX0(cMin);
 		
 		int x1;
 		int y1;
 		int x2;
 		y1 = y0;
-		
-		
+
 		CellStyle[] oldStyles = new CellStyle[cMax - cMin + 1];
 		
 		for (int row = rMin; row <= rMax; row++) {
@@ -316,22 +295,9 @@ public class BasicReportUI extends BasicTableUI {
 			int cMax) {
 		
 		int position = Border.LINE_BOTTOM;
-		
-		int y0 = 0;
-		for (int i = 0; i < rMin; i++) {
-			y0 += rowModel.getRow(i).getHeight();
-		}
-		
-		int x0 = 0;
-		if (isLeftToRight) {
-			for (int i = 0; i < cMin; i++) {
-				x0 += columnModel.getColumn(i).getWidth();
-			}
-		} else {
-			for (int i = columnModel.getColumnCount() - 1; i > cMin; i--) {
-				x0 += columnModel.getColumn(i).getWidth();
-			}
-		}
+
+		int y0 = getY0(rMin);
+		int x0 = getX0(cMin);
 		
 		int x1;
 		int y1;
@@ -384,22 +350,10 @@ public class BasicReportUI extends BasicTableUI {
 			int cMax) {
 		
 		int position = Border.LINE_LEFT;
-		
-		int y0 = 0;
-		for (int i = 0; i < rMin; i++) {
-			y0 += rowModel.getRow(i).getHeight();
-		}
-		
-		int x0 = 0;
-		if (isLeftToRight) {
-			for (int i = 0; i < cMin; i++) {
-				x0 += columnModel.getColumn(i).getWidth();
-			}
-		} else {
-			for (int i = columnModel.getColumnCount() - 1; i > cMin; i--) {
-				x0 += columnModel.getColumn(i).getWidth();
-			}
-		}
+
+		int y0 = getY0(rMin);
+
+		int x0 = getX0(cMin);
 		
 		int x1;
 		int y1;
@@ -445,24 +399,9 @@ public class BasicReportUI extends BasicTableUI {
 			int cMax) {
 		
 		int position = Border.LINE_RIGHT;
-		
-		int y0 = 0;
-		for (int i = 0; i < rMin; i++) {
-			y0 += rowModel.getRow(i).getHeight();
-		}
-		
-		int x0 = 0;
-		if (isLeftToRight) {
-			for (int i = 0; i < cMin; i++) {
-				x0 += columnModel.getColumn(i).getWidth();
-			}
-		} else {
-			for (int i = columnModel.getColumnCount() - 1; i > cMin; i--) {
-				x0 += columnModel.getColumn(i).getWidth();
-			}
-		}
-		
-		int x1 = x0;
+
+		int y0 = getY0(rMin);
+		int x1 = getX0(cMin);
 		int y1;
 		int y2;
 
@@ -509,7 +448,29 @@ public class BasicReportUI extends BasicTableUI {
 			
 		}
 	}
-	
+
+	private int getY0(int startRow) {
+		int y0 = 0;
+		for (int i = 0; i < startRow; i++) {
+			y0 += rowModel.getRow(i).getHeight();
+		}
+		return y0;
+	}
+
+	private int getX0(int startColumn) {
+		int x0 = 0;
+		if (isLeftToRight) {
+			for (int i = 0; i < startColumn; i++) {
+				x0 += columnModel.getColumn(i).getWidth();
+			}
+		} else {
+			for (int i = columnModel.getColumnCount() - 1; i > startColumn; i--) {
+				x0 += columnModel.getColumn(i).getWidth();
+			}
+		}
+		return x0;
+	}
+
 	private Rectangle getCellRect(Rectangle rect, int row, int column, Cell cell) {
 		Rectangle r = new Rectangle(rect);
 
@@ -586,16 +547,7 @@ public class BasicReportUI extends BasicTableUI {
 	private void printRow(Graphics g, int cMin, int cMax, int row,
 			 Rectangle rect) {
 
-		rect.x = 0;
-		if (isLeftToRight) {
-			for (int i = 0; i < cMin; i++) {
-				rect.x += columnModel.getColumn(i).getWidth();
-			}
-		} else {
-			for (int i = columnModel.getColumnCount() - 1; i > cMin; i--) {
-				rect.x += columnModel.getColumn(i).getWidth();
-			}
-		}
+		rect.x = getX0(cMin);
 
 		for (int column = cMin; column <= cMax; column++) {
 			Cell cell = report.getReportModel().getReportCell(row, column);
@@ -630,17 +582,11 @@ public class BasicReportUI extends BasicTableUI {
 		int draggedColumnIndex = viewIndexForColumn(draggedColumn);
 
 		Rectangle vacatedColumnRect = new Rectangle();
-
-		for (int r = 0; r < rMin; r++) {
-			vacatedColumnRect.y += rowModel.getRow(r).getHeight();
-		}
+		vacatedColumnRect.y = getY0(rMin);
+		vacatedColumnRect.x = getX0(draggedColumnIndex);
 
 		for (int r = rMin; r <= rMax; r++) {
 			vacatedColumnRect.height += rowModel.getRow(r).getHeight();
-		}
-
-		for (int c = 0; c < draggedColumnIndex; c++) {
-			vacatedColumnRect.x += columnModel.getColumn(c).getWidth();
 		}
 
 		vacatedColumnRect.width = columnModel.getColumn(draggedColumnIndex)
@@ -670,17 +616,11 @@ public class BasicReportUI extends BasicTableUI {
 		int draggedRowIndex = viewIndexForRow(draggedRow);
 
 		Rectangle vacatedRowRect = new Rectangle();
-
-		for (int c = 0; c < cMin; c++) {
-			vacatedRowRect.x += columnModel.getColumn(c).getWidth();
-		}
+		vacatedRowRect.x = getX0(cMin);
+		vacatedRowRect.y = getY0(draggedRowIndex);
 
 		for (int c = cMin; c <= cMax; c++) {
 			vacatedRowRect.width += columnModel.getColumn(c).getWidth();
-		}
-
-		for (int r = 0; r < draggedRowIndex; r++) {
-			vacatedRowRect.y += rowModel.getRow(r).getHeight();
 		}
 
 		vacatedRowRect.height = rowModel.getRow(draggedRowIndex).getHeight();
@@ -726,8 +666,8 @@ public class BasicReportUI extends BasicTableUI {
 					&& !style.getBackground().equals(
 							CellStyle.getDefaultStyle().getBackground())) {
 				g.setColor(style.getBackground());
-				g.fillRect(cellRect.x - 1, cellRect.y - 1, cellRect.width + 1,
-						cellRect.height + 1);
+				g.fillRect(cellRect.x - 1, cellRect.y - 1, cellRect.width + 2,
+						cellRect.height + 2);
 			}
 			rendererPane.paintComponent(g, component, table, cellRect.x,
 					cellRect.y, cellRect.width, cellRect.height, false);

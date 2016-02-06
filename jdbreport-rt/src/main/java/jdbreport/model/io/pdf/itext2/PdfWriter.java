@@ -18,6 +18,7 @@
  */
 package jdbreport.model.io.pdf.itext2;
 
+import java.awt.*;
 import java.awt.print.Paper;
 import java.io.IOException;
 import java.io.OutputStream;
@@ -235,6 +236,9 @@ public class PdfWriter extends ITextWriter {
 
 	private void assignBorders(CellStyle style, PdfPCell pdfCell) {
 		pdfCell.setBorderWidth(0);
+		if (pdfCell.getBackgroundColor() != Color.WHITE) {
+			pdfCell.setBorderColor(pdfCell.getBackgroundColor());
+		}
 		Border border = style.getBorders(Border.LINE_LEFT);
 		if (border != null) {
 			pdfCell.setBorderWidthLeft(border.getLineWidth());
@@ -244,6 +248,8 @@ public class PdfWriter extends ITextWriter {
 		if (border != null) {
 			pdfCell.setBorderWidthRight(border.getLineWidth());
 			pdfCell.setBorderColorRight(border.getColor());
+		} if (pdfCell.getBackgroundColor() != Color.WHITE) {
+			pdfCell.setBorderWidthRight(0.5f);
 		}
 		border = style.getBorders(Border.LINE_TOP);
 		if (border != null) {
@@ -254,6 +260,8 @@ public class PdfWriter extends ITextWriter {
 		if (border != null) {
 			pdfCell.setBorderWidthBottom(border.getLineWidth());
 			pdfCell.setBorderColorBottom(border.getColor());
+		} if (pdfCell.getBackgroundColor() != Color.WHITE) {
+			pdfCell.setBorderWidthBottom(0.5f);
 		}
 	}
 

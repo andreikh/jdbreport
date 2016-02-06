@@ -537,6 +537,10 @@ public class CellStyle implements Cloneable, SwingConstants {
 		return borders[pos];
 	}
 
+	public boolean isEmptyBorder() {
+		return borders[0] == null && borders[1] == null && borders[2] == null && borders[3] == null;
+	}
+
 	public float getBorderWidth(int pos) {
 		return borders[pos] != null ?  borders[pos].getLineWidth() : 0;
 	}

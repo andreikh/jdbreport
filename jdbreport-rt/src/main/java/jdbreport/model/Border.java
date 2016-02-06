@@ -121,15 +121,10 @@ public class Border implements Cloneable, Serializable {
 	}
 
 	/**
-	 * Returns the border's width in pixels. Deprecated, use getLineWidth
+	 * Returns the border's width in pixels
 	 * 
 	 * @return the border's width.
 	 */
-	@Deprecated
-	public int getWidth() {
-		return (int) width;
-	}
-
 	public float getLineWidth() {
 		return width;
 	}

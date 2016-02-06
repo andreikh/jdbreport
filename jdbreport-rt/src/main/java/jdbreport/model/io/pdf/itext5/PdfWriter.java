@@ -1,7 +1,7 @@
 /*
  * JDBReport Generator
  * 
- * Copyright (C) 2009-2014 Andrey Kholmanskih
+ * Copyright (C) 2009-2016 Andrey Kholmanskih
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -61,7 +61,7 @@ import jdbreport.util.GraphicUtil;
 
 /**
  * @author Andrey Kholmanskih
- * @version 3.0.13.12.2014
+ * @version 3.1 06.02.2016
  */
 public class PdfWriter extends ITextWriter {
 
@@ -224,22 +224,22 @@ public class PdfWriter extends ITextWriter {
         Border border = style.getBorders(Border.LINE_LEFT);
         if (border != null) {
             pdfCell.setBorderWidthLeft(border.getLineWidth());
-            pdfCell.setBorderColorLeft(new BaseColor(border.getColor()));
+            pdfCell.setBorderColorLeft(new BaseColor(border.getColor().getRGB()));
         }
         border = style.getBorders(Border.LINE_RIGHT);
         if (border != null) {
             pdfCell.setBorderWidthRight(border.getLineWidth());
-            pdfCell.setBorderColorRight(new BaseColor(border.getColor()));
+            pdfCell.setBorderColorRight(new BaseColor(border.getColor().getRGB()));
         }
         border = style.getBorders(Border.LINE_TOP);
         if (border != null) {
             pdfCell.setBorderWidthTop(border.getLineWidth());
-            pdfCell.setBorderColorTop(new BaseColor(border.getColor()));
+            pdfCell.setBorderColorTop(new BaseColor(border.getColor().getRGB()));
         }
         border = style.getBorders(Border.LINE_BOTTOM);
         if (border != null) {
             pdfCell.setBorderWidthBottom(border.getLineWidth());
-            pdfCell.setBorderColorBottom(new BaseColor(border.getColor()));
+            pdfCell.setBorderColorBottom(new BaseColor(border.getColor().getRGB()));
         }
     }
 
@@ -316,7 +316,7 @@ public class PdfWriter extends ITextWriter {
 
         pdfCell.setFixedHeight(h);
         pdfCell.setPadding(1);
-        pdfCell.setBackgroundColor(new BaseColor(style.getBackground()));
+        pdfCell.setBackgroundColor(new BaseColor(style.getBackground().getRGB()));
         pdfCell.setHorizontalAlignment(toPdfHAlignment(style
                 .getHorizontalAlignment()));
         pdfCell.setVerticalAlignment(toPdfVAlignment(style
@@ -410,7 +410,7 @@ public class PdfWriter extends ITextWriter {
                     Chunk chunk = new Chunk(content.getText(), font);
                     chunk
                             .setBackground(new BaseColor(newStyle
-                                    .getBackground()));
+                                    .getBackground().getRGB()));
                     if (newStyle.getTypeOffset() == CellStyle.SS_SUPER) {
                         chunk.setTextRise(newStyle.getSize() / 2);
                     } else if (newStyle.getTypeOffset() == CellStyle.SS_SUB) {
