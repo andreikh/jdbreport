@@ -1,7 +1,7 @@
 /*
  * JDBReport Generator
  * 
- * Copyright (C) 2006-2014 Andrey Kholmanskih
+ * Copyright (C) 2006-2016 Andrey Kholmanskih
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,7 +27,7 @@ package jdbreport.model;
  */
 public interface HeightCalculator {
 
-	public int calcRowHeight(ReportModel model, Cell cell, int row, int column);
+	int calcRowHeight(ReportModel model, Cell cell, int row, int column);
 
-	public StringMetrics getStringMetrics();
+	StringMetrics getStringMetrics();
 }

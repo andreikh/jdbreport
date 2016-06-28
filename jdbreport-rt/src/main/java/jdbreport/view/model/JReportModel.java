@@ -1,7 +1,7 @@
 /*
  * JDBReport Generator
  * 
- * Copyright (C) 2006-2014 Andrey Kholmanskih
+ * Copyright (C) 2006-2016 Andrey Kholmanskih
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -35,13 +35,13 @@ import java.util.Map;
 import java.util.NoSuchElementException;
 
 /**
- * @version 3.0 12.12.2014
+ * @version 3.1.2 31.03.2016
  * @author Andrey Kholmanskih
  * 
  */
 public class JReportModel extends AbstractTableModel implements ReportModel {
 
-	public static final String VERSION = "3.1";
+	public static final String VERSION = "3.1.2";
 
 	private static final long serialVersionUID = -2926872019856806971L;
 

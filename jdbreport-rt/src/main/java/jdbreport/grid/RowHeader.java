@@ -437,7 +437,7 @@ public class RowHeader extends JComponent implements TableRowModelListener,
 	 * @see JComponent#updateUI
 	 */
 	public void updateUI() {
-		setUI((TableRowHeaderUI) UIManager.getUI(this));
+		setUI(UIManager.getUI(this));
 		resizeAndRepaint();
 		invalidate();// PENDING
 	}

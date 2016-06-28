@@ -5,7 +5,7 @@
     <parent>
         <artifactId>jdbreport</artifactId>
         <groupId>jdbreport</groupId>
-        <version>3.1.1</version>
+        <version>3.1.2</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
@@ -28,7 +28,7 @@
         <dependency>
             <groupId>jdbreport</groupId>
             <artifactId>jdbr-dt</artifactId>
-            <version>3.1.1</version>
+            <version>3.1.2</version>
         </dependency>
 
         <dependency>

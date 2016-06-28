@@ -3,7 +3,7 @@
  *
  * JDBReport Generator
  * 
- * Copyright (C) 2011-2014 Andrey Kholmanskih
+ * Copyright (C) 2011-2016 Andrey Kholmanskih
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -30,11 +30,11 @@ import jdbreport.model.ReportException;
 /**
  * @author Andrey Kholmanskih
  *
- * @version	2.1 20.06.2012
+ * @version	3.1.2 31.03.2016
  */
 public interface ReportService {
 
-	public String getMimeType(String format);
+	String getMimeType(String format);
 	
 	byte[] getReportBuf(URL templateUrl, Map<String, Object> dataSetList, Map<Object, Object> vars, String format) throws ReportException;
 
