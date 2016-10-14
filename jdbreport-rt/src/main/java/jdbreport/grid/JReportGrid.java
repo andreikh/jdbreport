@@ -86,6 +86,7 @@ import java.beans.PropertyChangeListener;
 import java.io.*;
 import java.math.BigDecimal;
 import java.text.MessageFormat;
+import java.text.NumberFormat;
 import java.util.Date;
 import java.util.Hashtable;
 import java.util.Iterator;
@@ -232,7 +233,7 @@ public class JReportGrid extends JTable implements TableRowModelListener,
 		return getReportModel().getRowModel().moveGroup(group, newIndex, parent);
 	}
 
-	void pushRowMovedUndo(int fromIndex, int toIndex) {
+	private void pushRowMovedUndo(int fromIndex, int toIndex) {
 		if (fromIndex != toIndex && canUndo())
 			try {
 				pushUndo(new RowMovedUndoItem(this, UndoItem.ROW_MOVED,
@@ -2799,8 +2800,10 @@ public class JReportGrid extends JTable implements TableRowModelListener,
 
 	private static class ValueFormatter {
 
+		private NumberFormat numberFormat = NumberFormat.getInstance();
+
 		public String formatFloating(Number value) {
-			String v = value.toString();
+			String v = numberFormat.format(value);
 			if (Utils.getDecimalSeparator() != '.') {
 				return v.replace('.', Utils.getDecimalSeparator());
 			}

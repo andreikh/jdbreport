@@ -107,6 +107,24 @@ public interface ReportModel extends TableModel {
 	public void removeColumns(int count, int index);
 
 	/**
+	 * Create and copy column from src to dest
+	 * @param src index template column
+	 * @param dest index for insert new column
+	 * @return columns count
+	 */
+	int cloneColumn(int src, int dest);
+
+	/**
+	 *  Copy cell
+	 * @param srcRow source cell' row
+	 * @param srcCol source cell' column
+	 * @param dstRow destination cell row
+	 * @param dstCol destination cell column
+	 * @return destination cell
+	 */
+	Cell copyCell(int srcRow, int srcCol, int dstRow, int dstCol);
+
+	/**
 	 * Sets the columns' count in the model If the columns' count is bigger than
 	 * parameter, the columns are removed from the model If the columns' count
 	 * is smaller than parameter, the columns are added to the model

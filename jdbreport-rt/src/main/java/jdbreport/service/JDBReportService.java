@@ -49,57 +49,37 @@ import jdbreport.source.ReportDataSet;
 
 /**
  * @author Andrey Kholmanskih
- * @version 3.1.2 31.03.2016
+ * @version 3.1.3 13.10.2016
  */
 public class JDBReportService implements ReportService {
 
     private static final Logger logger = Logger.getLogger(JDBReportService.class
             .getName());
 
-    public byte[] getReportBuf(URL templateUrl,
-                               Map<String, Object> dataSetList, Map<Object, Object> vars,
-                               String format, Connection connection) throws LoadReportException {
 
-        return getReportBuf(templateUrl, createDataSets(dataSetList), vars,
-                format, connection);
-    }
-
-    public byte[] getReportBuf(URL templateUrl,
-                               Map<String, Object> dataSetList, Map<Object, Object> vars,
+    public byte[] getReportBuf(URL templateUrl, Map<String, Object> dataSetList, Map<Object, Object> vars,
                                String format) throws LoadReportException {
-
-        return getReportBuf(templateUrl, createDataSets(dataSetList), vars,
-                format, null);
+        return getReportBuf(templateUrl, dataSetList, vars, format, null);
     }
 
-    public byte[] getReportBuf(URL templateUrl,
-                               Collection<ReportDataSet> dataSetList, Map<Object, Object> vars,
+    public byte[] getReportBuf(URL templateUrl, Map<String, Object> dataSetList, Map<Object, Object> vars,
                                String format, Connection connection) throws LoadReportException {
         ByteArrayOutputStream out = new ByteArrayOutputStream();
         writeReport(out, templateUrl, dataSetList, vars, format, connection);
         return out.toByteArray();
     }
 
-    public ReportBook getReportBook(URL templateUrl,
-                                    Map<String, Object> dataSetList, Map<Object, Object> vars)
-            throws LoadReportException {
-        return createReportBook(templateUrl, createDataSets(dataSetList), vars, null);
-    }
-
-    public ReportBook getReportBook(URL templateUrl,
-                                    Collection<ReportDataSet> dataSetList, Map<Object, Object> vars)
+    public ReportBook getReportBook(URL templateUrl, Map<String, Object> dataSetList, Map<Object, Object> vars)
             throws LoadReportException {
         return createReportBook(templateUrl, dataSetList, vars, null);
     }
 
-    public void writeReport(OutputStream out, URL templateUrl,
-                            Map<String, Object> dataSetList, Map<Object, Object> vars,
-                            String format) throws LoadReportException {
-        writeReport(out, templateUrl, createDataSets(dataSetList), vars, format, null);
+    public void writeReport(OutputStream out, URL templateUrl, Map<String, Object> dataSetList,
+                            Map<Object, Object> vars, String format) throws LoadReportException {
+        writeReport(out, templateUrl, dataSetList, vars, format, null);
     }
 
-    public void writeReport(OutputStream out, URL templateUrl,
-                            Collection<ReportDataSet> dataSetList, Map<Object, Object> vars,
+    public void writeReport(OutputStream out, URL templateUrl, Map<String, Object> dataSetList, Map<Object, Object> vars,
                             String format, Connection connection) throws LoadReportException {
         FileType fileType = ReportBook.getFileTypeClass(format);
         if (fileType != null) {
@@ -109,8 +89,7 @@ public class JDBReportService implements ReportService {
             throw new LoadReportException("Unknown format");
     }
 
-    protected void convert(OutputStream out, FileType fileType, ReportBook book)
-            throws LoadReportException {
+    protected void convert(OutputStream out, FileType fileType, ReportBook book) throws LoadReportException {
         ReportWriter writer = fileType.getWriter();
         try {
             writer.save(out, book);
@@ -127,9 +106,14 @@ public class JDBReportService implements ReportService {
         return null;
     }
 
-    public ReportBook createReportBook(URL templateUrl,
-                                       Collection<ReportDataSet> dataSetList, Map<Object, Object> vars,
+    public ReportBook createReportBook(URL templateUrl, Map<String, Object> dataSets, Map<Object, Object> vars,
                                        Connection connection) throws LoadReportException {
+        TemplateBook tbook = createTemplateBook(templateUrl, dataSets, vars, connection);
+        return createReportBook(tbook);
+    }
+
+    public TemplateBook createTemplateBook(URL templateUrl, Map<String, Object> dataSets,
+                                           Map<Object, Object> vars, Connection connection) throws LoadReportException {
         if (templateUrl == null) throw new LoadReportException("URL is null");
         TemplateBook tbook = new TemplateBook();
         tbook.open(templateUrl);
@@ -140,10 +124,14 @@ public class JDBReportService implements ReportService {
             for (Object key : vars.keySet())
                 tbook.setVarValue(key, vars.get(key));
         }
-        if (dataSetList != null) {
-            for (ReportDataSet ds : dataSetList)
+        if (dataSets != null) {
+            for (ReportDataSet ds : createDataSets(dataSets))
                 tbook.addReportDataSet(ds);
         }
+        return tbook;
+    }
+
+    public ReportBook createReportBook(TemplateBook tbook) {
         JReportGrid grid = null;
         try {
             grid = new JReportGrid(new JReportModel(tbook.getStyleList()));

@@ -149,23 +149,24 @@ public class Excel2003Writer implements ReportWriter {
                 sheet.setColumnBreak(c);
             }
 
-
             //char width in points
             float char_width = 5.5f;
-            sheet.setColumnWidth(
-                    c,
-                    (int) ((((ReportColumn) cm.getColumn(c)).getNativeWidth() - 2)
+            sheet.setColumnWidth(c, (int) ((((ReportColumn) cm.getColumn(c)).getNativeWidth() - 2)
                             / char_width * 256));
         }
 
-        styleMap.clear();
-        for (Object styleId : reportBook.getStyleList().keySet()) {
-            jdbreport.model.CellStyle style = reportBook.getStyles(styleId);
-            if (style != null) {
-                styleMap.put(styleId, createStyle(style, wb));
-            }
-        }
+        fillStyles(wb, reportBook);
 
+        createRows(model, sheet);
+
+        drawing = sheet.createDrawingPatriarch();
+        for (int row = 0; row < model.getRowCount(); row++) {
+            saveRow(wb, sheet, reportBook, model, row, createHelper);
+        }
+        drawing = null;
+    }
+
+    private void createRows(ReportModel model, Sheet sheet) {
         for (int row = 0; row < model.getRowCount(); row++) {
             TableRow tableRow = model.getRowModel().getRow(row);
             Row sheetRow = sheet.getRow(row);
@@ -177,12 +178,16 @@ public class Excel2003Writer implements ReportWriter {
                 sheet.setRowBreak(row);
             }
         }
+    }
 
-        drawing = sheet.createDrawingPatriarch();
-        for (int row = 0; row < model.getRowCount(); row++) {
-            saveRow(wb, sheet, reportBook, model, row, createHelper);
+    private void fillStyles(Workbook wb, ReportBook reportBook) {
+        styleMap.clear();
+        for (Object styleId : reportBook.getStyleList().keySet()) {
+            jdbreport.model.CellStyle style = reportBook.getStyles(styleId);
+            if (style != null) {
+                styleMap.put(styleId, createStyle(style, wb));
+            }
         }
-        drawing = null;
     }
 
     private short convertPaperSize(PaperSize paperSize) {
@@ -242,28 +247,22 @@ public class Excel2003Writer implements ReportWriter {
 
                 if (value != null) {
                     if (cell.getValueType() == Type.BOOLEAN) {
-                        newCell.setCellType(Cell.CELL_TYPE_BOOLEAN);
+                        newCell.setCellType(CellType.BOOLEAN);
                         newCell.setCellValue((Boolean) value);
                     } else if (cell.getValueType() == Type.CURRENCY
                             || cell.getValueType() == Type.FLOAT) {
-                        newCell.setCellType(Cell.CELL_TYPE_NUMERIC);
-                        newCell.setCellValue(((Number) value).doubleValue());
+                        setDoubleValue(wb, createHelper, newCell, styleId, (Number) value);
                     } else if (cell.getValueType() == Type.DATE) {
-                        CellStyle cellStyle = newCell.getCellStyle();
-                        cellStyle.setDataFormat(
-                                createHelper.createDataFormat().getFormat("dd.mm.yyyy"));
-                        newCell.setCellStyle(cellStyle);
+                        newCell.setCellStyle(getStyle(styleId, Type.DATE, wb, createHelper));
                         newCell.setCellValue((Date) value);
                     } else if (reportBook.getStyles(cell.getStyleId())
                             .getDecimal() != -1) {
-                        newCell.setCellType(Cell.CELL_TYPE_NUMERIC);
-                        try {
-                            newCell.setCellValue(Utils.parseDouble(value
+                         try {
+                            setDoubleValue(wb, createHelper, newCell, styleId, Utils.parseDouble(value
                                     .toString()));
                         } catch (Exception e) {
                             newCell.setCellValue(0);
                         }
-
                     } else {
                         String text = null;
                         if (value instanceof CellValue<?>) {
@@ -284,7 +283,7 @@ public class Excel2003Writer implements ReportWriter {
                                 text = strWriter.getBuffer().toString();
                             }
                         } else {
-                            newCell.setCellType(Cell.CELL_TYPE_STRING);
+                            newCell.setCellType(CellType.STRING);
 
                             if (jdbreport.model.Cell.TEXT_HTML.equals(cell
                                     .getContentType())) {
@@ -333,6 +332,36 @@ public class Excel2003Writer implements ReportWriter {
 
             }
         }
+    }
+
+    private CellStyle getStyle(Object styleId, Type cellType, Workbook wb, CreationHelper createHelper) {
+        if (cellType == Type.DATE  || cellType == Type.FLOAT || cellType == Type.CURRENCY) {
+            String key = String.valueOf(styleId) + cellType;
+            CellStyle style = styleMap.get(key);
+            if (style == null) {
+                style = wb.createCellStyle();
+                CellStyle parentStyle = styleMap.get(styleId);
+                if (parentStyle != null) {
+                    style.cloneStyleFrom(parentStyle);
+                }
+                if (cellType == Type.DATE) {
+                    style.setDataFormat(
+                            createHelper.createDataFormat().getFormat("dd.mm.yyyy"));
+                } else {
+                    style.setDataFormat(
+                            createHelper.createDataFormat().getFormat("General"));
+                }
+                styleMap.put(key, style);
+            }
+            return style;
+        }
+        return styleMap.get(styleId);
+    }
+
+    private void setDoubleValue(Workbook wb, CreationHelper createHelper, Cell newCell, Object styleId, Number value) {
+        newCell.setCellType(CellType.NUMERIC);
+        newCell.setCellStyle(getStyle(styleId, Type.FLOAT, wb, createHelper));
+        newCell.setCellValue(value.doubleValue());
     }
 
     private void createImage(Workbook wb, ReportModel model,
@@ -454,7 +483,7 @@ public class Excel2003Writer implements ReportWriter {
             if (fontIndex > 0) {
                 Font parentFont = wb.getFontAt(fontIndex);
                 if (parentFont != null) {
-                    font.setBoldweight(parentFont.getBoldweight());
+                    font.setBold(parentFont.getBold());
                     font.setColor(parentFont.getColor());
                     try {
                         font.setCharSet(parentFont.getCharSet());
@@ -472,7 +501,7 @@ public class Excel2003Writer implements ReportWriter {
                 font.setFontName(family);
             }
             if (bold) {
-                font.setBoldweight(Font.BOLDWEIGHT_BOLD);
+                font.setBold(true);
             }
             if (italic) {
                 font.setItalic(italic);
@@ -566,7 +595,7 @@ public class Excel2003Writer implements ReportWriter {
         Font font = wb.createFont();
         font.setFontName(style.getFamily());
         if (style.isBold()) {
-            font.setBoldweight(Font.BOLDWEIGHT_BOLD);
+            font.setBold(true);
         }
         font.setItalic(style.isItalic());
         if (style.isUnderline()) {
@@ -587,7 +616,7 @@ public class Excel2003Writer implements ReportWriter {
                 && !style.getBackground().equals(Color.white)) {
             short colorIndex = colorToIndex(wb, style.getBackground());
             newStyle.setFillForegroundColor(colorIndex);
-            newStyle.setFillPattern(CellStyle.SOLID_FOREGROUND);
+            newStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND);
         }
 
         if (style.getAngle() != 0) {
@@ -607,41 +636,41 @@ public class Excel2003Writer implements ReportWriter {
         return newStyle;
     }
 
-    protected short getBorder(Border border) {
+    protected BorderStyle getBorder(Border border) {
         if (border.getLineWidth() <= 1f) {
-            return CellStyle.BORDER_THIN;
+            return BorderStyle.THIN;
         }
         if (border.getLineWidth() <= 2f) {
-            return CellStyle.BORDER_MEDIUM;
+            return BorderStyle.MEDIUM;
         } else {
-            return CellStyle.BORDER_THICK;
+            return BorderStyle.THICK;
         }
     }
 
-    protected short convertHorizontalAlign(int hAlignment) {
+    protected HorizontalAlignment convertHorizontalAlign(int hAlignment) {
         switch (hAlignment) {
             case jdbreport.model.CellStyle.LEFT:
-                return CellStyle.ALIGN_LEFT;
+                return HorizontalAlignment.LEFT;
             case jdbreport.model.CellStyle.RIGHT:
-                return CellStyle.ALIGN_RIGHT;
+                return HorizontalAlignment.RIGHT;
             case jdbreport.model.CellStyle.CENTER:
-                return CellStyle.ALIGN_CENTER;
+                return HorizontalAlignment.CENTER;
             case jdbreport.model.CellStyle.JUSTIFY:
-                return CellStyle.ALIGN_JUSTIFY;
+                return HorizontalAlignment.JUSTIFY;
         }
-        return 0;
+        return HorizontalAlignment.LEFT;
     }
 
-    protected short convertVerticalAlign(int vAlignment) {
+    protected VerticalAlignment convertVerticalAlign(int vAlignment) {
         switch (vAlignment) {
             case jdbreport.model.CellStyle.TOP:
-                return CellStyle.VERTICAL_TOP;
+                return VerticalAlignment.TOP;
             case jdbreport.model.CellStyle.BOTTOM:
-                return CellStyle.VERTICAL_BOTTOM;
+                return VerticalAlignment.BOTTOM;
             case jdbreport.model.CellStyle.CENTER:
-                return CellStyle.VERTICAL_CENTER;
+                return VerticalAlignment.CENTER;
         }
-        return 0;
+        return VerticalAlignment.TOP;
     }
 
     protected short colorToIndex(Workbook wb, Color color) {

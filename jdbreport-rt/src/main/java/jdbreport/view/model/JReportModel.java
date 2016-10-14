@@ -179,6 +179,38 @@ public class JReportModel extends AbstractTableModel implements ReportModel {
 			}
 	}
 
+	public int cloneColumn(int src, int dest) {
+		getRowModel().startUpdate();
+		try {
+			TableColumn tc = createDefaultColumn(dest);
+			TableColumn srcColumn = getColumnModel().getColumn(src);
+			tc.setPreferredWidth(srcColumn.getPreferredWidth());
+			tc.setWidth(srcColumn.getWidth());
+			tc.setMaxWidth(srcColumn.getMaxWidth());
+			tc.setMinWidth(srcColumn.getMinWidth());
+			tc.setResizable(srcColumn.getResizable());
+
+			((ReportColumnModel) columnModel).addColumn(tc, dest);
+			getRowModel().setColCount(columnModel.getColumnCount());
+			getRowModel().moveColumn(columnModel.getColumnCount() - 1,
+					dest);
+			for (int r = 0; r < getRowCount(); r++) {
+				copyCell(r, src, r, dest);
+			}
+		} finally {
+			getRowModel().endUpdate();
+		}
+		return getColumnCount();
+	}
+
+	public Cell copyCell(int srcRow, int srcCol, int dstRow, int dstCol) {
+		Cell cell = getReportCell(srcRow, srcCol);
+		Cell dstCell = (Cell) cell.clone();
+		getRowModel().getRow(dstRow).setCellItem(dstCell, dstCol);
+		return dstCell;
+	}
+
+
 	/*
 	 * (non-Javadoc)
 	 * 

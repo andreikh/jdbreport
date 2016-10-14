@@ -24,10 +24,7 @@ import java.awt.Color;
 
 import jdbreport.model.Border;
 
-import org.apache.poi.ss.usermodel.CellStyle;
-import org.apache.poi.ss.usermodel.Font;
-import org.apache.poi.ss.usermodel.IndexedColors;
-import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFCellStyle;
 import org.apache.poi.xssf.usermodel.XSSFColor;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
@@ -75,7 +72,7 @@ public class Excel2007Writer extends Excel2003Writer {
 		Font font = wb.createFont();
 		font.setFontName(style.getFamily());
 		if (style.isBold()) {
-			font.setBoldweight(Font.BOLDWEIGHT_BOLD);
+			font.setBold(true);
 		}
 		font.setItalic(style.isItalic());
 		if (style.isUnderline()) {
@@ -95,7 +92,7 @@ public class Excel2007Writer extends Excel2003Writer {
 		if (style.getBackground() != null
 				&& !style.getBackground().equals(Color.white)) {
 			newStyle.setFillForegroundColor(new XSSFColor(style.getBackground()));
-			newStyle.setFillPattern(CellStyle.SOLID_FOREGROUND);
+			newStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND);
 		}
 
 		if (style.getAngle() != 0) {
