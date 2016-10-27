@@ -3,7 +3,7 @@
  *
  * JDBReport Generator
  * 
- * Copyright (C) 2004-2014 Andrey Kholmanskih
+ * Copyright (C) 2004-2016 Andrey Kholmanskih
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,14 +22,16 @@
 package jdbreport.model;
 
 import java.awt.Image;
+import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Map;
 
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 
 /**
- * @version 3.0 13.12.2014
+ * @version 3.1.3 15.10.2016
  * 
  * @author Andrey Kholmanskih
  * 
@@ -38,7 +40,7 @@ public class ReportCell implements Cell {
 
 	private static final long serialVersionUID = -8821568917060765855L;
 
-	public static HashMap<Class<?>, CellValueInfo> defaultValuesByClass = new HashMap<>();
+	private static final Map<Class<?>, CellValueInfo> defaultValuesByClass = new HashMap<>();
 
 	private Object value;
 
@@ -78,6 +80,27 @@ public class ReportCell implements Cell {
 					cellValueClass, rendererClass, editorClass));
 		} else {
 			defaultValuesByClass.remove(valueClass);
+		}
+	}
+
+	public static Collection<CellValueInfo> getDefaultCellValueClasses() {
+		return defaultValuesByClass.values();
+	}
+
+	private static CellValueInfo getDefaultCellValueInfo(Class<?> valueClass) {
+		if (valueClass == null) {
+			return null;
+		} else {
+			CellValueInfo vi = defaultValuesByClass.get(valueClass);
+			if (vi != null) {
+				return vi;
+			} else {
+				vi = getDefaultCellValueInfo(valueClass.getSuperclass());
+				if (vi != null) {
+					defaultValuesByClass.put(valueClass, vi);
+				}
+				return vi;
+			}
 		}
 	}
 
@@ -142,23 +165,6 @@ public class ReportCell implements Cell {
 						valueType = Type.STRING;
 					}
 				}
-			}
-		}
-	}
-
-	private CellValueInfo getDefaultCellValueInfo(Class<?> valueClass) {
-		if (valueClass == null) {
-			return null;
-		} else {
-			CellValueInfo vi = defaultValuesByClass.get(valueClass);
-			if (vi != null) {
-				return vi;
-			} else {
-				vi = getDefaultCellValueInfo(valueClass.getSuperclass());
-				if (vi != null) {
-					defaultValuesByClass.put(valueClass, vi);
-				}
-				return vi;
 			}
 		}
 	}

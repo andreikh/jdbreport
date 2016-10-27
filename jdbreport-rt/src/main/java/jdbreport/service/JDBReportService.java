@@ -31,9 +31,11 @@ import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import jdbreport.GenerateProcessor;
 import jdbreport.ReportService;
 import jdbreport.design.model.TemplateBook;
 import jdbreport.grid.JReportGrid;
+import jdbreport.model.ReportException;
 import jdbreport.view.model.JReportModel;
 import jdbreport.model.ReportBook;
 import jdbreport.model.io.FileType;
@@ -49,53 +51,58 @@ import jdbreport.source.ReportDataSet;
 
 /**
  * @author Andrey Kholmanskih
- * @version 3.1.3 13.10.2016
+ * @version 3.1.3 15.10.2016
  */
 public class JDBReportService implements ReportService {
 
     private static final Logger logger = Logger.getLogger(JDBReportService.class
             .getName());
 
-
+    @Override
     public byte[] getReportBuf(URL templateUrl, Map<String, Object> dataSetList, Map<Object, Object> vars,
-                               String format) throws LoadReportException {
-        return getReportBuf(templateUrl, dataSetList, vars, format, null);
+                               String format) throws ReportException {
+        return getReportBuf(templateUrl, dataSetList, vars, format, null, null);
     }
 
     public byte[] getReportBuf(URL templateUrl, Map<String, Object> dataSetList, Map<Object, Object> vars,
-                               String format, Connection connection) throws LoadReportException {
+                               String format, GenerateProcessor generateProcessor) throws LoadReportException {
+        return getReportBuf(templateUrl, dataSetList, vars, format, null, generateProcessor);
+    }
+
+    public byte[] getReportBuf(URL templateUrl, Map<String, Object> dataSetList, Map<Object, Object> vars,
+                               String format, Connection connection, GenerateProcessor generateProcessor)
+            throws LoadReportException {
         ByteArrayOutputStream out = new ByteArrayOutputStream();
-        writeReport(out, templateUrl, dataSetList, vars, format, connection);
+        writeReport(out, templateUrl, dataSetList, vars, format, connection, generateProcessor);
         return out.toByteArray();
     }
 
     public ReportBook getReportBook(URL templateUrl, Map<String, Object> dataSetList, Map<Object, Object> vars)
             throws LoadReportException {
-        return createReportBook(templateUrl, dataSetList, vars, null);
+        return createReportBook(templateUrl, dataSetList, vars, null, null);
     }
 
     public void writeReport(OutputStream out, URL templateUrl, Map<String, Object> dataSetList,
-                            Map<Object, Object> vars, String format) throws LoadReportException {
-        writeReport(out, templateUrl, dataSetList, vars, format, null);
+                            Map<Object, Object> vars, String format, GenerateProcessor generateProcessor)
+            throws LoadReportException {
+        writeReport(out, templateUrl, dataSetList, vars, format, null, generateProcessor);
+    }
+
+    @Override
+    public void writeReport(OutputStream out, URL templateUrl, Map<String, Object> dataSetList,
+                            Map<Object, Object> vars, String format) throws ReportException {
+        writeReport(out, templateUrl, dataSetList, vars, format, null, null);
     }
 
     public void writeReport(OutputStream out, URL templateUrl, Map<String, Object> dataSetList, Map<Object, Object> vars,
-                            String format, Connection connection) throws LoadReportException {
+                            String format, Connection connection, GenerateProcessor generateProcessor)
+            throws LoadReportException {
         FileType fileType = ReportBook.getFileTypeClass(format);
         if (fileType != null) {
-            ReportBook book = createReportBook(templateUrl, dataSetList, vars, connection);
+            ReportBook book = createReportBook(templateUrl, dataSetList, vars, connection, generateProcessor);
             convert(out, fileType, book);
         } else
             throw new LoadReportException("Unknown format");
-    }
-
-    protected void convert(OutputStream out, FileType fileType, ReportBook book) throws LoadReportException {
-        ReportWriter writer = fileType.getWriter();
-        try {
-            writer.save(out, book);
-        } catch (SaveReportException e) {
-            throw new LoadReportException(e);
-        }
     }
 
     public String getMimeType(String format) {
@@ -106,13 +113,20 @@ public class JDBReportService implements ReportService {
         return null;
     }
 
-    public ReportBook createReportBook(URL templateUrl, Map<String, Object> dataSets, Map<Object, Object> vars,
-                                       Connection connection) throws LoadReportException {
+
+    protected ReportBook createReportBook(URL templateUrl, Map<String, Object> dataSets, Map<Object, Object> vars,
+                                       Connection connection, GenerateProcessor generateProcessor)
+            throws LoadReportException {
         TemplateBook tbook = createTemplateBook(templateUrl, dataSets, vars, connection);
-        return createReportBook(tbook);
+        if (generateProcessor != null)
+            generateProcessor.beforeGenerate(tbook);
+        ReportBook book = createReportBook(tbook);
+        if (generateProcessor != null)
+            generateProcessor.afterGenerate(book);
+        return book;
     }
 
-    public TemplateBook createTemplateBook(URL templateUrl, Map<String, Object> dataSets,
+    protected TemplateBook createTemplateBook(URL templateUrl, Map<String, Object> dataSets,
                                            Map<Object, Object> vars, Connection connection) throws LoadReportException {
         if (templateUrl == null) throw new LoadReportException("URL is null");
         TemplateBook tbook = new TemplateBook();
@@ -131,7 +145,7 @@ public class JDBReportService implements ReportService {
         return tbook;
     }
 
-    public ReportBook createReportBook(TemplateBook tbook) {
+    protected ReportBook createReportBook(TemplateBook tbook) {
         JReportGrid grid = null;
         try {
             grid = new JReportGrid(new JReportModel(tbook.getStyleList()));
@@ -142,19 +156,7 @@ public class JDBReportService implements ReportService {
         return tbook.createReportBook(grid);
     }
 
-    protected Collection<ReportDataSet> createDataSets(
-            Map<String, Object> dataSetList) {
-        Collection<ReportDataSet> dsList = null;
-        if (dataSetList != null && dataSetList.size() > 0) {
-            dsList = new ArrayList<>();
-            for (String key : dataSetList.keySet()) {
-                dsList.add(createDataSet(key, dataSetList.get(key)));
-            }
-        }
-        return dsList;
-    }
-
-    public ReportDataSet createDataSet(String id, Object ds) {
+    protected ReportDataSet createDataSet(String id, Object ds) {
         if (ds instanceof ReportDataSet) {
             return (ReportDataSet) ds;
         }
@@ -173,7 +175,7 @@ public class JDBReportService implements ReportService {
         return new ObjectDataSet(id, ds);
     }
 
-    public byte[] convert(ReportBook book, String format)
+    protected byte[] convert(ReportBook book, String format)
             throws LoadReportException {
         FileType fileType = ReportBook.getFileTypeClass(format);
         ByteArrayOutputStream out = new ByteArrayOutputStream();
@@ -182,6 +184,27 @@ public class JDBReportService implements ReportService {
             return out.toByteArray();
         } else
             throw new LoadReportException("Unknown format");
+    }
+
+    private Collection<ReportDataSet> createDataSets(
+            Map<String, Object> dataSetList) {
+        Collection<ReportDataSet> dsList = null;
+        if (dataSetList != null && dataSetList.size() > 0) {
+            dsList = new ArrayList<>();
+            for (String key : dataSetList.keySet()) {
+                dsList.add(createDataSet(key, dataSetList.get(key)));
+            }
+        }
+        return dsList;
+    }
+
+    private void convert(OutputStream out, FileType fileType, ReportBook book) throws LoadReportException {
+        ReportWriter writer = fileType.getWriter();
+        try {
+            writer.save(out, book);
+        } catch (SaveReportException e) {
+            throw new LoadReportException(e);
+        }
     }
 
 }

@@ -30,17 +30,26 @@ import jdbreport.model.ReportException;
 /**
  * @author Andrey Kholmanskih
  *
- * @version	3.1.2 31.03.2016
+ * @version	3.1.3 23.10.2016
  */
 public interface ReportService {
 
 	String getMimeType(String format);
-	
-	byte[] getReportBuf(URL templateUrl, Map<String, Object> dataSetList, Map<Object, Object> vars, String format) throws ReportException;
 
-	byte[] getReportBuf(URL templateUrl, Map<String, Object> dataSetList, Map<Object, Object> vars, String format, Connection connection) throws ReportException;
+	byte[] getReportBuf(URL templateUrl, Map<String, Object> dataSetList, Map<Object, Object> vars, String format)
+			throws ReportException;
 
-	void writeReport(OutputStream out, URL templateUrl, Map<String, Object> dataSetList, Map<Object, Object> vars, String format) throws ReportException;
+	byte[] getReportBuf(URL templateUrl, Map<String, Object> dataSetList, Map<Object, Object> vars, String format,
+						GenerateProcessor generateProcessor)
+			throws ReportException;
 
+	byte[] getReportBuf(URL templateUrl, Map<String, Object> dataSetList, Map<Object, Object> vars, String format,
+						Connection connection, GenerateProcessor generateProcessor) throws ReportException;
+
+	void writeReport(OutputStream out, URL templateUrl, Map<String, Object> dataSetList, Map<Object, Object> vars,
+					 String format, GenerateProcessor generateProcessor) throws ReportException;
+
+	void writeReport(OutputStream out, URL templateUrl, Map<String, Object> dataSetList, Map<Object, Object> vars,
+					 String format) throws ReportException;
 
 }

@@ -1,7 +1,7 @@
 /*
  * JDBReport Generator
  * 
- * Copyright (C) 2006-2014 Andrey Kholmanskih
+ * Copyright (C) 2006-2016 Andrey Kholmanskih
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -36,15 +36,14 @@ import jdbreport.view.ReportEditor;
 
 
 /**
- * @version 3.0 12.12.2014
+ * @version 3.1.3 23.10.2016
  *  
  * @author Andrey Kholmanskih
  *
  */
 public class JDBReport {
 
-	private static JDBReportService reportService = new JDBReportService();
-	
+
 	static {
 		Utils.errorHandler = new DefaultErrorHandler();
 	}
@@ -148,6 +147,8 @@ public class JDBReport {
 	 * @throws LoadReportException
 	 */
 	public static ReportEditor showReport(URL url, Map<String, Object> dataSetList, Map<Object, Object> vars, boolean show) throws LoadReportException {
+		JDBReportService reportService = new JDBReportService();
+
 		ReportBook book = reportService.getReportBook(url, dataSetList, vars);
 		ReportEditor re = new ReportEditor();
 		re.setReportBook(book);
@@ -178,6 +179,7 @@ public class JDBReport {
 	}
 	
 	public static ReportDialog showModalReport(Window owner, URL url, Map<String, Object> dataSetList, Map<Object, Object> vars, boolean show) throws LoadReportException {
+		JDBReportService reportService = new JDBReportService();
 		ReportBook book = reportService.getReportBook(url, dataSetList, vars);
 		ReportDialog re;
 		if (owner instanceof Dialog) {

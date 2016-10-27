@@ -2,7 +2,7 @@
  *
  * JDBReport Generator
  * 
- * Copyright (C) 2004-2014 Andrey Kholmanskih
+ * Copyright (C) 2004-2016 Andrey Kholmanskih
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -95,7 +95,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
- * @version 3.0 13.12.2014
+ * @version 3.1.3 15.10.2016
  * 
  * @author Andrey Kholmanskih
  * 
@@ -1242,8 +1242,7 @@ public class JReportGrid extends JTable implements TableRowModelListener,
 	}
 
 	/**
-	 * @param l
-	 *            CellValueChangeListener
+	 * @param l CellValueChangeListener
 	 */
 	public void removeCellValueChangeListener(CellValueChangeListener l) {
 		listenerList.remove(CellValueChangeListener.class, l);
@@ -1574,9 +1573,9 @@ public class JReportGrid extends JTable implements TableRowModelListener,
 	 * @param reader Reader
 	 * @param selectRow selected row
 	 * @param selectCol selected column
-	 * @throws ParserConfigurationException
-	 * @throws SAXException
-	 * @throws IOException
+	 * @throws ParserConfigurationException parse exception
+	 * @throws SAXException SAX exception
+	 * @throws IOException IO exception
 	 */
 	public void loadFragment(Reader reader, int selectRow, int selectCol)
 			throws ParserConfigurationException, SAXException, IOException {
@@ -2183,11 +2182,8 @@ public class JReportGrid extends JTable implements TableRowModelListener,
 
 		setLazyRenderer(Date.class, DateRenderer.class.getName()); //$NON-NLS-1$
 
-		for (Class<?> c : ReportCell.defaultValuesByClass.keySet()) {
-			CellValueInfo vi = ReportCell.defaultValuesByClass.get(c);
-			if (vi != null) {
+		for (CellValueInfo vi : ReportCell.getDefaultCellValueClasses()) {
 				setLazyRenderer(vi.getCellValueClass(), vi.getRendererClass());
-			}
 		}
 
 	}
@@ -2208,8 +2204,7 @@ public class JReportGrid extends JTable implements TableRowModelListener,
 
 		private static final long serialVersionUID = -770321762562547996L;
 
-		protected static final Border noFocusBorder = new EmptyBorder(1, 1, 1,
-				1);
+		protected static final Border noFocusBorder = new EmptyBorder(1, 1, 1, 1);
 
 		protected Cell cell;
 
@@ -2720,11 +2715,8 @@ public class JReportGrid extends JTable implements TableRowModelListener,
 		// Booleans
 		setLazyEditor(Boolean.class, "javax.swing.JTable$BooleanEditor");
 
-		for (Class<?> c : ReportCell.defaultValuesByClass.keySet()) {
-			CellValueInfo vi = ReportCell.defaultValuesByClass.get(c);
-			if (vi != null) {
+		for (CellValueInfo vi  : ReportCell.getDefaultCellValueClasses()) {
 				setLazyEditor(vi.getCellValueClass(), vi.getEditorClass());
-			}
 		}
 	}
 

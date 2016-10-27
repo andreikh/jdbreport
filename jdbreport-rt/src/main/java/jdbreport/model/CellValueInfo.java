@@ -1,7 +1,7 @@
 /*
  * JDBReport Generator
  * 
- * Copyright (C) 2007-2014 Andrey Kholmanskih
+ * Copyright (C) 2007-2016 Andrey Kholmanskih
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,35 +26,35 @@ package jdbreport.model;
 public class CellValueInfo {
 
 	private Class<?> cellValueClass;
-	private String rendereClass;
+	private String rendererClass;
 	private String editorClass;
 
 	public CellValueInfo(Class<?> cellValueClass, String rendererClass,
 			String editorClass) {
 		this.cellValueClass = cellValueClass;
-		this.rendereClass = rendererClass;
+		this.rendererClass = rendererClass;
 		this.editorClass = editorClass;
 	}
 
 	/**
-	 * @return the cellValueClass
+	 * @return the cell value class
 	 */
 	public Class<?> getCellValueClass() {
 		return cellValueClass;
 	}
 
 	/**
-	 * @return the editorClass
+	 * @return the cell editor class
 	 */
 	public String getEditorClass() {
 		return editorClass;
 	}
 
 	/**
-	 * @return the rendereClass
+	 * @return the cell renderer class
 	 */
 	public String getRendererClass() {
-		return rendereClass;
+		return rendererClass;
 	}
 
 }

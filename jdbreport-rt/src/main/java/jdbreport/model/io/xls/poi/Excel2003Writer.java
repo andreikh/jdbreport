@@ -3,7 +3,7 @@
  *
  * JDBReport Generator
  * 
- * Copyright (C) 2009-2014 Andrey Kholmanskih
+ * Copyright (C) 2009-2016 Andrey Kholmanskih
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -63,7 +63,7 @@ import jdbreport.util.Utils;
 
 /**
  * @author Andrey Kholmanskih
- * @version 3.0 13.12.2014
+ * @version 3.1.3 13.10.2016
  */
 public class Excel2003Writer implements ReportWriter {
 
