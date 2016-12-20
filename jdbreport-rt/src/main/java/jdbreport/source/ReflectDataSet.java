@@ -104,7 +104,14 @@ public abstract class ReflectDataSet extends AbstractDataSet {
 			if (o == null)
 				return null;
 			if (o instanceof Method) {
-				return ((Method) o).invoke(current, (Object[]) null);
+				try {
+					return ((Method) o).invoke(current);
+				} catch (IllegalArgumentException e) {
+					logger.log(Level.WARNING, "Error for value name=" + name + " " + e.toString());
+					Method m = current.getClass().getMethod(((Method) o).getName());
+					getColumnMap().put(name, m);
+					return m.invoke(current);
+				}
 			} else
 				return ((Field) o).get(current);
 		} catch (Exception e) {

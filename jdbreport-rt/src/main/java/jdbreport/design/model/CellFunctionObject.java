@@ -129,7 +129,7 @@ public class CellFunctionObject implements Cloneable {
 				logger.severe("Compiler not found");
 				return;
 			}
-			int compileReturnCode = javac.run(null, null, null, "-source", "5", "-target", "5", "-encoding", "UTF-8", sourceFile);
+			int compileReturnCode = javac.run(null, null, null, "-source", "1.8", "-target", "1.8", "-encoding", "UTF-8", sourceFile);
 			if (compileReturnCode != 0) {
 				throw new Exception("Compilation error");
 			}
