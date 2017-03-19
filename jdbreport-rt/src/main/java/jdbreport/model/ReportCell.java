@@ -60,7 +60,7 @@ public class ReportCell implements Cell {
 
 	private boolean scaleIcon;
 
-	private Type valueType = Type.STRING;
+	private Type valueType = Cell.DEFAULT_TYPE;
 
 	private boolean editable = true;
 
@@ -151,22 +151,27 @@ public class ReportCell implements Cell {
 				}
 			}
 			this.value = value;
-			if (this.value != null) {
-				if (value instanceof Number) {
-					valueType = Type.FLOAT;
-				} else if (value instanceof Date) {
-					valueType = Type.DATE;
-				} else if (value instanceof Boolean) {
-					valueType = Type.BOOLEAN;
-				} else if (getValueType() == Type.FLOAT) {
-					try {
-						Double.parseDouble(this.value.toString());
-					} catch (Exception e) {
-						valueType = Type.STRING;
-					}
-				}
-			}
+			calcTypeByValue();
 		}
+	}
+
+	protected void calcTypeByValue() {
+		if (this.value != null) {
+            if (value instanceof Number) {
+                valueType = Type.FLOAT;
+            } else if (value instanceof Date) {
+                valueType = Type.DATE;
+            } else if (value instanceof Boolean) {
+                valueType = Type.BOOLEAN;
+            } else if (getValueType() == Type.FLOAT) {
+                try {
+                	String v = this.value.toString();
+                	if (!v.isEmpty()) Double.parseDouble(v);
+                } catch (Exception e) {
+                    valueType = Type.STRING;
+                }
+            }
+        }
 	}
 
 	public int getColSpan() {

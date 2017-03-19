@@ -39,6 +39,8 @@ public interface Cell extends Cloneable, Serializable {
 		STRING, FLOAT, DATE, TIME, BOOLEAN, PERCENTAGE, CURRENCY
 	}
 
+	Type DEFAULT_TYPE = Type.STRING;
+
 	String TEXT_PLAIN = "text/plain";
 
 	String TEXT_HTML = "text/html";

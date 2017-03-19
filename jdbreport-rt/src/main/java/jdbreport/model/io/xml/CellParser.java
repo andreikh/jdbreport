@@ -3,7 +3,7 @@
  *
  * JDBReport Generator
  * 
- * Copyright (C) 2005-2014 Andrey Kholmanskih
+ * Copyright (C) 2005-2017 Andrey Kholmanskih
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -44,7 +44,7 @@ import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 
 /**
- * @version 3.0 12.12.2014
+ * @version 3.1.3 19.03.2017
  * @author Andrey Kholmanskih
  * 
  */
@@ -69,6 +69,9 @@ public class CellParser extends DefaultReportParser {
 	public boolean startElement(String name, Attributes attributes)
 			throws SAXException {
 		if (name.equals("t")) {
+			return true;
+		}
+		if (name.equals("vt")) {
 			return true;
 		}
 		if (name.equals("cf")) {
@@ -153,6 +156,14 @@ public class CellParser extends DefaultReportParser {
 			getCell().setExtFlags(Integer.parseInt(value.toString()));
 			return;
 		}
+		if (name.equals("vt")) {
+			try {
+				getCell().setValueType(Cell.Type.valueOf(value.toString()));
+			} catch (Exception e) {
+				getCell().setValueType(null);
+			}
+			return;
+		}
 		if (name.equals("cf")) {
 			getCell().setCellFormula(value.toString());
 			return;
@@ -220,6 +231,10 @@ public class CellParser extends DefaultReportParser {
 			if (cell.toString().length() > 0)
 				writer.println("<t>"
 						+ XMLCoder.replaceSpecChar(cell.toString()) + "</t>");
+		}
+
+		if (cell.getValueType() != Cell.DEFAULT_TYPE) {
+			writer.println("<vt>" + cell.getValueType() + "</vt>");
 		}
 
 		if (cell.getCellFormula() != null) {

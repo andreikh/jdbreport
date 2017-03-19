@@ -20,10 +20,7 @@ package jdbreport.grid;
 
 import java.awt.GridBagLayout;
 
-import javax.swing.JCheckBox;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JTextField;
+import javax.swing.*;
 
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
@@ -46,6 +43,7 @@ public class CellPropertiesPanel extends JPanel {
 	private List<Cell> cells;
 
 	private JTextField formulaField;
+	private JComboBox<Cell.Type> typeBox;
 
 	/**
 	 * This is the default constructor
@@ -81,11 +79,24 @@ public class CellPropertiesPanel extends JPanel {
 		constr.gridy = 1;
 		constr.gridwidth = 2;
 		this.add(getNoEditBox(), constr);
-		
+
 		constr = new GridBagConstraints();
 		constr.anchor = GridBagConstraints.NORTHWEST;
 		constr.insets = new Insets(4, 16, 4, 2);
 		constr.gridy = 2;
+		this.add(new JLabel(Messages.getString("CellPropertiesPanel.type")), constr); //$NON-NLS-1$
+
+		constr = new GridBagConstraints();
+		constr.anchor = GridBagConstraints.NORTHWEST;
+		constr.insets = new Insets(4, 16, 4, 4);
+		constr.gridy = 2;
+		constr.gridwidth = 2;
+		this.add(getTypeBox(), constr);
+
+		constr = new GridBagConstraints();
+		constr.anchor = GridBagConstraints.NORTHWEST;
+		constr.insets = new Insets(4, 16, 4, 2);
+		constr.gridy = 3;
 		this.add(new JLabel(Messages.getString("CellPropertiesPanel.formula")), constr); //$NON-NLS-1$
 
 		constr = new GridBagConstraints();
@@ -95,7 +106,7 @@ public class CellPropertiesPanel extends JPanel {
 		constr.weightx = 0.1;
 		constr.insets = new Insets(2, 2, 2, 4);
 		constr.gridx = 1;
-		constr.gridy = 2;
+		constr.gridy = 3;
 		this.add(getFormulaField(), constr);
 	}
 
@@ -103,6 +114,8 @@ public class CellPropertiesPanel extends JPanel {
 		noPrintBox.setSelected(cells.get(0).isNotPrint());
 		noEditBox.setSelected(!cells.get(0).isEditable());
 		getFormulaField().setText(cells.get(0).getCellFormula());
+		Cell.Type type = cells.get(0).getValueType();
+		getTypeBox().setSelectedIndex(type != null ? type.ordinal() + 1 : 0);
 	}
 
 	private JTextField getFormulaField() {
@@ -110,6 +123,17 @@ public class CellPropertiesPanel extends JPanel {
 			formulaField = new JTextField();
 		}
 		return formulaField;
+	}
+
+	private JComboBox<Cell.Type> getTypeBox() {
+		if (typeBox == null) {
+			typeBox = new JComboBox<>();
+			typeBox.addItem(null);
+			for (Cell.Type t : Cell.Type.values()) {
+				typeBox.addItem(t);
+			}
+		}
+		return typeBox;
 	}
 
 	/**
@@ -145,6 +169,7 @@ public class CellPropertiesPanel extends JPanel {
 			cell.setNotPrint(noPrintBox.isSelected());
 			cell.setEditable(!noEditBox.isSelected());
 			cell.setCellFormula(getFormulaField().getText());
+			cell.setValueType((Cell.Type) getTypeBox().getSelectedItem());
 		}
 	}
 	

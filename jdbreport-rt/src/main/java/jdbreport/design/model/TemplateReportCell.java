@@ -58,6 +58,7 @@ public class TemplateReportCell extends ReportCell implements CellObject {
 		cell.setScaleIcon(isScaleIcon());
 		cell.setImageFormat(getImageFormat());
 		cell.setCellFormula(getCellFormula());
+		cell.setValueType(getValueType());
 		return cell;
 	}
 
@@ -172,4 +173,5 @@ public class TemplateReportCell extends ReportCell implements CellObject {
 		this.formatting = b;
 	}
 
+	protected void calcTypeByValue() {}
 }

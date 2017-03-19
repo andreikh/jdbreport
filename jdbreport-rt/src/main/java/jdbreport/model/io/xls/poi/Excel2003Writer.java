@@ -302,12 +302,15 @@ public class Excel2003Writer implements ReportWriter {
                                 }
                             } else {
                                 text = model.getCellText(cell);
+                                newCell.setCellStyle(getStyle(styleId, Type.STRING, wb, createHelper));
                             }
                         }
                         if (text != null) {
                             newCell.setCellValue(text);
                         }
                     }
+                } else if (cell.getValueType() != null) {
+                    newCell.setCellStyle(getStyle(styleId, cell.getValueType(), wb, createHelper));
                 }
 
                 if (cell.getPicture() != null) {
@@ -335,7 +338,8 @@ public class Excel2003Writer implements ReportWriter {
     }
 
     private CellStyle getStyle(Object styleId, Type cellType, Workbook wb, CreationHelper createHelper) {
-        if (cellType == Type.DATE  || cellType == Type.FLOAT || cellType == Type.CURRENCY) {
+        if (cellType == Type.DATE  || cellType == Type.FLOAT || cellType == Type.CURRENCY
+                || cellType == Type.STRING) {
             String key = String.valueOf(styleId) + cellType;
             CellStyle style = styleMap.get(key);
             if (style == null) {
@@ -347,6 +351,9 @@ public class Excel2003Writer implements ReportWriter {
                 if (cellType == Type.DATE) {
                     style.setDataFormat(
                             createHelper.createDataFormat().getFormat("dd.mm.yyyy"));
+                } else if (cellType == Type.STRING) {
+                    style.setDataFormat(
+                            createHelper.createDataFormat().getFormat("@"));
                 } else {
                     style.setDataFormat(
                             createHelper.createDataFormat().getFormat("General"));
