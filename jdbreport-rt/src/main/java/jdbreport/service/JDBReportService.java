@@ -188,9 +188,8 @@ public class JDBReportService implements ReportService {
 
     private Collection<ReportDataSet> createDataSets(
             Map<String, Object> dataSetList) {
-        Collection<ReportDataSet> dsList = null;
+        Collection<ReportDataSet> dsList = new ArrayList<>();
         if (dataSetList != null && dataSetList.size() > 0) {
-            dsList = new ArrayList<>();
             for (String key : dataSetList.keySet()) {
                 dsList.add(createDataSet(key, dataSetList.get(key)));
             }

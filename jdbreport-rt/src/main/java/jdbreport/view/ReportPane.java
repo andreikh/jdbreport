@@ -44,6 +44,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedList;
@@ -1624,23 +1625,28 @@ public class ReportPane extends JPanel implements ReportListListener,
                 try {
                     printPage(graphics, pageFormat, pageIndex);
                 } catch (Throwable throwable) {
-                    retThrowable = throwable;
-                } finally {
-                    notifyAll();
-                }
-            };
+					logger.severe(throwable.toString());
+					retThrowable = throwable;
+				}
+			};
 
 			synchronized (runnable) {
 				retVal = -1;
 				retThrowable = null;
 
-				SwingUtilities.invokeLater(runnable);
+				try {
+					SwingUtilities.invokeAndWait(runnable);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				} catch (InvocationTargetException e) {
+					e.printStackTrace();
+				}
 
 				while (retVal == -1 && retThrowable == null) {
 					try {
 						runnable.wait();
 					} catch (InterruptedException ignored) {
-
+						break;
 					}
 				}
 
