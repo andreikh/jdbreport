@@ -1068,7 +1068,7 @@ public class ReportEditorPane extends ReportPane implements CellSelectListener,
 				}
 
 			});
-			fontNameBox.setRenderer(getFontCellRenderer());
+			//fontNameBox.setRenderer(getFontCellRenderer());
 		}
 		return fontNameBox;
 	}
@@ -1467,7 +1467,9 @@ public class ReportEditorPane extends ReportPane implements CellSelectListener,
 		public Component getListCellRendererComponent(JList list, Object value,
 				int index, boolean isSelected, boolean cellHasFocus) {
 			setText(value.toString());
-			setFont(Font.decode(value.toString() + "-plain-14")); //$NON-NLS-1$
+			try {
+				setFont(Font.decode(value.toString() + "-plain-14"));
+			} catch (Exception ignore) {}
 			setBackground(isSelected ? Color.BLUE : Color.white);
 			setForeground(isSelected ? Color.white : Color.black);
 			return this;
@@ -1862,7 +1864,7 @@ public class ReportEditorPane extends ReportPane implements CellSelectListener,
 	private static String findLookAndFeel(String name) {
 		LookAndFeelInfo[] looks = UIManager.getInstalledLookAndFeels();
 		for (LookAndFeelInfo look : looks) {
-			if (look.getName().equals(name))
+			if (look.getName().equalsIgnoreCase(name))
 				return look.getClassName();
 		}
 		return null;
