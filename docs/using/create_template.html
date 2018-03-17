@@ -1,0 +1,147 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+  <meta content="text/html; charset=UTF-8" http-equiv="Content-Type">
+  <title>Создание шаблона отчета</title>
+</head>
+<body>
+<div style="text-align: center;">
+<h3>Создание отчета</h3>
+<div style="text-align: left;">&nbsp;&nbsp;&nbsp; После запуска
+дизайнера откроется окно с пустым шаблоном отчета.<br>
+<br>
+<img style="width: 820px; height: 506px;" alt="Шаблон отчета"
+ src="images/Sheet1.png"><br>
+<br>
+Создадим простой отчет, выводящий список строк из базы данных.<br>
+Для этого сначала настроим соединение с базой данной (меню <span
+ style="font-weight: bold;">Дизайнер</span> | <span
+ style="font-weight: bold;">Источник данных</span>).<br>
+<br>
+<img style="width: 518px; height: 321px;" alt=""
+ src="images/Jdbc_source.png"><br>
+<br>
+В диалоге добавляем новый источник данных и заполняем необходимые
+параметры для доступа к базе данных. <br>
+<br>
+<img style="width: 400px; height: 450px;" alt=""
+ src="images/dbsource.png"><br>
+<br>
+</div>
+<br>
+<div style="text-align: left;">Нажимаем кнопку OK. После этого создаем
+новый запрос, в поле ID вводим id запроса - test. По этому id мы будем
+обращаться к данным запроса в отчете. Можно вносить сколько угодно
+запросов и источников данных, но id запроса должно быть уникальным.<br>
+<br>
+<img style="width: 518px; height: 321px;" alt=""
+ src="images/selectsql.png"><br>
+<br>
+Нажимаем кнопку OK. <br>
+<br>
+<br>
+Добавим в отчет два столбца (чтобы общее количество столбцов было
+шесть) по кнопке <img style="width: 16px; height: 16px;" alt=""
+ src="images/inscol.png">.<br>
+По кнопке <img style="width: 16px; height: 16px;" alt=""
+ src="images/insrow.png"> или меню <span style="font-weight: bold;">Дизайнер</span>
+| <span style="font-weight: bold;">Группы</span> вставьте строки <span
+ style="font-style: italic;">Заголовок отчета (Title), Заголовок
+страницы (PageHeader), Детализация (Detail) и Итог отчета (Footer)</span>.<br>
+<br>
+<img style="width: 792px; height: 360px;" alt=""
+ src="images/Sheet1_2.png"><br>
+<br>
+В строке Title в первой ячейке напишем название отчета "Мои друзья"<br>
+<br>
+В строке PageHeader (Заголовок страницы) напишем названия столбцов.<br>
+В строке Detail (Детализация) напишем названия полей из базы данных. <br>
+<span style="font-style: italic;">Названия полей нужно писать в том
+виде, в каком они возвращаются базой данных. Большинство баз данных
+возвращают имена полей в верхнем регистре, независимо от формы
+написания их в запросе.</span><br>
+<br style="font-style: italic;">
+<img style="width: 792px; height: 360px;" alt=""
+ src="images/Sheet1_3.png"><br>
+<br>
+Укажем, что значения ячеек в строке детализации являются полями базы
+данных. Для этого выделим с помощью мышки или клавиатуры, все ячейки в
+строке детализации и в поле dataset введем id нашего запроса - test.
+После ввода нажмем Enter.<br>
+Во всех выделенных ячейках перед именем поля появится буква F (field).<br>
+<br>
+<img style="width: 792px; height: 360px;" alt=""
+ src="images/Sheet1_4.png"><br>
+<br>
+Теперь можно сформировать отчет. Нажимаем на кнопку <span
+ style="font-weight: bold;">Сформировать отчет</span> <img
+ style="width: 16px; height: 16px;" alt="" src="images/gen_report.gif">
+и получаем сформированный отчет.<br>
+<br>
+<img style="width: 750px; height: 541px;" alt=""
+ src="images/Sheet1_5.png"><br>
+<br>
+Отчет получился не очень красивым, поэтому мы его закрываем.<br>
+Чтобы придать отчету приличный вид нужно отформатировать шаблон отчета.
+<br>
+<br>
+Выделяем и объединяем ячейки первой строки по кнопке <img
+ style="width: 16px; height: 16px;" alt="" src="images/mergecell.png">.
+Выравниваем текст в ячейках с помощью кнопок форматирования.
+Устанавливаем нужный шрифт в ячейках. По кнопке <img
+ style="width: 16px; height: 16px;" alt="" src="images/background.png">
+устанавливаем цвет заливки ячеек.<br>
+Меняем ширину столбцов и высоту строк. Выделяем ячейки строк PageHeader
+и Detail и устанавливаем границы ячеек.<br>
+<br>
+<img style="width: 218px; height: 76px;" alt=""
+ src="images/Sheet1_6.png"> <br>
+<br>
+В диалоге свойств отчета (меню <span style="font-weight: bold;">Файл</span>
+|&nbsp; <span style="font-weight: bold;">Свойства</span>) меняем
+наименование отчета и снимаем флажок <span style="font-weight: bold;">показывать
+сетку.</span><br>
+<br>
+<img style="width: 500px; height: 400px;" alt=""
+ src="images/Sheet1_8.png"><br>
+<br>
+Нажимаем OK. <br>
+<br>
+Открываем диалог настройки страницы (меню <span
+ style="font-weight: bold;">Файл</span> | <span
+ style="font-weight: bold;">Параметры страницы</span>) и
+устанавливаем&nbsp; параметры страницы.<br>
+<br>
+<img style="width: 304px; height: 359px;" alt="" src="images/page.png"><br>
+<br>
+<br>
+Шаблон будет выглядеть примерно так<br>
+<br>
+<img style="width: 905px; height: 357px;" alt=""
+ src="images/Sheet1_7.png"><br>
+<br style="font-style: italic;">
+Снова нажимаем на кнопку <span style="font-weight: bold;">Сформировать
+отчет</span> <img style="width: 16px; height: 16px;" alt=""
+ src="images/gen_report.gif"> и получаем отчет<br>
+<br>
+<img style="width: 789px; height: 644px;" alt=""
+ src="images/Sheet1_9.png"><br style="font-style: italic;">
+<br>
+Можно посмотреть представление на странице (меню <span
+ style="font-weight: bold;">Файл</span> | <span
+ style="font-weight: bold;">Просмотр</span> или кнопка <img
+ style="width: 16px; height: 16px;" alt="" src="images/preview.png">)<br>
+<br>
+<img style="width: 870px; height: 688px;" alt=""
+ src="images/Sheet1_preview.png"><br>
+<br>
+Можно напечатать отчет по кнопке <img
+ style="width: 16px; height: 16px;" alt="" src="images/print.gif"> или
+меню <span style="font-weight: bold;">Файл</span> | <span
+ style="font-weight: bold;">Печать</span>.<br>
+<br>
+<br>
+</div>
+</div>
+</body>
+</html>
