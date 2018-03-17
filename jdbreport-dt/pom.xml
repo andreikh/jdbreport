@@ -2,44 +2,32 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
-	<groupId>jdbreport</groupId>
+	<parent>
+		<artifactId>jdbreport</artifactId>
+		<groupId>jdbreport</groupId>
+		<version>3.1.3-SNAPSHOT</version>
+	</parent>
+
 	<artifactId>jdbr-dt</artifactId>
-	<version>3.1.3-SNAPSHOT</version>
-	<packaging>jar</packaging> 
+	<packaging>jar</packaging>
 	<name>JDBReport Designer</name>
 	<url>http://www.jdbreport.ru</url>
 
 	<properties>
-		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
 
-	<licenses>
-		<license>
-			<name>The Apache License, Version 2.0</name>
-			<url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
-		</license>
-	</licenses>
-
-	<distributionManagement>
-
-		<repository>
-			<id>internal</id>
-			<url>http://localhost:8080/repository/internal/</url>
-		</repository>
-	</distributionManagement>
-
-	<dependencies> 
+	<dependencies>
 
 		<dependency>
 			<groupId>jdbreport</groupId>
 			<artifactId>jdbr-rt</artifactId>
-			<version>3.1.3-SNAPSHOT</version>
+			<version>${project.version}</version>
 		</dependency>
 
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
-			<version>4.11</version>
+			<version>${junit.version}</version>
 			<scope>test</scope>
 		</dependency>
 	</dependencies>

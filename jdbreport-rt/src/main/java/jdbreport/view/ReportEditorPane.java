@@ -1068,7 +1068,7 @@ public class ReportEditorPane extends ReportPane implements CellSelectListener,
 				}
 
 			});
-			//fontNameBox.setRenderer(getFontCellRenderer());
+			fontNameBox.setRenderer(getFontCellRenderer());
 		}
 		return fontNameBox;
 	}
@@ -1434,9 +1434,12 @@ public class ReportEditorPane extends ReportPane implements CellSelectListener,
 		}
 	}
 
+	private static boolean failedDecodeFont = false;
+
 	private class FontCellRenderer extends JTextPane implements
 			ListCellRenderer {
 		private static final long serialVersionUID = -889837983681353498L;
+
 
 		public FontCellRenderer() {
 			setOpaque(true);
@@ -1468,8 +1471,9 @@ public class ReportEditorPane extends ReportPane implements CellSelectListener,
 				int index, boolean isSelected, boolean cellHasFocus) {
 			setText(value.toString());
 			try {
-				setFont(Font.decode(value.toString() + "-plain-14"));
-			} catch (Exception ignore) {}
+				if (!failedDecodeFont)
+					setFont(Font.decode(value.toString() + "-plain-14"));
+			} catch (Exception ignore) { failedDecodeFont = true;}
 			setBackground(isSelected ? Color.BLUE : Color.white);
 			setForeground(isSelected ? Color.white : Color.black);
 			return this;

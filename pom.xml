@@ -11,10 +11,31 @@
     <name>JDBReport</name>
     <url>http://www.jdbreport.ru</url>
 
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <junit.version>4.11</junit.version>
+    </properties>
+
+    <licenses>
+        <license>
+            <name>The Apache License, Version 2.0</name>
+            <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+        </license>
+    </licenses>
+
+    <distributionManagement>
+
+        <repository>
+            <id>internal</id>
+            <url>http://localhost:8080/repository/internal/</url>
+        </repository>
+    </distributionManagement>
+
     <modules>
         <module>jdbreport-rt</module>
         <module>jdbreport-dt</module>
         <module>jdbr-samlpe</module>
+        <module>jdbr-editor</module>
     </modules>
 
 </project>
