@@ -1,4 +1,4 @@
-/**
+/*
  * Created	15.10.2010
  *
  * Copyright (C) 2010-2014 Andrey Kholmanskih
@@ -94,7 +94,8 @@ public class PictureSVG extends Picture {
 
 		String parser = org.apache.batik.util.XMLResourceDescriptor
 				.getXMLParserClassName();
-		org.apache.batik.dom.svg.SAXSVGDocumentFactory f = new org.apache.batik.dom.svg.SAXSVGDocumentFactory(
+
+		org.apache.batik.anim.dom.SAXSVGDocumentFactory f = new org.apache.batik.anim.dom.SAXSVGDocumentFactory(
 				parser);
 		try {
 			Document document = f.createDocument(null,

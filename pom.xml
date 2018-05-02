@@ -13,6 +13,8 @@
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <batik.version>1.9.1</batik.version>
+        <org.apache.poi.version>3.17</org.apache.poi.version>
         <junit.version>4.11</junit.version>
     </properties>
 

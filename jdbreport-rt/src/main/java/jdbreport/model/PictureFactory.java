@@ -1,4 +1,4 @@
-/**
+/*
  * Created	15.10.2010
  *
  * Copyright (C) 2010-2014 Andrey Kholmanskih
@@ -18,6 +18,8 @@
  */
 package jdbreport.model;
 
+import jdbreport.model.svg.SVGImage;
+
 /**
  * @author Andrey Kholmanskih
  * 
@@ -25,18 +27,8 @@ package jdbreport.model;
  */
 public class PictureFactory {
 
-	private static Boolean enableSVG;
-
 	public static boolean isEnableSVG() {
-		if (enableSVG == null) {
-			try {
-				Class.forName("org.apache.batik.dom.svg.SAXSVGDocumentFactory");
-				enableSVG = true;
-			} catch (Throwable e) {
-				enableSVG = false;
-			}
-		}
-		return enableSVG;
+		return SVGImage.isEnableSVG();
 	}
 
 	public static Picture createPicture(String format) {

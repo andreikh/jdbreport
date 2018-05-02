@@ -14,8 +14,6 @@
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <batik.version>1.7</batik.version>
-        <org.apache.poi.version>3.15</org.apache.poi.version>
     </properties>
 
     <dependencies>
@@ -41,6 +39,7 @@
             <groupId>org.apache.poi</groupId>
             <artifactId>poi-ooxml</artifactId>
             <version>${org.apache.poi.version}</version>
+            <optional>true</optional>
         </dependency>
 
         <dependency>
@@ -52,7 +51,7 @@
         <dependency>
             <groupId>com.itextpdf</groupId>
             <artifactId>itextpdf</artifactId>
-            <version>5.5.8</version>
+            <version>5.5.13</version>
             <scope>provided</scope>
         </dependency>
 
@@ -74,18 +73,28 @@
             <groupId>org.apache.xmlgraphics</groupId>
             <artifactId>batik-svg-dom</artifactId>
             <version>${batik.version}</version>
+            <optional>true</optional>
         </dependency>
 
         <dependency>
             <groupId>org.apache.xmlgraphics</groupId>
             <artifactId>batik-transcoder</artifactId>
             <version>${batik.version}</version>
+            <optional>true</optional>
         </dependency>
 
         <dependency>
             <groupId>org.apache.xmlgraphics</groupId>
             <artifactId>batik-svggen</artifactId>
             <version>${batik.version}</version>
+            <optional>true</optional>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.xmlgraphics</groupId>
+            <artifactId>batik-codec</artifactId>
+            <version>${batik.version}</version>
+            <optional>true</optional>
         </dependency>
 
     </dependencies>
@@ -119,7 +128,6 @@
             <id>jdbreport</id>
             <name>JDBReport Repository</name>
             <url>http://jdbreport.ru/repositories</url>
-            <layout>default</layout>
         </repository>
 
     </repositories>
@@ -129,6 +137,7 @@
                 <inherited>true</inherited>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-source-plugin</artifactId>
+                <version>3.0.1</version>
 
                 <executions>
                     <execution>
@@ -142,6 +151,7 @@
 
             <plugin>
                 <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.7.0</version>
                 <configuration>
                     <source>1.8</source>
                     <target>1.8</target>
