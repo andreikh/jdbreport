@@ -26,12 +26,15 @@ import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.*;
+import java.util.logging.Logger;
 
 /**
  * @author Andrey Kholmanskih
  * @version 3.0 13.12.2014
  */
 public class SVGImage {
+
+    private static final Logger logger = Logger.getLogger(SVGImage.class.getName());
 
     private static Boolean enableSVG;
 
@@ -44,7 +47,9 @@ public class SVGImage {
             } catch (Throwable e) {
                 enableSVG = false;
             }
+            logger.info("SVG " + (enableSVG ? "is supported" : "is not supported"));
         }
+
         return enableSVG;
     }
 

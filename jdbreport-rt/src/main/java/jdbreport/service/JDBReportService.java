@@ -150,7 +150,7 @@ public class JDBReportService implements ReportService {
         try {
             grid = new JReportGrid(new JReportModel(tbook.getStyleList()));
         } catch (Exception e) {
-            logger.log(Level.SEVERE, e.getMessage(), e);
+            logger.log(Level.FINE, "Failed create grid " + e.getMessage());
         }
 
         return tbook.createReportBook(grid);
