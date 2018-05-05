@@ -20,12 +20,16 @@ package jdbreport.model;
 
 import jdbreport.model.svg.SVGImage;
 
+import java.util.logging.Logger;
+
 /**
  * @author Andrey Kholmanskih
  * 
  * @version 1.0 28.10.2010
  */
 public class PictureFactory {
+
+	private static final Logger logger = Logger.getLogger(PictureFactory.class.getName());
 
 	public static boolean isEnableSVG() {
 		return SVGImage.isEnableSVG();
@@ -37,12 +41,14 @@ public class PictureFactory {
 				if (isEnableSVG()) {
 					return new PictureSVG(format);
 				} else {
+					logger.warning("Format " + format + " is not supported");
 					return null;
 				}
 			} else if (format.equalsIgnoreCase("wmf")) {
 				if (isEnableSVG()) {
 					return new PictureWMF(format);
 				} else {
+					logger.warning("Format " + format + " is not supported");
 					return null;
 				}
 			}

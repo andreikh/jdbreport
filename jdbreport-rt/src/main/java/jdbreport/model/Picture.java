@@ -109,7 +109,7 @@ public class Picture {
 	protected void createBuf() {
 		ByteArrayOutputStream stream = new ByteArrayOutputStream();
 		if (format == null || !checkImageWriterFormat(format)) {
-			format = "png";
+			format = PNG;
 		}
 		RenderedImage image = Utils.getRenderedImage(icon);
 		try {

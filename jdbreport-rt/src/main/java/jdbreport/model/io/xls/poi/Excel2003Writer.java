@@ -21,7 +21,6 @@
 package jdbreport.model.io.xls.poi;
 
 import java.awt.Color;
-import java.awt.Dimension;
 import java.awt.image.RenderedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -274,7 +273,7 @@ public class Excel2003Writer implements ReportWriter {
                                         .getValue()).getAsImage(model, row,
                                         column);
                                 if (img instanceof RenderedImage) {
-                                    createImage(wb, model, cell,
+                                    createImage(wb, cell,
                                             (RenderedImage) img, row, column,
                                             createHelper);
                                 }
@@ -316,7 +315,6 @@ public class Excel2003Writer implements ReportWriter {
                 if (cell.getPicture() != null) {
                     createImage(
                             wb,
-                            model,
                             cell,
                             Utils.getRenderedImage(cell.getPicture().getIcon()),
                             row, column, createHelper);
@@ -371,11 +369,11 @@ public class Excel2003Writer implements ReportWriter {
         newCell.setCellValue(value.doubleValue());
     }
 
-    private void createImage(Workbook wb, ReportModel model,
+    private void createImage(Workbook wb,
                              jdbreport.model.Cell cell, RenderedImage image, int row,
                              int column, CreationHelper createHelper) {
         int pictureIdx = createImage(wb, cell, image);
-        if (pictureIdx > 0) {
+        if (pictureIdx >= 0) {
 
             ClientAnchor anchor = createHelper.createClientAnchor();
             anchor.setCol1(column);
@@ -383,15 +381,11 @@ public class Excel2003Writer implements ReportWriter {
             anchor.setCol2(column + cell.getColSpan());
             anchor.setRow2(row + cell.getRowSpan());
             Picture pict = drawing.createPicture(anchor, pictureIdx);
-            double scale = 1;
-            if (cell.isScaleIcon()) {
-                Dimension size = model.getCellSize(cell, row, column, false);
-                double hscale = 1.0 * size.height
-                        / cell.getPicture().getHeight();
-                double wscale = 1.0 * size.width / cell.getPicture().getWidth();
-                scale = Math.min(hscale, wscale);
+            if (!cell.isScaleIcon()) {
+                pict.resize(Double.MAX_VALUE, Double.MAX_VALUE);
+            } else {
+                pict.resize(1.0);
             }
-            pict.resize(scale);
         }
     }
 
