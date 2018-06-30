@@ -50,7 +50,7 @@ public interface ReportModel extends TableModel {
 	 *            the row index of the rows to be inserted
 	 * @return rows' count in the model
 	 */
-	public int addRows(int count, int index);
+	int addRows(int count, int index);
 
     /**
      * Appends all rows from model
@@ -66,13 +66,13 @@ public interface ReportModel extends TableModel {
 	 * @param index
 	 *            index of the first removed row
 	 */
-	public void removeRows(int count, int index);
+	void removeRows(int count, int index);
 
 	/**
 	 * Removes all rows from the model.
 	 * 
 	 */
-	public void removeRows();
+	void removeRows();
 
 	/**
 	 * Adds columns' count to the model
@@ -81,7 +81,7 @@ public interface ReportModel extends TableModel {
 	 *            columns' count
 	 * @return the columns' count in the model
 	 */
-	public int addColumns(int count);
+	int addColumns(int count);
 
 	/**
 	 * Adds columns' count to the index of the model. The new columns will
@@ -94,7 +94,7 @@ public interface ReportModel extends TableModel {
 	 *            the column index of the columns to be inserted
 	 * @return columns' count in the model
 	 */
-	public int addColumns(int count, int index);
+	int addColumns(int count, int index);
 
 	/**
 	 * Removes columns' count begining with the index from the model.
@@ -104,7 +104,7 @@ public interface ReportModel extends TableModel {
 	 * @param index
 	 *            index of the first removed column
 	 */
-	public void removeColumns(int count, int index);
+	void removeColumns(int count, int index);
 
 	/**
 	 * Create and copy column from src to dest
@@ -132,7 +132,7 @@ public interface ReportModel extends TableModel {
 	 * @param count
 	 *            new columns' count
 	 */
-	public void setColumnCount(int count);
+	void setColumnCount(int count);
 
 	/**
 	 * Returns the Cell by row and column
@@ -143,7 +143,7 @@ public interface ReportModel extends TableModel {
 	 *            the column's number
 	 * @return the Cell
 	 */
-	public Cell getReportCell(int row, int column);
+	Cell getReportCell(int row, int column);
 
 	/**
 	 * Returns the Cell's owner by row and column If there is no owner, the Cell
@@ -155,7 +155,7 @@ public interface ReportModel extends TableModel {
 	 *            the column's number
 	 * @return the Cell
 	 */
-	public Cell getOwnerReportCell(int row, int column);
+	Cell getOwnerReportCell(int row, int column);
 
 	/**
 	 * Creates the Cell by row and column
@@ -166,7 +166,7 @@ public interface ReportModel extends TableModel {
 	 *            the column's number
 	 * @return the Cell
 	 */
-	public Cell createReportCell(int row, int column);
+	Cell createReportCell(int row, int column);
 
 	/**
 	 * Returns the row's number of the cell's owner If there is no owner, the
@@ -180,7 +180,7 @@ public interface ReportModel extends TableModel {
 	 *            the column's number
 	 * @return the row's number
 	 */
-	public int getOwnerRow(Cell cell, int row, int column);
+	int getOwnerRow(Cell cell, int row, int column);
 
 	/**
 	 * Returns the column's number of the cell's owner If there is no owner, the
@@ -194,7 +194,7 @@ public interface ReportModel extends TableModel {
 	 *            the column's number
 	 * @return the owner column's number
 	 */
-	public int getOwnerColumn(Cell cell, int row, int column);
+	int getOwnerColumn(Cell cell, int row, int column);
 
 	/**
 	 * Returns the width of the column
@@ -203,7 +203,7 @@ public interface ReportModel extends TableModel {
 	 *            the column's number
 	 * @return the column's width
 	 */
-	public int getColumnWidth(int column);
+	int getColumnWidth(int column);
 
 	/**
 	 * Returns the height of the row
@@ -212,7 +212,7 @@ public interface ReportModel extends TableModel {
 	 *            the row's number
 	 * @return the row's height
 	 */
-	public int getRowHeight(int row);
+	int getRowHeight(int row);
 
 	/**
 	 * Sets the row's height by row
@@ -222,7 +222,7 @@ public interface ReportModel extends TableModel {
 	 * @param rowHeight
 	 *            a new row's height
 	 */
-	public void setRowHeight(int row, int rowHeight);
+	void setRowHeight(int row, int rowHeight);
 
 	/**
 	 * Unions the cells by coordinates
@@ -236,7 +236,7 @@ public interface ReportModel extends TableModel {
 	 * @param rightColumn
 	 *            the number of the right column
 	 */
-	public void unionCells(int topRow, int leftColumn, int bottomRow,
+	void unionCells(int topRow, int leftColumn, int bottomRow,
 			int rightColumn);
 
 	/**
@@ -247,7 +247,7 @@ public interface ReportModel extends TableModel {
 	 * @param column
 	 *            the column's number
 	 */
-	public void clearUnion(int row, int column);
+	void clearUnion(int row, int column);
 
 	/**
 	 * Sets the borders at the specified positions for the cells by coordinates
@@ -267,24 +267,24 @@ public interface ReportModel extends TableModel {
 	 * @param line
 	 *            the border
 	 */
-	public void addBorder(int topRow, int leftColumn, int bottomRow,
+	void addBorder(int topRow, int leftColumn, int bottomRow,
 			int rightColumn, boolean[] positions, Border line);
 
 	/**
 	 * @return the report's title.
 	 */
-	public String getReportTitle();
+	String getReportTitle();
 
 	/**
 	 * @param reportTitle
 	 *            a new report's title.
 	 */
-	public void setReportTitle(String reportTitle);
+	void setReportTitle(String reportTitle);
 
 	/**
 	 * @return the default column's width
 	 */
-	public int getDefaultColumnWidth();
+	int getDefaultColumnWidth();
 
 	/**
 	 * Sets a default column's width
@@ -292,12 +292,12 @@ public interface ReportModel extends TableModel {
 	 * @param defaultColumnWidth
 	 *            a new default column's width
 	 */
-	public void setDefaultColumnWidth(int defaultColumnWidth);
+	void setDefaultColumnWidth(int defaultColumnWidth);
 
 	/**
 	 * @return the reportPage.
 	 */
-	public ReportPage getReportPage();
+	ReportPage getReportPage();
 
 	/**
 	 * Returns true if the user is allowed to resize rows by dragging between
@@ -306,7 +306,7 @@ public interface ReportModel extends TableModel {
 	 * 
 	 * @return true if rows can resizing
 	 */
-	public boolean isRowSizing();
+	boolean isRowSizing();
 
 	/**
 	 * Sets whether the user can resize rows by dragging between headers.
@@ -314,7 +314,7 @@ public interface ReportModel extends TableModel {
 	 * @param b
 	 *            true if report view should allow resizing
 	 */
-	public void setRowSizing(boolean b);
+	void setRowSizing(boolean b);
 
 	/**
 	 * Returns true if the user is allowed to resize columns by dragging between
@@ -323,7 +323,7 @@ public interface ReportModel extends TableModel {
 	 * 
 	 * @return true if columns can resizing
 	 */
-	public boolean isColSizing();
+	boolean isColSizing();
 
 	/**
 	 * Sets whether the user can resize columns by dragging between headers.
@@ -331,7 +331,7 @@ public interface ReportModel extends TableModel {
 	 * @param b
 	 *            true if report view should allow resizing
 	 */
-	public void setColSizing(boolean b);
+	void setColSizing(boolean b);
 
 	/**
 	 * Returns true if the user is allowed to rearrange rows by dragging their
@@ -340,7 +340,7 @@ public interface ReportModel extends TableModel {
 	 * 
 	 * @return the rowMoving property
 	 */
-	public boolean isRowMoving();
+	boolean isRowMoving();
 
 	/**
 	 * Sets whether the user can drag row headers to reorder rows.
@@ -349,7 +349,7 @@ public interface ReportModel extends TableModel {
 	 *            true if the report view should allow reordering; otherwise
 	 *            false
 	 */
-	public void setRowMoving(boolean b);
+	void setRowMoving(boolean b);
 
 	/**
 	 * Returns true if the user is allowed to rearrange columns by dragging
@@ -358,7 +358,7 @@ public interface ReportModel extends TableModel {
 	 * 
 	 * @return the colMoving property
 	 */
-	public boolean isColMoving();
+	boolean isColMoving();
 
 	/**
 	 * Sets whether the user can drag column headers to reorder columns.
@@ -367,7 +367,7 @@ public interface ReportModel extends TableModel {
 	 *            true if the report view should allow reordering; otherwise
 	 *            false
 	 */
-	public void setColMoving(boolean b);
+	void setColMoving(boolean b);
 
 	/**
 	 * Returns the boolean indicating whether this ReportModel is editable or
@@ -375,7 +375,7 @@ public interface ReportModel extends TableModel {
 	 * 
 	 * @return the boolean value
 	 */
-	public boolean isEditable();
+	boolean isEditable();
 
 	/**
 	 * Sets the specified boolean to indicate whether or not this ReportModel
@@ -384,7 +384,7 @@ public interface ReportModel extends TableModel {
 	 * @param b
 	 *            the boolean to be set
 	 */
-	public void setEditable(boolean b);
+	void setEditable(boolean b);
 
 	/**
 	 * Printing mode that scales the output smaller, if necessary, to fit the
@@ -393,7 +393,7 @@ public interface ReportModel extends TableModel {
 	 * 
 	 * @return if true sets printing mode in FIT_WIDTH otherwise in NORMAL.
 	 */
-	public boolean isStretchPage();
+	boolean isStretchPage();
 
 	/**
 	 * Printing mode that scales the output smaller, if necessary, to fit the
@@ -405,7 +405,7 @@ public interface ReportModel extends TableModel {
 	 * 
 	 * @see javax.swing.JTable.PrintMode
 	 */
-	public void setStretchPage(boolean stretchPage);
+	void setStretchPage(boolean stretchPage);
 
 	/**
 	 * Returns the flag of the page's break by the row's number
@@ -414,7 +414,7 @@ public interface ReportModel extends TableModel {
 	 *            the row's number
 	 * @return the flag of the page's end
 	 */
-	public boolean isRowBreak(int row);
+	boolean isRowBreak(int row);
 
 	/**
 	 * Returns true if the row is last on page
@@ -423,7 +423,7 @@ public interface ReportModel extends TableModel {
 	 * @return true if the row is last on page
 	 * @since 1.3
 	 */
-	public boolean isLastRowInPage(int row);
+	boolean isLastRowInPage(int row);
 	
 	/**
 	 * Sets the horizontal page break after row
@@ -434,7 +434,7 @@ public interface ReportModel extends TableModel {
 	 *            a boolean value, where true sets the end page and false remove
 	 *            it
 	 */
-	public void setRowBreak(int row, boolean b);
+	void setRowBreak(int row, boolean b);
 
 	/**
 	 * Returns true if the sets vertical page break after column
@@ -443,7 +443,7 @@ public interface ReportModel extends TableModel {
 	 *            the column's number
 	 * @return columnBreak property
 	 */
-	public boolean isColumnBreak(int column);
+	boolean isColumnBreak(int column);
 
 	/**
 	 * Sets the vertical page break after column
@@ -454,18 +454,18 @@ public interface ReportModel extends TableModel {
 	 *            a boolean value, where true sets the page break and false
 	 *            remove it
 	 */
-	public void setColumnBreak(int column, boolean b);
+	void setColumnBreak(int column, boolean b);
 
 	/**
 	 * @return TableRowModel
 	 */
-	public TableRowModel getRowModel();
+	TableRowModel getRowModel();
 
 	/**
 	 * 
 	 * @return TableColumnModel
 	 */
-	public TableColumnModel getColumnModel();
+	TableColumnModel getColumnModel();
 
 	/**
 	 * Returns cells that do not have owner
@@ -474,7 +474,7 @@ public interface ReportModel extends TableModel {
 	 *            the region where the cells are selected
 	 * @return iterator
 	 */
-	public Iterator<Cell> getSelectedCells(GridRect rect);
+	Iterator<Cell> getSelectedCells(GridRect rect);
 
 	/**
 	 * Returns the CellStyle by the index
@@ -483,7 +483,7 @@ public interface ReportModel extends TableModel {
 	 *            the id of the CellStyle
 	 * @return the CellStyle
 	 */
-	public CellStyle getStyles(Object index);
+	CellStyle getStyles(Object index);
 
 	/**
 	 * Looks for style in the list of styles if doesn't find, adds it to the
@@ -494,7 +494,7 @@ public interface ReportModel extends TableModel {
 	 *            adding style
 	 * @return the style's id
 	 */
-	public Object addStyle(CellStyle style);
+	Object addStyle(CellStyle style);
 
 	/**
 	 * Returns a rectangle for the cell that lies at the intersection of row and
@@ -512,7 +512,7 @@ public interface ReportModel extends TableModel {
 	 * @param isLeftToRight leftToRight flag
 	 * @return the rectangle containing the cell at location row,column
 	 */
-	public Rectangle getCellRect(int row, int column, boolean includeSpacing,
+	Rectangle getCellRect(int row, int column, boolean includeSpacing,
 			boolean isLeftToRight);
 
 	/**
@@ -529,7 +529,7 @@ public interface ReportModel extends TableModel {
 	 * @param includeSpacing include spacing flag
 	 * @return the cell's size
 	 */
-	public Dimension getCellSize(Cell cell, int row, int column,
+	Dimension getCellSize(Cell cell, int row, int column,
 			boolean includeSpacing);
 
 	/**
@@ -542,14 +542,14 @@ public interface ReportModel extends TableModel {
 	 * @param column
 	 *            the column's number
 	 */
-	public void updateRowHeight(HeightCalculator hCalc, int row, int column);
+	void updateRowHeight(HeightCalculator hCalc, int row, int column);
 
 	/**
 	 * Determines whether report should be visible
 	 * 
 	 * @return true if the report is visible, false otherwise
 	 */
-	public boolean isVisible();
+	boolean isVisible();
 
 	/**
 	 * Shows or hides report depending on the value of parameter visible.
@@ -557,14 +557,14 @@ public interface ReportModel extends TableModel {
 	 * @param visible
 	 *            if true, shows this report; otherwise, hides this report
 	 */
-	public void setVisible(boolean visible);
+	void setVisible(boolean visible);
 
 	/**
 	 * Determines whether page's bounders will be calculated automatically
 	 * 
 	 * @return canUpdatePages property
 	 */
-	public boolean isCanUpdatePages();
+	boolean isCanUpdatePages();
 
 	/**
 	 * Sets the property that determines whether page's bounders will be
@@ -573,7 +573,7 @@ public interface ReportModel extends TableModel {
 	 * @param b
 	 *            if true, page's bounders will be calculated automatically
 	 */
-	public void setCanUpdatePages(boolean b);
+	void setCanUpdatePages(boolean b);
 
 	/**
 	 * Calculates pages' size
@@ -581,9 +581,9 @@ public interface ReportModel extends TableModel {
 	 * @param startRow
 	 *            the first row for calculation
 	 */
-	public void updatePages(int startRow);
+	void updatePages(int startRow);
 
-	public void updateRowAndPageHeight(HeightCalculator hCalc);
+	void updateRowAndPageHeight(HeightCalculator hCalc);
 	
 	/**
 	 * Adds a PropertyChangeListener to the listener list. The listener is
@@ -592,7 +592,7 @@ public interface ReportModel extends TableModel {
 	 * @param listener
 	 *            the property change listener to be added
 	 */
-	public void addPropertyChangeListener(PropertyChangeListener listener);
+	void addPropertyChangeListener(PropertyChangeListener listener);
 
 	/**
 	 * Removes a PropertyChangeListener from the listener list. This method
@@ -604,7 +604,7 @@ public interface ReportModel extends TableModel {
 	 * @param listener
 	 *            the PropertyChangeListener to be removed
 	 */
-	public void removePropertyChangeListener(PropertyChangeListener listener);
+	void removePropertyChangeListener(PropertyChangeListener listener);
 
 	/**
 	 * Sets the font's name for the cells by the selRect.
@@ -614,7 +614,7 @@ public interface ReportModel extends TableModel {
 	 * @param fontName
 	 *            the font's name
 	 */
-	public void setFontName(GridRect selRect, String fontName);
+	void setFontName(GridRect selRect, String fontName);
 
 	/**
 	 * Sets the font's size for the cells by the selRect
@@ -624,7 +624,7 @@ public interface ReportModel extends TableModel {
 	 * @param fontSize
 	 *            the new font's size
 	 */
-	public void setFontSize(GridRect selRect, int fontSize);
+	void setFontSize(GridRect selRect, int fontSize);
 
 	/**
 	 * Determines whether font's style is in the cell
@@ -637,7 +637,7 @@ public interface ReportModel extends TableModel {
 	 *            the font's style
 	 * @return true, if font's style in the cell is determined
 	 */
-	public boolean isFontStyle(int row, int column, int style);
+	boolean isFontStyle(int row, int column, int style);
 
 	/**
 	 * Sets the font's style for the cells by coordinates selRect
@@ -652,7 +652,7 @@ public interface ReportModel extends TableModel {
 	 *            if true, the style is determined, otherwise the style is
 	 *            removed.
 	 */
-	public void setFontStyle(GridRect selRect, int fontStyle, boolean enable);
+	void setFontStyle(GridRect selRect, int fontStyle, boolean enable);
 
 	/**
 	 * Sets background color for the selected cells
@@ -662,7 +662,7 @@ public interface ReportModel extends TableModel {
 	 * @param color
 	 *            the new background color for the cells
 	 */
-	public void setBackground(GridRect selectionRect, Color color);
+	void setBackground(GridRect selectionRect, Color color);
 
 	/**
 	 * Sets foreground color for the selected cells
@@ -672,7 +672,7 @@ public interface ReportModel extends TableModel {
 	 * @param color
 	 *            the new foreground color for the cells
 	 */
-	public void setForeground(GridRect selectionRect, Color color);
+	void setForeground(GridRect selectionRect, Color color);
 
 	/**
 	 * 
@@ -683,7 +683,18 @@ public interface ReportModel extends TableModel {
 	 * @param d
 	 *            the decimal position of the numeric value.
 	 */
-	public void setDecimals(GridRect selectionRect, int d);
+	void setDecimals(GridRect selectionRect, int d);
+
+	/**
+	 *
+	 * Sets new round to significant property for selected cells.
+	 *
+	 * @param selectionRect
+	 *            coordinates of the selected cells
+	 * @param round
+	 *            the new round to significant property.
+	 */
+	void setRoundToSignificant(GridRect selectionRect, boolean round);
 
 	/**
 	 * Sets the horizontal alignment for the selected cells The horizontal
@@ -695,7 +706,7 @@ public interface ReportModel extends TableModel {
 	 * @param align
 	 *            the new horizontal alignment for the cells
 	 */
-	public void setHorizontalAlignment(GridRect selectionRect, int align);
+	void setHorizontalAlignment(GridRect selectionRect, int align);
 
 	/**
 	 * Sets the vertical alignment for the selected cells The vertical alignment
@@ -706,7 +717,7 @@ public interface ReportModel extends TableModel {
 	 * @param align
 	 *            the new vertical alignment for the cells
 	 */
-	public void setVerticalAlignment(GridRect selectionRect, int align);
+	void setVerticalAlignment(GridRect selectionRect, int align);
 
 	/**
 	 * Removes the selected cells
@@ -714,7 +725,7 @@ public interface ReportModel extends TableModel {
 	 * @param selectionRect
 	 *            coordinates of the selected cells
 	 */
-	public void delete(GridRect selectionRect);
+	void delete(GridRect selectionRect);
 
 	/**
 	 * Returns the CellWrap object for the cell by row and column
@@ -725,27 +736,27 @@ public interface ReportModel extends TableModel {
 	 *            the column's number
 	 * @return the CellWrap object
 	 */
-	public CellWrap getCellWrap(int row, int column);
+	CellWrap getCellWrap(int row, int column);
 
 	/**
 	 * Bans notification of listeners
 	 * 
 	 */
-	public void startUpdate();
+	void startUpdate();
 
-	public CellCoord getCellPosition(Cell cell);
+	CellCoord getCellPosition(Cell cell);
 
 	/**
 	 * Allows notification of listeners
 	 * 
 	 */
-	public void endUpdate();
+	void endUpdate();
 
 	/**
 	 * 
 	 * @return if true, all notification are locked
 	 */
-	public boolean isUpdate();
+	boolean isUpdate();
 
 	/**
 	 * Returns the string to be used as the tooltip for the cell by row and
@@ -757,19 +768,19 @@ public interface ReportModel extends TableModel {
 	 *            the column's number
 	 * @return the tooltip string
 	 */
-	public String getToolTipText(int row, int column);
+	String getToolTipText(int row, int column);
 
-	public boolean isShowHeader();
+	boolean isShowHeader();
 
-	public void setShowHeader(boolean b);
+	void setShowHeader(boolean b);
 
-	public boolean isShowRowHeader();
+	boolean isShowRowHeader();
 
-	public void setShowRowHeader(boolean b);
+	void setShowRowHeader(boolean b);
 
-	public String getCellText(Cell cell);
+	String getCellText(Cell cell);
 
-	public void setColumnWidths(int[] widths);
+	void setColumnWidths(int[] widths);
 	
 	/**
 	 * Searches for the right extreme column of page
@@ -804,6 +815,6 @@ public interface ReportModel extends TableModel {
 	 * @param value print left to right flag
 	 * @since 2.0
 	 */
-	public void setPrintLeftToRight(boolean value);
+	void setPrintLeftToRight(boolean value);
 
 }

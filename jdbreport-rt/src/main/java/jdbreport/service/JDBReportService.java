@@ -105,6 +105,26 @@ public class JDBReportService implements ReportService {
             throw new LoadReportException("Unknown format");
     }
 
+    public byte[] convert(ReportBook book, String format)
+            throws LoadReportException {
+        FileType fileType = ReportBook.getFileTypeClass(format);
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        if (fileType != null) {
+            convert(out, fileType, book);
+            return out.toByteArray();
+        } else
+            throw new LoadReportException("Unknown format");
+    }
+
+    public void convert(OutputStream out, ReportBook book, String format)
+            throws LoadReportException {
+        FileType fileType = ReportBook.getFileTypeClass(format);
+        if (fileType != null) {
+            convert(out, fileType, book);
+        } else
+            throw new LoadReportException("Unknown format");
+    }
+
     public String getMimeType(String format) {
         FileType fileType = ReportBook.getFileTypeClass(format);
         if (fileType != null) {
@@ -173,17 +193,6 @@ public class JDBReportService implements ReportService {
             return new ArrayDataSet(id, (Object[]) ds);
         }
         return new ObjectDataSet(id, ds);
-    }
-
-    protected byte[] convert(ReportBook book, String format)
-            throws LoadReportException {
-        FileType fileType = ReportBook.getFileTypeClass(format);
-        ByteArrayOutputStream out = new ByteArrayOutputStream();
-        if (fileType != null) {
-            convert(out, fileType, book);
-            return out.toByteArray();
-        } else
-            throw new LoadReportException("Unknown format");
     }
 
     private Collection<ReportDataSet> createDataSets(

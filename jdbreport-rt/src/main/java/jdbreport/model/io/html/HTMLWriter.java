@@ -1,7 +1,7 @@
 /*
  * JDBReport Generator
  * 
- * Copyright (C) 2006-2014 Andrey Kholmanskih
+ * Copyright (C) 2006-2018 Andrey Kholmanskih
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -43,7 +43,7 @@ import jdbreport.model.io.SaveReportException;
 import jdbreport.util.Utils;
 
 /**
- * @version 3.0 12.12.2014
+ * @version 3.1.3 30.06.2018
  * @author Andrey Kholmanskih
  * 
  */
@@ -285,11 +285,10 @@ public class HTMLWriter implements ReportWriter {
 								}
 							}
 							
-							if (cell.getColSpan() > 0)
-								if ("".equals(colSpan)) {
-									colSpan = " COLSPAN="
-											+ (cell.getColSpan() + 1);
-								}
+							if (cell.getColSpan() > 0) {
+								colSpan = " COLSPAN="
+										+ (cell.getColSpan() + 1);
+							}
 
 							if (colSpan.length() > 0)
 								parametrs += colSpan;
@@ -463,19 +462,7 @@ public class HTMLWriter implements ReportWriter {
 		return imgTag.toString();
 	}
 
-	static class BackupStyles {
-		public Cell cell;
-		public Object styleId;
-
-		public BackupStyles(Cell cell, Object styleId) {
-			this.cell = cell;
-			this.styleId = styleId;
-		}
-
-	}
-
-	public String write(String fileName, Object resource)
-			throws SaveReportException {
+	public String write(String fileName, Object resource) {
 		return fileName;
 	}
 }

@@ -1,7 +1,7 @@
 /*
  * JDBReport Generator
  * 
- * Copyright (C) 2006-2014 Andrey Kholmanskih
+ * Copyright (C) 2006-2018 Andrey Kholmanskih
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -30,7 +30,7 @@ import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 
 /**
- * @version 3.0 13.12.2014
+ * @version 3.1.3 30.06.2018
  * @author Andrey Kholmanskih
  * 
  */
@@ -81,6 +81,8 @@ public class StyleReportParser extends DefaultReportParser {
 	private static final String PATTERN = "Pattern";
 
 	private static final String ROUND = "Round";
+
+	private static final String TO_SIGNIFICANT = "ToSign";
 
 	private static final String FORMAT = "Format";
 
@@ -250,6 +252,11 @@ public class StyleReportParser extends DefaultReportParser {
 				int round = Integer.parseInt(s);
 				currentStyle = getCurrentStyle().deriveFormat(round);
 			}
+			boolean roundToSignificant = Boolean.parseBoolean(attributes.getValue(TO_SIGNIFICANT));
+			if (roundToSignificant) {
+				currentStyle = getCurrentStyle().deriveRoundSignificant(roundToSignificant);
+			}
+
 			return true;
 		}
 
@@ -319,12 +326,19 @@ public class StyleReportParser extends DefaultReportParser {
 		if (!style.getBackground().equals(CellStyle.defaultBackground)) {
 			writer.println(colorToXML(style));
 		}
-		if (style.getDecimal() >= 0) {
+		if (style.getDecimal() >= 0 || style.isRoundToSignificant()) {
 			writer.print("<");
 			writer.print(FORMAT);
 			writer.print(" ");
-			writer.print(ROUND);
-			writer.println("=\"" + style.getDecimal() + "\" />");
+			if (style.getDecimal() >= 0) {
+				writer.print(ROUND);
+				writer.println("=\"" + style.getDecimal() + "\" ");
+			}
+			if (style.isRoundToSignificant()) {
+				writer.print(TO_SIGNIFICANT);
+				writer.println("=\"true\" ");
+			}
+			writer.println("/>");
 		}
 		writer.print("</");
 		writer.print(STYLE);

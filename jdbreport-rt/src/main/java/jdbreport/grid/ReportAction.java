@@ -3,7 +3,7 @@
  * 
  * JDBReport Generator
  * 
- * Copyright (C) 2005-2014 Andrey Kholmanskih
+ * Copyright (C) 2005-2018 Andrey Kholmanskih
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -38,7 +38,7 @@ import jdbreport.model.GridRect;
 import jdbreport.util.Resources;
 
 /**
- * @version 3.0 12.12.2014
+ * @version 3.1.3 29.06.2018
  * @author Andrey Kholmanskih
  * 
  */
@@ -46,6 +46,7 @@ public class ReportAction {
 	
 	public static final String DECIMALS_DEC_ACTION = "decimals_dec";
 	public static final String DECIMALS_INC_ACTION = "decimals_inc";
+	public static final String ROUND_TO_SIGNIFICANT_ACTION = "round_to_significant";
 	public static final String PAGE_SETUP_ACTION = "page_setup";
 	public static final String CELL_EDITOR_ACTION = "cell_editor";
 	public static final String EDIT_SELECT_ALL_ACTION = "edit_select_all";
@@ -463,6 +464,23 @@ public class ReportAction {
 
 	}
 
+	public static class RoundAction extends GridAction {
+
+		private static final long serialVersionUID = 1L;
+
+		public RoundAction(TargetGrid targetGrid) {
+			super(ROUND_TO_SIGNIFICANT_ACTION, targetGrid);
+		}
+
+		public void actionPerformed(ActionEvent e) {
+			JReportGrid reportGrid = getReportGrid(e);
+			if (reportGrid != null) {
+				reportGrid.roundToSignificant();
+			}
+		}
+
+	}
+
 	public static void gridActionPerformed(ActionEvent e, TargetGrid targetGrid) {
 		JReportGrid grid;
 		Object o = e.getSource();
@@ -572,8 +590,10 @@ public class ReportAction {
 			grid.pageSetup();
 		}else if (DECIMALS_INC_ACTION.equals(e.getActionCommand())) {
 			grid.incDecimals();
-		}else if (DECIMALS_DEC_ACTION.equals(e.getActionCommand())) {
+		} else if (DECIMALS_DEC_ACTION.equals(e.getActionCommand())) {
 			grid.decDecimals();
+		} else if (ROUND_TO_SIGNIFICANT_ACTION.equals(e.getActionCommand())) {
+			grid.roundToSignificant();
 		}
 	}
 

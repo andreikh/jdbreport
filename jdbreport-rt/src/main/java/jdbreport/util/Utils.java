@@ -3,7 +3,7 @@
  *
  * JDBReport Generator
  * 
- * Copyright (C) 2005-2014 Andrey Kholmanskih
+ * Copyright (C) 2005-2018 Andrey Kholmanskih
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -36,7 +36,7 @@ import java.util.logging.Logger;
 import javax.swing.ImageIcon;
 
 /**
- * @version 3.0 12.12.2014
+ * @version 3.1.3 30.06.2018
  * @author Andrey Kholmanskih
  * 
  */
@@ -343,6 +343,25 @@ public class Utils {
 
 	public static String roundStr(Double value, int decimal) {
 		return String.format("%1." + decimal + "f", value);
+	}
+
+	public static String truncateToSignificant(String v) {
+		int i = v.indexOf('.');
+		if (i < 0 && Utils.getDecimalSeparator() != '.') {
+			i = v.indexOf(Utils.getDecimalSeparator());
+		}
+		if (i >= 0) {
+			int l = v.length() - 1;
+			while (v.charAt(l) == '0') {
+				l--;
+			}
+			if (l == i) {
+				v = v.substring(0, i);
+			} else if (l < v.length() - 1) {
+				v = v.substring(0, l + 1);
+			}
+		}
+		return v;
 	}
 
 	public static double parseDouble(String s) {

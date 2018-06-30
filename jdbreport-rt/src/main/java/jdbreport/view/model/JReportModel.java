@@ -1,7 +1,7 @@
 /*
  * JDBReport Generator
  * 
- * Copyright (C) 2006-2016 Andrey Kholmanskih
+ * Copyright (C) 2006-2018 Andrey Kholmanskih
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -35,13 +35,13 @@ import java.util.Map;
 import java.util.NoSuchElementException;
 
 /**
- * @version 3.1.2 31.03.2016
+ * @version 3.1.3 29.06.2018
  * @author Andrey Kholmanskih
  * 
  */
 public class JReportModel extends AbstractTableModel implements ReportModel {
 
-	public static final String VERSION = "3.1.2";
+	public static final String VERSION = "3.1.3";
 
 	private static final long serialVersionUID = -2926872019856806971L;
 
@@ -671,6 +671,15 @@ public class JReportModel extends AbstractTableModel implements ReportModel {
 			Cell cell = it.next();
 			CellStyle style = getStyles(cell.getStyleId());
 			cell.setStyleId(addStyle(style.deriveFormat(d)));
+		}
+	}
+
+	public void setRoundToSignificant(GridRect selectionRect, boolean round) {
+		Iterator<Cell> it = getSelectedCells(selectionRect);
+		while (it.hasNext()) {
+			Cell cell = it.next();
+			CellStyle style = getStyles(cell.getStyleId());
+			cell.setStyleId(addStyle(style.deriveRoundSignificant(round)));
 		}
 	}
 
@@ -1384,13 +1393,18 @@ public class JReportModel extends AbstractTableModel implements ReportModel {
 			return ReportBook.getDateFormatter().format(cell.getValue());
 		} else {
 			String str = cell.getText();
-			if (str != null && style.getDecimal() > 0) {
-				try {
-					str = Utils.roundStr(new Double(str.replace(',', '.')),
-							style.getDecimal());
-				} catch (Exception ignored) {
-				}
-			}
+			if (str != null) {
+                if (style.getDecimal() > 0) {
+                    try {
+                        str = Utils.roundStr(new Double(str.replace(',', '.')),
+                                style.getDecimal());
+                    } catch (Exception ignored) {
+                    }
+                }
+                if (style.isRoundToSignificant()) {
+                    str = Utils.truncateToSignificant(str);
+                }
+            }
 			return str;
 		}
 		

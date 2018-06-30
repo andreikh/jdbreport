@@ -3,7 +3,7 @@
  *
  * JDBReport Generator
  * 
- * Copyright (C) 2005-2014 Andrey Kholmanskih
+ * Copyright (C) 2005-2018 Andrey Kholmanskih
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -33,7 +33,7 @@ import jdbreport.util.GraphicUtil;
 /**
  * The cell attributes form the definition of a cell to be rendered.
  * 
- * @version 3.0 13.12.2014
+ * @version 3.1.3 29.06.2018
  * 
  * @author Andrey Kholmanskih
  * 
@@ -110,6 +110,8 @@ public class CellStyle implements Cloneable, SwingConstants {
 
 	private int decimal = -1;
 
+	private boolean roundToSignificant;
+
 	private int bgStyle;
 
 	private boolean wrapLine = true;
@@ -127,6 +129,7 @@ public class CellStyle implements Cloneable, SwingConstants {
 	private int carryRows;
 
 	private int typeOffset;
+
 
 	protected CellStyle() {
 
@@ -255,7 +258,8 @@ public class CellStyle implements Cloneable, SwingConstants {
 						&& horizontalAlignment == otherStyle.horizontalAlignment
 						&& verticalAlignment == otherStyle.verticalAlignment
 						&& equalsBorders(otherStyle.borders)
-						&& decimal == otherStyle.decimal
+						&& roundToSignificant == otherStyle.roundToSignificant
+						&& getDecimal() == otherStyle.getDecimal()
 						&& angle == otherStyle.angle
 						&& autoHeight == otherStyle.autoHeight
 						&& wrapLine == otherStyle.wrapLine
@@ -597,6 +601,22 @@ public class CellStyle implements Cloneable, SwingConstants {
 	}
 
 	/**
+	 * Creates a new CellStyle object by replicating the current CellStyle
+	 * object and applying a new roundToSignificant value to it.
+	 *
+	 * @param round
+	 *            the round rounding to significant digit.
+	 * @return a new CellStyle object.
+	 */
+	public CellStyle deriveRoundSignificant(boolean round) {
+		if (this.roundToSignificant == round)
+			return this;
+		CellStyle newStyle = (CellStyle) clone();
+		newStyle.roundToSignificant = round;
+		return newStyle;
+	}
+
+	/**
 	 * Converts to StyleConstants alignment
 	 * 
 	 * @return StyleConstants alignment
@@ -652,6 +672,14 @@ public class CellStyle implements Cloneable, SwingConstants {
 	 */
 	public int getDecimal() {
 		return decimal;
+	}
+
+	/**
+	 *
+	 * @return true if the cell value is rounded to the first significant digit after the decimal point
+	 */
+	public boolean isRoundToSignificant() {
+		return roundToSignificant;
 	}
 
 	/**
