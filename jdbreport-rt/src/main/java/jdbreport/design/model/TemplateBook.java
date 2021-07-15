@@ -42,9 +42,9 @@ public class TemplateBook extends ReportBook {
 
     public static final String REPORT_CAPTION = "reportCaption";
 
-    private static TreeMap<Object, String> WRITERS_MAP = new TreeMap<>();
+    private static final TreeMap<Object, String> WRITERS_MAP = new TreeMap<>();
 
-    private static TreeMap<Object, String> READERS_MAP = new TreeMap<>();
+    private static final TreeMap<Object, String> READERS_MAP = new TreeMap<>();
 
     private static final Logger logger = Logger.getLogger(TemplateBook.class
             .getName());
@@ -246,6 +246,7 @@ public class TemplateBook extends ReportBook {
                 dsList = null;
             }
             newModel.setCanUpdatePages(templModel.isCanUpdatePages());
+            newModel.setHideFirstHeader(templModel.isHideFirstHeader());
             newModel.getRowModel().enableSpan();
             newModel.updateRowAndPageHeight(hCalc);
         } finally {
@@ -786,18 +787,17 @@ public class TemplateBook extends ReportBook {
     }
 
 
-    private Object getExprValue(Expression[] expressions)
-            throws ReportException {
+    private Object getExprValue(Expression[] expressions) {
         if (expressions.length > 1) {
-            String value = "";
+            StringBuilder value = new StringBuilder();
             for (Expression expression : expressions) {
                 try {
-                    value += expression.getFormatValue();
+                    value.append(expression.getFormatValue());
                 } catch (Exception e) {
                     logger.log(Level.WARNING, e.getMessage());
                 }
             }
-            return value;
+            return value.toString();
         } else {
             try {
                 return expressions[0].getValue();

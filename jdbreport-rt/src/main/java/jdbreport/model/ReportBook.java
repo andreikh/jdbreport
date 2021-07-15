@@ -1019,6 +1019,12 @@ public class ReportBook implements Iterable<ReportModel>, TableRowModelListener 
 		return list.iterator();
 	}
 
+	public void setHideFirstHeader(boolean b) {
+		if (list.size() > 0) {
+			list.get(0).setHideFirstHeader(b);
+		}
+	}
+
 	/**
 	 * Returns the name of the report's creator
 	 * 

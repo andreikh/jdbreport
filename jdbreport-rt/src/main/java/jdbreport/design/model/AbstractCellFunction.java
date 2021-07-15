@@ -27,6 +27,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
+import java.nio.charset.StandardCharsets;
 import java.util.Iterator;
 
 import javax.swing.Icon;
@@ -279,7 +280,7 @@ public abstract class AbstractCellFunction implements CellFunction {
 		if (c > 25) {
 			int i = c % 26;
 			c = (c / 26) - 1;
-			return String.valueOf((char)('A' + c)) + String.valueOf((char)('A' + i));
+			return (char) ('A' + c) + String.valueOf((char)('A' + i));
 		}
 		return String.valueOf((char)('A' + c));
 	}
@@ -399,22 +400,28 @@ public abstract class AbstractCellFunction implements CellFunction {
 		if (value != null) {
 			if (value instanceof byte[]) {
 				Picture picture = PictureFactory.createPicture(format);
-				picture.setBuf((byte[]) value);
-				picture.setScale(getCell().isScaleIcon());
-				getCell().setValue(picture);
+				if (picture != null) {
+					picture.setBuf((byte[]) value);
+					picture.setScale(getCell().isScaleIcon());
+					getCell().setValue(picture);
+				}
 			} else if (value instanceof String) {
 				Picture picture = PictureFactory.createPicture(format);
-				picture.setBuf(((String) value).getBytes());
-				picture.setScale(getCell().isScaleIcon());
-				getCell().setValue(picture);
+				if (picture != null) {
+					picture.setBuf(((String) value).getBytes());
+					picture.setScale(getCell().isScaleIcon());
+					getCell().setValue(picture);
+				}
 			} else if (value instanceof Image || value instanceof Icon) {
 				getCell().setValue(value);
 			} else if (value instanceof InputStream) {
 				try {
 					Picture picture = PictureFactory.createPicture(format);
-					picture.load((InputStream) value);
-					picture.setScale(getCell().isScaleIcon());
-					getCell().setValue(picture);
+					if (picture != null) {
+						picture.load((InputStream) value);
+						picture.setScale(getCell().isScaleIcon());
+						getCell().setValue(picture);
+					}
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
@@ -424,9 +431,11 @@ public abstract class AbstractCellFunction implements CellFunction {
 						format = Utils.getFileExtension(((File) value));
 					}
 					Picture picture = PictureFactory.createPicture(format);
-					picture.load((File) value);
-					picture.setScale(getCell().isScaleIcon());
-					getCell().setValue(picture);
+					if (picture != null) {
+						picture.load((File) value);
+						picture.setScale(getCell().isScaleIcon());
+						getCell().setValue(picture);
+					}
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
@@ -457,7 +466,7 @@ public abstract class AbstractCellFunction implements CellFunction {
 					getCell().setValue(m);
 				} else if (value instanceof InputStream) {
 					jdbreport.model.math.MathML m = new jdbreport.model.math.MathML(
-							new InputStreamReader((InputStream) value, "UTF-8"));
+							new InputStreamReader((InputStream) value, StandardCharsets.UTF_8));
 					getCell().setValue(m);
 				} else if (value instanceof File) {
                     try (FileReader reader = new FileReader((File) value)) {

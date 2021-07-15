@@ -26,6 +26,7 @@ import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.io.Writer;
+import java.nio.charset.StandardCharsets;
 import java.text.MessageFormat;
 
 import jdbreport.model.ReportBook;
@@ -101,8 +102,7 @@ public class ReportBookParser extends ReportBookWriterParser implements
 	public void save(OutputStream out, ReportBook reportBook)
 			throws SaveReportException {
 		PrintWriter fw = new PrintWriter(new BufferedWriter(
-				new OutputStreamWriter(out, java.nio.charset.Charset
-						.forName("UTF-8"))));
+				new OutputStreamWriter(out, StandardCharsets.UTF_8)));
 		save(fw, reportBook);
 	}
 

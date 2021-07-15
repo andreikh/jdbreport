@@ -44,7 +44,7 @@ public interface CellFunction {
 	 * 
 	 * @throws ReportException
 	 */
-	public void run() throws ReportException;
+	void run() throws ReportException;
 
 	/**
 	 * Returns value of the current cell. If cell's value is null, returns empty
@@ -52,14 +52,14 @@ public interface CellFunction {
 	 * 
 	 * @return value of the cell
 	 */
-	public String getText();
+	String getText();
 
 	/**
 	 * Returns value of the current cell
 	 * 
 	 * @return value of the cell
 	 */
-	public Object getValue();
+	Object getValue();
 
 	/**
 	 * Sets value to the current cell
@@ -67,14 +67,14 @@ public interface CellFunction {
 	 * @param value
 	 *            new value
 	 */
-	public void setValue(Object value);
+	void setValue(Object value);
 
 	/**
 	 * Sets value as Image to the current cell
 	 * @param value Image, Icon, byte[], InputStream, File
 	 * @since 2.0
 	 */
-	public void setImage(Object value);
+	void setImage(Object value);
 
 	/**
 	 * Sets value as Image to the current cell
@@ -82,7 +82,7 @@ public interface CellFunction {
 	 * @param format image format
 	 * @since 2.0
 	 */
-	public void setImage(Object value, String format);
+	void setImage(Object value, String format);
 	
 	/**
 	 * Sets value as MathML data to the current cell
@@ -96,7 +96,7 @@ public interface CellFunction {
 	 * 
 	 * @return the cell's object
 	 */
-	public Cell getCell();
+	Cell getCell();
 
 	/**
 	 * Returns the Cell by row and column
@@ -105,7 +105,7 @@ public interface CellFunction {
 	 * @param column the column's number
 	 * @return the cell's object
 	 */
-	public Cell getCell(int row, int column);
+	Cell getCell(int row, int column);
 
 	/**
 	 * Returns a number of the current row, since with 0
@@ -297,7 +297,7 @@ public interface CellFunction {
 	 * 
 	 * @return the row's height for the current cell
 	 */
-	public int getRowHeight();
+	int getRowHeight();
 
 	/**
 	 * Returns the row's height by the row's number
@@ -306,7 +306,7 @@ public interface CellFunction {
 	 *            the row's number
 	 * @return the row's height by the row's number
 	 */
-	public int getRowHeight(int row);
+	int getRowHeight(int row);
 
 	/**
 	 * Sets the row's height for the current cell
@@ -314,7 +314,7 @@ public interface CellFunction {
 	 * @param height
 	 *            the new row's height
 	 */
-	public void setRowHeight(int height);
+	void setRowHeight(int height);
 
 	/**
 	 * Sets the row's height by the row
@@ -324,14 +324,14 @@ public interface CellFunction {
 	 * @param row
 	 *            the row's number
 	 */
-	public void setRowHeight(int height, int row);
+	void setRowHeight(int height, int row);
 
 	/**
 	 * Returns the column's width by the column's number
 	 * 
 	 * @return the column's width by the column's number
 	 */
-	public int getColumnWidth();
+	int getColumnWidth();
 
 	/**
 	 * Returns the column's width by the column's number
@@ -340,7 +340,7 @@ public interface CellFunction {
 	 *            the column's number
 	 * @return the column's width by the column's number
 	 */
-	public int getColumnWidth(int column);
+	int getColumnWidth(int column);
 
 	/**
 	 * Sets the column's width for the current cell
@@ -348,7 +348,7 @@ public interface CellFunction {
 	 * @param width
 	 *            the new column's width
 	 */
-	public void setColumnWidth(int width);
+	void setColumnWidth(int width);
 
 	/**
 	 * Sets the column's width by the column
@@ -358,7 +358,7 @@ public interface CellFunction {
 	 * @param column
 	 *            the column's number
 	 */
-	public void setColumnWidth(int width, int column);
+	void setColumnWidth(int width, int column);
 
 	/**
 	 * Sets the vertical alignment for the current cell The vertical alignment
@@ -367,7 +367,7 @@ public interface CellFunction {
 	 * @param align
 	 *            the new vertical alignment
 	 */
-	public void setVerticalAlignment(int align);
+	void setVerticalAlignment(int align);
 
 	/**
 	 * Sets the vertical alignment for the cell by row and column The vertical
@@ -381,7 +381,7 @@ public interface CellFunction {
 	 * @param column
 	 *            the cell's column
 	 */
-	public void setVerticalAlignment(int align, int row, int column);
+	void setVerticalAlignment(int align, int row, int column);
 
 	/**
 	 * Sets the horizontal alignment for the current cell The horizontal
@@ -391,7 +391,7 @@ public interface CellFunction {
 	 * @param align
 	 *            the new horizontal alignment for the current cell
 	 */
-	public void setHorizontalAlignment(int align);
+	void setHorizontalAlignment(int align);
 
 	/**
 	 * Sets the horizontal alignment for the cell by row and column The
@@ -405,7 +405,7 @@ public interface CellFunction {
 	 * @param column
 	 *            the cell's column
 	 */
-	public void setHorizontalAlignment(int align, int row, int column);
+	void setHorizontalAlignment(int align, int row, int column);
 
 	/**
 	 * Adds rows in the report
@@ -415,7 +415,7 @@ public interface CellFunction {
 	 * @param index
 	 *            the specified position in this report
 	 */
-	public void addRows(int count, int index);
+	void addRows(int count, int index);
 
 	/**
 	 * Removes rows from the report
@@ -425,7 +425,7 @@ public interface CellFunction {
 	 * @param index
 	 *            the index of the first removing row
 	 */
-	public void removeRows(int count, int index);
+	void removeRows(int count, int index);
 
 	/**
 	 * Adds columns in the report
@@ -435,7 +435,7 @@ public interface CellFunction {
 	 * @param index
 	 *            the specified position in this report
 	 */
-	public void addColumns(int count, int index);
+	void addColumns(int count, int index);
 
 	/**
 	 * Removes columns from the report
@@ -445,7 +445,7 @@ public interface CellFunction {
 	 * @param index
 	 *            the index of the first removing column
 	 */
-	public void removeColumns(int count, int index);
+	void removeColumns(int count, int index);
 
 	/**
 	 * Sets decimal position of the numeric value of the current cell.
@@ -453,7 +453,7 @@ public interface CellFunction {
 	 * @param d
 	 *            the new decimal position of the numeric value.
 	 */
-	public void setDecimal(int d);
+	void setDecimal(int d);
 
 	/**
 	 * Sets decimal position of the numeric value of the cell's by row and
@@ -466,7 +466,7 @@ public interface CellFunction {
 	 * @param column
 	 *            the cell's column
 	 */
-	public void setDecimal(int d, int row, int column);
+	void setDecimal(int d, int row, int column);
 
 	/**
 	 * Sets the horizontal break of the page after row
@@ -477,14 +477,14 @@ public interface CellFunction {
 	 *            a boolean value, where true sets the page break and false
 	 *            remove it
 	 */
-	public void setRowBreak(int row, boolean b);
+	void setRowBreak(int row, boolean b);
 
 	/**
 	 * Returns the title of the sheet
 	 * 
 	 * @return the title of the sheet
 	 */
-	public String getReportTitle();
+	String getReportTitle();
 
 	/**
 	 * Sets the sheet's title
@@ -492,7 +492,7 @@ public interface CellFunction {
 	 * @param reportTitle
 	 *            new sheet's title
 	 */
-	public void setReportTitle(String reportTitle);
+	void setReportTitle(String reportTitle);
 
 	/**
 	 * Sets the borders at specified positions for the current cell
@@ -504,7 +504,7 @@ public interface CellFunction {
 	 *            nothing. Position's index can be from Border.LINE_LEFT to
 	 *            Border.LINE_HMIDDLE
 	 */
-	public void setBorder(Border line, boolean[] positions);
+	void setBorder(Border line, boolean[] positions);
 
 	/**
 	 * Sets the borders at specified positions for the cell by row and column
@@ -520,7 +520,7 @@ public interface CellFunction {
 	 * @param column
 	 *            the column's number
 	 */
-	public void setBorder(Border line, boolean[] positions, int row, int column);
+	void setBorder(Border line, boolean[] positions, int row, int column);
 
 	/**
 	 * Cleans the cell by row and column
@@ -530,14 +530,14 @@ public interface CellFunction {
 	 * @param column
 	 *            the column's number
 	 */
-	public void deleteCell(int row, int column);
+	void deleteCell(int row, int column);
 
 	/**
 	 * Returns the cell's sizes for the current cell, including spanned cells
 	 * 
 	 * @return the cell's sizes
 	 */
-	public Dimension getCellSize();
+	Dimension getCellSize();
 
 	/**
 	 * Returns the cell's sizes for the cell by row and column, including
@@ -549,21 +549,21 @@ public interface CellFunction {
 	 *            the column's number
 	 * @return the cell's sizes
 	 */
-	public Dimension getCellSize(int row, int column);
+	Dimension getCellSize(int row, int column);
 
 	/**
 	 * Returns rows' count formed during the current time
 	 * 
 	 * @return the rows count
 	 */
-	public int getRowCount();
+	int getRowCount();
 
 	/**
 	 * Returns columns' count formed during the current time
 	 * 
 	 * @return the columns count
 	 */
-	public int getColumnCount();
+	int getColumnCount();
 
 	/**
 	 * Unions cells The first cell of the top-left corner is specified by topRow
@@ -579,7 +579,7 @@ public interface CellFunction {
 	 * @param rightColumn
 	 *            the right column of the union
 	 */
-	public void unionCells(int topRow, int leftColumn, int bottomRow,
+	void unionCells(int topRow, int leftColumn, int bottomRow,
 			int rightColumn);
 
 	/**
@@ -592,7 +592,7 @@ public interface CellFunction {
 	 * 
 	 * @see javax.swing.JTable.PrintMode
 	 */
-	public void setStretchPage(boolean stretchPage);
+	void setStretchPage(boolean stretchPage);
 
 	/**
 	 * Runs function by functionName in current cell

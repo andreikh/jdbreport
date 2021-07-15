@@ -125,6 +125,8 @@ public class PreferencesDlg extends JDialog implements ActionListener {
 
 	private ReportBook reportBook;
 
+	private JCheckBox hideFirstHeaderBox;
+
 	public PreferencesDlg(Frame owner, boolean modal) throws HeadlessException {
 		super(owner, modal);
 		initialize();
@@ -470,6 +472,12 @@ public class PreferencesDlg extends JDialog implements ActionListener {
 			gridBagConstraints13.anchor = GridBagConstraints.NORTHWEST;
 			gridBagConstraints13.gridwidth = 2;
 
+			GridBagConstraints gridBagConstraints14 = new GridBagConstraints();
+			gridBagConstraints14.insets = new Insets(2, 10, 2, 4);
+			gridBagConstraints14.gridy = 11;
+			gridBagConstraints14.anchor = GridBagConstraints.NORTHWEST;
+			gridBagConstraints14.gridwidth = 2;
+
 			jPanel2 = new JPanel();
 			jPanel2.setLayout(new GridBagLayout());
 			jPanel2.add(getCanUpdatePageBox(), gridBagConstraints4);
@@ -482,23 +490,24 @@ public class PreferencesDlg extends JDialog implements ActionListener {
 			jPanel2.add(getEditableBox(), gridBagConstraints11);
 			jPanel2.add(getVisibleBox(), gridBagConstraints12);
 			jPanel2.add(getHideHeadersBox(), gridBagConstraints13);
+			jPanel2.add(getHideFirstHeaderBox(), gridBagConstraints14);
 
-			GridBagConstraints gridBagConstraints14 = new GridBagConstraints();
-			gridBagConstraints14.insets = new Insets(2, 10, 2, 4);
-			gridBagConstraints14.gridy = 11;
-			gridBagConstraints14.anchor = GridBagConstraints.NORTHWEST;
-			gridBagConstraints14.gridwidth = 2;
-			gridBagConstraints14.weighty = 0.1;
+			GridBagConstraints gridBagConstraints15 = new GridBagConstraints();
+			gridBagConstraints15.insets = new Insets(2, 10, 2, 4);
+			gridBagConstraints15.gridy = 12;
+			gridBagConstraints15.anchor = GridBagConstraints.NORTHWEST;
+			gridBagConstraints15.gridwidth = 2;
+			gridBagConstraints15.weighty = 0.1;
 
 			ButtonGroup group = new ButtonGroup();
 			group.add(getTopDownButton());
 			group.add(getLeftRightButton());
 			JPanel panel = new JPanel(new GridLayout(2, 1));
 			panel.setBorder(BorderFactory.createTitledBorder(Messages
-					.getString("PreferencesDlg.print_direction"))); //$NON-NLS-1$
+					.getString("PreferencesDlg.print_direction")));
 			panel.add(getTopDownButton());
 			panel.add(getLeftRightButton());
-			jPanel2.add(panel, gridBagConstraints14);
+			jPanel2.add(panel, gridBagConstraints15);
 		}
 		return jPanel2;
 	}
@@ -506,7 +515,7 @@ public class PreferencesDlg extends JDialog implements ActionListener {
 	private JRadioButton getLeftRightButton() {
 		if (leftRightButton == null) {
 			leftRightButton = new JRadioButton(
-					Messages.getString("PreferencesDlg.print_left_right")); //$NON-NLS-1$
+					Messages.getString("PreferencesDlg.print_left_right"));
 		}
 		return leftRightButton;
 	}
@@ -527,10 +536,18 @@ public class PreferencesDlg extends JDialog implements ActionListener {
 		return visibleBox;
 	}
 
+	private JCheckBox getHideFirstHeaderBox() {
+		if (hideFirstHeaderBox == null) {
+			hideFirstHeaderBox = new JCheckBox();
+			hideFirstHeaderBox.setText(Messages.getString("PreferencesDlg.hideFirstNumber"));
+		}
+		return hideFirstHeaderBox;
+	}
+
 	private JCheckBox getEditableBox() {
 		if (editableBox == null) {
 			editableBox = new JCheckBox();
-			editableBox.setText(Messages.getString("PreferencesDlg.editing")); //$NON-NLS-1$
+			editableBox.setText(Messages.getString("PreferencesDlg.editing"));
 		}
 		return editableBox;
 	}
@@ -656,6 +673,7 @@ public class PreferencesDlg extends JDialog implements ActionListener {
 		pushUndo(new PreferencesUndo(grid, getReportBook()));
 		ReportModel reportModel = grid.getReportModel();
 		reportModel.setReportTitle(getNameSheetField().getText());
+		reportModel.setHideFirstHeader(getVisibleBox().isSelected());
 		reportModel.setCanUpdatePages(getCanUpdatePageBox().isSelected());
 		reportModel.setRowSizing(getResizingRowsBox().isSelected());
 		reportModel.setColSizing(getResizingColumnsBox().isSelected());
@@ -665,6 +683,7 @@ public class PreferencesDlg extends JDialog implements ActionListener {
 		reportModel.setVisible(getVisibleBox().isSelected());
 		reportModel.setShowHeader(!getHideHeadersBox().isSelected());
 		reportModel.setShowRowHeader(!getHideHeadersBox().isSelected());
+		reportModel.setHideFirstHeader(getHideFirstHeaderBox().isSelected());
 		reportModel.setPrintLeftToRight(getLeftRightButton().isSelected());
 
 		getReportBook().setReportCaption(getNameReportField().getText());
@@ -740,6 +759,7 @@ public class PreferencesDlg extends JDialog implements ActionListener {
 		getEditableBox().setSelected(reportModel.isEditable());
 		getVisibleBox().setSelected(reportModel.isVisible());
 		getHideHeadersBox().setSelected(!reportModel.isShowHeader());
+		getHideFirstHeaderBox().setSelected(reportModel.isHideFirstHeader());
 		getLeftRightButton().setSelected(reportModel.isPrintLeftToRight());
 		getTopDownButton().setSelected(!reportModel.isPrintLeftToRight());
 
@@ -923,7 +943,7 @@ public class PreferencesDlg extends JDialog implements ActionListener {
 			if (fileChooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
 				if (fileChooser.getSelectedFile() != null) {
 					String path = fileChooser.getSelectedFile().getPath();
-					if (fontPaths.indexOf(path) < 0) {
+					if (!fontPaths.contains(path)) {
 						fontPaths.add(path);
 						getFontPathTable().revalidate();
 						getFontPathTable().repaint();

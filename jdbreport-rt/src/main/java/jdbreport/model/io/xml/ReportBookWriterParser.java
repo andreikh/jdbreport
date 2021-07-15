@@ -126,13 +126,16 @@ public abstract class ReportBookWriterParser extends DefaultReportParser {
 				+ model.getRowModel().getPreferredRowHeight()
 				+ "</DefaultRowHeight>");
 		writer.print("<Options " + "RowSizing=\"" + model.isRowSizing() + "\" "
-				+ "ColSizing=\"" + model.isColSizing() + "\" " + "RowMoving=\""
-				+ model.isRowMoving() + "\" " + " ColMoving=\""
-				+ model.isColMoving() + "\" " + "Editing=\""
-				+ model.isEditable() + "\" " + "printLR=\""
-				+ model.isPrintLeftToRight() + "\" ");
+				+ "ColSizing=\"" + model.isColSizing() + "\" "
+				+ "RowMoving=\"" + model.isRowMoving() + "\" "
+				+ "ColMoving=\""+ model.isColMoving() + "\" "
+				+ "Editing=\"" 	+ model.isEditable() + "\" "
+				+ "printLR=\""  + model.isPrintLeftToRight() + "\" ");
 		if (!model.isVisible()) {
 			writer.print("Visible=\"" + model.isVisible() + "\" ");
+		}
+		if (model.isHideFirstHeader()) {
+			writer.print("HideFirstHeader=\"" + model.isHideFirstHeader() + "\" ");
 		}
 		writer
 				.println("CanUpdatePages=\"" + model.isCanUpdatePages()
@@ -152,10 +155,10 @@ public abstract class ReportBookWriterParser extends DefaultReportParser {
 		writer.println("<Rows>");
 		writeRows(writer, model);
 		writer.println("</Rows>");
-		String s = "";
+		StringBuilder s = new StringBuilder();
 		for (int c = 0; c < model.getColumnCount(); c++) {
 			if (model.isColumnBreak(c)) {
-				s += "<col>" + c + "</col>";
+				s.append("<col>").append(c).append("</col>");
 			}
 		}
 		if (s.length() > 0) {

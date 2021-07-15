@@ -550,4 +550,8 @@ public interface TableRowModel extends Iterable<TableRow> {
 	 */
 	void setPrintLeftToRight(boolean value);
 
+	boolean isHideFirstHeader();
+
+	void setHideFirstHeader(boolean hideFirstHeader);
+
 }

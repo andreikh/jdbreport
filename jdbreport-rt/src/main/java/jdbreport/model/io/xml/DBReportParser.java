@@ -200,6 +200,8 @@ public class DBReportParser extends DefaultReportParser {
 									.getValue("CanUpdatePages")));
 			getReportModel().setPrintLeftToRight(
 					Boolean.parseBoolean(attributes.getValue("printLR")));
+			getReportModel().setHideFirstHeader(
+					Boolean.parseBoolean(attributes.getValue("HideFirstHeader")));
 			return true;
 		}
 		if (name.equals(REPORTTITLE)) {

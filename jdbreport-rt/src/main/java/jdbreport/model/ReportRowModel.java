@@ -50,13 +50,13 @@ public class ReportRowModel implements TableRowModel, PropertyChangeListener,
 
     private double preferredHeight = 17;
 
-    private static Units unit = Units.getDefaultUnit();
+    private static final Units unit = Units.getDefaultUnit();
 
     protected int rowMargin = 0;
 
     protected ArrayList<TableRow> rowList;
 
-    private RootGroup rootGroup;
+    private final RootGroup rootGroup;
 
     private int pageHeight;
 
@@ -64,7 +64,7 @@ public class ReportRowModel implements TableRowModel, PropertyChangeListener,
 
     private boolean canHideGroup = false;
 
-    static private NullReportRow nullRow = new NullReportRow();
+    static private final NullReportRow nullRow = new NullReportRow();
 
     protected EventListenerList listenerList = new EventListenerList();
 
@@ -84,7 +84,7 @@ public class ReportRowModel implements TableRowModel, PropertyChangeListener,
      */
     private int firstPageNumber = 1;
 
-    private List<PageNumber> pageNumberList = new ArrayList<>();
+    private final List<PageNumber> pageNumberList = new ArrayList<>();
 
     private List<Integer> pageColumnList;
 
@@ -93,6 +93,8 @@ public class ReportRowModel implements TableRowModel, PropertyChangeListener,
     private boolean showPageNumber = true;
 
     private boolean printLeftToRight;
+
+    private boolean hideFirstHeader;
 
     public ReportRowModel() {
         rowList = new ArrayList<>();
@@ -1070,7 +1072,7 @@ public class ReportRowModel implements TableRowModel, PropertyChangeListener,
             int di = 0;
             resetStruct(pHeight, us, rowHeight);
 
-            if (pageHeaderGroup.getChildCount() > 0) {
+            if (pageHeaderGroup.getChildCount() > 0 && !isHideFirstHeader()) {
                 for (int i = 0; i < pageHeaderGroup.getChildCount(); i++) {
                     TableRow tableRow = pageHeaderGroup.getChild(i);
                     rowList.add(us.index - di, tableRow);
@@ -1519,7 +1521,14 @@ public class ReportRowModel implements TableRowModel, PropertyChangeListener,
 
     public void setPrintLeftToRight(boolean value) {
         this.printLeftToRight = value;
+    }
 
+    public boolean isHideFirstHeader() {
+        return hideFirstHeader;
+    }
+
+    public void setHideFirstHeader(boolean hideFirstHeader) {
+        this.hideFirstHeader = hideFirstHeader;
     }
 
     public int getPageCount() {
