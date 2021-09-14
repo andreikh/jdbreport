@@ -2516,7 +2516,7 @@ public class JReportGrid extends JTable implements TableRowModelListener,
 
                         Rectangle r = modelToView(doc.getLength());
                         if (r != null) {
-                            p = r.y + r.height;
+                            p = r.y + r.height + rowMargin;
                         }
                     } catch (Exception e1) {
                         logger.log(Level.SEVERE, e1.getMessage(), e1);
