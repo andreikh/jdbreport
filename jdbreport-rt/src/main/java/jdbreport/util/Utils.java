@@ -85,6 +85,15 @@ public class Utils {
 				+ color.getRed();
 	}
 
+	public static byte[] colorToRgb(Color color) {
+		byte[] rgb = new byte[4];
+		rgb[0] = (byte) color.getRed();
+		rgb[1] = (byte) color.getGreen();
+		rgb[2] = (byte) color.getBlue();
+		rgb[3] = (byte) color.getAlpha();
+		return rgb;
+	}
+
 	public static String colorToHex(Color color) {
 		String red = Integer.toHexString(color.getRed());
 		if (red.length() == 1) {
@@ -284,7 +293,7 @@ public class Utils {
 					continue;
 				}
 				int b = ++i;
-				while (text.charAt(i) != ';' && i < text.length()) {
+				while (text.charAt(i) != ';') {
 					i++;
 				}
 				if (text.charAt(i) == ';') {
@@ -292,7 +301,7 @@ public class Utils {
 						int ch = Integer.parseInt(text.substring(b, i));
 						result.append((char) ch);
 					} catch (Exception e) {
-						result.append(text.substring(b - 2, i));
+						result.append(text, b - 2, i);
 					}
 				} else {
 					result.append(text.substring(b - 2));
@@ -383,7 +392,6 @@ public class Utils {
 	 * @param in input stream
 	 * @param b bytes
 	 * @return count bytes reads from stream
-	 * @throws java.io.IOException
 	 */
 	public static int readBytes(InputStream in, byte[] b) throws IOException {
 		int l = b.length;

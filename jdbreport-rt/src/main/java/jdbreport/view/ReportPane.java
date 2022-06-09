@@ -585,7 +585,7 @@ public class ReportPane extends JPanel implements ReportListListener,
 			if (child == target)
 				return true;
 			else {
-				if (child != null && child instanceof Container) {
+				if (child instanceof Container) {
 					if (containingChild((Container) child, target))
 						return true;
 				}
@@ -622,8 +622,6 @@ public class ReportPane extends JPanel implements ReportListListener,
 	 * Printing of all report
 	 * 
 	 * @return true if the print has been successful
-	 * @throws PrinterException
-	 * @throws HeadlessException
 	 * @since 2.0
 	 */
 	public boolean print(Component component, List<JReportGrid> grids,
@@ -642,8 +640,6 @@ public class ReportPane extends JPanel implements ReportListListener,
 	 * @param numPage
 	 *            default page
 	 * @return true if the print has been successful
-	 * @throws PrinterException
-	 * @throws HeadlessException
 	 * @since 2.0
 	 */
 	public boolean print(Component component, List<JReportGrid> grids,
@@ -770,8 +766,6 @@ public class ReportPane extends JPanel implements ReportListListener,
 
 	/**
 	 * Print pdf document
-	 * 
-	 * @throws IOException
 	 * 
 	 * @since 1.4
 	 */
@@ -1224,6 +1218,7 @@ public class ReportPane extends JPanel implements ReportListListener,
 				ReportPane.CURRENT_DIRECTORY_PATH);
 		for (String className : getReportBook().getReaderNames()) {
 			FileType reader = getFileTypeClass(className);
+			assert reader != null;
 			ReportFileFilter filter = new ReportFileFilter(reader);
 			fileChooser.addChoosableFileFilter(filter);
 		}
@@ -1517,7 +1512,7 @@ public class ReportPane extends JPanel implements ReportListListener,
 
 	protected JFrame getParentFrame() {
 		Window w = SwingUtilities.getWindowAncestor(this);
-		if (w != null && w instanceof JFrame) {
+		if (w instanceof JFrame) {
 			return (JFrame) w;
 		}
 		return null;
@@ -1525,11 +1520,11 @@ public class ReportPane extends JPanel implements ReportListListener,
 
 	private static class ReportPageable implements Pageable, Printable {
 
-		private List<JReportGrid> gridList;
+		private final List<JReportGrid> gridList;
 		private int numberOfPages;
 		private int retVal;
 		private Throwable retThrowable;
-		private int[] numbers;
+		private final int[] numbers;
 		private int currentGrid;
 		private Printable printable;
 
@@ -1636,9 +1631,7 @@ public class ReportPane extends JPanel implements ReportListListener,
 
 				try {
 					SwingUtilities.invokeAndWait(runnable);
-				} catch (InterruptedException e) {
-					e.printStackTrace();
-				} catch (InvocationTargetException e) {
+				} catch (InterruptedException | InvocationTargetException e) {
 					e.printStackTrace();
 				}
 

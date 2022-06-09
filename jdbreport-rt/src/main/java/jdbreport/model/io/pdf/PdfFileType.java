@@ -74,13 +74,6 @@ public abstract class PdfFileType implements FileType {
 
 	public abstract ReportWriter createPdfWriter();
 	
-	public abstract Collection<String> getFontPaths();
-
-	public abstract String getDefaultFont();
-
-	public abstract void setFontPaths(Collection<String> fontPaths);
-
-	public abstract void setDefaultFont(String font);
 
 	public abstract void initFontMapper();
 }

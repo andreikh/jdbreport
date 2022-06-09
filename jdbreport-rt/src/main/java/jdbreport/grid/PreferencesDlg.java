@@ -46,6 +46,7 @@ import jdbreport.grid.undo.UndoItem;
 import jdbreport.model.ReportBook;
 import jdbreport.model.ReportModel;
 import jdbreport.model.io.pdf.PdfFileType;
+import jdbreport.model.io.pdf.ReportFont;
 import jdbreport.util.Utils;
 import jdbreport.view.ReportEditorPane;
 
@@ -262,8 +263,8 @@ public class PreferencesDlg extends JDialog implements ActionListener {
 				PdfFileType fileType = (PdfFileType) ReportBook
 						.getFileTypeClass(ReportBook.PDF);
 				if (fileType != null) {
-					fontPaths.addAll(fileType.getFontPaths());
-					defaultFont = fileType.getDefaultFont();
+					fontPaths.addAll(ReportFont.getFontPaths());
+					defaultFont = ReportFont.getDefaultFont();
 				}
 			}
 
@@ -447,12 +448,6 @@ public class PreferencesDlg extends JDialog implements ActionListener {
 			gridBagConstraints4.anchor = GridBagConstraints.NORTHWEST;
 			gridBagConstraints4.gridwidth = 2;
 			gridBagConstraints4.gridx = 0;
-			GridBagConstraints gridBagConstraints3 = new GridBagConstraints();
-			gridBagConstraints3.insets = new Insets(4, 10, 2, 4);
-			gridBagConstraints3.gridy = 2;
-			gridBagConstraints3.anchor = GridBagConstraints.NORTHWEST;
-			gridBagConstraints3.gridwidth = 2;
-			gridBagConstraints3.gridx = 0;
 
 			GridBagConstraints gridBagConstraints11 = new GridBagConstraints();
 			gridBagConstraints11.insets = new Insets(2, 10, 2, 4);
@@ -695,8 +690,8 @@ public class PreferencesDlg extends JDialog implements ActionListener {
 			PdfFileType fileType = (PdfFileType) ReportBook
 					.getFileTypeClass(ReportBook.PDF);
 			if (fileType != null) {
-				fileType.setFontPaths(fontPaths);
-				fileType.setDefaultFont(defaultFontField.getText());
+				ReportFont.setFontPaths(fontPaths);
+				ReportFont.setDefaultFont(defaultFontField.getText());
 			}
 			getReportBook().setPrintThroughPdf(
 					getPrintThroughPdfBox().isSelected());

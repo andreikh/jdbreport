@@ -23,9 +23,6 @@
 
 package jdbreport.design.grid;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-
 import javax.swing.JLabel;
 
 import jdbreport.design.model.CellObject;
@@ -41,10 +38,9 @@ public class CellDataPanel extends javax.swing.JPanel {
 
 	private static final String EMPTY_STRING = "";
 	private static final long serialVersionUID = 1L;
-	private TemplateModel model;
+	private final TemplateModel model;
 	private CellObject cell;
 	private boolean varChange;
-	private boolean dataSetChange;
 	private boolean functionChange;
 	private boolean fieldChange;
 
@@ -61,21 +57,20 @@ public class CellDataPanel extends javax.swing.JPanel {
 		}
 		
 		varChange = false;
-		dataSetChange = false;
 		fieldChange = false;
 		functionChange = false;
 	}
 
 	private void initValues() {
 		varBox.removeAllItems();
-		varBox.addItem(EMPTY_STRING); //$NON-NLS-1$
+		varBox.addItem(EMPTY_STRING);
 		for (Object var : model.getVars().keySet()) {
 			varBox.addItem(var);
 		}
 		dataSetBox.removeAllItems();
-		dataSetBox.addItem(EMPTY_STRING); //$NON-NLS-1$
+		dataSetBox.addItem(EMPTY_STRING);
 		for (int i = 0; i < model.getSourcesList().size(); i++) {
-			JdbcReportSource source = (JdbcReportSource) model.getSourcesList()
+			JdbcReportSource source = model.getSourcesList()
 					.get(i);
 			for (int n = 0; n < source.getDataSetCount(); n++) {
 				dataSetBox.addItem(source.getDataSet(n).getId());
@@ -83,7 +78,7 @@ public class CellDataPanel extends javax.swing.JPanel {
 		}
 
 		fieldBox.removeAllItems();
-		fieldBox.addItem(EMPTY_STRING); //$NON-NLS-1$
+		fieldBox.addItem(EMPTY_STRING);
 
 		functionsBox.removeAllItems();
 		functionsBox.addItem(EMPTY_STRING);
@@ -104,68 +99,39 @@ public class CellDataPanel extends javax.swing.JPanel {
 		buttonGroup1 = new javax.swing.ButtonGroup();
 		varButton = new javax.swing.JRadioButton();
 		fieldButton = new javax.swing.JRadioButton();
-		varBox = new javax.swing.JComboBox();
-		varBox.addActionListener(new ActionListener() {
+		varBox = new javax.swing.JComboBox<>();
+		varBox.addActionListener(e -> varChange = true);
 
-			public void actionPerformed(ActionEvent e) {
-				varChange = true;
+		fieldBox = new javax.swing.JComboBox<>();
+		fieldBox.addActionListener(e -> {
+			if (fieldBox.getItemCount() > 0) {
+				fieldChange = true;
 			}
-
 		});
 
-		fieldBox = new javax.swing.JComboBox();
-		fieldBox.addActionListener(new ActionListener() {
+		functionsBox = new javax.swing.JComboBox<>();
+		functionsBox.addActionListener(e -> functionChange = true);
 
-			public void actionPerformed(ActionEvent e) {
-				if (fieldBox.getItemCount() > 0) {
-					fieldChange = true;
-				}
-			}
-
-		});
-
-		functionsBox = new javax.swing.JComboBox();
-		functionsBox.addActionListener(new ActionListener() {
-
-			public void actionPerformed(ActionEvent e) {
-				functionChange = true;
-			}
-
-		});
-
-		dataSetBox = new javax.swing.JComboBox();
-		dataSetBox.addActionListener(new ActionListener() {
-
-			public void actionPerformed(ActionEvent e) {
-				dataSetChange = true;
-			}
-
+		dataSetBox = new javax.swing.JComboBox<>();
+		dataSetBox.addActionListener(e -> {
 		});
 
 		setLayout(new java.awt.GridBagLayout());
 
 		buttonGroup1.add(varButton);
-		varButton.setText(Messages.getString("CellDataPanel.4")); //$NON-NLS-1$
+		varButton.setText(Messages.getString("CellDataPanel.4"));
 		varButton.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 0,
 				0, 0));
 		varButton.setMargin(new java.awt.Insets(0, 0, 0, 0));
-		varButton.addActionListener(new java.awt.event.ActionListener() {
-			public void actionPerformed(java.awt.event.ActionEvent evt) {
-				varButtonActionPerformed(evt);
-			}
-		});
+		varButton.addActionListener(this::varButtonActionPerformed);
 
 
 		buttonGroup1.add(fieldButton);
-		fieldButton.setText(Messages.getString("CellDataPanel.5")); //$NON-NLS-1$
+		fieldButton.setText(Messages.getString("CellDataPanel.5"));
 		fieldButton.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 0,
 				0, 0));
 		fieldButton.setMargin(new java.awt.Insets(0, 0, 0, 0));
-		fieldButton.addActionListener(new java.awt.event.ActionListener() {
-			public void actionPerformed(java.awt.event.ActionEvent evt) {
-				fieldButtonActionPerformed(evt);
-			}
-		});
+		fieldButton.addActionListener(this::fieldButtonActionPerformed);
 
 		gridBagConstraints = new java.awt.GridBagConstraints();
 		gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
@@ -204,7 +170,7 @@ public class CellDataPanel extends javax.swing.JPanel {
 		gridBagConstraints.gridx = 0;
 		gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
 		gridBagConstraints.insets = new java.awt.Insets(4, 10, 36, 4);
-		add(new JLabel(Messages.getString("CellDataPanel.19")), gridBagConstraints);//$NON-NLS-1$
+		add(new JLabel(Messages.getString("CellDataPanel.19")), gridBagConstraints);
 
 		fieldBox.setEditable(true);
 		fieldBox.setEnabled(false);
@@ -221,7 +187,7 @@ public class CellDataPanel extends javax.swing.JPanel {
 		gridBagConstraints.gridx = 0;
 		gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
 		gridBagConstraints.insets = new java.awt.Insets(4, 10, 4, 4);
-		add(new JLabel(Messages.getString("CellDataPanel.14")), gridBagConstraints); //$NON-NLS-1$
+		add(new JLabel(Messages.getString("CellDataPanel.14")), gridBagConstraints);
 
 		gridBagConstraints = new java.awt.GridBagConstraints();
 		gridBagConstraints.gridy = 3;
@@ -280,11 +246,11 @@ public class CellDataPanel extends javax.swing.JPanel {
 		}
 	}
 
-	private javax.swing.JComboBox dataSetBox;
-	private javax.swing.JComboBox fieldBox;
+	private javax.swing.JComboBox<String> dataSetBox;
+	private javax.swing.JComboBox<String> fieldBox;
 	private javax.swing.JRadioButton fieldButton;
-	private javax.swing.JComboBox functionsBox;
-	private javax.swing.JComboBox varBox;
+	private javax.swing.JComboBox<String> functionsBox;
+	private javax.swing.JComboBox<Object> varBox;
 	private javax.swing.JRadioButton varButton;
 
 }

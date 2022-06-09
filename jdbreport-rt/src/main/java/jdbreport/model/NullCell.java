@@ -168,6 +168,7 @@ public class NullCell implements Cell {
 
 	}
 
+	@SuppressWarnings("MethodDoesntCallSuperMethod")
 	@Override
 	public Object clone() {
 		return this;

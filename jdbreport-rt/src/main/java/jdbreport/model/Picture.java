@@ -29,9 +29,9 @@ import java.io.BufferedInputStream;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.file.Files;
 
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
@@ -266,7 +266,7 @@ public class Picture {
 	}
 
 	public void load(File file) throws IOException {
-		try (InputStream is = new BufferedInputStream(new FileInputStream(file))) {
+		try (InputStream is = new BufferedInputStream(Files.newInputStream(file.toPath()))) {
 			load(is);
 		}
 	}

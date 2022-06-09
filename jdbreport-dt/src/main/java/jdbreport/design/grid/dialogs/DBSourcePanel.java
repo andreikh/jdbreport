@@ -22,8 +22,6 @@ import jdbreport.source.JdbcSource;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.util.Properties;
 
 /**
@@ -34,17 +32,17 @@ import java.util.Properties;
 public class DBSourcePanel extends JPanel {
 
 	private static final long serialVersionUID = 1L;
-	private JdbcSource dbSource;
+	private final JdbcSource dbSource;
 	private JTextField aliasText;
 	private JTextField dataSourceText;
 	private JTextField driverText;
 	private JTextField urlText;
 	private JTextField loginText;
 	private JTextField passwordText;
-	private JComboBox driversBox;
+	private JComboBox<JdbcDrivers> driversBox;
 	private JTable table;
 	private PropertiesTableModel settingsModel;
-	private boolean editable;
+	private final boolean editable;
 
 	public DBSourcePanel(JdbcSource dbSource) {
 		this(dbSource, true);
@@ -171,21 +169,15 @@ public class DBSourcePanel extends JPanel {
 		return clientPanel;
 	}
 
-	private JComboBox getDriversBox() {
+	private JComboBox<JdbcDrivers> getDriversBox() {
 		if (driversBox == null) {
-			driversBox = new JComboBox();
+			driversBox = new JComboBox<>();
 			driversBox.setEnabled(editable);
 			driversBox.setFont(getFont());
 			for (JdbcDrivers d : JdbcDrivers.getDrivers()) {
 				driversBox.addItem(d);
 			}
-			driversBox.addActionListener(new ActionListener() {
-
-				public void actionPerformed(ActionEvent e) {
-					updateDriverField();
-				}
-
-			});
+			driversBox.addActionListener(e -> updateDriverField());
 		}
 		return driversBox;
 	}
@@ -205,7 +197,7 @@ public class DBSourcePanel extends JPanel {
 
 			private static final long serialVersionUID = 1L;
 
-			Insets insets = new Insets(10, 10, 10, 10);
+			final Insets insets = new Insets(10, 10, 10, 10);
 
 			public Insets getInsets() {
 				return insets;
@@ -224,24 +216,14 @@ public class DBSourcePanel extends JPanel {
 
 		JButton addButton = new JButton("+"); //$NON-NLS-1$
 		addButton.setToolTipText(Messages.getString("DBSourceDialog.4")); //$NON-NLS-1$
-		addButton.addActionListener(new ActionListener() {
-
-			public void actionPerformed(ActionEvent e) {
-				settingsModel.addRow();
-			}
-
-		});
+		addButton.addActionListener(e -> settingsModel.addRow());
 
 		JButton delButton = new JButton("-"); //$NON-NLS-1$
 		delButton.setToolTipText(Messages.getString("DBSourceDialog.6")); //$NON-NLS-1$
-		delButton.addActionListener(new ActionListener() {
-
-			public void actionPerformed(ActionEvent e) {
-				int[] rows = table.getSelectedRows();
-				if (rows.length > 0)
-					settingsModel.delRow(rows[0], rows[rows.length - 1]);
-			}
-
+		delButton.addActionListener(e -> {
+			int[] rows = table.getSelectedRows();
+			if (rows.length > 0)
+				settingsModel.delRow(rows[0], rows[rows.length - 1]);
 		});
 		tblHPanel.add(addButton, BorderLayout.CENTER);
 		tblHPanel.add(delButton, BorderLayout.CENTER);
@@ -272,7 +254,7 @@ public class DBSourcePanel extends JPanel {
 		if (dbSource.getDriverName() != null) {
 			for (int i = 1; i < driversBox.getItemCount(); i++) {
 				if (dbSource.getDriverName().equals(
-						((JdbcDrivers)driversBox.getItemAt(i)).getDriver())) {
+						driversBox.getItemAt(i).getDriver())) {
 					driversBox.setSelectedIndex(i);
 					break;
 				}

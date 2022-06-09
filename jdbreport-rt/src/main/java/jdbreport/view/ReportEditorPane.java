@@ -27,6 +27,7 @@ import jdbreport.grid.undo.UndoItem;
 import jdbreport.model.*;
 import jdbreport.model.event.CellSelectListener;
 import jdbreport.model.io.pdf.PdfFileType;
+import jdbreport.model.io.pdf.ReportFont;
 import jdbreport.model.svg.SVGValue;
 import jdbreport.util.HelpWindow;
 import jdbreport.util.Utils;
@@ -45,10 +46,8 @@ import java.beans.PropertyChangeEvent;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.*;
 import java.util.List;
-import java.util.StringTokenizer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -207,8 +206,8 @@ public class ReportEditorPane extends ReportPane implements CellSelectListener,
     private Action saveImageAction;
     private HelpWindow helpWindow;
 
-    public static final boolean isWindows = System.getProperty("os.name") //$NON-NLS-1$
-            .startsWith("Windows"); //$NON-NLS-1$
+    public static final boolean isWindows = System.getProperty("os.name")
+            .startsWith("Windows");
 
     public ReportEditorPane(XMLProperties properties) {
         super(properties);
@@ -285,16 +284,16 @@ public class ReportEditorPane extends ReportPane implements CellSelectListener,
     public void setRowHeight() {
         int height = getFocusedGrid().getReportModel().getRowHeight(
                 getFocusedGrid().getSelectedRow());
-        int unit = properties.getInt("Units", NumericDlg.PX); //$NON-NLS-1$
+        int unit = properties.getInt("Units", NumericDlg.PX);
         NumericDlg dlg;
         Window w = SwingUtilities.getWindowAncestor(this);
         if (w instanceof Frame) {
             dlg = new NumericDlg((Frame) w, ReportResources.getInstance()
-                    .getString("row_height_dialog.caption"), (double) height, //$NON-NLS-1$
+                    .getString("row_height_dialog.caption"), height,
                     unit, Orientation.Vertical);
         } else {
             dlg = new NumericDlg((Dialog) w, ReportResources.getInstance()
-                    .getString("row_height_dialog.caption"), (double) height, //$NON-NLS-1$
+                    .getString("row_height_dialog.caption"), height,
                     unit, Orientation.Vertical);
         }
         dlg.setVisible(true);
@@ -306,22 +305,22 @@ public class ReportEditorPane extends ReportPane implements CellSelectListener,
                     .getMaxSelectionIndex();
             getFocusedGrid().setRowsHeight(minRow, maxRow, height);
         }
-        properties.put("Units", dlg.getUnits()); //$NON-NLS-1$
+        properties.put("Units", dlg.getUnits());
     }
 
     public void setColumnWidth() {
         int width = getFocusedGrid().getReportModel().getColumnWidth(
                 getFocusedGrid().getSelectedColumn());
-        int unit = properties.getInt("Units", NumericDlg.PX); //$NON-NLS-1$
+        int unit = properties.getInt("Units", NumericDlg.PX);
         NumericDlg dlg;
         Window w = SwingUtilities.getWindowAncestor(this);
         if (w instanceof Frame) {
             dlg = new NumericDlg((Frame) w, ReportResources.getInstance()
-                    .getString("column_width_dialog.caption"), (double) width, //$NON-NLS-1$
+                    .getString("column_width_dialog.caption"), width,
                     unit, Orientation.Horizontal);
         } else {
             dlg = new NumericDlg((Dialog) w, ReportResources.getInstance()
-                    .getString("column_width_dialog.caption"), (double) width, //$NON-NLS-1$
+                    .getString("column_width_dialog.caption"), width,
                     unit, Orientation.Horizontal);
         }
         dlg.setVisible(true);
@@ -332,7 +331,7 @@ public class ReportEditorPane extends ReportPane implements CellSelectListener,
                     + getFocusedGrid().getSelectedColumnCount() - 1;
             getFocusedGrid().setColumnsWidth(minColumn, maxColumn, width);
         }
-        properties.put("Units", dlg.getUnits()); //$NON-NLS-1$
+        properties.put("Units", dlg.getUnits());
     }
 
     protected void initActions() {
@@ -385,7 +384,7 @@ public class ReportEditorPane extends ReportPane implements CellSelectListener,
             }
 
         };
-        aboutAction = new ReportAction.BasedAction("help_about") { //$NON-NLS-1$
+        aboutAction = new ReportAction.BasedAction("help_about") {
 
             private static final long serialVersionUID = 1L;
 
@@ -394,7 +393,7 @@ public class ReportEditorPane extends ReportPane implements CellSelectListener,
             }
 
         };
-        addSheetAction = new ReportAction.BasedAction("add_sheet") { //$NON-NLS-1$
+        addSheetAction = new ReportAction.BasedAction("add_sheet") {
 
             private static final long serialVersionUID = 1L;
 
@@ -406,13 +405,13 @@ public class ReportEditorPane extends ReportPane implements CellSelectListener,
             }
 
         };
-        delSheetAction = new ReportAction.BasedAction("del_sheet") { //$NON-NLS-1$
+        delSheetAction = new ReportAction.BasedAction("del_sheet") {
 
             private static final long serialVersionUID = 1L;
 
             public void actionPerformed(ActionEvent e) {
                 if (JOptionPane.showConfirmDialog(ReportEditorPane.this,
-                        Messages.getString("ReportEditorPane.del_sheet")) == JOptionPane.YES_OPTION) { //$NON-NLS-1$
+                        Messages.getString("ReportEditorPane.del_sheet")) == JOptionPane.YES_OPTION) {
                     JReportGrid grid = getFocusedGrid();
                     ReportModel model = grid.getReportModel();
                     int index = indexOfTabbed(grid);
@@ -424,7 +423,7 @@ public class ReportEditorPane extends ReportPane implements CellSelectListener,
 
         };
         delSheetAction.setEnabled(false);
-        loadSheetAction = new ReportAction.BasedAction("load_sheet") { //$NON-NLS-1$
+        loadSheetAction = new ReportAction.BasedAction("load_sheet") {
 
             private static final long serialVersionUID = 1L;
 
@@ -433,7 +432,7 @@ public class ReportEditorPane extends ReportPane implements CellSelectListener,
             }
 
         };
-        saveSheetAction = new ReportAction.BasedAction("save_sheet") { //$NON-NLS-1$
+        saveSheetAction = new ReportAction.BasedAction("save_sheet") {
 
             private static final long serialVersionUID = 1L;
 
@@ -442,7 +441,7 @@ public class ReportEditorPane extends ReportPane implements CellSelectListener,
             }
 
         };
-        moveLeftSheetAction = new ReportAction.BasedAction("left_sheet") { //$NON-NLS-1$
+        moveLeftSheetAction = new ReportAction.BasedAction("left_sheet") {
 
             private static final long serialVersionUID = 1L;
 
@@ -450,7 +449,7 @@ public class ReportEditorPane extends ReportPane implements CellSelectListener,
                 moveLeftSheet();
             }
         };
-        moveRightSheetAction = new ReportAction.BasedAction("right_sheet") { //$NON-NLS-1$
+        moveRightSheetAction = new ReportAction.BasedAction("right_sheet") {
 
             private static final long serialVersionUID = 1L;
 
@@ -458,7 +457,7 @@ public class ReportEditorPane extends ReportPane implements CellSelectListener,
                 moveRightSheet();
             }
         };
-        printSheetAction = new ReportAction.BasedAction("print_sheet") { //$NON-NLS-1$
+        printSheetAction = new ReportAction.BasedAction("print_sheet") {
 
             private static final long serialVersionUID = 1L;
 
@@ -541,7 +540,7 @@ public class ReportEditorPane extends ReportPane implements CellSelectListener,
 
     protected JToolBar getFormatBar() {
         if (formatBar == null) {
-            formatBar = new JToolBar(Messages.getString("ReportEditor.11")); //$NON-NLS-1$
+            formatBar = new JToolBar(Messages.getString("ReportEditor.11"));
             formatBar.setRollover(true);
             formatBar.setFloatable(false);
             formatBar.add(getFontPanel());
@@ -554,9 +553,9 @@ public class ReportEditorPane extends ReportPane implements CellSelectListener,
             addAlignAction(formatBar);
             formatBar.addSeparator();
 
-            borderButton = new JButton(new ImageIcon(getClass().getResource(
-                    "/jdbreport/resources/brd.png"))); //$NON-NLS-1$
-            borderButton.setToolTipText(Messages.getString("ReportEditor.13")); //$NON-NLS-1$
+            borderButton = new JButton(new ImageIcon(Objects.requireNonNull(getClass().getResource(
+                    "/jdbreport/resources/brd.png"))));
+            borderButton.setToolTipText(Messages.getString("ReportEditor.13"));
             borderButton.setActionCommand(SHOW_BORDER_DLG_COMMAND);
             borderButton.addActionListener(this);
             formatBar.add(borderButton);
@@ -570,7 +569,7 @@ public class ReportEditorPane extends ReportPane implements CellSelectListener,
     protected JMenu getImageMenu() {
         if (imageMenu == null) {
             imageMenu = new JMenu(ReportResources.getInstance().getString(
-                    "menu.image")); //$NON-NLS-1$
+                    "menu.image"));
             imageMenu.add(getImageAction());
             imageMenu.add(getScaleImageItem());
             imageMenu.add(getDeleteImageAction());
@@ -583,8 +582,8 @@ public class ReportEditorPane extends ReportPane implements CellSelectListener,
         File tmpFile;
         try {
             if (ods_exists) {
-                String ext = ".ods"; //$NON-NLS-1$
-                tmpFile = File.createTempFile("~rpt", null); //$NON-NLS-1$
+                String ext = ".ods";
+                tmpFile = File.createTempFile("~rpt", null);
                 tmpFile.delete();
                 tmpFile = new File(Utils.changeFileExtension(
                         tmpFile.getPath(), ext));
@@ -661,22 +660,22 @@ public class ReportEditorPane extends ReportPane implements CellSelectListener,
     protected void addAlignAction(JToolBar alignBar) {
         AbstractButton leftButton = getAlignLeftAction().addButton(
                 new JToggleButton());
-        leftButton.setText(""); //$NON-NLS-1$
+        leftButton.setText("");
         alignBar.add(leftButton);
 
         AbstractButton centerButton = getAlignCenterAction().addButton(
                 new JToggleButton());
-        centerButton.setText(""); //$NON-NLS-1$
+        centerButton.setText("");
         alignBar.add(centerButton);
 
         AbstractButton rightButton = getAlignRightAction().addButton(
                 new JToggleButton());
-        rightButton.setText(""); //$NON-NLS-1$
+        rightButton.setText("");
         alignBar.add(rightButton);
 
         AbstractButton justifyButton = getJustifyAction().addButton(
                 new JToggleButton());
-        justifyButton.setText(""); //$NON-NLS-1$
+        justifyButton.setText("");
         alignBar.add(justifyButton);
 
         ButtonGroup buttonGroup = new ButtonGroup();
@@ -687,17 +686,17 @@ public class ReportEditorPane extends ReportPane implements CellSelectListener,
 
         AbstractButton topButton = getAlignTopAction().addButton(
                 new JToggleButton());
-        topButton.setText(""); //$NON-NLS-1$
+        topButton.setText("");
         alignBar.add(topButton);
 
         AbstractButton vcenterButton = getAlignVCenterAction().addButton(
                 new JToggleButton());
-        vcenterButton.setText(""); //$NON-NLS-1$
+        vcenterButton.setText("");
         alignBar.add(vcenterButton);
 
         AbstractButton bottomButton = getAlignBottomAction().addButton(
                 new JToggleButton());
-        bottomButton.setText(""); //$NON-NLS-1$
+        bottomButton.setText("");
         alignBar.add(bottomButton);
 
         ButtonGroup buttonvGroup = new ButtonGroup();
@@ -709,7 +708,7 @@ public class ReportEditorPane extends ReportPane implements CellSelectListener,
 
         AbstractButton mergeCellButton = getUnionCellAction().addButton(
                 new JToggleButton());
-        mergeCellButton.setText(""); //$NON-NLS-1$
+        mergeCellButton.setText("");
         alignBar.add(mergeCellButton);
     }
 
@@ -723,7 +722,7 @@ public class ReportEditorPane extends ReportPane implements CellSelectListener,
     private AbstractButton createItalicButton() {
         AbstractButton button = getItalicAction()
                 .addButton(new JToggleButton());
-        button.setText(""); //$NON-NLS-1$
+        button.setText("");
         return button;
     }
 
@@ -892,7 +891,7 @@ public class ReportEditorPane extends ReportPane implements CellSelectListener,
 
     private AbstractButton createBoldButton() {
         AbstractButton button = getBoldAction().addButton(new JToggleButton());
-        button.setText(""); //$NON-NLS-1$
+        button.setText("");
         return button;
     }
 
@@ -980,7 +979,7 @@ public class ReportEditorPane extends ReportPane implements CellSelectListener,
      *
      * @return javax.swing.JComboBox
      */
-    private JComboBox getFontSizeBox() {
+    private JComboBox<Integer> getFontSizeBox() {
         if (fontSizeBox == null) {
             fontSizeBox = new JComboBox<>();
             fontSizeBox.setPreferredSize(new Dimension(46, 22));
@@ -1003,7 +1002,7 @@ public class ReportEditorPane extends ReportPane implements CellSelectListener,
         return fontSizeBox;
     }
 
-    private JComboBox getFontNameBox() {
+    private JComboBox<String> getFontNameBox() {
         if (fontNameBox == null) {
             fontNameBox = new JComboBox<>();
             fontNameBox.setMaximumSize(new Dimension(150, 22));
@@ -1034,7 +1033,7 @@ public class ReportEditorPane extends ReportPane implements CellSelectListener,
                 public void popupMenuWillBecomeInvisible(PopupMenuEvent e) {
                     if (visible && getFocusedGrid() != null
                             && isEnabledAction()) {
-                        JComboBox cb = (JComboBox) e.getSource();
+                        JComboBox<?> cb = (JComboBox<?>) e.getSource();
                         getFocusedGrid().setFontName(
                                 String.valueOf(cb.getSelectedItem()));
                     }
@@ -1134,10 +1133,10 @@ public class ReportEditorPane extends ReportPane implements CellSelectListener,
 
     private String getExcelCommand() {
         if (excelCommand == null || excelCommand.length() == 0) {
-            excelCommand = "excel.exe"; //$NON-NLS-1$
+            excelCommand = "excel.exe";
             for (int i = 13; i >= 10; i--) {
-                File file = new File("c:/Program Files/Microsoft Office/OFFICE" //$NON-NLS-1$
-                        + i + "/excel.exe"); //$NON-NLS-1$
+                File file = new File("c:/Program Files/Microsoft Office/OFFICE"
+                        + i + "/excel.exe");
                 if (file.exists()) {
                     excelCommand = file.getPath();
                     break;
@@ -1154,32 +1153,24 @@ public class ReportEditorPane extends ReportPane implements CellSelectListener,
     private String getODSCommand() {
         if (odsCommand == null || odsCommand.length() == 0) {
             if (isWindows) {
-                odsCommand = "scalc.exe"; //$NON-NLS-1$
+                odsCommand = "scalc.exe";
                 {
-                    File file = new File("c:/Program Files/OpenOffice.org 3" //$NON-NLS-1$
-                            + "/program/scalc.exe"); //$NON-NLS-1$
-                    if (file.exists()) {
-                        odsCommand = file.getPath();
-                        return odsCommand;
-                    }
-                }
-                for (int i = 4; i >= 0; i--) {
-                    File file = new File("c:/Program Files/OpenOffice.org 2." //$NON-NLS-1$
-                            + i + "/program/scalc.exe"); //$NON-NLS-1$
+                    File file = new File("c:/Program Files/OpenOffice.org 3"
+                            + "/program/scalc.exe");
                     if (file.exists()) {
                         odsCommand = file.getPath();
                         return odsCommand;
                     }
                 }
             } else
-                odsCommand = "openoffice.org -calc"; //$NON-NLS-1$
+                odsCommand = "openoffice.org -calc";
         }
         return odsCommand;
     }
 
     protected JToolBar getStandartBar() {
         if (standartBar == null) {
-            standartBar = new JToolBar(Messages.getString("ReportEditor.10")); //$NON-NLS-1$
+            standartBar = new JToolBar(Messages.getString("ReportEditor.10"));
             standartBar.setRollover(true);
             standartBar.setFloatable(false);
 
@@ -1208,7 +1199,7 @@ public class ReportEditorPane extends ReportPane implements CellSelectListener,
     protected JButton createInsertRowButton() {
         JButton button = new JButton(ReportAction.createGridAction(
                 ReportAction.INSERT_ROW_ACTION, this));
-        button.setText(""); //$NON-NLS-1$
+        button.setText("");
         return button;
     }
 
@@ -1409,9 +1400,9 @@ public class ReportEditorPane extends ReportPane implements CellSelectListener,
             undoButton.setToolTipText(getUndoAction().getToolTipText());
             redoButton.setToolTipText(getRedoAction().getToolTipText());
             if (grid == null) {
-                undoButton.setToolTipText(getUndoAction().getValue("Name") //$NON-NLS-1$
+                undoButton.setToolTipText(getUndoAction().getValue("Name")
                         .toString());
-                redoButton.setToolTipText(getRedoAction().getValue("Name") //$NON-NLS-1$
+                redoButton.setToolTipText(getRedoAction().getValue("Name")
                         .toString());
             }
             getSaveAction().setEnabled(isModified());
@@ -1420,7 +1411,7 @@ public class ReportEditorPane extends ReportPane implements CellSelectListener,
 
     private static boolean failedDecodeFont = false;
 
-    private class FontCellRenderer extends JTextPane implements
+    private static class FontCellRenderer extends JTextPane implements
             ListCellRenderer {
         private static final long serialVersionUID = -889837983681353498L;
 
@@ -1456,7 +1447,7 @@ public class ReportEditorPane extends ReportPane implements CellSelectListener,
             setText(value.toString());
             try {
                 if (!failedDecodeFont)
-                    setFont(Font.decode(value.toString() + "-plain-14"));
+                    setFont(Font.decode(value + "-plain-14"));
             } catch (Exception ignore) {
                 failedDecodeFont = true;
             }
@@ -1487,7 +1478,7 @@ public class ReportEditorPane extends ReportPane implements CellSelectListener,
         private boolean added;
         private boolean hasUndo = false;
         private JReportGrid[] grids;
-        private int index;
+        private final int index;
 
         public LoadSheetUndo(int index, JReportGrid[] grids) {
             this.index = index;
@@ -1574,7 +1565,7 @@ public class ReportEditorPane extends ReportPane implements CellSelectListener,
         private boolean added;
 
         public AddSheetUndo(JReportGrid grid) {
-            super(grid, "Add sheet"); //$NON-NLS-1$
+            super(grid, "Add sheet");
             added = true;
         }
 
@@ -1593,10 +1584,10 @@ public class ReportEditorPane extends ReportPane implements CellSelectListener,
     private class DelSheetUndo extends AbstractGridUndo {
 
         private boolean deleted;
-        private int index;
+        private final int index;
 
         public DelSheetUndo(JReportGrid grid, int index) {
-            super(grid, Messages.getString("ReportEditorPane.1")); //$NON-NLS-1$
+            super(grid, Messages.getString("ReportEditorPane.1"));
             this.index = index;
             deleted = true;
         }
@@ -1627,7 +1618,7 @@ public class ReportEditorPane extends ReportPane implements CellSelectListener,
         }
 
         public String getDescription() {
-            return Messages.getString("ReportEditorPane.0"); //$NON-NLS-1$
+            return Messages.getString("ReportEditorPane.0");
         }
 
         public UndoItem undo() {
@@ -1675,7 +1666,7 @@ public class ReportEditorPane extends ReportPane implements CellSelectListener,
     private JMenu getFormatMenu() {
         JMenu formatMenu = new JMenu();
         formatMenu.setText(ReportResources.getInstance().getString(
-                "menu.format")); //$NON-NLS-1$
+                "menu.format"));
         formatMenu.add(createUnionCellItem());
         formatMenu.add(createRowBreakItem());
         formatMenu.add(createColumnBreakItem());
@@ -1692,18 +1683,18 @@ public class ReportEditorPane extends ReportPane implements CellSelectListener,
     }
 
     protected JMenu createHelpMenu() {
-        JMenu helpMenu = new JMenu(Messages.getString("ReportEditor.8")); //$NON-NLS-1$
+        JMenu helpMenu = new JMenu(Messages.getString("ReportEditor.8"));
         JMenuItem menuItem = new JMenuItem(
-                Messages.getString("ReportEditorPane.user_guide")); //$NON-NLS-1$
+                Messages.getString("ReportEditorPane.user_guide"));
         menuItem.addActionListener(this);
-        menuItem.setActionCommand("help"); //$NON-NLS-1$
+        menuItem.setActionCommand("help");
         helpMenu.add(menuItem);
         return helpMenu;
     }
 
     public JMenu getLfMenu() {
         lfMenu = new JMenu();
-        lfMenu.setText(ReportResources.getInstance().getString("menu.lf")); //$NON-NLS-1$
+        lfMenu.setText(ReportResources.getInstance().getString("menu.lf"));
         LookAndFeelInfo[] looks = UIManager.getInstalledLookAndFeels();
         for (LookAndFeelInfo look : looks) {
             JMenuItem item = new JCheckBoxMenuItem(look.getName());
@@ -1741,7 +1732,7 @@ public class ReportEditorPane extends ReportPane implements CellSelectListener,
 
     protected JMenu createFileMenu() {
         JMenu fileMenu = new JMenu();
-        fileMenu.setText(ReportResources.getInstance().getString("menu.file")); //$NON-NLS-1$
+        fileMenu.setText(ReportResources.getInstance().getString("menu.file"));
         fileMenu.add(getNewAction());
         fileMenu.add(getOpenAction());
         fileMenu.add(getSaveAction());
@@ -1786,7 +1777,7 @@ public class ReportEditorPane extends ReportPane implements CellSelectListener,
     protected JMenu getEditMenu() {
         if (editMenu == null) {
             editMenu = new JMenu(ReportResources.getInstance().getString(
-                    "menu.edit")); //$NON-NLS-1$
+                    "menu.edit"));
             editMenu.addMenuListener(new MenuListener() {
 
                 public void menuCanceled(MenuEvent e) {
@@ -1797,10 +1788,10 @@ public class ReportEditorPane extends ReportPane implements CellSelectListener,
 
                 public void menuSelected(MenuEvent e) {
                     editMenu.getItem(0).setText(
-                            getUndoAction().getValue("Name") + " " //$NON-NLS-1$ //$NON-NLS-2$
+                            getUndoAction().getValue("Name") + " "
                                     + getUndoAction().getDescription());
                     editMenu.getItem(1).setText(
-                            getRedoAction().getValue("Name") + " " //$NON-NLS-1$ //$NON-NLS-2$
+                            getRedoAction().getValue("Name") + " "
                                     + getRedoAction().getDescription());
                 }
 
@@ -1875,7 +1866,7 @@ public class ReportEditorPane extends ReportPane implements CellSelectListener,
     }
 
     public void changeLookAndFeel() {
-        if (!"".equals(defaultLf)) { //$NON-NLS-1$
+        if (!"".equals(defaultLf)) {
             String className = findLookAndFeel(defaultLf);
             if (className != null)
                 try {
@@ -1917,9 +1908,9 @@ public class ReportEditorPane extends ReportPane implements CellSelectListener,
                                 fonts.add(path);
                             }
                         }
-                        fileType.setFontPaths(fonts);
+                        ReportFont.setFontPaths(fonts);
                     }
-                    fileType.setDefaultFont(font);
+                    ReportFont.setDefaultFont(font);
                 }
             }
         } catch (Exception e) {
@@ -1968,7 +1959,7 @@ public class ReportEditorPane extends ReportPane implements CellSelectListener,
         if (w instanceof Frame) {
             Frame frame = (Frame) w;
             if ((frame.getExtendedState() & Frame.ICONIFIED) == 0)
-                properties.put(WINDOW_STATE, "" + frame.getExtendedState()); //$NON-NLS-1$
+                properties.put(WINDOW_STATE, "" + frame.getExtendedState());
             if (frame.getState() == Frame.NORMAL) {
                 Rectangle r = frame.getBounds();
                 if (r.width > 0 && r.height > 0) {
@@ -2000,20 +1991,20 @@ public class ReportEditorPane extends ReportPane implements CellSelectListener,
         if (defaultLf != null && defaultLf.length() > 0) {
             properties.put(LOOK_AND_FEEL, defaultLf);
         }
-        properties.put(EXCEL_COMMAND, excelCommand == null ? "" : excelCommand); //$NON-NLS-1$
-        properties.put(ODS_COMMAND, odsCommand == null ? "" : odsCommand); //$NON-NLS-1$
+        properties.put(EXCEL_COMMAND, excelCommand == null ? "" : excelCommand);
+        properties.put(ODS_COMMAND, odsCommand == null ? "" : odsCommand);
         if (ReportBook.pdfExists()) {
             PdfFileType fileType = (PdfFileType) ReportBook.getFileTypeClass(ReportBook.PDF);
             if (fileType != null) {
 
-                StringBuilder paths = new StringBuilder(); //$NON-NLS-1$
-                for (String path : fileType.getFontPaths()) {
-                    paths.append(path).append(";"); //$NON-NLS-1$
+                StringBuilder paths = new StringBuilder();
+                for (String path : ReportFont.getFontPaths()) {
+                    paths.append(path).append(";");
                 }
                 properties.put(PdfFileType.FONT_PATHS, paths.toString());
                 properties.put(PdfFileType.DEFAULT_FONT,
-                        fileType.getDefaultFont() == null ? "" //$NON-NLS-1$
-                                : fileType.getDefaultFont());
+                        ReportFont.getDefaultFont() == null ? ""
+                                : ReportFont.getDefaultFont());
 
             }
         }
@@ -2040,11 +2031,11 @@ public class ReportEditorPane extends ReportPane implements CellSelectListener,
 
     protected void showHelp() {
         URL url = getClass().getResource(
-                Messages.getString("ReportEditorPane.help_url")); //$NON-NLS-1$
+                Messages.getString("ReportEditorPane.help_url"));
         if (url != null) {
             getHelpWindow().setUrl(url);
             getHelpWindow().setTitle(
-                    Messages.getString("ReportEditorPane.help_title")); //$NON-NLS-1$
+                    Messages.getString("ReportEditorPane.help_title"));
         }
         getHelpWindow().setVisible(true);
     }
@@ -2069,7 +2060,7 @@ public class ReportEditorPane extends ReportPane implements CellSelectListener,
             updateBorderActions(style);
         } else if (FONT_SIZE_COMMAND.equals(e.getActionCommand())) {
             if (getFocusedGrid() != null && isEnabledAction()) {
-                JComboBox cb = (JComboBox) e.getSource();
+                JComboBox<?> cb = (JComboBox<?>) e.getSource();
                 if (cb.getSelectedItem() != null) {
                     getFocusedGrid().setFontSize(
                             (Integer) cb.getSelectedItem());
@@ -2094,7 +2085,7 @@ public class ReportEditorPane extends ReportPane implements CellSelectListener,
                     logger.log(Level.SEVERE, e1.getMessage(), e1);
                 }
 
-        } else if ("help".equals(e.getActionCommand())) { //$NON-NLS-1$
+        } else if ("help".equals(e.getActionCommand())) {
             showHelp();
         }
 

@@ -66,7 +66,7 @@ import jdbreport.util.Utils;
  */
 public class Excel2003Writer implements ReportWriter {
 
-    private Map<Object, CellStyle> styleMap = new HashMap<>();
+    private final Map<Object, CellStyle> styleMap = new HashMap<>();
     private JTextComponent htmlReportRenderer;
     private Drawing drawing;
 
@@ -246,7 +246,6 @@ public class Excel2003Writer implements ReportWriter {
 
                 if (value != null) {
                     if (cell.getValueType() == Type.BOOLEAN) {
-                        newCell.setCellType(CellType.BOOLEAN);
                         newCell.setCellValue((Boolean) value);
                     } else if (cell.getValueType() == Type.CURRENCY
                             || cell.getValueType() == Type.FLOAT) {
@@ -282,7 +281,6 @@ public class Excel2003Writer implements ReportWriter {
                                 text = strWriter.getBuffer().toString();
                             }
                         } else {
-                            newCell.setCellType(CellType.STRING);
 
                             if (jdbreport.model.Cell.TEXT_HTML.equals(cell
                                     .getContentType())) {
@@ -290,15 +288,11 @@ public class Excel2003Writer implements ReportWriter {
                                 HTMLDocument doc = getHTMLDocument(cell);
                                 List<Content> contentList = Content
                                         .getHTMLContentList(doc);
-                                if (contentList != null) {
-                                    RichTextString richText = createRichTextFromContent(
-                                            contentList, createHelper, wb,
-                                            newCell.getCellStyle()
-                                                    .getFontIndex());
-                                    if (richText != null) {
-                                        newCell.setCellValue(richText);
-                                    }
-                                }
+                                RichTextString richText = createRichTextFromContent(
+                                        contentList, createHelper, wb,
+                                        (short)newCell.getCellStyle()
+                                                .getFontIndex());
+                                newCell.setCellValue(richText);
                             } else {
                                 text = model.getCellText(cell);
                                 newCell.setCellStyle(getStyle(styleId, Type.STRING, wb, createHelper));
@@ -364,7 +358,6 @@ public class Excel2003Writer implements ReportWriter {
     }
 
     private void setDoubleValue(Workbook wb, CreationHelper createHelper, Cell newCell, Object styleId, Number value) {
-        newCell.setCellType(CellType.NUMERIC);
         newCell.setCellStyle(getStyle(styleId, Type.FLOAT, wb, createHelper));
         newCell.setCellValue(value.doubleValue());
     }
@@ -453,7 +446,6 @@ public class Excel2003Writer implements ReportWriter {
                     break;
                 case "font-size":
                     sizeStr = attribute;
-
                     break;
                 case "color":
                     Color fontColor = Utils.colorByName(attribute);
@@ -505,13 +497,13 @@ public class Excel2003Writer implements ReportWriter {
                 font.setBold(true);
             }
             if (italic) {
-                font.setItalic(italic);
+                font.setItalic(true);
             }
             if (underline) {
                 font.setUnderline(Font.U_SINGLE);
             }
             if (line_through) {
-                font.setStrikeout(line_through);
+                font.setStrikeout(true);
             }
             if (color > 0) {
                 font.setColor(color);
@@ -544,9 +536,7 @@ public class Excel2003Writer implements ReportWriter {
                             RenderedImage image) {
 
         String format = cell.getImageFormat();
-        if (format != null
-                && ("jpeg".equals(format.toLowerCase()) || "jpg".equals(format
-                .toLowerCase()))) {
+        if (("jpeg".equalsIgnoreCase(format) || "jpg".equalsIgnoreCase(format))) {
             format = "jpg";
         } else {
             format = "png";

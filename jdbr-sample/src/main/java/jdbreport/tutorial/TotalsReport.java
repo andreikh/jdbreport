@@ -21,7 +21,7 @@ import jdbreport.view.ReportEditor;
  */
 public class TotalsReport extends SampleItem {
 
-	public class Test {
+	public static class Test {
 
 		public String firstName;
 
@@ -46,9 +46,9 @@ public class TotalsReport extends SampleItem {
 	}
 
 	final Object[][] data = {
-			{ "Avril", "Carry", "orange", new Integer(14), new Double(8) },
-			{ "Jeam", "Bullon", "orange", new Integer(16), new Double(22) },
-			{ "Mark", "Verzilina", "blue", new Integer(13), new Double(3) },
+			{ "Avril", "Carry", "orange", 14, 8.0},
+			{ "Jeam", "Bullon", "orange", 16, 22.0},
+			{ "Mark", "Verzilina", "blue", 13, 3.0},
 			{ "Mike", "Black", "blue", new Integer(11), new Double(13) },
 			{ "Lucy", "Weeler", "blue", new Integer(14), new Double(8) },
 			{ "Eric", "Hilary", "blue", new Integer(18), new Double(.693) },

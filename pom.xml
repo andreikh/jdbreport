@@ -4,17 +4,20 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>jdbreport</groupId>
-    <artifactId>jdbreport</artifactId>
-    <version>3.1.3-SNAPSHOT</version>
+    <artifactId>jdbreport-parent</artifactId>
+    <version>3.1.4</version>
     <packaging>pom</packaging>
 
     <name>JDBReport</name>
-    <url>http://www.jdbreport.ru</url>
+    <url>https://github.com/andreikh/jdbreport.git</url>
 
     <properties>
+        <maven.compiler.source>1.8</maven.compiler.source>
+        <maven.compiler.target>1.8</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <batik.version>1.9.1</batik.version>
-        <org.apache.poi.version>3.17</org.apache.poi.version>
+        <batik.version>1.14</batik.version>
+        <org.apache.poi.version>5.2.2</org.apache.poi.version>
+        <build.plugins.plugin.version>3.10.1</build.plugins.plugin.version>
         <junit.version>4.13.2</junit.version>
     </properties>
 
@@ -24,6 +27,10 @@
             <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
         </license>
     </licenses>
+
+    <scm>
+        <url>https://github.com/andreikh/jdbreport.git</url>
+    </scm>
 
     <distributionManagement>
 
@@ -36,7 +43,7 @@
     <modules>
         <module>jdbreport-rt</module>
         <module>jdbreport-dt</module>
-        <module>jdbr-samlpe</module>
+        <module>jdbr-sample</module>
         <module>jdbr-editor</module>
     </modules>
 

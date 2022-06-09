@@ -24,6 +24,7 @@ import java.awt.Color;
 
 import jdbreport.model.Border;
 
+import jdbreport.util.Utils;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFCellStyle;
 import org.apache.poi.xssf.usermodel.XSSFColor;
@@ -51,22 +52,22 @@ public class Excel2007Writer extends Excel2003Writer {
 		Border border = style.getBorders(Border.LINE_BOTTOM);
 		if (border != null) {
 			newStyle.setBorderBottom(getBorder(border));
-			newStyle.setBottomBorderColor(new XSSFColor(border.getColor()));
+			newStyle.setBottomBorderColor(new XSSFColor(Utils.colorToRgb(border.getColor())));
 		}
 		border = style.getBorders(Border.LINE_TOP);
 		if (border != null) {
 			newStyle.setBorderTop(getBorder(border));
-			newStyle.setTopBorderColor(new XSSFColor(border.getColor()));
+			newStyle.setTopBorderColor(new XSSFColor(Utils.colorToRgb(border.getColor())));
 		}
 		border = style.getBorders(Border.LINE_LEFT);
 		if (border != null) {
 			newStyle.setBorderLeft(getBorder(border));
-			newStyle.setLeftBorderColor(new XSSFColor(border.getColor()));
+			newStyle.setLeftBorderColor(new XSSFColor(Utils.colorToRgb(border.getColor())));
 		}
 		border = style.getBorders(Border.LINE_RIGHT);
 		if (border != null) {
 			newStyle.setBorderRight(getBorder(border));
-			newStyle.setRightBorderColor(new XSSFColor(border.getColor()));
+			newStyle.setRightBorderColor(new XSSFColor(Utils.colorToRgb(border.getColor())));
 		}
 
 		Font font = wb.createFont();
@@ -91,7 +92,7 @@ public class Excel2007Writer extends Excel2003Writer {
 
 		if (style.getBackground() != null
 				&& !style.getBackground().equals(Color.white)) {
-			newStyle.setFillForegroundColor(new XSSFColor(style.getBackground()));
+			newStyle.setFillForegroundColor(new XSSFColor(Utils.colorToRgb(style.getBackground())));
 			newStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND);
 		}
 
@@ -160,7 +161,7 @@ public class Excel2007Writer extends Excel2003Writer {
 			return IndexedColors.YELLOW.getIndex();
 		}
 
-		XSSFColor xssfColor = new XSSFColor(color);
+		XSSFColor xssfColor = new XSSFColor(Utils.colorToRgb(color));
 		return xssfColor.getIndexed();
 	}
 

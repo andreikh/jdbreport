@@ -21,8 +21,8 @@ public class SubDetailReport extends SampleItem {
 
 	public static class ColorFavorits {
 		
-		private String colorName;
-		private List<Test> tests = new ArrayList<>();
+		private final String colorName;
+		private final List<Test> tests = new ArrayList<>();
 	
 		public ColorFavorits(String colorName) {
 			super();
@@ -66,127 +66,123 @@ public class SubDetailReport extends SampleItem {
 				return false;
 			final ColorFavorits other = (ColorFavorits) obj;
 			if (colorName == null) {
-				if (other.colorName != null)
-					return false;
-			} else if (!colorName.equals(other.colorName))
-				return false;
-			return true;
+				return other.colorName == null;
+			} else return colorName.equals(other.colorName);
 		}
 		
 		
 	}
 	
 	final Object[][] data = {
-			{ "Zhenya", "Albers", "green", "Brazil", new Double(44.0),
+			{ "Zhenya", "Albers", "green", "Brazil", 44.0,
 					"strawberry" },
-			{ "Mark", "Verzilina", "blue", "Curse of the Demon", new Double(3),
+			{ "Mark", "Verzilina", "blue", "Curse of the Demon", 3.0,
 					"grapes" },
 			{ "Maria", "Parcker", "black", "The Blues Brothers",
-					new Double(2.7182818285), "raspberry" },
+					2.7182818285, "raspberry" },
 			{ "Lara", "Bunny", "red", "Airplane (the whole series)",
-					new Double(15), "strawberry" },
+					15.0, "strawberry" },
 			{ "Mike", "Black", "blue", "The Man Who Knew Too Much",
-					new Double(13), "peach" },
+					13.0, "peach" },
 			{ "Andrew", "Falls", "black", "Blade Runner (Director's Cut)",
-					new Double(23), "broccoli" },
-			{ "Luck", "Burov", "darkgreen", "Brazil", new Double(27),
+					23.0, "broccoli" },
+			{ "Luck", "Burov", "darkgreen", "Brazil", 27.0,
 					"asparagus" },
-			{ "Lucy", "Weeler", "blue", "The Lady Vanishes", new Double(8),
+			{ "Lucy", "Weeler", "blue", "The Lady Vanishes", 8.0,
 					"kiwi" },
-			{ "Ewan", "Spears", "yellow", "A Bug's Life", new Double(2),
+			{ "Ewan", "Spears", "yellow", "A Bug's Life", 2.0,
 					"strawberry" },
 			{ "Katerina", "Koshkina", "violet", "Reservoir Dogs",
-					new Double(3), "raspberry" },
-			{ "Lev", "Zykin", "purple", "Jules et Jim", new Double(5),
+					3.0, "raspberry" },
+			{ "Lev", "Zykin", "purple", "Jules et Jim", 5.0,
 					"raspberry" },
-			{ "Daria", "White", "blue", "Pulp Fiction", new Double(3),
+			{ "Daria", "White", "blue", "Pulp Fiction", 3.0,
 					"watermelon" },
 			{ "Kristina", "Kholmanskih", "pink",
-					"Blade Runner (Director's Cut)", new Double(21), "donut" },
+					"Blade Runner (Director's Cut)", 21.0, "donut" },
 			{ "Eric", "Hilary", "blue", "The Shawshank Redemption",
-					new Double(.693), "pickle" },
-			{ "Paris", "Hilton", "green", "Pulp Fiction", new Double(2),
+					.693, "pickle" },
+			{ "Paris", "Hilton", "green", "Pulp Fiction", 2.0,
 					"grapes" },
-			{ "Stuart", "Little", "green", "Goodfellas", new Double(8),
+			{ "Stuart", "Little", "green", "Goodfellas", 8.0,
 					"carrot" },
 			{ "Robin", "Holms", "green", "The Last of the Mohicans",
-					new Double(89), "apple" },
-			{ "Jenifer", "Kim", "blue", "Lone Star", new Double(655321),
+					89.0, "apple" },
+			{ "Jenifer", "Kim", "blue", "Lone Star", 655321.0,
 					"strawberry" },
-			{ "Ann", "Rues", "turquoise", "The Stuntman", new Double(7),
+			{ "Ann", "Rues", "turquoise", "The Stuntman", 7.0,
 					"peach" },
 			{ "Justin", "Kennedy", "blue", "Once Upon A Time In The West",
-					new Double(17), "pineapple" },
-			{ "Avril", "Carry", "orange", "The Music Man", new Double(8),
+					17.0, "pineapple" },
+			{ "Avril", "Carry", "orange", "The Music Man", 8.0,
 					"broccoli" },
-			{ "Peter", "Sun", "sunpurple", "Harold & Maude", new Double(12),
+			{ "Peter", "Sun", "sunpurple", "Harold & Maude", 12.0,
 					"sparegrass" },
-			{ "Rick", "Lone", "black", "The Fifth Element", new Double(1327),
+			{ "Rick", "Lone", "black", "The Fifth Element", 1327.0,
 					"raspberry" },
-			{ "Jeam", "Bullon", "jfcblue", "The Joy Luck Club", new Double(22),
+			{ "Jeam", "Bullon", "jfcblue", "The Joy Luck Club", 22.0,
 					"pear" },
 			{ "Victoria", "Lohan", "beige", "City of Lost Children",
-					new Double(9), "corn" },
-			{ "Sasha", "Lamp", "green", "Schindler's List", new Double(3),
+					9.0, "corn" },
+			{ "Sasha", "Lamp", "green", "Schindler's List", 3.0,
 					"strawberry" },
-			{ "David", "Candle", "forestgreen", "Withnail & I", new Double(7),
+			{ "David", "Candle", "forestgreen", "Withnail & I", 7.0,
 					"peach" },
-			{ "Phillip", "Hengry", "suspectpink", "Das Boot", new Double(3),
+			{ "Phillip", "Hengry", "suspectpink", "Das Boot", 3.0,
 					"banana" },
-			{ "Phiona", "Makarova", "cybergreen", "Eraserhead", new Double(52),
+			{ "Phiona", "Makarova", "cybergreen", "Eraserhead", 52.0,
 					"peach" },
-			{ "Anton", "Muller", "rustred", "Labyrinth", new Double(0),
+			{ "Anton", "Muller", "rustred", "Labyrinth", (double) 0,
 					"pineapple" },
-			{ "Martin", "King", "blue", "At First Sight", new Double(3),
+			{ "Martin", "King", "blue", "At First Sight", 3.0,
 					"pineapple" },
-			{ "Timur", "Jackson", "blue", "None", new Double(69), "pepper" },
+			{ "Timur", "Jackson", "blue", "None", 69.0, "pepper" },
 			{ "Steve", "Field", "jfcblue2", "Defending Your Life",
-					new Double(7), "broccoli" },
+					7.0, "broccoli" },
 			{
 					"Garry",
 					"Garner",
 					"green",
 					"The Adventures of Buckaroo Banzai Across the 8th Dimension",
-					new Double(7), "strawberry" },
+					7.0, "strawberry" },
 			{
 					"Jerry",
 					"Plastinin",
 					"black",
 					"The Bicycle Thief",
-					new Double(
-							3.141592653589793238462643383279502884197169399375105820974944),
+					3.141592653589793238462643383279502884197169399375105820974944,
 					"banana" },
-			{ "Vlad", "Kokarev", "aqua", "This is Spinal Tap", new Double(290),
+			{ "Vlad", "Kokarev", "aqua", "This is Spinal Tap", 290.0,
 					"cantaloupe" },
-			{ "Lada", "Freeze", "blue", "Repo Man", new Double(241), "pepper" },
-			{ "Ashanti", "Cell", "blue", "The Fifth Element", new Double(0xFF),
+			{ "Lada", "Freeze", "blue", "Repo Man", 241.0, "pepper" },
+			{ "Ashanti", "Cell", "blue", "The Fifth Element", (double) 0xFF,
 					"pepper" },
 			{ "Elena", "Schort", "green", "2001: A Space Odyssey",
-					new Double(47), "watermelon" },
-			{ "Katerina", "Bokova", "darkgreen", "Star Wars", new Double(13),
+					47.0, "watermelon" },
+			{ "Katerina", "Bokova", "darkgreen", "Star Wars", 13.0,
 					"watermelon" },
-			{ "Sandy", "Tucker", "eblue", "Aliens", new Double(2), "broccoli" },
+			{ "Sandy", "Tucker", "eblue", "Aliens", 2.0, "broccoli" },
 			{ "Pasha", "Rukov", "red", "Raiders of the Lost Ark",
-					new Double(222), "tomato" },
-			{ "Scott", "Wild", "violet", "The Thin Man", new Double(-97),
+					222.0, "tomato" },
+			{ "Scott", "Wild", "violet", "The Thin Man", (double) -97,
 					"banana" },
-			{ "Stefany", "Carrot", "blue", "Chusingura (1962)", new Double(8),
+			{ "Stefany", "Carrot", "blue", "Chusingura (1962)", 8.0,
 					"pear" },
 			{ "Pamela", "Gwen", "black", "Raiders of the Lost Ark",
-					new Double(3), "grapefruit" },
-			{ "Julia", "Petelina", "green", "My Life as a Dog", new Double(7),
+					3.0, "grapefruit" },
+			{ "Julia", "Petelina", "green", "My Life as a Dog", 7.0,
 					"onion" },
-			{ "Jim", "Shilov", "gray", "None", new Double(13), "grapes" } };
+			{ "Jim", "Shilov", "gray", "None", 13.0, "grapes" } };
 
 	private Map<String, ColorFavorits> colorMap;
 
 	private void initTestList() {
 		colorMap = new TreeMap<>();
-		for (int i = 0; i < data.length; i++) {
-			Test test = new Test((String) data[i][0], (String) data[i][1],
-					(String) data[i][2], (String) data[i][3],
-					(Double) data[i][4], (String) data[i][5]);
-			
+		for (Object[] datum : data) {
+			Test test = new Test((String) datum[0], (String) datum[1],
+					(String) datum[2], (String) datum[3],
+					(Double) datum[4], (String) datum[5]);
+
 			ColorFavorits cf = colorMap.get(test.getColorName());
 			if (cf == null) {
 				cf = new ColorFavorits(test.getColorName());

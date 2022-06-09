@@ -8,6 +8,7 @@ package jdbreport.tutorial.helper;
 import java.awt.Color;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
@@ -47,8 +48,8 @@ public class Test {
 	}
 
 	private static void addImage(String name) {
-		icons.put(name, new ImageIcon(Test.class
-				.getResource("/tutorial/food/" + name + ".jpg")));
+		icons.put(name, new ImageIcon(Objects.requireNonNull(Test.class
+				.getResource("/tutorial/food/" + name + ".jpg"))));
 	}
 
 	private static void fillImageMap() {

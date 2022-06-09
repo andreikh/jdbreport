@@ -3,7 +3,7 @@
  *
  * JDBReport Generator
  * 
- * Copyright (C) 2010-2014 Andrey Kholmanskih
+ * Copyright (C) 2010-2022 Andrey Kholmanskih
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,7 +26,7 @@ import java.util.Collection;
 import jdbreport.model.io.ReportWriter;
 
 /**
- * @version 2.0 07.06.2011
+ * @version 3.1.4 07.06.2022
  * @author Andrey Kholmanskih
  * 
  */
@@ -35,22 +35,6 @@ public class PdfFileType extends jdbreport.model.io.pdf.PdfFileType {
 	@Override
 	public ReportWriter createPdfWriter() {
 		return new PdfWriter();
-	}
-
-	public Collection<String> getFontPaths() {
-		return ReportFontMapper.getFontPaths();
-	}
-
-	public String getDefaultFont() {
-		return ReportFontMapper.getDefaultFont();
-	}
-
-	public void setFontPaths(Collection<String> fontPaths) {
-		ReportFontMapper.setFontPaths(fontPaths); 
-	}
-	
-	public void setDefaultFont(String font) {
-		ReportFontMapper.setDefaultFont(font);
 	}
 
 	@Override

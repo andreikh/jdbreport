@@ -21,7 +21,7 @@ public class Main extends JFrame {
 
 	private JPanel buttonPanel;
 
-	private JList tutorialList = null;
+	private JList<SampleItem> tutorialList = null;
 
 	private JButton runButton = null;
 
@@ -81,9 +81,9 @@ public class Main extends JFrame {
 	 * 
 	 * @return javax.swing.JList
 	 */
-	private JList getTutorialList() {
+	private JList<SampleItem> getTutorialList() {
 		if (tutorialList == null) {
-			tutorialList = new JList();
+			tutorialList = new JList<>();
 			Vector<SampleItem> samples = new Vector<>();
 			samples.add(new ExpressionReport());
 			samples.add(new SimpleDBReport());
@@ -135,17 +135,13 @@ public class Main extends JFrame {
 		if (runButton == null) {
 			runButton = new JButton();
 			runButton.setText("Run"); 
-			runButton.addActionListener(new java.awt.event.ActionListener() {
-				public void actionPerformed(java.awt.event.ActionEvent e) {
-					run();
-				}
-			});
+			runButton.addActionListener(e -> run());
 		}
 		return runButton;
 	}
 
 	SampleItem getSelectedItem() {
-		return (SampleItem) tutorialList.getSelectedValue();
+		return tutorialList.getSelectedValue();
 	}
 
 	/**
@@ -158,16 +154,14 @@ public class Main extends JFrame {
 			templateButton = new JButton();
 			templateButton.setText("Template");
 			templateButton
-					.addActionListener(new java.awt.event.ActionListener() {
-						public void actionPerformed(java.awt.event.ActionEvent e) {
-							TemplateEditor te = new TemplateEditor();
-							try {
-								te.getReportBook().open(
-										getSelectedItem().getTemplateURL());
-								te.setVisible(true);
-							} catch (LoadReportException e1) {
-								Utils.showError(e1);
-							}
+					.addActionListener(e -> {
+						TemplateEditor te = new TemplateEditor();
+						try {
+							te.getReportBook().open(
+									getSelectedItem().getTemplateURL());
+							te.setVisible(true);
+						} catch (LoadReportException e1) {
+							Utils.showError(e1);
 						}
 					});
 		}
@@ -183,11 +177,7 @@ public class Main extends JFrame {
 		if (sourceButton == null) {
 			sourceButton = new JButton();
 			sourceButton.setText("Source"); 
-			sourceButton.addActionListener(new java.awt.event.ActionListener() {
-				public void actionPerformed(java.awt.event.ActionEvent e) {
-					new SourceViewer(getSelectedItem().getSource());
-				}
-			});
+			sourceButton.addActionListener(e -> new SourceViewer(getSelectedItem().getSource()));
 		}
 		return sourceButton;
 	}

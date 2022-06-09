@@ -20,6 +20,7 @@ package jdbreport.design.grid;
 
 import java.awt.*;
 import java.util.Map;
+import java.util.Objects;
 
 import javax.swing.JPanel;
 import javax.swing.JDialog;
@@ -57,7 +58,7 @@ public class FunctionsListEditor extends JDialog {
 
 	private JToolBar jToolBar = null;
 
-	private JList functionsJList = null;
+	private JList<Object> functionsJList = null;
 
 	private JButton okButton = null;
 
@@ -105,8 +106,7 @@ public class FunctionsListEditor extends JDialog {
 
 	/**
 	 * This method initializes this
-	 * 
-	 * @return void
+	 *
 	 */
 	private void initialize() {
 		this.setSize(300, 200);
@@ -191,15 +191,14 @@ protected void pushUndo(UndoItem undo) {
 	 * 
 	 * @return javax.swing.JList
 	 */
-	private JList getFunctionsList() {
+	private JList<Object> getFunctionsList() {
 		if (functionsJList == null) {
-			functionsJList = new JList();
+			functionsJList = new JList<>();
 			functionsJList
-					.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
-						public void valueChanged(javax.swing.event.ListSelectionEvent e) {
-							getFunctionField().setText(functionsJList.getSelectedValue() != null ? functionsJList.getSelectedValue().toString() : ""); //$NON-NLS-1$
-							updateButtons();
-						}
+					.addListSelectionListener(e -> {
+						getFunctionField().setText(functionsJList.getSelectedValue() != null ?
+								functionsJList.getSelectedValue().toString() : "");
+						updateButtons();
 					});
 			functionsJList.addMouseListener(new java.awt.event.MouseAdapter() {
 				public void mouseClicked(java.awt.event.MouseEvent e) {
@@ -207,7 +206,8 @@ protected void pushUndo(UndoItem undo) {
 						if (getOkButton().isEnabled()) 
 							select();
 					} else {
-						getFunctionField().setText(functionsJList.getSelectedValue() != null ? functionsJList.getSelectedValue().toString() : ""); //$NON-NLS-1$
+						getFunctionField().setText(functionsJList.getSelectedValue() != null ?
+								functionsJList.getSelectedValue().toString() : "");
 						updateButtons();
 					}
 				}
@@ -225,13 +225,9 @@ protected void pushUndo(UndoItem undo) {
 	private JButton getOkButton() {
 		if (okButton == null) {
 			okButton = new JButton();
-			okButton.setText(Messages.getString("FunctionsListEditor.ok_text")); //$NON-NLS-1$
-			okButton.setToolTipText(Messages.getString("FunctionsListEditor.ok_tooltip")); //$NON-NLS-1$
-			okButton.addActionListener(new java.awt.event.ActionListener() {
-				public void actionPerformed(java.awt.event.ActionEvent e) {
-					select();
-				}
-			});
+			okButton.setText(Messages.getString("FunctionsListEditor.ok_text"));
+			okButton.setToolTipText(Messages.getString("FunctionsListEditor.ok_tooltip"));
+			okButton.addActionListener(e -> select());
 		}
 		return okButton;
 	}
@@ -244,14 +240,9 @@ protected void pushUndo(UndoItem undo) {
 	private JButton getRemoveButton() {
 		if (removeButton == null) {
 			removeButton = new JButton();
-			removeButton.setText(Messages.getString("FunctionsListEditor.remove_text")); //$NON-NLS-1$
-			removeButton.setToolTipText(Messages.getString("FunctionsListEditor.remove_tooltip")); //$NON-NLS-1$
-			removeButton.addActionListener(new java.awt.event.ActionListener() {
-				public void actionPerformed(java.awt.event.ActionEvent e) {
-					remove();
-				}
-
-			});
+			removeButton.setText(Messages.getString("FunctionsListEditor.remove_text"));
+			removeButton.setToolTipText(Messages.getString("FunctionsListEditor.remove_tooltip"));
+			removeButton.addActionListener(e -> remove());
 		}
 		return removeButton;
 	}
@@ -264,12 +255,8 @@ protected void pushUndo(UndoItem undo) {
 	private JButton getCancelButton() {
 		if (cancelButton == null) {
 			cancelButton = new JButton();
-			cancelButton.setText(Messages.getString("FunctionsListEditor.close_text")); //$NON-NLS-1$
-			cancelButton.addActionListener(new java.awt.event.ActionListener() {
-				public void actionPerformed(java.awt.event.ActionEvent e) {
-					setVisible(false);
-				}
-			});
+			cancelButton.setText(Messages.getString("FunctionsListEditor.close_text"));
+			cancelButton.addActionListener(e -> setVisible(false));
 		}
 		return cancelButton;
 	}
@@ -282,14 +269,10 @@ protected void pushUndo(UndoItem undo) {
 	private JButton getAddButton() {
 		if (addButton == null) {
 			addButton = new JButton();
-			addButton.setIcon(new ImageIcon(getClass().getResource(
-					"/jdbreport/resources/add.gif"))); //$NON-NLS-1$
-			addButton.setToolTipText(Messages.getString("FunctionsListEditor.add_tooltip")); //$NON-NLS-1$
-			addButton.addActionListener(new java.awt.event.ActionListener() {
-				public void actionPerformed(java.awt.event.ActionEvent e) {
-					newFunction();
-				}
-			});
+			addButton.setIcon(new ImageIcon(Objects.requireNonNull(getClass().getResource(
+					"/jdbreport/resources/add.gif"))));
+			addButton.setToolTipText(Messages.getString("FunctionsListEditor.add_tooltip"));
+			addButton.addActionListener(e -> newFunction());
 		}
 		return addButton;
 	}
@@ -317,13 +300,9 @@ protected void pushUndo(UndoItem undo) {
 		if (editButton == null) {
 			editButton = new JButton();
 			editButton.setToolTipText(Messages.getString("FunctionsListEditor.edit_tooltip")); //$NON-NLS-1$
-			editButton.setIcon(new ImageIcon(getClass().getResource(
-					"/jdbreport/resources/edit_item.gif"))); //$NON-NLS-1$
-			editButton.addActionListener(new java.awt.event.ActionListener() {
-				public void actionPerformed(java.awt.event.ActionEvent e) {
-					editFunction();
-				}
-			});
+			editButton.setIcon(new ImageIcon(Objects.requireNonNull(getClass().getResource(
+					"/jdbreport/resources/edit_item.gif"))));
+			editButton.addActionListener(e -> editFunction());
 		}
 		return editButton;
 	}
@@ -336,14 +315,10 @@ protected void pushUndo(UndoItem undo) {
 	private JButton getDelButton() {
 		if (delButton == null) {
 			delButton = new JButton();
-			delButton.setIcon(new ImageIcon(getClass().getResource(
-					"/jdbreport/resources/del.gif"))); //$NON-NLS-1$
-			delButton.setToolTipText(Messages.getString("FunctionsListEditor.delete_tooltip")); //$NON-NLS-1$
-			delButton.addActionListener(new java.awt.event.ActionListener() {
-				public void actionPerformed(java.awt.event.ActionEvent e) {
-					deleteFunction();
-				}
-			});
+			delButton.setIcon(new ImageIcon(Objects.requireNonNull(getClass().getResource(
+					"/jdbreport/resources/del.gif"))));
+			delButton.setToolTipText(Messages.getString("FunctionsListEditor.delete_tooltip"));
+			delButton.addActionListener(e -> deleteFunction());
 		}
 		return delButton;
 	}
@@ -351,7 +326,7 @@ protected void pushUndo(UndoItem undo) {
 	protected void deleteFunction() {
 		String key = (String) getFunctionsList().getSelectedValue();
 		if (key != null) {
-			CellFunctionObject cellFunction = (CellFunctionObject) functionList.remove(key);
+			CellFunctionObject cellFunction = functionList.remove(key);
 			getFunctionsList().setListData(functionList.keySet().toArray());
 			updateButtons();
 			pushUndo(new FunctionUndo(functionList, cellFunction, null));
@@ -372,9 +347,6 @@ protected void pushUndo(UndoItem undo) {
 		}
 	}
 
-	/**
-	 * @param cellFunction
-	 */
 	private void saveFunction(CellFunctionObject cellFunction) {
 		functionList.put(cellFunction.getFunctionName(), cellFunction);
 		getFunctionsList().setListData(functionList.keySet().toArray());
@@ -383,7 +355,7 @@ protected void pushUndo(UndoItem undo) {
 	private void editFunction() {
 		String key = (String) getFunctionsList().getSelectedValue();
 		if (key == null) return;
-		CellFunctionObject cellFunction = (CellFunctionObject) functionList.get(key);
+		CellFunctionObject cellFunction = functionList.get(key);
 		if (cellFunction == null)
 			return;
 		CellFunctionObject old = (CellFunctionObject) cellFunction.clone(); 

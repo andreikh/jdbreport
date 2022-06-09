@@ -88,15 +88,13 @@ public class ReportBook implements Iterable<ReportModel>, TableRowModelListener 
 		WRITERS_MAP.put(ODS, "jdbreport.model.io.xml.odf.OdsFileType");
 		WRITERS_MAP.put(ODT, "jdbreport.model.io.xml.odf.OdtFileType");
 		try {
-			if (Class.forName("org.apache.poi.hssf.usermodel.HSSFWorkbook") != null) {
-				WRITERS_MAP.put(XLS, "jdbreport.model.io.xls.poi.XlsFileType");
-				logger.info("Support MS Excel 2003 with POI is added");
-				if (Class.forName("org.apache.poi.xssf.usermodel.XSSFWorkbook") != null) {
-					WRITERS_MAP.put(XLSX,
-							"jdbreport.model.io.xls.poi.XlsxFileType");
-					logger.info("Support MS Excel 2007 with POI is added");
-				}
-			}
+			Class.forName("org.apache.poi.hssf.usermodel.HSSFWorkbook");
+			WRITERS_MAP.put(XLS, "jdbreport.model.io.xls.poi.XlsFileType");
+			logger.info("Support MS Excel 2003 with POI is added");
+			Class.forName("org.apache.poi.xssf.usermodel.XSSFWorkbook");
+			WRITERS_MAP.put(XLSX,
+					"jdbreport.model.io.xls.poi.XlsxFileType");
+			logger.info("Support MS Excel 2007 with POI is added");
 		} catch (NoClassDefFoundError | ClassNotFoundException ignored) {
 		}
         try {
@@ -138,9 +136,9 @@ public class ReportBook implements Iterable<ReportModel>, TableRowModelListener 
 		return dateFormatter;
 	}
 
-	private List<ReportModel> list = new ArrayList<>();
+	private final List<ReportModel> list = new ArrayList<>();
 
-	private Map<Object, CellStyle> styleList;
+	private final Map<Object, CellStyle> styleList;
 
 	protected EventListenerList listenerList = new EventListenerList();
 
@@ -356,14 +354,12 @@ public class ReportBook implements Iterable<ReportModel>, TableRowModelListener 
 	 * @return the index of the last element in the list of the ReportModel
 	 */
 	public int add(ReportModel reportModel) {
-		if (list.add(reportModel)) {
-			revalidatePageNumbers();
-			reportModel.getRowModel().addRowModelListener(this);
-			int toIndex = list.size() - 1;
-			fireReportAdded(new ReportListEvent(this, -1, toIndex));
-			return toIndex;
-		}
-		return -1;
+		list.add(reportModel);
+		revalidatePageNumbers();
+		reportModel.getRowModel().addRowModelListener(this);
+		int toIndex = list.size() - 1;
+		fireReportAdded(new ReportListEvent(this, -1, toIndex));
+		return toIndex;
 	}
 
 	/**
@@ -414,9 +410,9 @@ public class ReportBook implements Iterable<ReportModel>, TableRowModelListener 
 			CellStyle style = book.getStyleList().get(key);
 			if (getStyleList().containsKey(key)) {
 
-				Object newKey = getStyleList().size();
+				Integer newKey = getStyleList().size();
 				while (getStyleList().containsKey(newKey)
-						|| book.getStyleList().containsKey(newKey)) newKey = (Integer) newKey + 1;
+						|| book.getStyleList().containsKey(newKey)) newKey = newKey + 1;
 				style.setId(newKey);
 				book.replaceStyles(key, newKey);
 				getStyleList().put(newKey, style);
@@ -543,9 +539,9 @@ public class ReportBook implements Iterable<ReportModel>, TableRowModelListener 
 	 */
 	public CellStyle getStyles(Object index) {
 		if (index != null) {
-			Object o = styleList.get(index);
+			CellStyle o = styleList.get(index);
 			if (o != null)
-				return (CellStyle) o;
+				return o;
 		}
 		return CellStyle.getDefaultStyle();
 	}
@@ -606,7 +602,6 @@ public class ReportBook implements Iterable<ReportModel>, TableRowModelListener 
 	 * 
 	 * @param file
 	 *            the file in which the report will be saved
-	 * @throws IOException 
 	 */
 	public void save(File file) throws IOException {
 		ReportWriter writer = getWriterClass(getKeyByFile(file.getName()));
@@ -624,7 +619,6 @@ public class ReportBook implements Iterable<ReportModel>, TableRowModelListener 
 	 *            the file in which the report will be saved
 	 * @param writer
 	 *            the ReportWriter that is used to save the report
-	 * @throws IOException 
 	 */
 	public void save(File file, ReportWriter writer) throws IOException {
 		try {
@@ -659,7 +653,6 @@ public class ReportBook implements Iterable<ReportModel>, TableRowModelListener 
 	 * 
 	 * @param fileName
 	 *            the file's name
-	 * @throws LoadReportException
 	 */
 	public void open(String fileName) throws LoadReportException {
 		File file = new File(fileName);
@@ -682,7 +675,6 @@ public class ReportBook implements Iterable<ReportModel>, TableRowModelListener 
 	 * 
 	 * @param file
 	 *            the report's file
-	 * @throws LoadReportException
 	 */
 	public void open(File file) throws LoadReportException {
 		ReportReader reader = getReaderClass(getKeyByFile(file.getName()));
@@ -707,7 +699,6 @@ public class ReportBook implements Iterable<ReportModel>, TableRowModelListener 
 	 *            the report's file
 	 * @param reader
 	 *            the ReportReader that is used to read the report
-	 * @throws LoadReportException
 	 */
 	public void open(File file, ReportReader reader) throws LoadReportException {
 		setSourceTemplate(file.getPath());
@@ -724,7 +715,6 @@ public class ReportBook implements Iterable<ReportModel>, TableRowModelListener 
 	 * 
 	 * @param url
 	 *            the report's URL
-	 * @throws LoadReportException
 	 */
 	public void open(URL url) throws LoadReportException {
 		ReportReader reader = getReaderClass(getKeyByFile(url.getFile()));
@@ -746,7 +736,6 @@ public class ReportBook implements Iterable<ReportModel>, TableRowModelListener 
 	 *            the report's URL
 	 * @param reader
 	 *            the ReportReader that is used to read the report
-	 * @throws LoadReportException
 	 */
 	public void open(URL url, ReportReader reader) throws LoadReportException {
 		setSourceTemplate(url.toString());
@@ -764,7 +753,6 @@ public class ReportBook implements Iterable<ReportModel>, TableRowModelListener 
 	 *            the report's stream
 	 * @param reader
 	 *            the ReportReader that is used to read the report
-	 * @throws LoadReportException
 	 */
 	public void open(InputStream stream, ReportReader reader)
 			throws LoadReportException {
@@ -799,7 +787,6 @@ public class ReportBook implements Iterable<ReportModel>, TableRowModelListener 
 	 *            the bytes' array
 	 * @param readerId
 	 *            the ReportReader's id
-	 * @throws LoadReportException
 	 */
 	public void open(byte[] buf, String readerId) throws LoadReportException {
 		ReportReader reader = getReaderClass(readerId);

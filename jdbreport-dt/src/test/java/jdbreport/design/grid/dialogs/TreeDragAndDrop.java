@@ -1,8 +1,6 @@
 package jdbreport.design.grid.dialogs;
 
-import java.awt.*;
 import java.awt.datatransfer.*;
-import java.awt.dnd.*;
 import java.util.*;
 import java.util.List;
 import javax.swing.*;
@@ -28,7 +26,7 @@ public class TreeDragAndDrop {
     private void expandTree(JTree tree) {
         DefaultMutableTreeNode root =
                 (DefaultMutableTreeNode)tree.getModel().getRoot();
-        Enumeration e = root.breadthFirstEnumeration();
+        Enumeration<?> e = root.breadthFirstEnumeration();
         while(e.hasMoreElements()) {
             DefaultMutableTreeNode node =
                     (DefaultMutableTreeNode)e.nextElement();
@@ -81,8 +79,9 @@ class TreeTransferHandler extends TransferHandler {
         JTree tree = (JTree)support.getComponent();
         int dropRow = tree.getRowForPath(dl.getPath());
         int[] selRows = tree.getSelectionRows();
-        for(int i = 0; i < selRows.length; i++) {
-            if(selRows[i] == dropRow) {
+        assert selRows != null;
+        for (int selRow : selRows) {
+            if (selRow == dropRow) {
                 return false;
             }
         }
@@ -100,15 +99,13 @@ class TreeTransferHandler extends TransferHandler {
         TreePath path = tree.getPathForRow(selRows[0]);
         DefaultMutableTreeNode firstNode =
                 (DefaultMutableTreeNode)path.getLastPathComponent();
-        if(firstNode.getChildCount() > 0 &&
-                target.getLevel() < firstNode.getLevel()) {
-            return false;
-        }
-        return true;
+        return firstNode.getChildCount() <= 0 ||
+                target.getLevel() >= firstNode.getLevel();
     }
 
     private boolean haveCompleteNode(JTree tree) {
         int[] selRows = tree.getSelectionRows();
+        assert selRows != null;
         TreePath path = tree.getPathForRow(selRows[0]);
         DefaultMutableTreeNode first =
                 (DefaultMutableTreeNode)path.getLastPathComponent();
@@ -140,9 +137,9 @@ class TreeTransferHandler extends TransferHandler {
             // another for/of the nodes that will be removed in
             // exportDone after a successful drop.
             List<DefaultMutableTreeNode> copies =
-                    new ArrayList<DefaultMutableTreeNode>();
+                    new ArrayList<>();
             List<DefaultMutableTreeNode> toRemove =
-                    new ArrayList<DefaultMutableTreeNode>();
+                    new ArrayList<>();
             DefaultMutableTreeNode node =
                     (DefaultMutableTreeNode)paths[0].getLastPathComponent();
             DefaultMutableTreeNode copy = copy(node);
@@ -163,9 +160,9 @@ class TreeTransferHandler extends TransferHandler {
                 }
             }
             DefaultMutableTreeNode[] nodes =
-                    copies.toArray(new DefaultMutableTreeNode[copies.size()]);
+                    copies.toArray(new DefaultMutableTreeNode[0]);
             nodesToRemove =
-                    toRemove.toArray(new DefaultMutableTreeNode[toRemove.size()]);
+                    toRemove.toArray(new DefaultMutableTreeNode[0]);
             return new NodesTransferable(nodes);
         }
         return null;
@@ -181,8 +178,8 @@ class TreeTransferHandler extends TransferHandler {
             JTree tree = (JTree)source;
             DefaultTreeModel model = (DefaultTreeModel)tree.getModel();
             // Remove nodes saved in nodesToRemove in createTransferable.
-            for(int i = 0; i < nodesToRemove.length; i++) {
-                model.removeNodeFromParent(nodesToRemove[i]);
+            for (DefaultMutableTreeNode defaultMutableTreeNode : nodesToRemove) {
+                model.removeNodeFromParent(defaultMutableTreeNode);
             }
         }
     }
@@ -220,8 +217,9 @@ class TreeTransferHandler extends TransferHandler {
             index = parent.getChildCount();
         }
         // Add data to model.
-        for(int i = 0; i < nodes.length; i++) {
-            model.insertNodeInto(nodes[i], parent, index++);
+        assert nodes != null;
+        for (DefaultMutableTreeNode node : nodes) {
+            model.insertNodeInto(node, parent, index++);
         }
         return true;
     }

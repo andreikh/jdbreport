@@ -85,6 +85,7 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.*;
 import java.math.BigDecimal;
+import java.nio.charset.StandardCharsets;
 import java.text.MessageFormat;
 import java.text.NumberFormat;
 import java.util.Date;
@@ -435,7 +436,7 @@ public class JReportGrid extends JTable implements TableRowModelListener,
     public void setRowModel(TableRowModel rowModel) {
         if (rowModel == null) {
             throw new IllegalArgumentException(
-                    Messages.getString("JReportGrid.5")); //$NON-NLS-1$
+                    Messages.getString("JReportGrid.5"));
         }
         TableRowModel old = this.rowModel;
         if (rowModel != old) {
@@ -448,7 +449,7 @@ public class JReportGrid extends JTable implements TableRowModelListener,
             if (rowHeader != null) {
                 rowHeader.setRowModel(rowModel);
             }
-            firePropertyChange("rowModel", old, rowModel); //$NON-NLS-1$
+            firePropertyChange("rowModel", old, rowModel);
             resizeAndRepaint();
         }
     }
@@ -492,7 +493,7 @@ public class JReportGrid extends JTable implements TableRowModelListener,
             if (rowHeader != null) {
                 rowHeader.setTable(this);
             }
-            firePropertyChange("rowHeader", old, rowHeader); //$NON-NLS-1$
+            firePropertyChange("rowHeader", old, rowHeader);
         }
     }
 
@@ -568,7 +569,7 @@ public class JReportGrid extends JTable implements TableRowModelListener,
     public void columnMoving(TableColumnModelEvent e) {
         try {
             if (e.getFromIndex() != e.getToIndex() && canUndo()) {
-                pushUndo(new BackupItem(this, UndoItem.COLUMN_MOVED)); //$NON-NLS-1$
+                pushUndo(new BackupItem(this, UndoItem.COLUMN_MOVED));
             }
         } catch (Exception e1) {
             Utils.showError(e1);
@@ -1015,7 +1016,7 @@ public class JReportGrid extends JTable implements TableRowModelListener,
                 Border border = scrollPane.getBorder();
                 if (border == null || border instanceof UIResource) {
                     scrollPane.setBorder(UIManager
-                            .getBorder("Table.scrollPaneBorder")); //$NON-NLS-1$
+                            .getBorder("Table.scrollPaneBorder"));
                 }
             }
         }
@@ -1195,20 +1196,20 @@ public class JReportGrid extends JTable implements TableRowModelListener,
 
     public void propertyChange(PropertyChangeEvent evt) {
         if (evt.getSource() == getReportModel()) {
-            if (evt.getPropertyName().equals("colSizing")) { //$NON-NLS-1$
+            if (evt.getPropertyName().equals("colSizing")) {
                 tableHeader.setResizingAllowed(getReportModel().isColSizing());
-            } else if (evt.getPropertyName().equals("colMoving")) { //$NON-NLS-1$
+            } else if (evt.getPropertyName().equals("colMoving")) {
                 tableHeader
                         .setReorderingAllowed(getReportModel().isColMoving());
-            } else if (evt.getPropertyName().equals("reportTitle")) { //$NON-NLS-1$
-                firePropertyChange("reportTitle", evt.getOldValue(), evt //$NON-NLS-1$
+            } else if (evt.getPropertyName().equals("reportTitle")) {
+                firePropertyChange("reportTitle", evt.getOldValue(), evt
                         .getNewValue());
-            } else if (evt.getPropertyName().equals("visible")) { //$NON-NLS-1$
-                firePropertyChange("visible", evt.getOldValue(), evt //$NON-NLS-1$
+            } else if (evt.getPropertyName().equals("visible")) {
+                firePropertyChange("visible", evt.getOldValue(), evt
                         .getNewValue());
-            } else if (evt.getPropertyName().equals("showHeader")) { //$NON-NLS-1$
+            } else if (evt.getPropertyName().equals("showHeader")) {
                 tableHeader.setVisible((Boolean) evt.getNewValue());
-            } else if (evt.getPropertyName().equals("showRowHeader")) { //$NON-NLS-1$
+            } else if (evt.getPropertyName().equals("showRowHeader")) {
                 rowHeader.setVisible((Boolean) evt.getNewValue());
             }
         }
@@ -1374,7 +1375,7 @@ public class JReportGrid extends JTable implements TableRowModelListener,
             Component editor = ((ReportCellEditor) getCellEditor())
                     .getComponent();
             if (editor instanceof JTextComponent) {
-                ((JTextComponent) editor).replaceSelection(""); //$NON-NLS-1$
+                ((JTextComponent) editor).replaceSelection("");
                 return;
             }
         }
@@ -1404,7 +1405,7 @@ public class JReportGrid extends JTable implements TableRowModelListener,
     private String getRenderedText(Cell cell) {
 
         if (cell.isNull() || cell.isChild())
-            return ""; //$NON-NLS-1$
+            return "";
         TableCellRenderer renderer = getCellRenderer(cell);
         if (renderer instanceof JTextComponent) {
             JTextComponent tc = (JTextComponent) renderer;
@@ -1438,7 +1439,7 @@ public class JReportGrid extends JTable implements TableRowModelListener,
                 }
 
             }
-            result.append("\r\n"); //$NON-NLS-1$
+            result.append("\r\n");
         }
         return result.toString();
     }
@@ -1480,9 +1481,10 @@ public class JReportGrid extends JTable implements TableRowModelListener,
                     ReportTransferable.TypeFlavor.text);
             copyData = copy(getSelectionRect());
             reportTransferable.addCopyData(copyData, ReportTransferable.TypeFlavor.xml);
-            reportTransferable.addCopyData(copyData.getBytes("UTF-8"), ReportTransferable.TypeFlavor.xml);
+            reportTransferable.addCopyData(copyData.getBytes(StandardCharsets.UTF_8),
+                    ReportTransferable.TypeFlavor.xml);
             clip.setContents(reportTransferable, reportTransferable);
-        } catch (SaveReportException | UnsupportedEncodingException e) {
+        } catch (SaveReportException e) {
             Utils.showError(e);
         }
     }
@@ -1515,7 +1517,7 @@ public class JReportGrid extends JTable implements TableRowModelListener,
                 if (getRowCount() <= row) {
                     addRows(1, -1);
                 }
-                StringTokenizer st = new StringTokenizer(s, "\t\n\r\f"); //$NON-NLS-1$
+                StringTokenizer st = new StringTokenizer(s, "\t\n\r\f");
                 int col = selectedColumn;
                 while (st.hasMoreTokens()) {
                     if (col >= getColumnCount()) {
@@ -1532,7 +1534,7 @@ public class JReportGrid extends JTable implements TableRowModelListener,
 
     public void pasteImage(Image image, int selectedRow, int selectedColumn) {
         if (canUndo()) {
-            pushUndo(new CellUndoItem(this, UndoItem.INSERT_ICON)); //$NON-NLS-1$
+            pushUndo(new CellUndoItem(this, UndoItem.INSERT_ICON));
         }
         getReportModel().createReportCell(selectedRow, selectedColumn).setIcon(
                 new ImageIcon(image));
@@ -1621,7 +1623,7 @@ public class JReportGrid extends JTable implements TableRowModelListener,
                 if (dataFlavors[i].getMimeType().equals(
                         ReportTransferable.FLAVOR_XML_MIME_TYPE)) {
                     String data = (String) clip.getData(dataFlavors[i]);
-                    if (data.startsWith("<?xml") //$NON-NLS-1$
+                    if (data.startsWith("<?xml")
                             && data.contains(FragmentHandler.FRAGMENT)) {
                         xmlIndex = i;
                         break;
@@ -1629,8 +1631,8 @@ public class JReportGrid extends JTable implements TableRowModelListener,
                 } else if (dataFlavors[i].getMimeType().equals(
                         ReportTransferable.FLAVOR_XML_BYTE_MIME_TYPE)) {
                     byte[] buf = (byte[]) clip.getData(dataFlavors[i]);
-                    String data = new String(buf, "UTF-8");
-                    if (data.startsWith("<?xml") //$NON-NLS-1$
+                    String data = new String(buf, StandardCharsets.UTF_8);
+                    if (data.startsWith("<?xml")
                             && data.contains(FragmentHandler.FRAGMENT)) {
                         reportFlavorIndex = i;
                         break;
@@ -1638,15 +1640,15 @@ public class JReportGrid extends JTable implements TableRowModelListener,
                 } else if (dataFlavors[i].getMimeType().equals(
                         ReportTransferable.FLAVOR_MIME_TYPE)) {
                     byte[] buf = (byte[]) clip.getData(dataFlavors[i]);
-                    String data = new String(buf, "UTF-8");
-                    if (data.startsWith("<?xml") //$NON-NLS-1$
+                    String data = new String(buf, StandardCharsets.UTF_8);
+                    if (data.startsWith("<?xml")
                             && data.contains(FragmentHandler.FRAGMENT)) {
                         reportFlavorIndex = i;
                         break;
                     }
                 } else if (dataFlavors[i].equals(DataFlavor.stringFlavor)) {
                     String data = (String) clip.getData(dataFlavors[i]);
-                    if (data.startsWith("<?xml")) //$NON-NLS-1$
+                    if (data.startsWith("<?xml"))
                         xmlIndex = i;
                     else
                         textIndex = i;
@@ -1665,7 +1667,7 @@ public class JReportGrid extends JTable implements TableRowModelListener,
             if (reportFlavorIndex >= 0) {
                 String data = new String(
                         (byte[]) clip.getData(dataFlavors[reportFlavorIndex]),
-                        "UTF-8");
+                        StandardCharsets.UTF_8);
                 paste(data, getSelectedRow(), getSelectedColumn());
                 repaint();
                 return;
@@ -1691,9 +1693,8 @@ public class JReportGrid extends JTable implements TableRowModelListener,
     }
 
     public void insertIcon() {
-        JFileChooser fileChooser = new JFileChooser(ReportPane.CURRENT_IMAGE_PATH); //$NON-NLS-1$
-        String[] exts = {".bmp", ".gif", ".png", ".jpg", //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
-                ".jpeg"}; //$NON-NLS-1$
+        JFileChooser fileChooser = new JFileChooser(ReportPane.CURRENT_IMAGE_PATH);
+        String[] exts = {".bmp", ".gif", ".png", ".jpg", ".jpeg"};
         FileFilter filter = new ExtensionFileFilter(exts,
                 Messages.getString("JReportGrid.27"));
 
@@ -1725,13 +1726,14 @@ public class JReportGrid extends JTable implements TableRowModelListener,
             String format = Utils.getFileExtension(selectedFile);
             try {
                 Picture picture = PictureFactory.createPicture(format);
+                assert picture != null;
                 picture.load(selectedFile);
                 picture.setScale(cell.isScaleIcon());
                 cell.setPicture(picture);
                 if (canUndo()) {
-                    pushUndo(new CellUndoItem(this, UndoItem.INSERT_ICON)); //$NON-NLS-1$
+                    pushUndo(new CellUndoItem(this, UndoItem.INSERT_ICON));
                 }
-            } catch (IOException e) {
+            } catch (Exception e) {
                 Utils.showError(e);
             }
         }
@@ -1745,7 +1747,7 @@ public class JReportGrid extends JTable implements TableRowModelListener,
         final boolean enableSvg = ReportBook.isEnableSVG()
                 && (cell.getValue() instanceof SVGValue);
 
-        JFileChooser fileChooser = new JFileChooser("."); //$NON-NLS-1$
+        JFileChooser fileChooser = new JFileChooser(".");
         ExtensionFileFilter jpegFilter = new ExtensionFileFilter(new String[]{
                 ".jpeg", ".jpg", ".jpe"}, "JPEG image");
         ExtensionFileFilter pngFilter = new ExtensionFileFilter(".png",
@@ -1797,9 +1799,11 @@ public class JReportGrid extends JTable implements TableRowModelListener,
                     }
                 }
             }
-
+            if (format == null) {
+                format = "png";
+            }
             try {
-                if (format.equals("svg") && enableSvg) {
+                if (enableSvg && "svg".equals(format)) {
                     SVGImage image = ((SVGValue) cell.getValue()).getValue();
                     try (PrintWriter pw = new PrintWriter(selectedFile)) {
                         pw.write(image.getXML());
@@ -1823,7 +1827,7 @@ public class JReportGrid extends JTable implements TableRowModelListener,
 
     public void scaleIcon() {
         if (canUndo()) {
-            pushUndo(new CellUndoItem(this, UndoItem.SCALE_ICON)); //$NON-NLS-1$
+            pushUndo(new CellUndoItem(this, UndoItem.SCALE_ICON));
         }
         Cell cell = getSelectedCell();
         if (cell.isNull()) {
@@ -1835,7 +1839,7 @@ public class JReportGrid extends JTable implements TableRowModelListener,
 
     public void deleteIcon() {
         if (canUndo()) {
-            pushUndo(new CellUndoItem(this, UndoItem.DELETE_ICON)); //$NON-NLS-1$
+            pushUndo(new CellUndoItem(this, UndoItem.DELETE_ICON));
         }
         Cell cell = getSelectedCell();
         cell.setIcon(null);
@@ -1853,7 +1857,7 @@ public class JReportGrid extends JTable implements TableRowModelListener,
     public void addColumns() {
         if (canUndo()) {
             try {
-                pushUndo(new BackupItem(this, UndoItem.ADD_COLUMNS)); //$NON-NLS-1$
+                pushUndo(new BackupItem(this, UndoItem.ADD_COLUMNS));
             } catch (Exception e) {
                 Utils.showError(e);
             }
@@ -1866,7 +1870,7 @@ public class JReportGrid extends JTable implements TableRowModelListener,
         if (cols.length > 0) {
             if (canUndo()) {
                 try {
-                    pushUndo(new BackupItem(this, UndoItem.REMOVE_COLUMNS)); //$NON-NLS-1$
+                    pushUndo(new BackupItem(this, UndoItem.REMOVE_COLUMNS));
                 } catch (Exception e) {
                     Utils.showError(e);
                 }
@@ -1878,7 +1882,7 @@ public class JReportGrid extends JTable implements TableRowModelListener,
     public void addRows(int count, int index) {
         if (canUndo())
             try {
-                pushUndo(new BackupItem(this, UndoItem.ADD_ROWS)); //$NON-NLS-1$
+                pushUndo(new BackupItem(this, UndoItem.ADD_ROWS));
             } catch (Throwable e) {
                 Utils.showError(e);
             }
@@ -1888,7 +1892,7 @@ public class JReportGrid extends JTable implements TableRowModelListener,
     public TableRow addRow(RowsGroup group) {
         if (canUndo())
             try {
-                pushUndo(new BackupItem(this, UndoItem.ADD_ROWS)); //$NON-NLS-1$
+                pushUndo(new BackupItem(this, UndoItem.ADD_ROWS));
             } catch (Throwable e) {
                 Utils.showError(e);
             }
@@ -1900,7 +1904,7 @@ public class JReportGrid extends JTable implements TableRowModelListener,
     public Group addGroup(GroupsGroup parent, int type) {
         if (canUndo())
             try {
-                pushUndo(new BackupItem(this, UndoItem.ADD_ROWS)); //$NON-NLS-1$
+                pushUndo(new BackupItem(this, UndoItem.ADD_ROWS));
             } catch (Throwable e) {
                 Utils.showError(e);
             }
@@ -1914,7 +1918,7 @@ public class JReportGrid extends JTable implements TableRowModelListener,
     public void removeGroup(Group group) {
         if (canUndo())
             try {
-                pushUndo(new BackupItem(this, UndoItem.REMOVE_ROWS)); //$NON-NLS-1$
+                pushUndo(new BackupItem(this, UndoItem.REMOVE_ROWS));
             } catch (Exception e) {
                 Utils.showError(e);
             }
@@ -1924,7 +1928,7 @@ public class JReportGrid extends JTable implements TableRowModelListener,
     public void removeRow(TableRow row) {
         if (canUndo())
             try {
-                pushUndo(new BackupItem(this, UndoItem.REMOVE_ROWS)); //$NON-NLS-1$
+                pushUndo(new BackupItem(this, UndoItem.REMOVE_ROWS));
             } catch (Exception e) {
                 Utils.showError(e);
             }
@@ -1934,7 +1938,7 @@ public class JReportGrid extends JTable implements TableRowModelListener,
     public void removeRows(int count, int index) {
         if (canUndo())
             try {
-                pushUndo(new BackupItem(this, UndoItem.REMOVE_ROWS)); //$NON-NLS-1$
+                pushUndo(new BackupItem(this, UndoItem.REMOVE_ROWS));
             } catch (Exception e) {
                 Utils.showError(e);
             }
@@ -2069,9 +2073,6 @@ public class JReportGrid extends JTable implements TableRowModelListener,
         }
     }
 
-    /**
-     * @throws HeadlessException
-     */
     protected CellPropertiesDlg createCellProperties() throws HeadlessException {
         Window w = SwingUtilities.getWindowAncestor(this);
         if (w instanceof Frame) {
@@ -2159,20 +2160,20 @@ public class JReportGrid extends JTable implements TableRowModelListener,
 
         // Objects
         setLazyRenderer(Object.class,
-                TextReportRenderer.class.getName()); //$NON-NLS-1$
+                TextReportRenderer.class.getName());
 
         // PageNumber
         setLazyRenderer(jdbreport.model.PageNumber.class,
-                PageNumberRenderer.class.getName()); //$NON-NLS-1$
+                PageNumberRenderer.class.getName());
 
         // PageCount
         setLazyRenderer(jdbreport.model.PageCount.class,
-                PageCountRenderer.class.getName()); //$NON-NLS-1$
+                PageCountRenderer.class.getName());
 
         // Booleans
-        setLazyRenderer(Boolean.class, "javax.swing.JTable$BooleanRenderer"); //$NON-NLS-1$
+        setLazyRenderer(Boolean.class, "javax.swing.JTable$BooleanRenderer");
 
-        setLazyRenderer(Date.class, DateRenderer.class.getName()); //$NON-NLS-1$
+        setLazyRenderer(Date.class, DateRenderer.class.getName());
 
         for (CellValueInfo vi : ReportCell.getDefaultCellValueClasses()) {
             setLazyRenderer(vi.getCellValueClass(), vi.getRendererClass());
@@ -2201,9 +2202,9 @@ public class JReportGrid extends JTable implements TableRowModelListener,
 
         protected Cell cell;
 
-        protected int verticalAlignment;
+        int verticalAlignment;
 
-        protected int horizontalAlignment;
+        int horizontalAlignment;
 
         protected boolean hasFocus;
 
@@ -2289,11 +2290,11 @@ public class JReportGrid extends JTable implements TableRowModelListener,
             if (hasFocus) {
                 if (!isSelected && table.isCellEditable(row, column)) {
                     Color color;
-                    color = UIManager.getColor("Table.focusCellForeground"); //$NON-NLS-1$
+                    color = UIManager.getColor("Table.focusCellForeground");
                     if (color != null) {
                         super.setForeground(color);
                     }
-                    color = UIManager.getColor("Table.focusCellBackground"); //$NON-NLS-1$
+                    color = UIManager.getColor("Table.focusCellBackground");
                     if (color != null) {
                         super.setBackground(color);
                     }
@@ -2490,7 +2491,7 @@ public class JReportGrid extends JTable implements TableRowModelListener,
         protected void paintBorder(Graphics g) {
             if (hasFocus) {
                 Border border = UIManager
-                        .getBorder("Table.focusCellHighlightBorder"); //$NON-NLS-1$
+                        .getBorder("Table.focusCellHighlightBorder");
                 if (border != null) {
                     border.paintBorder(this, g, 0, 0, getWidth(), getHeight());
                 }
@@ -2540,7 +2541,7 @@ public class JReportGrid extends JTable implements TableRowModelListener,
 
         public HTMLReportRenderer() {
             super();
-            setContentType("text/html"); //$NON-NLS-1$
+            setContentType("text/html");
             setEditorKit(new NoWrapHTMLKit());
         }
 
@@ -2551,7 +2552,7 @@ public class JReportGrid extends JTable implements TableRowModelListener,
             super.getTableCellRendererComponent(table, value, isSelected,
                     hasFocus, row, column);
 
-            String str = (value == null) ? "" : value.toString(); //$NON-NLS-1$
+            String str = (value == null) ? "" : value.toString();
 
             if (!str.equals(getText())) {
                 setText(str);
@@ -2585,7 +2586,7 @@ public class JReportGrid extends JTable implements TableRowModelListener,
 
         protected static final Insets insets = new Insets(2, 2, 2, 2);
 
-        private ValueFormatter formatter = new ValueFormatter();
+        private final ValueFormatter formatter = new ValueFormatter();
 
         public TextReportRenderer() {
             super();
@@ -2751,8 +2752,8 @@ public class JReportGrid extends JTable implements TableRowModelListener,
         private FontMetrics fm;
 
         public void setStyle(CellStyle style) {
-            Font font = Font.decode(style.getFamily() + "-" //$NON-NLS-1$
-                    + CellStyle.fontStyleStr(style.getStyle()) + "-" //$NON-NLS-1$
+            Font font = Font.decode(style.getFamily() + "-"
+                    + CellStyle.fontStyleStr(style.getStyle()) + "-"
                     + style.getSize());
             fm = getFontMetrics(font);
         }
@@ -2777,7 +2778,7 @@ public class JReportGrid extends JTable implements TableRowModelListener,
 
     private static class ValueFormatter {
 
-        private NumberFormat numberFormat = NumberFormat.getInstance();
+        private final NumberFormat numberFormat = NumberFormat.getInstance();
 
         public String format(Object value, int decimal, boolean roundToSignificant) {
             if (value == null) {

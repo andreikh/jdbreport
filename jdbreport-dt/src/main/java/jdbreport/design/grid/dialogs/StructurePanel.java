@@ -44,7 +44,7 @@ public class StructurePanel extends JPanel implements ActionListener {
     private JToolBar toolBar;
     private JButton collapseButton;
     private JButton expandButton;
-    private JTree tree;
+    private final JTree tree;
     private JPopupMenu treeMenu;
     private Action delAction;
     private Action addDetailGroupAction;
@@ -303,7 +303,7 @@ public class StructurePanel extends JPanel implements ActionListener {
     private void expandTree(JTree tree) {
         DefaultMutableTreeNode root =
                 (DefaultMutableTreeNode) tree.getModel().getRoot();
-        Enumeration e = root.breadthFirstEnumeration();
+        Enumeration<?> e = root.breadthFirstEnumeration();
         while (e.hasMoreElements()) {
             DefaultMutableTreeNode node =
                     (DefaultMutableTreeNode) e.nextElement();
@@ -452,9 +452,8 @@ public class StructurePanel extends JPanel implements ActionListener {
                 int targetType = ((Group) target.getUserObject()).getType();
                 int type = ((Group) data).getType();
 
-                if ((type == Group.ROW_DETAIL || type == Group.ROW_GROUP_HEADER || type == Group.ROW_GROUP_FOOTER)
-                        && (targetType != Group.GROUP_DETAIL))
-                    return false;
+                return (type != Group.ROW_DETAIL && type != Group.ROW_GROUP_HEADER && type != Group.ROW_GROUP_FOOTER)
+                        || (targetType == Group.GROUP_DETAIL);
             }
 
             return true;
@@ -477,8 +476,8 @@ public class StructurePanel extends JPanel implements ActionListener {
             DefaultTreeModel model = (DefaultTreeModel) tree.getModel();
 
             int childIndex = dl.getChildIndex();// DropMode.INSERT
-             if (childIndex == -1) {     // DropMode.ON
-                 childIndex = parent.getChildCount();
+            if (childIndex == -1) {     // DropMode.ON
+                childIndex = parent.getChildCount();
             }
 
             DefaultMutableTreeNode node = null;

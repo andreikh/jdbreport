@@ -38,9 +38,9 @@ public class TestDao {
 	
 	private PreparedStatement insertStatement;
 
-	private String driverName;
+	private final String driverName;
 
-	private String connectionUrl;
+	private final String connectionUrl;
 
 	private Connection connection;
 
@@ -55,36 +55,29 @@ public class TestDao {
 			try {
 				Class.forName(driverName);
 				connection = DriverManager.getConnection(connectionUrl);
-			} catch (ClassNotFoundException e) {
-				throw new SQLException(e.getMessage());
-			} catch (SQLException e) {
+			} catch (ClassNotFoundException | SQLException e) {
 				throw new SQLException(e.getMessage());
 			}
 		}
 		return connection;
 	}
 	
-	private boolean createIfNotExists() {			
+	private void createIfNotExists() {
 
-		boolean result = false;
 		try {
 			DatabaseMetaData dmd = getConnection().getMetaData();
-			ResultSet rs = dmd.getTables(null, null, "TEST", null);
-			try {
-			if (!rs.next()) {
+			try (ResultSet rs = dmd.getTables(null, null, "TEST", null)) {
+				if (!rs.next()) {
 					System.out.println(" . . . . creating table TEST");
-					Statement s = getConnection().createStatement();
-					s.execute(createSql );
-					getConnection().commit();
-					result = true;
-			}
-			} finally {
-				rs.close();
+					try (Statement s = getConnection().createStatement()) {
+						s.execute(createSql);
+						getConnection().commit();
+					}
+				}
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		return result;
 	}
 	
 	
@@ -102,26 +95,24 @@ public class TestDao {
 	}
 
 	public void deleteTest() throws SQLException {
-			Statement deleteStatement = getConnection().createStatement();
-			deleteStatement.executeUpdate(deleteSql);
-			getConnection().commit();
+			try (Statement deleteStatement = getConnection().createStatement()) {
+				deleteStatement.executeUpdate(deleteSql);
+				getConnection().commit();
+			}
 	}
 
 	public List<Test> getTestList() throws SQLException {
-		List<Test> result = new ArrayList<Test>();
+		List<Test> result = new ArrayList<>();
 			if (selectStatement == null)
 				selectStatement = getConnection().prepareStatement(selectSql);
-			ResultSet rs = selectStatement.executeQuery();
-			try {
-				while (rs.next()) {
-					Test test = new Test(rs.getString("firstname"), rs.getString("lastname"),
-							rs.getString("color"),rs.getString("movie"),rs.getDouble("number"),
-							rs.getString("food"));
-					result.add(test);
-				}
-			} finally {
-				rs.close();
+		try (ResultSet rs = selectStatement.executeQuery()) {
+			while (rs.next()) {
+				Test test = new Test(rs.getString("firstname"), rs.getString("lastname"),
+						rs.getString("color"), rs.getString("movie"), rs.getDouble("number"),
+						rs.getString("food"));
+				result.add(test);
 			}
+		}
 		return result;
 	}
 	

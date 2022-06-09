@@ -10,6 +10,8 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextPane;
 
 import java.io.*;
+import java.nio.charset.StandardCharsets;
+import java.util.Objects;
 
 import javax.swing.JEditorPane;
 import javax.swing.text.SimpleAttributeSet;
@@ -27,7 +29,7 @@ public class SourceViewer extends JFrame {
 
 	private JTextPane sourcePane = null;
 
-	private String sourcePath;
+	private final String sourcePath;
 
 	private JScrollPane scrollPane;
 
@@ -85,7 +87,8 @@ public class SourceViewer extends JFrame {
 			setTabs(sourcePane, 4);
 			sourcePane.setEditable(false);
 			try {
-				Reader reader = new InputStreamReader(getClass().getResourceAsStream(sourcePath), "UTF-8");
+				Reader reader = new InputStreamReader(Objects.requireNonNull(getClass().getResourceAsStream(sourcePath)),
+						StandardCharsets.UTF_8);
 				char[] cbuf = new char[1024 * 10];
 				int l = reader.read(cbuf);
 				String source = new String(cbuf, 0, l);

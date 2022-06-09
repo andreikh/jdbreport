@@ -202,7 +202,7 @@ public class GenerateReport2 {
 	private static final int POSTAL_CODE = 7;
 
 	private static List<Customer> getData() {
-		List<Customer> customers = new ArrayList<Customer>();
+		List<Customer> customers = new ArrayList<>();
 		customers.add(new Customer(1001, "Signature Design", "Dale J.",
 				"Little", "(619) 530-2710", "15500 Pacific Heights Blvd.",
 				"San Diego", "USA", "92121"));
@@ -251,9 +251,7 @@ public class GenerateReport2 {
 	}
 
 	private static final int[] WIDTHS = {50, 130, 90, 100, 140, 75, 80, 60 };
-	/**
-	 * @param args
-	 */
+
 	public static void main(String[] args) throws IOException {
 		List<Customer> customers = getData();
 

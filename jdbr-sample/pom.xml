@@ -4,12 +4,19 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
-        <artifactId>jdbreport</artifactId>
+        <artifactId>jdbreport-parent</artifactId>
         <groupId>jdbreport</groupId>
-        <version>3.1.3-SNAPSHOT</version>
+        <version>3.1.4</version>
     </parent>
 
     <artifactId>jdbr-sample</artifactId>
+
+    <licenses>
+        <license>
+            <name>The Apache License, Version 2.0</name>
+            <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+        </license>
+    </licenses>
 
     <dependencies>
 
@@ -22,19 +29,10 @@
         <dependency>
             <groupId>org.apache.derby</groupId>
             <artifactId>derby</artifactId>
-            <version>10.12.1.1</version>
+            <version>10.15.2.0</version>
         </dependency>
 
     </dependencies>
-
-    <repositories>
-        <repository>
-            <id>jdbreport</id>
-            <name>JDBReport Repository</name>
-            <url>http://jdbreport.ru/repositories</url>
-            <layout>default</layout>
-        </repository>
-    </repositories>
 
     <build>
         <plugins>
@@ -78,10 +76,7 @@
 
             <plugin>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.7.0</version>
                 <configuration>
-                    <source>1.8</source>
-                    <target>1.8</target>
                     <encoding>${project.build.sourceEncoding}</encoding>
                 </configuration>
             </plugin>
