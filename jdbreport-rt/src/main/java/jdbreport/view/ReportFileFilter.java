@@ -34,7 +34,7 @@ import jdbreport.model.io.ReportWriter;
  */
 public class ReportFileFilter extends FileFilter {
 
-	private Hashtable<String, ReportFileFilter> filters = null;
+	private Hashtable<String, ReportFileFilter> filters;
 
 	private String description = null;
 
@@ -42,7 +42,7 @@ public class ReportFileFilter extends FileFilter {
 
 	private boolean useExtensionsInDescription = true;
 
-	private FileType fileType;
+	private final FileType fileType;
 
 	public ReportFileFilter(FileType fileType) {
 		this.filters = new Hashtable<>();
@@ -61,16 +61,15 @@ public class ReportFileFilter extends FileFilter {
 				return true;
 			}
 			String extension = getExtension(f);
-			if (extension != null && filters.get(getExtension(f)) != null) {
-				return true;
-			}
+			return extension != null && filters.get(getExtension(f)) != null;
 			
 		}
 		return false;
 	}
 
 	/**
-	 * Returns the extension portion of the file's name .
+	 * @param f file
+	 * @return Returns the extension portion of the file's name .
 	 * 
 	 */
 	public String getExtension(File f) {
@@ -87,9 +86,10 @@ public class ReportFileFilter extends FileFilter {
 
 	/**
 	 * Adds a filetype "dot" extension to filter against.
-	 * 
-	 * 
+	 *
 	 * Note that the "." before the extension is not needed and will be ignored.
+	 *
+	 * @param extension file extension
 	 */
 	public void addExtension(String extension) {
 		if (filters == null) {
@@ -108,14 +108,13 @@ public class ReportFileFilter extends FileFilter {
 			if (description == null || isExtensionListInDescription()) {
 				fullDescription = description == null ? "(" : description
 						+ " (";
-				String exts = "";
+				StringBuilder exts = new StringBuilder();
 				Enumeration<String> extensions = filters.keys();
 				if (extensions != null) {
 					while (extensions.hasMoreElements()) {
-						exts += ", "
-								+ extensions.nextElement();
+						exts.append(", ").append(extensions.nextElement());
 					}
-					exts = exts.substring(1);
+					exts = new StringBuilder(exts.substring(1));
 				}
 				fullDescription += exts + " )";
 			} else {
@@ -126,8 +125,9 @@ public class ReportFileFilter extends FileFilter {
 	}
 
 	/**
-	 * Sets the human readable description of this filter.
-	 * 
+	 * Sets the human-readable description of this filter.
+	 *
+	 * @param description description
 	 */
 	public void setDescription(String description) {
 		this.description = description;

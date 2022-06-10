@@ -31,8 +31,8 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.Reader;
 import java.io.StringWriter;
-import java.io.UnsupportedEncodingException;
 import java.io.Writer;
+import java.nio.charset.StandardCharsets;
 
 import jdbreport.grid.JReportGrid;
 import jdbreport.model.io.SaveReportException;
@@ -55,8 +55,8 @@ public abstract class StoredGridUndo extends AbstractGridUndo {
 	}
 
 	/**
-	 * @throws IOException
-	 * @throws SaveReportException
+	 * @throws IOException IOException
+	 * @throws SaveReportException SaveReportException
 	 */
 	protected void saveReport() throws SaveReportException, IOException {
 		buffer = null;
@@ -73,12 +73,12 @@ public abstract class StoredGridUndo extends AbstractGridUndo {
 		}
 	}
 
-	protected Writer createWriter(File file) throws UnsupportedEncodingException, FileNotFoundException {
-		return new BufferedWriter(new OutputStreamWriter(new FileOutputStream(file), "UTF-8"));
+	protected Writer createWriter(File file) throws FileNotFoundException {
+		return new BufferedWriter(new OutputStreamWriter(new FileOutputStream(file), StandardCharsets.UTF_8));
 	}
 	
-	protected Reader createReader(File file) throws UnsupportedEncodingException, FileNotFoundException {
-		return new InputStreamReader(new FileInputStream(file), "UTF-8");
+	protected Reader createReader(File file) throws FileNotFoundException {
+		return new InputStreamReader(new FileInputStream(file), StandardCharsets.UTF_8);
 	}
 	
 	private void saveToFile() throws IOException {

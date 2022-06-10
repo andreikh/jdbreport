@@ -42,15 +42,12 @@ public class HelpWindow extends JFrame {
 
 	private HelpPane helpPane;
 
-	private XMLProperties properties;
+	private final XMLProperties properties;
 
 	protected HelpWindow(XMLProperties properties) {
 		this(properties, null);
 	}
 
-	/**
-	 * This is the default constructor
-	 */
 	public HelpWindow(XMLProperties properties, URL url) {
 		super();
 		this.properties = properties;
@@ -84,7 +81,7 @@ public class HelpWindow extends JFrame {
 
 	protected void saveProperties() {
 		if ((getExtendedState() & Frame.ICONIFIED) == 0)
-			properties.put(HelpPane.WINDOW_STATE, "" + getExtendedState()); //$NON-NLS-1$
+			properties.put(HelpPane.WINDOW_STATE, "" + getExtendedState());
 		if (getState() == Frame.NORMAL) {
 			Rectangle r = getBounds();
 			properties.put(HelpPane.POS_X, r.x);
@@ -97,7 +94,7 @@ public class HelpWindow extends JFrame {
 	private void initialize() {
 		this.setSize(800, 600);
 		this.setContentPane(getJContentPane());
-		this.setTitle(Messages.getString("HelpWindow.0")); //$NON-NLS-1$
+		this.setTitle(Messages.getString("HelpWindow.0"));
 	}
 
 	/**

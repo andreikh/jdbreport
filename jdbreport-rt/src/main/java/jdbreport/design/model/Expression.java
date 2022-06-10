@@ -27,7 +27,7 @@ import jdbreport.model.ReportException;
  * Interface is used to calculate expressions in the CellObject.<br>
  * CellObject can contain several expressions, for instance:
  * <i><b>Customer: ${customer.name}</b></i> contains two expressions:
- * <i><b>Customer: </b><i> and  <i><b>${customer.name}</b></i>.
+ * <i><b>Customer: </b></i> and  <i><b>${customer.name}</b></i>.
  *
  * @version 3.1 15.12.2014
  * @author Andrey Kholmanskih
@@ -61,7 +61,7 @@ public interface Expression {
 	/**
 	 * The meaning of the expression
 	 * @return the meaning of the expression
-	 * @throws ReportException
+	 * @throws ReportException ReportException
 	 */
 	Object getValue() throws ReportException;
 	
@@ -76,7 +76,7 @@ public interface Expression {
 	/**
 	 * Returns a formatted string
 	 * @return formatted string
-	 * @throws ReportException 
+	 * @throws ReportException ReportException
 	 * @since 1.4
 	 */
 	String getFormatValue() throws ReportException;

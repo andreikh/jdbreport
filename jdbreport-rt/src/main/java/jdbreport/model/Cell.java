@@ -1,8 +1,8 @@
 /*
  * JDBReport Generator
- * 
+ *
  * Copyright (C) 2004-2014 Andrey Kholmanskih
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -24,279 +24,256 @@ import java.io.Serializable;
 import javax.swing.Icon;
 
 /**
- * 
  * The interface of the cell
- * 
- * @version 2.2 13.04.2013
+ *
  * @author Andrey Kholmanskih
- * 
+ * @version 2.2 13.04.2013
  */
 public interface Cell extends Cloneable, Serializable {
 
-	long serialVersionUID = 1L;
+    long serialVersionUID = 1L;
 
-	enum Type {
-		STRING, FLOAT, DATE, TIME, BOOLEAN, PERCENTAGE, CURRENCY
-	}
+    enum Type {
+        STRING, FLOAT, DATE, TIME, BOOLEAN, PERCENTAGE, CURRENCY
+    }
 
-	Type DEFAULT_TYPE = Type.STRING;
+    Type DEFAULT_TYPE = Type.STRING;
 
-	String TEXT_PLAIN = "text/plain";
+    String TEXT_PLAIN = "text/plain";
 
-	String TEXT_HTML = "text/html";
-	
-	String EMPTY_STRING = "";
+    String TEXT_HTML = "text/html";
 
-	/**
-	 * Returns the value for the cell
-	 * 
-	 * @return the value Object at the cell
-	 */
-	Object getValue();
+    String EMPTY_STRING = "";
 
-	/**
-	 * 
-	 * @param value
-	 *            to assign to cell
-	 */
-	void setValue(Object value);
+    /**
+     * Returns the value for the cell
+     *
+     * @return the value Object at the cell
+     */
+    Object getValue();
 
-	/**
-	 * 
-	 * @return the string value of the cell
-	 */
-	String getText();
+    /**
+     * @param value to assign to cell
+     */
+    void setValue(Object value);
 
-	/**
-	 * Key of the CellStyle in the map of the CellStyles
-	 * 
-	 * @return the CellStyle's id
-	 */
-	Object getStyleId();
+    /**
+     * @return the string value of the cell
+     */
+    String getText();
 
-	/**
-	 * Sets the CellStyle's id for the cell
-	 * 
-	 * @param id
-	 *            the CellStyle's id
-	 */
-	void setStyleId(Object id);
+    /**
+     * Key of the CellStyle in the map of the CellStyles
+     *
+     * @return the CellStyle's id
+     */
+    Object getStyleId();
 
-	/**
-	 * Returns a number of spanned rows for the cell
-	 * 
-	 * @return rowSpan of the cell
-	 */
-	int getRowSpan();
+    /**
+     * Sets the CellStyle's id for the cell
+     *
+     * @param id the CellStyle's id
+     */
+    void setStyleId(Object id);
 
-	/**
-	 * Sets a number of spanned rows for the cell
-	 * 
-	 * @param value
-	 *            a number of spanned rows
-	 */
-	void setRowSpan(int value);
+    /**
+     * Returns a number of spanned rows for the cell
+     *
+     * @return rowSpan of the cell
+     */
+    int getRowSpan();
 
-	/**
-	 * Returns a number of spanned columns for the cell
-	 * 
-	 * @return colSpan of the cell
-	 */
-	int getColSpan();
+    /**
+     * Sets a number of spanned rows for the cell
+     *
+     * @param value a number of spanned rows
+     */
+    void setRowSpan(int value);
 
-	/**
-	 * Sets a number of spanned columns for the cell
-	 * 
-	 * @param value
-	 *            a number of spanned columns
-	 */
-	void setColSpan(int value);
+    /**
+     * Returns a number of spanned columns for the cell
+     *
+     * @return colSpan of the cell
+     */
+    int getColSpan();
 
-	/**
-	 * Returns true if the cell has an owner
-	 * 
-	 * @return true if the cell has an owner
-	 */
-	boolean isChild();
+    /**
+     * Sets a number of spanned columns for the cell
+     *
+     * @param value a number of spanned columns
+     */
+    void setColSpan(int value);
 
-	/**
-	 * 
-	 * @return true if the rowSpan or the columnSpan is more than zero
-	 */
-	boolean isSpan();
+    /**
+     * Returns true if the cell has an owner
+     *
+     * @return true if the cell has an owner
+     */
+    boolean isChild();
 
-	/**
-	 * Returns the owner of the cell, can be null
-	 * 
-	 * @return owner of the cell
-	 */
-	Cell getOwner();
+    /**
+     * @return true if the rowSpan or the columnSpan is more than zero
+     */
+    boolean isSpan();
 
-	/**
-	 * Sets the owner of the cell
-	 * 
-	 * @param cell
-	 *            the owner of the cell, can be null
-	 */
-	void setOwner(Cell cell);
+    /**
+     * Returns the owner of the cell, can be null
+     *
+     * @return owner of the cell
+     */
+    Cell getOwner();
 
-	/**
-	 * Determines if the cell is null
-	 * 
-	 * @return true if the cell is null
-	 */
-	boolean isNull();
+    /**
+     * Sets the owner of the cell
+     *
+     * @param cell the owner of the cell, can be null
+     */
+    void setOwner(Cell cell);
 
-	/**
-	 * 
-	 * @return extFlags property
-	 */
-	int getExtFlags();
+    /**
+     * Determines if the cell is null
+     *
+     * @return true if the cell is null
+     */
+    boolean isNull();
 
-	void setExtFlags(int i);
+    /**
+     * @return extFlags property
+     */
+    int getExtFlags();
 
-	/**
-	 * Returns true if the cell is not printed
-	 * 
-	 * @return true if the cell is not printed
-	 */
-	boolean isNotPrint();
+    void setExtFlags(int i);
 
-	/**
-	 * Sets the notPrint property, which must be true to disable printing of the
-	 * cells
-	 * 
-	 * @param b
-	 *            if true the cell is not printed
-	 */
-	void setNotPrint(boolean b);
+    /**
+     * Returns true if the cell is not printed
+     *
+     * @return true if the cell is not printed
+     */
+    boolean isNotPrint();
 
-	Object clone();
+    /**
+     * Sets the notPrint property, which must be true to disable printing of the
+     * cells
+     *
+     * @param b if true the cell is not printed
+     */
+    void setNotPrint(boolean b);
 
-	/**
-	 * Sets an icon to the cell
-	 * 
-	 * @param icon
-	 *            the cell icon
-	 */
-	void setIcon(Icon icon);
+    Object clone();
 
-	/**
-	 * Sets an icon to the cell
-	 * 
-	 * @param image
-	 *            the cell image
-	 * @since 1.2           
-	 */
-	void setImage(Image image);
-	
-	/**
-	 * Returns the icon of the cell
-	 * 
-	 * @return the icon of the cell
-	 * @deprecated use getPicture()
-	 */
-	Icon getIcon();
+    /**
+     * Sets an icon to the cell
+     *
+     * @param icon the cell icon
+     */
+    void setIcon(Icon icon);
 
-	/**
-	 * Returns the picture of the cell
-	 * 
-	 * @return the picture of the cell
-	 * @since 2.0
-	 */
-	Picture getPicture();
+    /**
+     * Sets an icon to the cell
+     *
+     * @param image the cell image
+     * @since 1.2
+     */
+    void setImage(Image image);
 
-	/**
-	 * Sets an picture to the cell
-	 * 
-	 * @param picture the cell picture
-	 * @since 2.0
-	 */
-	void setPicture(Picture picture);
-	
-	/**
-	 * Sets a scale of the icon. If true, the icon's sizes are set like the
-	 * cell's sizes
-	 * 
-	 * @param scale
-	 *            scaleIcon property
-	 */
-	void setScaleIcon(boolean scale);
+    /**
+     * Returns the icon of the cell
+     *
+     * @return the icon of the cell
+     * @deprecated use getPicture()
+     */
+    @Deprecated
+    Icon getIcon();
 
-	/**
-	 * Determines whether the icons are scaled
-	 * 
-	 * @return true if the icon is scaled
-	 */
-	boolean isScaleIcon();
+    /**
+     * Returns the picture of the cell
+     *
+     * @return the picture of the cell
+     * @since 2.0
+     */
+    Picture getPicture();
 
-	/**
-	 * 
-	 * @param format
-	 *            the image's format e.g. "bmp", "png", "jpg"
-	 */
-	void setImageFormat(String format);
+    /**
+     * Sets an picture to the cell
+     *
+     * @param picture the cell picture
+     * @since 2.0
+     */
+    void setPicture(Picture picture);
 
-	/**
-	 * 
-	 * @return the image's format e.g. "bmp", "png", "jpg"
-	 */
-	String getImageFormat();
+    /**
+     * Sets a scale of the icon. If true, the icon's sizes are set like the
+     * cell's sizes
+     *
+     * @param scale scaleIcon property
+     */
+    void setScaleIcon(boolean scale);
 
-	/**
-	 * 
-	 * @return the cell's content e.g. "text/plain" or "text/html"
-	 */
-	String getContentType();
+    /**
+     * Determines whether the icons are scaled
+     *
+     * @return true if the icon is scaled
+     */
+    boolean isScaleIcon();
 
-	/**
-	 * Sets all properties by default
-	 * 
-	 */
-	void clear();
+    /**
+     * @param format the image's format e.g. "bmp", "png", "jpg"
+     */
+    void setImageFormat(String format);
 
-	/**
-	 * 
-	 * @return the type of the cell's value
-	 */
-	Type getValueType();
+    /**
+     * @return the image's format e.g. "bmp", "png", "jpg"
+     */
+    String getImageFormat();
 
-	/**
-	 * 
-	 * @param valueType
-	 *            new type of the cell's value
-	 */
-	void setValueType(Type valueType);
+    /**
+     * @return the cell's content e.g. "text/plain" or "text/html"
+     */
+    String getContentType();
 
-	/**
-	 * Default true
-	 * 
-	 * @return editable
-	 */
-	boolean isEditable();
+    /**
+     * Sets all properties by default
+     */
+    void clear();
 
-	/**
-	 * Sets the editable property, which must be false to disable edit of the
-	 * cells
-	 * 
-	 * @param b
-	 *            if true the cell is editable
-	 */
-	void setEditable(boolean b);
+    /**
+     * @return the type of the cell's value
+     */
+    Type getValueType();
 
-	/**
-	 * Cell formula. Not calculate value. Only for export to Spreadsheet 
-	 * 
-	 * @return Spreadsheet formula
-	 * @since 2.2
-	 */
-	String getCellFormula();
+    /**
+     * @param valueType new type of the cell's value
+     */
+    void setValueType(Type valueType);
 
-	/**
-	 * Cell formula. Not calculate value. Only for export to Spreadsheet
-	 *  
-	 * @param formula Spreadsheet formula
-	 * @since 2.2
-	 */
-	void setCellFormula(String formula);
+    /**
+     * Default true
+     *
+     * @return editable
+     */
+    boolean isEditable();
+
+    /**
+     * Sets the editable property, which must be false to disable edit of the
+     * cells
+     *
+     * @param b if true the cell is editable
+     */
+    void setEditable(boolean b);
+
+    /**
+     * Cell formula. Not calculate value. Only for export to Spreadsheet
+     *
+     * @return Spreadsheet formula
+     * @since 2.2
+     */
+    String getCellFormula();
+
+    /**
+     * Cell formula. Not calculate value. Only for export to Spreadsheet
+     *
+     * @param formula Spreadsheet formula
+     * @since 2.2
+     */
+    void setCellFormula(String formula);
 }

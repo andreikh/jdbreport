@@ -174,6 +174,7 @@ public class Utils {
 
 	/**
 	 * Center screen
+	 * @param window Window
 	 */
 	public static void screenCenter(Window window) {
 		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
@@ -392,6 +393,7 @@ public class Utils {
 	 * @param in input stream
 	 * @param b bytes
 	 * @return count bytes reads from stream
+	 * @throws IOException IOException
 	 */
 	public static int readBytes(InputStream in, byte[] b) throws IOException {
 		int l = b.length;

@@ -31,20 +31,17 @@ public class FindParams {
     public static final int SCOPE_ALL = 0;
     public static final int SCOPE_SELECTED = 1;
     
-    private String findText;
-    private int direction = FORWARD;
-    private int scope = SCOPE_ALL;
-    private boolean caseSensitive;
-    private boolean wholeWord;
-    private boolean wrapSearch;
-    private boolean incremental;
+    private final String findText;
+    private final int direction;
+    private final int scope;
+    private final boolean caseSensitive;
+    private final boolean wholeWord;
+    private final boolean wrapSearch;
+    private final boolean incremental;
     /* for table */
     private int column = -1;
     
-    /**
-     * 
-     */
-    public FindParams(String text, int direction, int scope, boolean incremental, 
+    public FindParams(String text, int direction, int scope, boolean incremental,
             boolean case_sensitive, boolean wrap_search, boolean whole_word) {
         super();
         this.findText = text;

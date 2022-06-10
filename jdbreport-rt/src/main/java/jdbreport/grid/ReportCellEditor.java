@@ -58,7 +58,7 @@ public class ReportCellEditor extends AbstractCellEditor implements
 
 	protected JTextPane editorComponent;
 
-	private int clickCountToStart = 2;
+	private final int clickCountToStart = 2;
 
 	public ReportCellEditor(String contentType) {
 		editorComponent = new JTextPane();
@@ -220,6 +220,8 @@ public class ReportCellEditor extends AbstractCellEditor implements
 		 * 
 		 * @param anEvent
 		 *            the event
+		 *
+		 * @return true to indicate that editing has begun
 		 */
 		public boolean startCellEditing(EventObject anEvent) {
 			return true;

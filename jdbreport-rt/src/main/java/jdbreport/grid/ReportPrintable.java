@@ -102,8 +102,8 @@ public class ReportPrintable implements Printable {
 	}
 
 	/**
-	 * Creates a new <code>TablePrintable<code> for the given
-	 * <code>JTable</code>. Header and footer text can be specified using the
+	 * Creates a new TablePrintable for the given JTable.
+	 * Header and footer text can be specified using the
 	 * two <code>MessageFormat</code> parameters. When called upon to provide a
 	 * String, each format is given the current page number.
 	 * 

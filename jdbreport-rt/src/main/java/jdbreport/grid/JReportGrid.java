@@ -1984,6 +1984,7 @@ public class JReportGrid extends JTable implements TableRowModelListener,
     /**
      * Compares text's height and row's height.
      *
+     * @param model report model
      * @param row    the row's number
      * @param column the column's number
      */

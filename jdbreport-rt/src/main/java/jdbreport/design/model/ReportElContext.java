@@ -2,7 +2,7 @@
  * Created 10.01.2011
  *
  * Copyright (C) 2011-2014 Andrey Kholmanskih
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -15,7 +15,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *
-*/
+ */
 package jdbreport.design.model;
 
 import java.lang.reflect.Method;
@@ -30,100 +30,94 @@ import javax.el.VariableMapper;
 
 
 /**
- * 
  * @author Andrey Kholmanskih
- *
  * @version 3.0 13.12.2014
  */
 public class ReportElContext extends ELContext {
-	
-	private Functions functions;
-	private Variables variables;
-	private ELResolver resolver;
 
-	public ReportElContext() {
-		super();
-	}
+    private Functions functions;
+    private Variables variables;
+    private ELResolver resolver;
 
-	static class Functions extends FunctionMapper {
-		Map<String, Method> map = new HashMap<>();
+    public ReportElContext() {
+        super();
+    }
 
-		@Override
-		public Method resolveFunction(String prefix, String localName) {
-			return map.get(prefix + ":" + localName);
-		}
+    static class Functions extends FunctionMapper {
+        Map<String, Method> map = new HashMap<>();
 
-		public void setFunction(String prefix, String localName, Method method) {
-			map.put(prefix + ":" + localName, method);
-		}
-	}
+        @Override
+        public Method resolveFunction(String prefix, String localName) {
+            return map.get(prefix + ":" + localName);
+        }
 
-	static class Variables extends VariableMapper {
-		Map<String, ValueExpression> map = new HashMap<>();
+        public void setFunction(String prefix, String localName, Method method) {
+            map.put(prefix + ":" + localName, method);
+        }
+    }
 
-		@Override
-		public ValueExpression resolveVariable(String variable) {
-			return map.get(variable);
-		}
+    static class Variables extends VariableMapper {
+        Map<String, ValueExpression> map = new HashMap<>();
 
-		@Override
-		public ValueExpression setVariable(String variable, ValueExpression expression) {
-			return map.put(variable, expression);
-		}
-	}
+        @Override
+        public ValueExpression resolveVariable(String variable) {
+            return map.get(variable);
+        }
 
+        @Override
+        public ValueExpression setVariable(String variable, ValueExpression expression) {
+            return map.put(variable, expression);
+        }
+    }
 
-	/**
-	 * Define a function.
-	 */
-	public void setFunction(String prefix, String localName, Method method) {
-		if (functions == null) {
-			functions = new Functions();
-		}
-		functions.setFunction(prefix, localName, method);
-	}
+    public void setFunction(String prefix, String localName, Method method) {
+        if (functions == null) {
+            functions = new Functions();
+        }
+        functions.setFunction(prefix, localName, method);
+    }
 
-	public ValueExpression setVariable(String name, ValueExpression expression) {
-		if (variables == null) {
-			variables = new Variables();
-		}
-		return variables.setVariable(name, expression);
-	}
+    public ValueExpression setVariable(String name, ValueExpression expression) {
+        if (variables == null) {
+            variables = new Variables();
+        }
+        return variables.setVariable(name, expression);
+    }
 
-	/**
-	 * Get our function mapper.
-	 */
-	@Override
-	public FunctionMapper getFunctionMapper() {
-		if (functions == null) {
-			functions = new Functions();
-		}
-		return functions;
-	}
+    /**
+     * Get our function mapper.
+     */
+    @Override
+    public FunctionMapper getFunctionMapper() {
+        if (functions == null) {
+            functions = new Functions();
+        }
+        return functions;
+    }
 
-	@Override
-	public VariableMapper getVariableMapper() {
-		if (variables == null) {
-			variables = new Variables();
-		}
-		return variables;
-	}
+    @Override
+    public VariableMapper getVariableMapper() {
+        if (variables == null) {
+            variables = new Variables();
+        }
+        return variables;
+    }
 
-	@Override
-	public ELResolver getELResolver() {
-		if (resolver == null) {
-			resolver = new ReportResolver();
-		}
-		return resolver;
-	}
+    @Override
+    public ELResolver getELResolver() {
+        if (resolver == null) {
+            resolver = new ReportResolver();
+        }
+        return resolver;
+    }
 
-	/**
-	 * Set our resolver.
-	 * 
-	 * @param resolver ELResolver
-	 */
-	public void setELResolver(ELResolver resolver) {
-		this.resolver = resolver;
-	}
+    /**
+     * Set our resolver.
+     *
+     * @param resolver ELResolver
+     */
+    public void setELResolver(ELResolver resolver) {
+        this.resolver = resolver;
+    }
 
 }

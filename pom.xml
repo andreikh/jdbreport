@@ -3,13 +3,13 @@
 
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>jdbreport</groupId>
+    <groupId>ru.jdbreport</groupId>
     <artifactId>jdbreport-parent</artifactId>
     <version>3.1.4</version>
     <packaging>pom</packaging>
 
     <name>JDBReport</name>
-    <url>https://github.com/andreikh/jdbreport.git</url>
+    <url>https://github.com/andreikh/jdbreport</url>
 
     <properties>
         <maven.compiler.source>1.8</maven.compiler.source>
@@ -29,16 +29,8 @@
     </licenses>
 
     <scm>
-        <url>https://github.com/andreikh/jdbreport.git</url>
+        <url>https://github.com/andreikh/jdbreport</url>
     </scm>
-
-    <distributionManagement>
-
-        <repository>
-            <id>internal</id>
-            <url>http://localhost:8080/repository/internal/</url>
-        </repository>
-    </distributionManagement>
 
     <modules>
         <module>jdbreport-rt</module>

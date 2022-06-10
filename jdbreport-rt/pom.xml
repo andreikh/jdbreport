@@ -2,22 +2,53 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <parent>
-        <artifactId>jdbreport-parent</artifactId>
-        <groupId>jdbreport</groupId>
-        <version>3.1.4</version>
-    </parent>
-
+    <groupId>ru.jdbreport</groupId>
     <artifactId>jdbr-rt</artifactId>
-    <name>JDBReport Runtime</name>
-    <url>https://github.com/andreikh/jdbreport.git</url>
+    <version>3.1.4</version>
+    <packaging>jar</packaging>
+
+    <name>JDBReport</name>
+    <description>Report Generator</description>
+    <url>https://github.com/andreikh/jdbreport</url>
 
     <licenses>
         <license>
             <name>The Apache License, Version 2.0</name>
             <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+            <distribution>repo</distribution>
         </license>
     </licenses>
+
+    <scm>
+        <url>https://github.com/andreikh/jdbreport</url>
+        <connection>scm:git:https://github.com/andreikh/jdbreport.git</connection>
+        <developerConnection>scm:git:https://github.com/andreikh/jdbreport.git</developerConnection>
+    </scm>
+
+    <developers>
+        <developer>
+            <id>andreikh</id>
+            <name>Andrey Kholmanskikh</name>
+            <url>https://github.com/andreikh/jdbreport</url>
+        </developer>
+    </developers>
+
+    <distributionManagement>
+        <repository>
+             <id>ossrh</id>
+            <url>https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/</url>
+        </repository>
+    </distributionManagement>
+
+    <properties>
+        <maven.compiler.source>1.8</maven.compiler.source>
+        <maven.compiler.target>1.8</maven.compiler.target>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <batik.version>1.14</batik.version>
+        <org.apache.poi.version>5.2.2</org.apache.poi.version>
+        <build.plugins.plugin.version>3.10.1</build.plugins.plugin.version>
+        <junit.version>4.13.2</junit.version>
+    </properties>
 
     <dependencies>
         <dependency>
@@ -109,7 +140,6 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-source-plugin</artifactId>
                 <version>3.2.1</version>
-
                 <executions>
                     <execution>
                         <id>attach-sources</id>
@@ -121,10 +151,18 @@
             </plugin>
 
             <plugin>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <configuration>
-                    <encoding>${project.build.sourceEncoding}</encoding>
-                </configuration>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <version>3.4.0</version>
+                <executions>
+                    <execution>
+                        <id>attach-javadocs</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
     </build>

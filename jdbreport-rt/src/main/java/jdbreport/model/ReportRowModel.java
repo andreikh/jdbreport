@@ -954,6 +954,7 @@ public class ReportRowModel implements TableRowModel, PropertyChangeListener,
 
     /**
      * removes all page headers and page footers from report
+     * @param startRow first row
      */
     public void clearPageHeader(int startRow) {
         startRow = 0;

@@ -38,9 +38,6 @@ public class PictureSVG extends Picture {
 	public static final String TIFF = "tiff";
 	public static final String SVG = "svg";
 
-	/**
-	 * 
-	 */
 	public PictureSVG(String format) {
 		super(format);
 	}

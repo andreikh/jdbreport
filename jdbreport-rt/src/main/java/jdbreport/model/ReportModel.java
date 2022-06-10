@@ -817,9 +817,6 @@ public interface ReportModel extends TableModel {
 	 */
 	void setPrintLeftToRight(boolean value);
 
-	/**
-	 * Hide page number on first page
-	 */
 	boolean isHideFirstHeader();
 
 	void setHideFirstHeader(boolean hideFirstHeader);

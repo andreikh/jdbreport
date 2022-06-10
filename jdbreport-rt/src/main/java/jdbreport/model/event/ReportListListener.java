@@ -2,9 +2,9 @@
  * Created on 01.03.2005
  *
  * JDBReport Generator
- * 
+ *
  * Copyright (C) 2005-2014 Andrey Kholmanskih
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -23,19 +23,30 @@ package jdbreport.model.event;
 import java.util.EventListener;
 
 /**
- * @version 1.1 03/09/08
  * @author Andrey Kholmanskih
- * 
+ * @version 1.1 03/09/08
  */
 public interface ReportListListener extends EventListener {
 
-	/** Tells listeners that a report was added to the list. */
-	public void reportAdded(ReportListEvent e);
+    /**
+     * Tells listeners that a report was added to the list.
+     *
+     * @param e ReportListEvent
+     */
+    void reportAdded(ReportListEvent e);
 
-	/** Tells listeners that a report was removed from the list. */
-	public void reportRemoved(ReportListEvent e);
+    /**
+     * Tells listeners that a report was removed from the list.
+     *
+     * @param e ReportListEvent
+     */
+    void reportRemoved(ReportListEvent e);
 
-	/** Tells listeners that a row was repositioned. */
-	public void reportMoved(ReportListEvent e);
+    /**
+     * Tells listeners that a row was repositioned.
+     *
+     * @param e ReportListEvent
+     */
+    void reportMoved(ReportListEvent e);
 
 }

@@ -2,9 +2,9 @@
  * Created on 01.03.2005
  *
  * JDBReport Generator
- * 
+ *
  * Copyright (C) 2005-2014 Andrey Kholmanskih
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -25,35 +25,41 @@ import java.util.EventObject;
 import jdbreport.model.ReportBook;
 
 /**
- * @version 1.1 03/09/08
- * 
  * @author Andrey Kholmanskih
- * 
+ * @version 1.1 03/09/08
  */
 public class ReportListEvent extends EventObject {
 
-	private static final long serialVersionUID = -7884866448852224538L;
+    private static final long serialVersionUID = -7884866448852224538L;
 
-	/** The index of the report from where it was moved or removed */
-	protected int fromIndex;
+    /**
+     * The index of the report from where it was moved or removed
+     */
+    protected int fromIndex;
 
-	/** The index of the report to where it was moved or added from */
-	protected int toIndex;
+    /**
+     * The index of the report to where it was moved or added from
+     */
+    protected int toIndex;
 
-	public ReportListEvent(ReportBook source, int from, int to) {
-		super(source);
-		fromIndex = from;
-		toIndex = to;
-	}
+    public ReportListEvent(ReportBook source, int from, int to) {
+        super(source);
+        fromIndex = from;
+        toIndex = to;
+    }
 
-	/** Returns the fromIndex. Valid for removed or moved events */
-	public int getFromIndex() {
-		return fromIndex;
-	}
+    /**
+     * @return the fromIndex. Valid for removed or moved events
+     */
+    public int getFromIndex() {
+        return fromIndex;
+    }
 
-	/** Returns the toIndex. Valid for add and moved events */
-	public int getToIndex() {
-		return toIndex;
-	}
+    /**
+     * @return the toIndex. Valid for add and moved events
+     */
+    public int getToIndex() {
+        return toIndex;
+    }
 
 }

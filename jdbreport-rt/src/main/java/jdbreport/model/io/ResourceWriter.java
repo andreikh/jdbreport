@@ -30,7 +30,7 @@ public interface ResourceWriter {
 	 * @param fileName file name
 	 * @param resource resource object
 	 * @return the filename
-	 * @throws SaveReportException
+	 * @throws SaveReportException SaveReportException
 	 * @since 2.0
 	 */
 	String write(String fileName, Object resource) throws SaveReportException;

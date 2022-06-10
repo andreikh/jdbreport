@@ -23,7 +23,6 @@ import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.ClipboardOwner;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.Transferable;
-import java.awt.datatransfer.UnsupportedFlavorException;
 import java.awt.image.RenderedImage;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -49,8 +48,8 @@ public class ReportTransferable implements Transferable, ClipboardOwner {
 		xml, text, image
 	}
 
-	private List<DataFlavor> dataFlavor;
-	private List<Object> copyData;
+	private final List<DataFlavor> dataFlavor;
+	private final List<Object> copyData;
 
 	public ReportTransferable() {
 		super();
@@ -72,7 +71,7 @@ public class ReportTransferable implements Transferable, ClipboardOwner {
 	}
 
 	public Object getTransferData(DataFlavor flavor)
-			throws UnsupportedFlavorException, IOException {
+			throws IOException {
 		int i = dataFlavor.indexOf(flavor);
 		if (flavor.getPrimaryType().equals("image")) {
 			if (flavor.getSubType().equals("bmp")
@@ -99,6 +98,7 @@ public class ReportTransferable implements Transferable, ClipboardOwner {
 	/**
 	 * @param copyData
 	 *            The copyData to set.
+	 * @param type TypeFlavor
 	 */
 	public void addCopyData(Object copyData, TypeFlavor type) {
 		if (type == TypeFlavor.xml) {

@@ -41,9 +41,6 @@ public class DefaultReportParser extends AbstractXMLParser {
 	public static final String SHEET = "Sheet";
 	public static final String ROW = "row";
 
-	/**
-	 * 
-	 */
 	public DefaultReportParser(DefaultReaderHandler reportHandler) {
 		super(reportHandler);
 	}

@@ -44,7 +44,6 @@ public class ReportColumn extends TableColumn {
 
 	private boolean pageBreak;
 
-	/** Creates a new instance of ReportColumn */
 	public ReportColumn(int modelIndex, int width) {
 		super(modelIndex, width);
 	}

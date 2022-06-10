@@ -100,7 +100,8 @@ public class RowHeader extends JComponent implements TableRowModelListener,
 	 * <code>cm</code> as the row model. If <code>cm</code> is
 	 * <code>null</code> this method will initialize the table header with a
 	 * default <code>RowModel</code>.
-	 * 
+	 *
+	 * @param table JReportGrid
 	 */
 	public RowHeader(JReportGrid table) {
 		super();
@@ -114,20 +115,20 @@ public class RowHeader extends JComponent implements TableRowModelListener,
 
 	public ImageIcon getShowGroupImage() {
 		if (SHOW_GROUP_IMAGE == null) {
-			SHOW_GROUP_IMAGE = new ImageIcon(getClass()
+			SHOW_GROUP_IMAGE = new ImageIcon(Objects.requireNonNull(getClass()
 					.getResource(
 							ReportResources.getInstance().getString(
-									"group_show_image"))); //$NON-NLS-1$
+									"group_show_image"))));
 		}
 		return SHOW_GROUP_IMAGE;
 	}
 
 	public ImageIcon getHideGroupImage() {
 		if (HIDE_GROUP_IMAGE == null) {
-			HIDE_GROUP_IMAGE = new ImageIcon(getClass()
+			HIDE_GROUP_IMAGE = new ImageIcon(Objects.requireNonNull(getClass()
 					.getResource(
 							ReportResources.getInstance().getString(
-									"group_hide_image"))); //$NON-NLS-1$
+									"group_hide_image"))));
 		}
 		return HIDE_GROUP_IMAGE;
 	}
@@ -264,7 +265,8 @@ public class RowHeader extends JComponent implements TableRowModelListener,
 	/**
 	 * Returns the index of the row that <code>point</code> lies in, or -1 if
 	 * it lies out of bounds.
-	 * 
+	 *
+	 * @param point point
 	 * @return the index of the row that <code>point</code> lies in, or -1 if
 	 *         it lies out of bounds
 	 */
@@ -312,7 +314,8 @@ public class RowHeader extends JComponent implements TableRowModelListener,
 	 * When the <code>row</code> parameter is out of bounds this method uses
 	 * the same conventions as the <code>JTable</code> method
 	 * <code>getCellRect</code>.
-	 * 
+	 *
+	 * @param row row number
 	 * @return the rectangle containing the header tile at <code>row</code>
 	 */
 	public Rectangle getHeaderRect(int row) {
@@ -406,7 +409,7 @@ public class RowHeader extends JComponent implements TableRowModelListener,
 	//
 
 	/**
-	 * Returns the look and feel (L&F) object that renders this component.
+	 * Returns the look and feel object that renders this component.
 	 * 
 	 * @return the <code>TableRowHeaderUI</code> object that renders this
 	 *         component
@@ -416,10 +419,10 @@ public class RowHeader extends JComponent implements TableRowModelListener,
 	}
 
 	/**
-	 * Sets the look and feel (L&F) object that renders this component.
+	 * Sets the look and feel object that renders this component.
 	 * 
 	 * @param ui
-	 *            the <code>TableHeaderUI</code> L&F object
+	 *            the <code>TableHeaderUI</code> look and feel object
 	 * @see UIDefaults#getUI
 	 */
 	public void setUI(TableRowHeaderUI ui) {
@@ -431,7 +434,7 @@ public class RowHeader extends JComponent implements TableRowModelListener,
 
 	/**
 	 * Notification from the <code>UIManager</code> that the look and feel
-	 * (L&F) has changed. Replaces the current UI object with the latest version
+	 * has changed. Replaces the current UI object with the latest version
 	 * from the <code>UIManager</code>.
 	 * 
 	 * @see JComponent#updateUI
@@ -443,7 +446,7 @@ public class RowHeader extends JComponent implements TableRowModelListener,
 	}
 
 	/**
-	 * Returns the suffix used to construct the name of the look and feel (L&F)
+	 * Returns the suffix used to construct the name of the look and feel
 	 * class used to render this component.
 	 * 
 	 * @return the string "TableRowHeaderUI"
@@ -703,6 +706,9 @@ public class RowHeader extends JComponent implements TableRowModelListener,
 	 * See <code>readObject</code> and <code>writeObject</code> in
 	 * <code>JComponent</code> for more information about serialization in
 	 * Swing.
+	 *
+	 * @param s ObjectOutputStream
+	 * @throws IOException IOException
 	 */
 	private void writeObject(ObjectOutputStream s) throws IOException {
 		s.defaultWriteObject();
@@ -766,7 +772,7 @@ public class RowHeader extends JComponent implements TableRowModelListener,
 	 * compatible with future Swing releases. The current serialization support
 	 * is appropriate for short term storage or RMI between applications running
 	 * the same version of Swing. As of 1.4, support for long term storage of
-	 * all JavaBeans <sup><font size="-2">TM </font> </sup> has been added to
+	 * all JavaBeans <sup>TM</sup> has been added to
 	 * the <code>java.beans</code> package. Please see
 	 * {@link java.beans.XMLEncoder}.
 	 */
@@ -857,9 +863,6 @@ public class RowHeader extends JComponent implements TableRowModelListener,
 
 			private JReportGrid table;
 
-			/**
-			 * Constructs an AccessiblJTableHeaaderEntry
-			 */
 			public AccessibleRowHeaderEntry(int r, RowHeader p, JReportGrid t) {
 				parent = p;
 				row = r;

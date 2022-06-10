@@ -46,6 +46,8 @@ public interface XMLParser {
 	 * @param attributes
 	 *            The attributes attached to the element. If there are no
 	 *            attributes, it shall be an empty Attributes object.
+	 * @return true if the element is found
+	 * @throws SAXException SAXException
 	 */
 
 	boolean startElement(String name, final Attributes attributes)
@@ -62,6 +64,8 @@ public interface XMLParser {
 	 * 
 	 * @param name
 	 *            The qualified name (with prefix)
+	 * @param value value
+	 * @throws SAXException SAXException
 	 */
 	void endElement(String name, final StringBuffer value)
 			throws SAXException;
@@ -74,7 +78,9 @@ public interface XMLParser {
 	 * take specific actions for each chunk of character data (such as adding
 	 * the data to a node or buffer, or printing it to a file).
 	 * </p>
-	 * 
+	 *
+	 * @param ch character data
+	 * @throws SAXException SAXException
 	 */
 	void characters(StringBuffer ch) throws SAXException;
 

@@ -53,7 +53,7 @@ public class JDBReport {
 	 * 
 	 * @param file report template file
 	 * @return ReportEditor window
-	 * @throws LoadReportException
+	 * @throws LoadReportException LoadReportException
 	 */
 	public static ReportEditor showReport(File file) throws LoadReportException {
 		return showReport(file, null, null, true);
@@ -65,7 +65,7 @@ public class JDBReport {
 	 * @param file report template file
 	 * @param dataSetList the list of DataSets
 	 * @return ReportEditor window
-	 * @throws LoadReportException
+	 * @throws LoadReportException LoadReportException
 	 */
 	public static ReportEditor showReport(File file, Map<String, Object> dataSetList) throws LoadReportException {
 		return showReport(file, dataSetList, null, true);
@@ -78,7 +78,7 @@ public class JDBReport {
 	 * @param dataSetList the list of DataSets
 	 * @param vars the list of variables
 	 * @return ReportEditor window
-	 * @throws LoadReportException
+	 * @throws LoadReportException LoadReportException
 	 */
 	public static ReportEditor showReport(File file, Map<String, Object> dataSetList, Map<Object, Object> vars) throws LoadReportException {
 		return showReport(file, dataSetList, vars, true);
@@ -90,7 +90,7 @@ public class JDBReport {
 	 * 
 	 * @param url report template url
 	 * @return ReportEditor window
-	 * @throws LoadReportException
+	 * @throws LoadReportException LoadReportException
 	 */
 	public static ReportEditor showReport(URL url) throws LoadReportException {
 		return showReport(url, null, null, true);
@@ -102,7 +102,7 @@ public class JDBReport {
 	 * @param url  report template url
 	 * @param dataSetList  the list of DataSets
 	 * @return  ReportEditor window
-	 * @throws LoadReportException
+	 * @throws LoadReportException LoadReportException
 	 */
 	public static ReportEditor showReport(URL url, Map<String, Object> dataSetList) throws LoadReportException {
 		return showReport(url, dataSetList, null, true);
@@ -114,7 +114,7 @@ public class JDBReport {
 	 * @param dataSetList  the list of DataSets
 	 * @param vars  var list
 	 * @return - ReportEditor window
-	 * @throws LoadReportException
+	 * @throws LoadReportException LoadReportException
 	 */
 	public static ReportEditor showReport(URL url, Map<String, Object> dataSetList, Map<Object, Object> vars) throws LoadReportException {
 		return showReport(url, dataSetList, vars, true);
@@ -127,9 +127,10 @@ public class JDBReport {
 	 * @param vars  the list of variables
 	 * @param show  if true set visible Report window
 	 * @return  ReportEditor window
-	 * @throws LoadReportException
+	 * @throws LoadReportException LoadReportException
 	 */
-	public static ReportEditor showReport(File file, Map<String, Object> dataSetList, Map<Object, Object> vars, boolean show) throws LoadReportException {
+	public static ReportEditor showReport(File file, Map<String, Object> dataSetList,
+										  Map<Object, Object> vars, boolean show) throws LoadReportException {
 		try {
 			return showReport(file.toURI().toURL(), dataSetList, vars);
 		} catch (MalformedURLException e) {
@@ -144,9 +145,10 @@ public class JDBReport {
 	 * @param vars the list of variables
 	 * @param show  if true set visible Report window
 	 * @return  ReportEditor window 
-	 * @throws LoadReportException
+	 * @throws LoadReportException LoadReportException
 	 */
-	public static ReportEditor showReport(URL url, Map<String, Object> dataSetList, Map<Object, Object> vars, boolean show) throws LoadReportException {
+	public static ReportEditor showReport(URL url, Map<String, Object> dataSetList,
+										  Map<Object, Object> vars, boolean show) throws LoadReportException {
 		JDBReportService reportService = new JDBReportService();
 
 		ReportBook book = reportService.getReportBook(url, dataSetList, vars);
@@ -178,7 +180,8 @@ public class JDBReport {
 		return re;
 	}
 	
-	public static ReportDialog showModalReport(Window owner, URL url, Map<String, Object> dataSetList, Map<Object, Object> vars, boolean show) throws LoadReportException {
+	public static ReportDialog showModalReport(Window owner, URL url, Map<String, Object> dataSetList,
+											   Map<Object, Object> vars, boolean show) throws LoadReportException {
 		JDBReportService reportService = new JDBReportService();
 		ReportBook book = reportService.getReportBook(url, dataSetList, vars);
 		ReportDialog re;

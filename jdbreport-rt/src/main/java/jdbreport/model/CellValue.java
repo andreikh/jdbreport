@@ -2,9 +2,9 @@
  * CellValue.java
  *
  * JDBReport Generator
- * 
+ *
  * Copyright (C) 2007-2014 Andrey Kholmanskih
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -33,75 +33,82 @@ import jdbreport.util.xml.XMLParser;
 import jdbreport.util.xml.XMLReaderHandler;
 
 /**
- * @version 3.0 12.12.2014
  * @author Andrey Kholmanskih
- * 
+ * @version 3.0 12.12.2014
  */
 public interface CellValue<E> extends Serializable {
 
-	/**
-	 * Reads from XML
-	 * 
-	 * @return XMLParser
-	 */
-	XMLParser createParser(XMLReaderHandler handler);
+    /**
+     * Reads from XML
+     *
+     * @param handler XMLReaderHandler
+     * @return XMLParser
+     */
+    XMLParser createParser(XMLReaderHandler handler);
 
-	/**
-	 * Reads from XML
-	 * 
-	 * @return XMLParser
-	 * @since 2.0
-	 */
-	XMLParser createParser(XMLReaderHandler handler, ResourceReader resourceReader);
-	
-	/**
-	 * Writes to XML
-	 * 
-	 * @param writer PrintWriter
-	 * @param model ReportModel
-	 * @param row row number
-	 * @param column column number
-	 * @return true if supported
-	 * @throws SaveReportException 
-	 */
-	boolean write(PrintWriter writer, ReportModel model, int row, int column) throws SaveReportException;
+    /**
+     * Reads from XML
+     *
+     * @param handler        XMLReaderHandler
+     * @param resourceReader ResourceReader
+     * @return XMLParser
+     * @since 2.0
+     */
+    XMLParser createParser(XMLReaderHandler handler, ResourceReader resourceReader);
 
-	/**
-	 * Writes to writer
-	 * @param writer PrintWriter
-	 * @param model ReportModel
-	 * @param row row number
-	 * @param column column number
-	 * @param format format string
-	 * @return true if supported
-	 */
-	boolean write(PrintWriter writer, ReportModel model, int row, int column,
-			String format) throws SaveReportException;
+    /**
+     * Writes to XML
+     *
+     * @param writer PrintWriter
+     * @param model  ReportModel
+     * @param row    row number
+     * @param column column number
+     * @return true if supported
+     * @throws SaveReportException SaveReportException
+     */
+    boolean write(PrintWriter writer, ReportModel model, int row, int column) throws SaveReportException;
 
-	/**
-	 *  Writes to writer
-	 * @param writer PrintWriter
-	 * @param model ReportModel
-	 * @param row row number
-	 * @param column column number
-	 * @param resourceWriter ResourceWriter
-	 * @param format format string
-	 * @return true if supported
-	 * @throws SaveReportException 
-	 * @since 2.0
-	 */
-	boolean write(PrintWriter writer, ReportModel model, int row, int column, ResourceWriter resourceWriter, 
-			String format) throws SaveReportException;
-	
-	public E getValue();
+    /**
+     * Writes to writer
+     *
+     * @param writer PrintWriter
+     * @param model  ReportModel
+     * @param row    row number
+     * @param column column number
+     * @param format format string
+     * @return true if supported
+     * @throws SaveReportException SaveReportException
+     */
+    boolean write(PrintWriter writer, ReportModel model, int row, int column,
+                  String format) throws SaveReportException;
 
-	public void setValue(E e);
+    /**
+     * Writes to writer
+     *
+     * @param writer         PrintWriter
+     * @param model          ReportModel
+     * @param row            row number
+     * @param column         column number
+     * @param resourceWriter ResourceWriter
+     * @param format         format string
+     * @return true if supported
+     * @throws SaveReportException SaveReportException
+     * @since 2.0
+     */
+    boolean write(PrintWriter writer, ReportModel model, int row, int column, ResourceWriter resourceWriter,
+                  String format) throws SaveReportException;
 
-	/**
-	 * 
-	 * @return as image
-	 * @since 2.0
-	 */
-	public Image getAsImage(ReportModel model, int row,
-			int column);
+    public E getValue();
+
+    public void setValue(E e);
+
+    /**
+     * @param model  ReportModel
+     * @param row    row
+     * @param column column
+     * @return cell value as image
+     * @since 2.0
+     */
+    public Image getAsImage(ReportModel model, int row,
+                            int column);
 }
