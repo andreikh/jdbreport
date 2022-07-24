@@ -37,6 +37,7 @@ import javax.swing.KeyStroke;
 import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 
 import javax.swing.JScrollPane;
 import javax.swing.event.PopupMenuEvent;
@@ -54,9 +55,11 @@ import jdbreport.util.Utils;
  * @author Andrey Kholmanskih
  * 
  */
-public class CellEditorPanel extends JPanel {
+public class CellEditorPanel extends JPanel implements KeyListener {
 
 	private static final long serialVersionUID = 1L;
+
+	private static String defaultContentType = Cell.TEXT_PLAIN;
 
 	private static final String BIG = "big";
 
@@ -105,6 +108,7 @@ public class CellEditorPanel extends JPanel {
 	private Action bigAction;
 	
 	private boolean editable = true;
+	private boolean dirty;
 
 	public CellEditorPanel(LayoutManager layout) {
 		super(layout);
@@ -127,10 +131,15 @@ public class CellEditorPanel extends JPanel {
 	}
 
 	public void setCell(Cell cell) {
-		updateContent(cell.getContentType());
+		String contentType = cell.getContentType();
+		if (!Cell.TEXT_PLAIN.equals(contentType) && Cell.TEXT_PLAIN.equals(defaultContentType)) {
+			contentType = defaultContentType;
+		}
+		updateContent(contentType);
+		getToolBar().setVisible(Cell.TEXT_HTML.equals(cell.getContentType()));
 		text = cell.getText();
 		getTextPane().setText(text);
-		getToolBar().setVisible(false);
+		dirty = false;
 	}
 
 	private void updateContent(String content) {
@@ -139,12 +148,10 @@ public class CellEditorPanel extends JPanel {
 			if (!contentButton.isSelected())
 				contentButton.setSelected(true);
 			contentButton.setText(Messages.getString("CellEditorPanel.Plain")); //$NON-NLS-1$
-			getToolBar().setVisible(false);
 		} else {
 			if (contentButton.isSelected())
 				contentButton.setSelected(false);
 			contentButton.setText(Messages.getString("CellEditorPanel.HTML")); //$NON-NLS-1$
-			getToolBar().setVisible(true);
 		}
 	}
 
@@ -294,6 +301,7 @@ public class CellEditorPanel extends JPanel {
 	}
 
 	private boolean setTag(String tag) {
+		dirty = true;
 		String btag = "<" + tag + ">";
 		String etag = "</" + tag + ">";
 		String t = textPane.getSelectedText();
@@ -339,6 +347,7 @@ public class CellEditorPanel extends JPanel {
 			textPane = new JEditorPane();
 			textPane.setFont(Consts.defaultFont);
 			textPane.setComponentPopupMenu(createPopupMenu(textPane));
+			textPane.addKeyListener(this);
 		}
 		return textPane;
 	}
@@ -392,23 +401,30 @@ public class CellEditorPanel extends JPanel {
 			contentButton.setText(Messages.getString("CellEditorPanel.HTML"));
 			contentButton.addActionListener(e -> {
                 String content = textPane.getContentType();
-                text = textPane.getText();
+				if (dirty) {
+					text = textPane.getText();
+				}
                 if (content.equals(Cell.TEXT_HTML)) {
-                    text = Utils.html2Plain(text);
+					if (dirty) {
+						text = Utils.html2Plain(text);
+					}
                     contentButton.setText(Messages
                             .getString("CellEditorPanel.Plain"));
                     textPane.setContentType(Cell.TEXT_PLAIN);
-                    getToolBar().setVisible(true);
+					defaultContentType = Cell.TEXT_PLAIN;
+					getToolBar().setVisible(true);
                 } else {
                     contentButton.setText(Messages
                             .getString("CellEditorPanel.HTML"));
                     textPane.setContentType(Cell.TEXT_HTML);
-                    getToolBar().setVisible(false);
+					defaultContentType = Cell.TEXT_HTML;
+					getToolBar().setVisible(false);
                 }
                 textPane.setText(text);
                 textPane.setSelectionStart(0);
                 textPane.setSelectionEnd(0);
-            });
+				dirty = false;
+			});
 		}
 		return contentButton;
 	}
@@ -495,9 +511,22 @@ public class CellEditorPanel extends JPanel {
 		return popupMenu;
 	}
 
+	@Override
+	public void keyTyped(KeyEvent keyEvent) {
+	}
+
+	@Override
+	public void keyPressed(KeyEvent keyEvent) {
+	}
+
+	@Override
+	public void keyReleased(KeyEvent keyEvent) {
+		dirty = !textPane.getText().equals(text);
+	}
+
 	public static class TextPopupMenuListener implements PopupMenuListener {
 
-		private JTextComponent parent;
+		private final JTextComponent parent;
 
 		public TextPopupMenuListener(JTextComponent parent) {
 			this.parent = parent;
