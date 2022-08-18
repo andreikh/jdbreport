@@ -6,7 +6,7 @@
     <parent>
         <artifactId>jdbreport-parent</artifactId>
         <groupId>ru.jdbreport</groupId>
-        <version>3.1.4</version>
+        <version>3.1.5-SNAPSHOT</version>
     </parent>
 
     <artifactId>jdbr-editor</artifactId>
